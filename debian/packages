@@ -1,0 +1,184 @@
+Source: phpmyadmin
+Section: web
+Priority: extra
+Maintainer: Piotr Roszatycki <dexter@debian.org>
+Standards-Version: 3.5.6
+Upstream-Source: <URL:http://phpmyadmin.sourceforge.net/>
+Home-Page: <URL:http://phpmyadmin.sourceforge.net/>
+Description: a set of PHP-scripts to administrate MySQL over the WWW
+Packaged-For: Debian
+Copyright: GPL
+     Copyright (C) 1998-2000 Tobias Ratschiller <tobias_at_phpwizard.net>
+     Copyright (C) 2001-     Marc Delisle <DelislMa_at_CollegeSherbrooke.qc.ca>
+                             Olivier Müller <om_at_omnis.ch>
+                             Loïc Chapeaux <lolo_at_phpHeaven.net>
+                             Robin Johnson <robbat2_at_users.sourceforge.net>
+                             Armel Fauveau <armel.fauveau_at_globalis-ms.com>
+                             Geert Lund <glund_at_silversoft.dk>
+                             Korakot Chaovavanich <korakot_at_iname.com>
+                             Pete Kelly <webmaster_at_trafficg.com>
+                             Steve Alberty <alberty_at_neptunlabs.de>
+                             Benjamin Gandon <gandon_at_isia.cma.fr>
+                             + many other people (check the CREDITS file)
+Major-Changes:
+ [001] default configuration with enabled cookie authentification
+Patches: *.diff
+Build: sh
+ find -name CVS | xargs rm -rf
+Clean: sh
+ find -name CVS | xargs rm -rf
+
+Package: phpmyadmin
+Architecture: all
+Depends: php4 | php3 | php4-cgi | php3-cgi, php4-mysql | php4-cgi-mysql | php3-mysql | php3-cgi-mysql, apache | httpd, wwwconfig-common (>= 0.0.7), []
+Suggests: mysql-doc, mysql-server
+Description: A set of PHP-scripts to administrate MySQL over the WWW.
+ phpMyAdmin is intended to handle the administration of MySQL over the WWW.
+ Currently it can:
+   - create and drop databases
+   - create, copy, drop and alter tables
+   - delete, edit and add fields
+   - execute any SQL-statement, even batch-queries
+   - manage keys on fields
+   - load text files into tables
+   - create and read dumps of tables
+   - export and import CSV data
+   - administer one single database
+Install: sh
+ yada install -data -into /usr/share/phpmyadmin *.php badwords.txt
+ yada install -data -into /usr/share/phpmyadmin/images images/*
+ yada install -data -into /usr/share/phpmyadmin/libraries libraries/*.*
+ yada install -data -into /usr/share/phpmyadmin/libraries/auth libraries/auth/*
+ yada install -dir /etc/phpmyadmin
+ for i in config footer header; do
+     mv -f $ROOT/usr/share/phpmyadmin/$i.inc.php $ROOT/etc/phpmyadmin/
+     ln -s /etc/phpmyadmin/$i.inc.php $ROOT/usr/share/phpmyadmin/
+ done
+ yada install -data -into /usr/share/phpmyadmin/lang lang/*.inc.php
+ yada install -data -into /usr/share/phpmyadmin Documentation.html
+ yada install -data -into /usr/share/phpmyadmin ChangeLog INSTALL README
+ yada install -conffile -into /etc/phpmyadmin -as apache.conf debian/phpmyadmin.apache.conf
+ yada install -doc README TODO
+ yada install -doc Documentation.html
+ yada install -doc -as changelog ChangeLog
+ yada install -doc -as README.Debian debian/README
+Templates:
+ Template: phpmyadmin/changed-extension
+ Type: note
+ Description: The extension of phpmyadmin files was changed.
+  In this release the *.php3 files were renamed to *.php. Please update
+  your HTTP server configuration and your /etc/phpmyadmin directory.
+ Description-de: Die Dateiendung der phpmyadmin-Dateien wurde geändert.
+  In dieser Version wurden die *.php3-Dateien nach *.php umbenannt.
+  Die aktualisieren Sie die Konfiguration Ihres Webservers und
+  das Verzeichnis /etc/phpmyadmin.
+ Description-pl: Rozszerzenia plików pakietu phpmyadmin zosta³y zmienione.
+  W tej wersji pakietu pliki *.php3 zosta³y wymienione na pliki *.php.
+  Proszê zaktualizowaæ konfiguracjê serwera HTTP oraz katalogu
+  /etc/phpmyadmin.
+ .
+ Template: phpmyadmin/webserver
+ Type: select
+ Choices: Apache, Apache-SSL, Both, None
+ Choices-pl: Apache, Apache-SSL, Obydwa, ¯aden
+ Default: ${webserver}
+ Description: Which web server would you like to reconfigure automatically?
+  phpMyAdmin supports any web server that php3/php4 does, but this
+  automatic configuration process only supports Apache and Apache-SSL.
+ Description-pl: Który serwer WWW przekonfigurowaæ automatycznie?
+  phpMyAdmin dzia³a z dowolnym serwerem WWW który obs³uguje pliki php3/php4,
+  ale automatyczna konfiguracja dzia³a tylko dla Apache i Apache-SSL.
+Config: bash
+ if [ "$1" = "upgrade" -a -n "$2" ] && \
+   dpkg --compare-versions "$2" lt-nl "2.1.0.1-2"; then
+     db_input low phpmyadmin/changed-extension || true
+     db_go
+ fi
+ .
+ db_subst "phpmyadmin/webserver" "webserver" "Apache" || true
+ db_input medium "phpmyadmin/webserver" || true
+ db_go
+Preinst: bash
+ if [ "$1" = "upgrade" -a -n "$2" ] && \
+   dpkg --compare-versions "$2" lt-nl "2.1.0.1-2"; then
+     if [ -d /etc/phpmyadmin ]; then
+         for i in config footer header; do
+ 	     mv -f /etc/phpmyadmin/$i.inc.php3 /etc/phpmyadmin/$i.inc.php || true
+ 	 done
+     fi
+ fi
+Postinst: bash
+ if [ "$1" = "configure" ]; then
+     db_get "phpmyadmin/webserver"
+     webserver="$RET"
+     case "$webserver" in
+         Apache)        webservers="apache";;
+ 	 Apache-SSL)	webservers="apache-ssl";;
+ 	 Both)		webservers="apache apache-ssl";;
+ 	 *)		webservers="";;
+     esac
+ .
+     . /usr/share/wwwconfig-common/php.get
+ .
+     for server in $webservers; do
+ 	 if [ "$phpver" = "php4" ]; then
+ 	     extension=".php"
+             typestr="application/x-httpd-php"
+             . /usr/share/wwwconfig-common/apache-addtype_all.sh
+ 	     [ "$status" = "uncommented" -o "$status" = "added" -o "$status" = "lineadded" ] && restart="$server $restart"
+ 	 elif [ "$phpver" = "php3" ]; then
+ 	     extension=".php"
+             typestr="application/x-httpd-php3"
+             . /usr/share/wwwconfig-common/apache-addtype_all.sh
+ 	     [ "$status" = "uncommented" -o "$status" = "added" -o "$status" = "lineadded" ] && restart="$server $restart"
+ 	 fi
+ .
+         . /usr/share/wwwconfig-common/apache-php.sh
+ 	 [ "$status" = "uncomment" ] && restart="$server $restart"
+ .
+ 	 includefile=/etc/phpmyadmin/apache.conf
+ 	 . /usr/share/wwwconfig-common/apache-include_all.sh
+ 	 [ "$status" = "uncomment" -o "$status" = "include" ] && restart="$server $restart"
+ .
+ 	 index=index.php
+ 	 . /usr/share/wwwconfig-common/apache-index_all.sh
+ 	 [ "$status" = "added" ] && restart="$server $restart"
+     done     
+ .
+     servers="apache-ssl apache"
+     . /usr/share/wwwconfig-common/restart.sh
+ fi
+Postrm: bash
+ if [ -f /usr/share/wwwconfig-common/apache-uninclude_all.sh ]; then
+     db_get "phpmyadmin/webserver"
+     webserver="$RET"
+     case "$webserver" in
+         Apache)	webservers="apache";;
+         Apache-SSL)	webservers="apache-ssl";;
+         Both)		webservers="apache apache-ssl";;
+         *)		webservers="";;
+     esac
+     includefile=/etc/phpmyadmin/apache.conf
+ .
+     if [ "$1" = "purge" ]; then
+         for server in $webservers; do
+             . /usr/share/wwwconfig-common/apache-uninclude_all.sh
+ 	     if [ "$status" = "purge" ]; then
+ 	         restart="$restart $server"
+ 	     fi
+         done
+         test -d /etc/phpmyadmin && rm -rf /etc/phpmyadmin
+     fi
+ .
+     if [ "$1" = "remove" ]; then
+         for server in $webservers; do
+             . /usr/share/wwwconfig-common/apache-cominclude_all.sh
+ 	     if [ "$status" = "comment" ]; then
+ 	         restart="$restart $server"
+ 	     fi
+         done
+     fi
+ .
+     servers="apache-ssl apache"
+     . /usr/share/wwwconfig-common/restart.sh
+ fi

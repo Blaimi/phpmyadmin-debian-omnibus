@@ -1,0 +1,38 @@
+Bug ID: 122941
+Summary: phpmyadmin: Invalid command 'php3_register_globals'
+Severity: grave
+Package: phpmyadmin
+Submitter: "Roland E. Lipovits" <rel@lipo.at0.net>
+Date Submitted: Sat, 08 Dec 2001 15:33:02 GMT
+Closed By: Piotr Roszatycki <dexter@debian.org>
+
+Bug ID: 125243
+Summary: phpmyadmin: Spelling error in description
+Severity: minor
+Package: phpmyadmin
+Submitter: Matt Zimmerman <mdz@debian.org>
+Date Submitted: Mon, 17 Dec 2001 23:04:50 GMT
+Closed By: Piotr Roszatycki <dexter@debian.org>
+
+Bug ID: 126253
+Summary: phpmyadmin: config.inc.php error on line 130 (wrong lang file name + location)
+Severity: important
+Package: phpmyadmin
+Submitter: de_lupus@hotmail.com
+Date Submitted: Sun, 23 Dec 2001 10:33:01 GMT
+
+Bug ID: 123459
+Summary: 'Query empty' when ordering by a column
+Severity: normal
+Package: phpmyadmin
+Submitter: Gavin Hamill <gdh@acentral.co.uk>
+Date Submitted: Tue, 11 Dec 2001 18:03:02 GMT
+Closed By: Piotr Roszatycki <dexter@debian.org>
+
+Bug ID: 119762
+Summary: phpmyadmin: requesting dbaseIII import/export
+Severity: wishlist
+Package: phpmyadmin
+Submitter: supaplex@pcbkits.com
+Date Submitted: Thu, 15 Nov 2001 23:48:06 GMT
+

@@ -1,0 +1,336 @@
+#! /usr/bin/make -f
+# Generated automatically from debian/packages
+# by yada v0.9.9, of Tue, 07 Dec 1999
+# Modified by Piotr Roszatycki <dexter@debian.org>, Mon,  1 Oct 2001 13:14:11 +0200
+
+DEB_HOST_GNU_CPU    := $(shell dpkg-architecture -qDEB_HOST_GNU_CPU)
+DEB_HOST_GNU_TYPE   := $(shell dpkg-architecture -qDEB_HOST_GNU_TYPE)
+DEB_HOST_GNU_SYSTEM := $(shell dpkg-architecture -qDEB_HOST_GNU_SYSTEM)
+
+DEB_BUILD_GNU_CPU    := $(shell dpkg-architecture -qDEB_BUILD_GNU_CPU)
+DEB_BUILD_GNU_TYPE   := $(shell dpkg-architecture -qDEB_BUILD_GNU_TYPE)
+DEB_BUILD_GNU_SYSTEM := $(shell dpkg-architecture -qDEB_BUILD_GNU_SYSTEM)
+
+VERSION:=$(shell LC_ALL=C dpkg-parsechangelog | sed -ne 's/^Version: *\([^2]*\)/\1/p')
+
+SHELL=/bin/bash
+
+.PHONY: default
+default:
+	@echo "Specify a target:"; \
+	echo " build              compile the package"; \
+	echo " binary             make all binary packages"; \
+	echo " binary-arch        make all architecture-dependent binary packages"; \
+	echo " binary-indep       make all architecture-independent binary packages"; \
+	echo " clean              clean up the source package"; \
+	echo; \
+	echo " depends            check build-time dependencies"; \
+	echo " patch              apply patches from debian/*.diff"; \
+	echo " unpatch            unapply patches from debian/*.diff{,disabled}"; \
+	echo " install-tree       compile the package and create the install trees"; \
+	echo " clean-install-tree clean up only under debian/"; \
+	echo
+
+# Check build dependencies and conflicts
+
+.PHONY: depends
+depends: chmod-yada debian/depends-stamp
+debian/depends-stamp:
+	@echo 'Checking build conflicts and dependencies; just a minute...'
+	@echo -n 'grep-dctrl...'; v=$$(grep-status -X -F Package 'grep-dctrl' | grep Version | head -1 | sed -e 's/^Version: //'); \
+	if test ! "$$v"; then echo -n 'grep-dctrl (virtual package)...'; v=$$(grep-status -e -F Provides '(^grep-dctrl, |, grep-dctrl$$|^grep-dctrl$$)' | grep Version | head -1 | sed -e 's/^Version: //'); fi; \
+	if test "$$v"; then \
+	    exit 0; \
+	fi; \
+	echo 'Build depends on `grep-dctrl'\'' (any version), which is not satisfied' | fmt; exit 1
+	@echo -n 'yada...'; v=$$(grep-status -X -F Package 'yada' | grep Version | head -1 | sed -e 's/^Version: //'); \
+	if test ! "$$v"; then echo -n 'yada (virtual package)...'; v=$$(grep-status -e -F Provides '(^yada, |, yada$$|^yada$$)' | grep Version | head -1 | sed -e 's/^Version: //'); fi; \
+	if test "$$v"; then \
+	  if dpkg --compare-versions "$$v" '>=' '0.9.9'; then \
+	    exit 0; \
+	  fi; \
+	fi; \
+	echo 'Build depends on `yada'\'' (version >= 0.9.9), which is not satisfied' | fmt; exit 1
+	@echo
+	@echo 'Conflicts and dependencies all satisfied!'
+	touch debian/depends-stamp
+
+.PHONY: patch unpatch
+# Apply patches matching `debian/*.diff' to the source tree,
+# and unapply any applied patches `debian/*.diff.disabled'
+patch: chmod-yada debian/patch-stamp
+debian/patch-stamp:
+	@set -e; backupdirs=$$(ls -d debian/backup-* 2>/dev/null | wc -l); \
+	if test $$backupdirs -gt 1; then \
+	  echo "*** Yada error: There are multiple debian/backup-* directories."; \
+	  echo "***             I can't cope.  Please clean up for me."; \
+	  exit 1; \
+	fi; \
+	if test $$backupdirs = 1; then \
+	  patchname="$$(echo debian/backup-* | sed 's=^debian/backup-==')"; \
+	  echo "*** Cleaning up after interrupted patching run for $$patchname"; \
+	  if test -f "debian/patch-$$patchname-applied"; then \
+	    rm -rf "debian/backup-$$patchname"; \
+	  else \
+	    (cd "debian/backup-$$patchname"; find . -type f -print0) | xargs -0ri mv -f -- debian/backup-$$patchname/{} {}; \
+	    find "debian/backup-$$patchname" -depth -type d -exec rmdir '{}' \;; \
+	    if test -e "debian/backup-$$patchname"; then \
+	      echo "*** Yada error: I could not recover cleanly from an interrupted patch."; \
+	      echo "***             I can't cope.  Please clean up for me."; \
+	      exit 1; \
+	    fi; \
+	  fi; \
+	fi
+
+	@set -e; backdowndirs=$$(ls -d debian/backdown-* 2>/dev/null | wc -l); \
+	if test $$backdowndirs -gt 1; then \
+	  echo "*** Yada error: There are multiple debian/backdown-* directories."; \
+	  echo "***             I can't cope.  Please clean up for me."; \
+	  exit 1; \
+	fi; \
+	if test $$backdowndirs = 1; then \
+	  patchname="$$(echo debian/backdown-* | sed 's=^debian/backdown-==')"; \
+	  echo "*** Cleaning up after interrupted unpatching run for $$patchname"; \
+	  if test ! -f "debian/patch-$$patchname-applied"; then \
+	    rm -rf "debian/backdown-$$patchname"; \
+	  else \
+	    (cd "debian/backdown-$$patchname"; find . -type f -print0) | xargs -0ri mv -f -- debian/backdown-$$patchname/{} {}; \
+	    find "debian/backdown-$$patchname" -depth -type d -exec rmdir '{}' \;; \
+	    if test -e "debian/backdown-$$patchname"; then \
+	      echo "*** Yada error: I could not recover cleanly from an interrupted patch."; \
+	      echo "***             I can't cope.  Please clean up for me."; \
+	      exit 1; \
+	    fi; \
+	  fi; \
+	fi
+
+	@set -e; for stampfile in debian/patch-*-applied; do \
+	  if test -f "$$stampfile"; then \
+	    patchname="$$(echo "$$stampfile" | sed 's=^debian/patch-\(.*\)-applied$$=\1=')"; \
+	    patchfile="debian/$$patchname.disabled"; \
+	    if test -f "$$patchfile"; then \
+	      echo "*** $$patchfile is now disabled; patching it out"; \
+	      patchoptions="$$(sed -n '/^#PATCHOPTIONS:/{;s/^[^:]*://;p;q;}' <"$$patchfile")"; \
+	      patch -R -f -i "$$patchfile" -b -V simple -B "debian/backdown-$$patchname/" $$patchoptions; \
+	      rm -f "$$stampfile"; \
+	      rm -rf "debian/backdown-$$patchname"; \
+	    fi; \
+	  fi; \
+	done
+
+	@set -e; for patchfile in debian/*.diff; do \
+	  if test -f "$$patchfile"; then \
+	    patchname="$$(echo "$$patchfile" | sed 's=^debian/==')"; \
+	    stampfile="debian/patch-$$patchname-applied"; \
+	    if test ! -f "$$stampfile"; then \
+	      echo "*** Applying patch from $$patchname"; \
+	      patchoptions="$$(sed -n '/^#PATCHOPTIONS:/{;s/^[^:]*://;p;q;}' <"$$patchfile")"; \
+	      patch -N -f -i "$$patchfile" -b -V simple -B "debian/backup-$$patchname/" $$patchoptions; \
+	      touch "$$stampfile"; \
+	      rm -rf "debian/backup-$$patchname"; \
+	    fi; \
+	  fi; \
+	done
+
+	touch debian/patch-stamp
+
+# Remove all managed patches from the source tree
+unpatch: chmod-yada
+	@set -e; backupdirs=$$(ls -d debian/backup-* 2>/dev/null | wc -l); \
+	if test $$backupdirs -gt 1; then \
+	  echo "*** Yada error: There are multiple debian/backup-* directories."; \
+	  echo "***             I can't cope.  Please clean up for me."; \
+	  exit 1; \
+	fi; \
+	if test $$backupdirs = 1; then \
+	  patchname="$$(echo debian/backup-* | sed 's=^debian/backup-==')"; \
+	  echo "*** Cleaning up after interrupted patching run for $$patchname"; \
+	  if test -f "debian/patch-$$patchname-applied"; then \
+	    rm -rf "debian/backup-$$patchname"; \
+	  else \
+	    (cd "debian/backup-$$patchname"; find . -type f -print0) | xargs -0ri mv -f -- debian/backup-$$patchname/{} {}; \
+	    find "debian/backup-$$patchname" -depth -type d -exec rmdir '{}' \;; \
+	    if test -e "debian/backup-$$patchname"; then \
+	      echo "*** Yada error: I could not recover cleanly from an interrupted patch."; \
+	      echo "***             I can't cope.  Please clean up for me."; \
+	      exit 1; \
+	    fi; \
+	  fi; \
+	fi
+
+	@set -e; backdowndirs=$$(ls -d debian/backdown-* 2>/dev/null | wc -l); \
+	if test $$backdowndirs -gt 1; then \
+	  echo "*** Yada error: There are multiple debian/backdown-* directories."; \
+	  echo "***             I can't cope.  Please clean up for me."; \
+	  exit 1; \
+	fi; \
+	if test $$backdowndirs = 1; then \
+	  patchname="$$(echo debian/backdown-* | sed 's=^debian/backdown-==')"; \
+	  echo "*** Cleaning up after interrupted unpatching run for $$patchname"; \
+	  if test ! -f "debian/patch-$$patchname-applied"; then \
+	    rm -rf "debian/backdown-$$patchname"; \
+	  else \
+	    (cd "debian/backdown-$$patchname"; find . -type f -print0) | xargs -0ri mv -f -- debian/backdown-$$patchname/{} {}; \
+	    find "debian/backdown-$$patchname" -depth -type d -exec rmdir '{}' \;; \
+	    if test -e "debian/backdown-$$patchname"; then \
+	      echo "*** Yada error: I could not recover cleanly from an interrupted patch."; \
+	      echo "***             I can't cope.  Please clean up for me."; \
+	      exit 1; \
+	    fi; \
+	  fi; \
+	fi
+
+	@set -e; for stampfile in debian/patch-*-applied; do \
+	  if test -f "$$stampfile"; then \
+	    patchname="$$(echo "$$stampfile" | sed 's=^debian/patch-\(.*\)-applied$$=\1=')"; \
+	    patchfile="debian/$$patchname"; \
+	    if test ! -f "$$patchfile"; then \
+	      patchfile="$$patchfile.disabled"; \
+	    fi; \
+	    if test -f "$$patchfile"; then \
+	      echo "*** Removing patch from $$patchname"; \
+	      patchoptions="$$(sed -n '/^#PATCHOPTIONS:/{;s/^[^:]*://;p;q;}' <"$$patchfile")"; \
+	      patch -R -f -i "$$patchfile" -b -V simple -B "debian/backdown-$$patchname/" $$patchoptions; \
+	      rm -f "$$stampfile"; \
+	      rm -rf "debian/backdown-$$patchname"; \
+	    else \
+	      echo "*** Yada warning: Cannot find a patchfile named \`$$patchname' to unapply"; \
+	    fi; \
+	  fi; \
+	done
+
+	rm -f debian/patch-stamp
+
+# Build the package and prepare the install tree
+
+.PHONY: build-only build
+build-only: debian/build-stamp
+build: chmod-yada build-only
+
+# Make sure these rules and the control file are up-to-date
+
+.PHONY: rules control
+rules: debian/rules
+debian/rules: $(shell which yada) debian/packages
+	$(shell which yada) rebuild rules
+
+control: debian/control
+debian/control: $(shell which yada) debian/packages
+	$(shell which yada) rebuild control
+
+debian/build-stamp: debian/depends-stamp debian/patch-stamp
+	@[ -f $(shell which yada) -a -f debian/rules ]
+	@umask 022 \
+	    && export PACKAGE="phpmyadmin" \
+	    && export VERSION="$(VERSION)" \
+	    && export DEB_HOST_GNU_CPU="$(DEB_HOST_GNU_CPU)" \
+	    && export DEB_HOST_GNU_TYPE="$(DEB_HOST_GNU_TYPE)" \
+	    && export DEB_HOST_GNU_SYSTEM="$(DEB_HOST_GNU_SYSTEM)" \
+	    && export DEB_BUILD_GNU_CPU="$(DEB_BUILD_GNU_CPU)" \
+	    && export DEB_BUILD_GNU_TYPE="$(DEB_BUILD_GNU_TYPE)" \
+	    && export DEB_BUILD_GNU_SYSTEM="$(DEB_BUILD_GNU_SYSTEM)" \
+ && (\
+	echo -E 'eval "yada () { perl $$(which yada) \"\$$@\"; }"; set -e; set -v';\
+	echo -E 'find -name CVS | xargs rm -rf') | /bin/sh
+	touch debian/build-stamp
+
+.PHONY: install-tree
+install-tree: chmod-yada install-tree-any
+install-tree-any: \
+	debian/tmp-phpmyadmin/DEBIAN/control
+
+debian/tmp-phpmyadmin/DEBIAN/control: debian/build-stamp debian/control
+	rm -rf debian/tmp-phpmyadmin
+	umask 022 && install -d debian/tmp-phpmyadmin/DEBIAN
+	install -d debian/tmp-phpmyadmin/usr/share/doc/phpmyadmin
+	umask 022; $(shell which yada) generate copyright \
+	                       >debian/tmp-phpmyadmin/usr/share/doc/phpmyadmin/copyright
+	install -m 644 -p debian/changelog \
+	                  debian/tmp-phpmyadmin/usr/share/doc/phpmyadmin/changelog.Debian
+	@umask 022 \
+	    && export PACKAGE="phpmyadmin" \
+	    && export ROOT="$$(pwd)/debian/tmp-phpmyadmin" \
+	    && export CONTROL="$$(pwd)/debian/tmp-phpmyadmin/DEBIAN" \
+	    && export VERSION="$(VERSION)" \
+	    && export DEB_HOST_GNU_CPU="$(DEB_HOST_GNU_CPU)" \
+	    && export DEB_HOST_GNU_TYPE="$(DEB_HOST_GNU_TYPE)" \
+	    && export DEB_HOST_GNU_SYSTEM="$(DEB_HOST_GNU_SYSTEM)" \
+	    && export DEB_BUILD_GNU_CPU="$(DEB_BUILD_GNU_CPU)" \
+	    && export DEB_BUILD_GNU_TYPE="$(DEB_BUILD_GNU_TYPE)" \
+	    && export DEB_BUILD_GNU_SYSTEM="$(DEB_BUILD_GNU_SYSTEM)" \
+ && (\
+	echo -E 'eval "yada () { perl $$(which yada) \"\$$@\"; }"; set -e; set -v';\
+	echo -E 'yada install -data -into /usr/share/phpmyadmin *.php badwords.txt';\
+	echo -E 'yada install -data -into /usr/share/phpmyadmin/images images/*';\
+	echo -E 'yada install -data -into /usr/share/phpmyadmin/libraries libraries/*.*';\
+	echo -E 'yada install -data -into /usr/share/phpmyadmin/libraries/auth libraries/auth/*';\
+	echo -E 'yada install -dir /etc/phpmyadmin';\
+	echo -E 'for i in config footer header; do';\
+	echo -E '    mv -f $$ROOT/usr/share/phpmyadmin/$$i.inc.php $$ROOT/etc/phpmyadmin/';\
+	echo -E '    ln -s /etc/phpmyadmin/$$i.inc.php $$ROOT/usr/share/phpmyadmin/';\
+	echo -E 'done';\
+	echo -E 'yada install -data -into /usr/share/phpmyadmin/lang lang/*.inc.php';\
+	echo -E 'yada install -data -into /usr/share/phpmyadmin Documentation.html';\
+	echo -E 'yada install -data -into /usr/share/phpmyadmin ChangeLog INSTALL README';\
+	echo -E 'yada install -conffile -into /etc/phpmyadmin -as apache.conf debian/phpmyadmin.apache.conf';\
+	echo -E 'yada install -doc README TODO';\
+	echo -E 'yada install -doc Documentation.html';\
+	echo -E 'yada install -doc -as changelog ChangeLog';\
+	echo -E 'yada install -doc -as README.Debian debian/README') | /bin/sh
+	$(shell which yada) compress phpmyadmin
+	$(shell which yada) generate maintscripts phpmyadmin
+	find debian/tmp-phpmyadmin -type f -print \
+	  | sed -n 's/^debian\/tmp-phpmyadmin\(\/etc\/.*\)$$/\1/p' \
+	    > debian/tmp-phpmyadmin/DEBIAN/conffiles
+	if test ! -s debian/tmp-phpmyadmin/DEBIAN/conffiles; then rm -f debian/tmp-phpmyadmin/DEBIAN/conffiles; fi
+	$(shell which yada) rebuild control
+	$(shell which yada) generate substvars phpmyadmin
+	umask 022 && dpkg-gencontrol -isp -pphpmyadmin -Pdebian/tmp-phpmyadmin
+
+# Build package files
+
+.PHONY: binary binary-arch binary-indep
+binary: binary-arch binary-indep
+binary-arch: chmod-yada binary-arch-any
+
+.PHONY: binary-arch-any
+binary-arch-any:
+binary-indep: chmod-yada \
+	binary-package-phpmyadmin
+
+.PHONY: binary-package-phpmyadmin
+binary-package-phpmyadmin: check-root debian/tmp-phpmyadmin/DEBIAN/control
+	@[ -f $(shell which yada) -a -f debian/rules ]
+	chown -R 0.0 debian/tmp-phpmyadmin
+	chmod -R u=rwX,go=rX debian/tmp-phpmyadmin
+	@if [ -d debian/tmp-phpmyadmin/usr/doc/phpmyadmin ]; then \
+	  echo "*** Yada warning: /usr/doc/phpmyadmin should be /usr/share/doc/phpmyadmin";\
+	fi
+	dpkg-deb --build debian/tmp-phpmyadmin ..
+
+.PHONY: check-root
+check-root:
+	@[ `id -u` = 0 ] || (echo "You must be root to do this!"; false)
+
+.PHONY: chmod-yada
+chmod-yada:
+	@if [ -f debian/yada -a ! -x debian/yada ]; then \
+	  chmod +x debian/yada; \
+	fi
+
+# Clean up afterwards
+
+.PHONY: clean clean-install-tree clean-build
+clean: chmod-yada clean-install-tree clean-build unpatch debian/control debian/rules
+
+clean-build:
+	@[ -f $(shell which yada) -a -f debian/rules ]
+	rm -f debian/build-stamp debian/depends-stamp
+	@umask 022 && (\
+	echo -E 'eval "yada () { perl $$(which yada) \"\$$@\"; }"; set -e; set -v';\
+	echo -E 'find -name CVS | xargs rm -rf') | /bin/sh
+
+clean-install-tree: chmod-yada debian/rules
+	@[ -f $(shell which yada) -a -f debian/rules ]
+	rm -f debian/install-tree-stamp
+	rm -rf debian/tmp* debian/files* debian/substvars

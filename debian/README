@@ -1,0 +1,27 @@
+phpmyadmin for Debian
+---------------------
+
+
+USAGE
+
+  The application should be available at http://localhost/phpmyadmin/
+  after install.
+  
+  Please note, the password can not be empty. You can change the password for
+  your database with 'mysqladmin password <new-password>' command.
+
+
+SECURITY
+
+  The default configuration for Debian has enabled cookie based authentication.
+  You *shouldn't* put your passwords into /etc/phpmyadmin/config.inc.php file.
+  This file has to be readable by www-data user, so it can be readable
+  by anyone who can run its own CGI script!
+  
+  Remember, that phpMyAdmin needs an access to mysql table. You should
+  give additional priviliges for a user, i.e.:
+  
+  GRANT USAGE ON mysql.* TO 'username@localhost'
+
+
+ -- Piotr Roszatycki <dexter@debian.org>  Tue, 18 Dec 2001 13:54:59 +0100

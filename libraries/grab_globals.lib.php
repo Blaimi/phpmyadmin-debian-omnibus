@@ -1,5 +1,5 @@
 <?php
-/* $Id: grab_globals.lib.php,v 2.5.4.4 2005/02/24 17:38:31 rabus Exp $ */
+/* $Id: grab_globals.lib.php,v 2.5.4.5 2005/03/03 20:39:28 rabus Exp $ */
 // vim: expandtab sw=4 ts=4 sts=4:
 
 
@@ -12,7 +12,7 @@
  * loic1 - 2001/25/11: use the new globals arrays defined with php 4.1+
  */
 
-function PMA_gpc_extract($array, &$target) {
+function PMA_gpc_extract($array, &$target, $sanitize = TRUE) {
     if (!is_array($array)) {
         return FALSE;
     }
@@ -30,7 +30,7 @@ function PMA_gpc_extract($array, &$target) {
          * Warning: this also affects array keys:
          * Variables like $_GET['harmless']['cfg'] will also be rejected!
          */
-        if (is_string($key) && (
+        if ($sanitize && is_string($key) && (
             $key == 'cfg'
             || $key == 'GLOBALS'
             || substr($key, 0, 3) == 'str'
@@ -43,7 +43,7 @@ function PMA_gpc_extract($array, &$target) {
             // another application, with the same name as this array
             unset($target[$key]);
 
-            PMA_gpc_extract($value, $target[$key]);
+            PMA_gpc_extract($value, $target[$key], FALSE);
         } else if ($is_magic_quotes) {
             $target[$key] = stripslashes($value);
         } else {

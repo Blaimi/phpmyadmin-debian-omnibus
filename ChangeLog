@@ -2,8 +2,23 @@
 phpMyAdmin - Changelog
 ----------------------
 
-$Id: ChangeLog,v 2.871.2.24 2005/02/24 19:08:57 lem9 Exp $
+$Id: ChangeLog,v 2.871.2.28 2005/03/04 11:17:05 lem9 Exp $
 $Source: /cvsroot/phpmyadmin/phpMyAdmin/ChangeLog,v $
+
+2005-03-04 Marc Delisle  <lem9@users.sourceforge.net>
+    * server_privileges.php: bug #1113788, escaping character removed by error
+    * server_privileges.php: bug #1118137, host not changing when editing user
+    ### 2.6.1-pl3 released
+
+2005-03-03 Alexander M. Turek  <me@derrabus.de>
+    * libraries/grab_globals.lib.php: Bug #1153079 (Updating columns starting
+      with "str").
+    * Documentation.html: Sync'ed with HEAD branch. See 2.6.2 ChangeLog for
+      details.
+
+2005-02-27 Alexander M. Turek  <me@derrab.us>
+    * libraries/sqlparser.data.php: Added missing MySQL functions STR_TO_DATE
+      and GET_FORMAT (bug #1152310).
 
 2005-02-24 Marc Delisle  <lem9@users.sourceforge.net>
     ### 2.6.1-pl2 released

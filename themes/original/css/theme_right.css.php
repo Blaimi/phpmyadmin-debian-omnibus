@@ -275,6 +275,20 @@ img, input, select, button {
     width: 20px;
     height: 16px;
 }
+
+/* disabled text */
+.disabled, .disabled a:link, disabled a:active, .disabled a:visited {
+    font-family: <?php echo $right_font_family; ?>;
+    font-size:   <?php echo $font_size; ?>;
+    color:       #666666;
+}
+.disabled a:hover {
+    text-decoration: none;
+}
+tr.disabled td, td.disabled {
+    background-color: #cccccc;
+}
+
 #textSQLDUMP {
     width: 95%;
     height: 95%;
@@ -282,3 +296,17 @@ img, input, select, button {
     font-size:   12px;
 }
 <?php } // end of isDom ?>
+#TooltipContainer {
+    position:   absolute;
+    z-index:    99;
+    width:      250px;
+    height:     50px;
+    overflow:   auto;
+    visibility: hidden;
+    background-color: #ffffcc;
+    color:            #006600;
+    border:           1px solid #000000;
+    padding:          5px;
+    font-family:      <?php echo $right_font_family; ?>;
+    font-size:        <?php echo $font_size; ?>;
+}

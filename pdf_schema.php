@@ -1,5 +1,5 @@
 <?php
-/* $Id: pdf_schema.php,v 2.12 2004/12/29 14:13:40 nijel Exp $ */
+/* $Id: pdf_schema.php,v 2.13 2005/03/05 23:19:59 lem9 Exp $ */
 // vim: expandtab sw=4 ts=4 sts=4:
 
 /**
@@ -1278,7 +1278,7 @@ function PMA_RT_DOC($alltables ){
         $pdf->ln();
 
         $cfgRelation  = PMA_getRelationsParam();
-        if ($cfgRelation['commwork']) {
+        if ($cfgRelation['commwork'] || PMA_MYSQL_INT_VERSION >= 40100) {
             $comments = PMA_getComments($db, $table);
         }
         if ($cfgRelation['mimework']) {

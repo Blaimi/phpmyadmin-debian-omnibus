@@ -1,5 +1,5 @@
 <?php
-/* $Id: footer.inc.php,v 2.12 2004/11/03 13:56:51 garvinhicking Exp $ */
+/* $Id: footer.inc.php,v 2.13 2005/01/20 16:35:52 mkkeck Exp $ */
 // vim: expandtab sw=4 ts=4 sts=4:
 
 /**
@@ -144,7 +144,7 @@ if (isset($GLOBALS['userlink']) && $GLOBALS['userlink']) {
 ?>
 
 <?php include('./config.footer.inc.php'); ?>
-
+    <script type="text/javascript" language="javascript" src="libraries/tooltip.js"></script>
 </body>
 
 </html>

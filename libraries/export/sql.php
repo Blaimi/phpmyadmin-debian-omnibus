@@ -1,5 +1,5 @@
 <?php
-/* $Id: sql.php,v 2.40 2004/12/29 09:36:25 nijel Exp $ */
+/* $Id: sql.php,v 2.44 2005/03/06 12:30:10 lem9 Exp $ */
 // vim: expandtab sw=4 ts=4 sts=4:
 error_reporting(E_ALL);
 /**
@@ -57,8 +57,7 @@ function PMA_exportHeader() {
     global $cfg;
 
     if (PMA_MYSQL_INT_VERSION >= 40100 && isset($GLOBALS['sql_compat']) && $GLOBALS['sql_compat'] != 'NONE') {
-        $result = PMA_DBI_query('SET @@SQL_MODE="' . $GLOBALS['sql_compat'] . '"');
-        PMA_DBI_free_result($result);
+        PMA_DBI_try_query('SET SQL_MODE="' . $GLOBALS['sql_compat'] . '"');
     }
 
     $head  =  $GLOBALS['comment_marker'] . 'phpMyAdmin SQL Dump' . $crlf
@@ -184,8 +183,8 @@ function PMA_getTableDef($db, $table, $crlf, $error_url, $show_dates = false)
     $auto_increment = '';
     $new_crlf = $crlf;
 
-
-    $result = PMA_DBI_query('SHOW TABLE STATUS FROM ' . PMA_backquote($db) . ' LIKE \'' . PMA_sqlAddslashes($table) . '\'');
+    // need to use PMA_DBI_QUERY_STORE with PMA_DBI_num_rows() in mysqli
+    $result = PMA_DBI_query('SHOW TABLE STATUS FROM ' . PMA_backquote($db) . ' LIKE \'' . PMA_sqlAddslashes($table) . '\'', NULL, PMA_DBI_QUERY_STORE);
     if ($result != FALSE) {
         if (PMA_DBI_num_rows($result) > 0) {
             $tmpres        = PMA_DBI_fetch_assoc($result);
@@ -332,8 +331,11 @@ function PMA_getTableComments($db, $table, $crlf, $do_relation = false, $do_comm
 
     $schema_create = '';
 
+    // triggered only for MySQL < 4.1.x (pmadb-style comments)
     if ($do_comments && $cfgRelation['commwork']) {
-        if (!($comments_map = PMA_getComments($db, $table))) unset($comments_map);
+        if (!($comments_map = PMA_getComments($db, $table))) {
+            unset($comments_map);
+        }
     }
 
     // Check if we can use Relations (Mike Beck)

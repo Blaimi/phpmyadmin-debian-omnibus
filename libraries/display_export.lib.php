@@ -1,5 +1,5 @@
 <?php
-/* $Id: display_export.lib.php,v 2.25 2004/12/28 12:54:39 nijel Exp $ */
+/* $Id: display_export.lib.php,v 2.30 2005/03/06 21:18:29 nijel Exp $ */
 // vim: expandtab sw=4 ts=4 sts=4:
 
 // Get relations & co. status
@@ -63,6 +63,8 @@ if (isset($sql_query)) {
         getElement("csv_options").style.display = 'none';
         getElement("excel_options").style.display = 'none';
         getElement("latex_options").style.display = 'none';
+        getElement("htmlexcel_options").style.display = 'none';
+        getElement("htmlword_options").style.display = 'none';
 <?php if ($xls) { ?>
         getElement("xls_options").style.display = 'none';
 <?php } ?>
@@ -76,6 +78,10 @@ if (isset($sql_query)) {
         hide_them_all();
         if (getElement('radio_dump_latex').checked) {
             getElement('latex_options').style.display = 'block';
+        } else if (getElement('radio_dump_htmlexcel').checked) {
+            getElement('htmlexcel_options').style.display = 'block';
+        } else if (getElement('radio_dump_htmlword').checked) {
+            getElement('htmlword_options').style.display = 'block';
 <?php if ($xls) { ?>
         } else if (getElement('radio_dump_xls').checked) {
             getElement('xls_options').style.display = 'block';
@@ -136,6 +142,16 @@ if (isset($sql_query)) {
                     <input type="radio" name="what" value="latex" id="radio_dump_latex"  onclick="if (this.checked) { hide_them_all(); getElement('latex_options').style.display = 'block'; }; return true" <?php PMA_exportIsActive('format', 'latex'); ?> style="vertical-align: middle" /><label for="radio_dump_latex"><?php echo $strLaTeX; ?>&nbsp;</label>
                 </td></tr>
 
+
+            <!-- HTML Excel -->
+                <tr><td bgcolor="<?php echo $cfg['BgcolorOne']; ?>">
+                    <input type="radio" name="what" value="htmlexcel" id="radio_dump_htmlexcel"  onclick="if (this.checked) { hide_them_all(); getElement('htmlexcel_options').style.display = 'block'; getElement('checkbox_dump_asfile').checked = true;};  return true" <?php PMA_exportIsActive('format', 'htmlexcel'); ?> /><label for="radio_dump_htmlexcel"><?php echo $strHTMLExcel; ?></label>
+               </td></tr>
+
+            <!-- HTML Word -->
+                <tr><td bgcolor="<?php echo $cfg['BgcolorOne']; ?>">
+                    <input type="radio" name="what" value="htmlword" id="radio_dump_htmlword"  onclick="if (this.checked) { hide_them_all(); getElement('htmlword_options').style.display = 'block'; getElement('checkbox_dump_asfile').checked = true;};  return true" <?php PMA_exportIsActive('format', 'htmlword'); ?> /><label for="radio_dump_htmlword"><?php echo $strHTMLWord; ?></label>
+               </td></tr>
 
 <?php if ($xls) { ?>
             <!-- Native Excel -->
@@ -227,7 +243,7 @@ if (!$hide_structure) { ?>
                         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="checkbox" name="sql_relation" value="yes" id="checkbox_sql_use_relation" <?php PMA_exportCheckboxCheck('sql_relation'); ?> style="vertical-align: middle" /><label for="checkbox_sql_use_relation"><?php echo $strRelations; ?></label><br />
 <?php
     } // end relation
-    if (!empty($cfgRelation['commwork'])) {
+    if (!empty($cfgRelation['commwork']) && PMA_MYSQL_INT_VERSION < 40100) {
 ?>
                         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="checkbox" name="sql_comments" value="yes" id="checkbox_sql_use_comments" <?php PMA_exportCheckboxCheck('sql_comments'); ?> style="vertical-align: middle" /><label for="checkbox_sql_use_comments"><?php echo $strComments; ?></label><br />
 <?php
@@ -241,14 +257,26 @@ if (!$hide_structure) { ?>
 ?>
                         <label for="select_sql_compat"><?php echo $strSQLExportCompatibility; ?>:&nbsp;</label><select name="sql_compat" id="select_sql_compat" style="vertical-align: middle">
                         <?php
-                        /* FIXME: offer only those that have effect on actual version? */
-                        $compats = array('NONE', 'ANSI', 'DB2', 'MAXDB', 'MSSQL', 'MYSQL323', 'MYSQL40', 'ORACLE', 'POSTGRESQL', 'TRADITIONAL');
+                        $compats = array('NONE');
+                        if (PMA_MYSQL_INT_VERSION >= 40101) {
+                            $compats[] = 'ANSI';
+                            $compats[] = 'DB2';
+                            $compats[] = 'MAXDB';
+                            $compats[] = 'MYSQL323';
+                            $compats[] = 'MYSQL40';
+                            $compats[] = 'MSSQL';
+                            $compats[] = 'ORACLE';
+                            $compats[] = 'POSTGRESQL';
+                            if (PMA_MYSQL_INT_VERSION >= 50001) {
+                                $compats[] = 'TRADITIONAL';
+                            }
+                        }
                         foreach ($compats as $x) {
                             echo '<option value="' . $x . '"' . ($cfg['Export']['sql_compat'] == $x ? ' selected="selected"' : '' ) . '>' . $x . '</option>' . "\n";
                         }
                         ?>
                         </select>
-                        <?php echo PMA_showMySQLDocu('manual_MySQL_Database_Administration', 'Server_SQL_mode') . "\n"; 
+                        <?php echo PMA_showMySQLDocu('manual_MySQL_Database_Administration', 'Server_SQL_mode') . "\n";
     }
     ?>
                     </td>
@@ -479,6 +507,69 @@ if (!$hide_structure) { ?>
                 </table>
                 </td></tr>
             </table>
+            </div>
+
+
+            <!-- HTML Excel options -->
+            <div id="htmlexcel_options">
+                <table border="0" cellspacing="1" cellpadding="0" width="400">
+                    <tr>
+                        <th align="left">
+                           <b><?php echo $strHTMLExcelOptions; ?></b>
+                           <input type="hidden" name="htmlexcel_data" value="htmlexcel_data" />
+                        </th>
+                   </tr>
+                   <tr><td bgcolor="<?php echo $cfg['BgcolorOne']; ?>">
+                <table border="0" cellspacing="1" cellpadding="0">
+                       <tr>
+                           <td>
+                            <?php echo $strReplaceNULLBy; ?>&nbsp;
+                        </td>
+                        <td>
+                            <input type="text" name="htmlexcel_replace_null" size="20" value="<?php echo $cfg['Export']['htmlexcel_null']; ?>" class="textfield" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <input type="checkbox" name="htmlexcel_shownames" value="yes" id="checkbox_dump_htmlexcel_shownames" <?php PMA_exportCheckboxCheck('htmlexcel_columns'); ?> /><label for="checkbox_dump_htmlexcel_shownames"><?php echo $strPutColNames; ?></label>
+                        </td>
+                    </tr>
+                </table>
+                    </td></tr>
+               </table>
+            </div>
+
+
+            <!-- HTML Word options -->
+            <div id="htmlword_options">
+                <table border="0" cellspacing="1" cellpadding="0" width="400">
+                    <tr>
+                        <th align="left">
+                           <b><?php echo $strHTMLWordOptions; ?></b>
+                        </th>
+                   </tr>
+                   <tr><td bgcolor="<?php echo $cfg['BgcolorOne']; ?>">
+                    <input type="checkbox" name="htmlword_structure" value="structure" id="checkbox_htmlword_structure" <?php PMA_exportCheckboxCheck('htmlword_structure'); ?> onclick="if (!this.checked &amp;&amp; (!getElement('checkbox_htmlword_data') || !getElement('checkbox_htmlword_data').checked)) return false; else return true;" style="vertical-align: middle" /><label for="checkbox_htmlword_structure"><b><?php echo $strStructure; ?></b></label><br />
+                    </td></tr>
+                   <tr><td bgcolor="<?php echo $cfg['BgcolorOne']; ?>">
+                    <input type="checkbox" name="htmlword_data" value="data" id="checkbox_htmlword_data" <?php PMA_exportCheckboxCheck('htmlword_data'); ?> onclick="if (!this.checked &amp;&amp; (!getElement('checkbox_htmlword_structure') || !getElement('checkbox_htmlword_structure').checked)) return false; else return true;" style="vertical-align: middle" /><label for="checkbox_htmlword_data"><b><?php echo $strData; ?>:</b></label><br />
+                <table border="0" cellspacing="1" cellpadding="0">
+                       <tr>
+                           <td>
+                            &nbsp;&nbsp;&nbsp;&nbsp;<?php echo $strReplaceNULLBy; ?>&nbsp;
+                        </td>
+                        <td>
+                            <input type="text" name="htmlword_replace_null" size="20" value="<?php echo $cfg['Export']['htmlword_null']; ?>" class="textfield" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            &nbsp;&nbsp;&nbsp;&nbsp;<input type="checkbox" name="htmlword_shownames" value="yes" id="checkbox_dump_htmlword_shownames" <?php PMA_exportCheckboxCheck('htmlword_columns'); ?> /><label for="checkbox_dump_htmlword_shownames"><?php echo $strPutColNames; ?></label>
+                        </td>
+                    </tr>
+                </table>
+                    </td></tr>
+               </table>
             </div>
 
 

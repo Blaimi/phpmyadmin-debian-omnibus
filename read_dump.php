@@ -1,5 +1,5 @@
 <?php
-/* $Id: read_dump.php,v 2.32 2004/12/28 14:05:47 nijel Exp $ */
+/* $Id: read_dump.php,v 2.33 2005/01/27 14:49:29 nijel Exp $ */
 // vim: expandtab sw=4 ts=4 sts=4:
 
 /**
@@ -275,7 +275,7 @@ if ($sql_query != '') {
 
                 // .*? below is non greedy expansion, just in case somebody wants to understand it...
                 // looks ok here without using PCRE_MULTILINE
-                if ($i == $count - 1 && preg_match('@^((-- |#)[^\n]*\n|/\*.*?\*/)*(SELECT|SHOW)@i', $a_sql_query)) {
+                if ($i == $count - 1 && preg_match('@^((-- |#)[^\n]*\n|[\s]*\n|/\*.*?\*/)*(SELECT|SHOW)@i', $a_sql_query)) {
                     $complete_query = $sql_query;
                     $display_query = $sql_query;
                     $sql_query = $a_sql_query;

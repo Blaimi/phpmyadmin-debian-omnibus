@@ -1,5 +1,5 @@
 <?php
-/* $Id: server_privileges.php,v 2.40.2.1 2005/03/04 11:13:15 lem9 Exp $ */
+/* $Id: server_privileges.php,v 2.42 2005/02/18 02:57:30 lem9 Exp $ */
 // vim: expandtab sw=4 ts=4 sts=4:
 
 /**

@@ -1,5 +1,5 @@
 <?php
-/* $Id: main.php,v 2.65 2004/12/28 15:12:08 nijel Exp $ */
+/* $Id: main.php,v 2.69 2005/03/06 21:10:53 nijel Exp $ */
 // vim: expandtab sw=4 ts=4 sts=4:
 
 /**
@@ -12,12 +12,6 @@ define('PMA_DISPLAY_HEADING', 0);
  */
 require_once('./libraries/grab_globals.lib.php');
 require_once('./libraries/common.lib.php');
-// Puts the language to use in a cookie that will expire in 30 days
-if (!isset($pma_uri_parts)) {
-    $pma_uri_parts = parse_url($cfg['PmaAbsoluteUri']);
-    $cookie_path   = substr($pma_uri_parts['path'], 0, strrpos($pma_uri_parts['path'], '/'));
-    $is_https      = (isset($pma_uri_parts['scheme']) && $pma_uri_parts['scheme'] == 'https') ? 1 : 0;
-}
 setcookie('pma_lang', $lang, time() + 60*60*24*30, $cookie_path, '', $is_https);
 if (isset($convcharset)) {
     setcookie('pma_charset', $convcharset, time() + 60*60*24*30, $cookie_path, '', $is_https);
@@ -179,7 +173,7 @@ if ($server > 0) {
 // can do a 'USE mysql' (even if they cannot see the tables)
     $is_superuser    = PMA_DBI_try_query('SELECT COUNT(*) FROM mysql.user', $userlink, PMA_DBI_QUERY_STORE);
 
-function PMA_analyseShowGrant($rs_usr, &$is_create_priv, &$db_to_create) {
+function PMA_analyseShowGrant($rs_usr, &$is_create_priv, &$db_to_create, &$is_reload_priv) {
 
     $re0 = '(^|(\\\\\\\\)+|[^\])'; // non-escaped wildcards
     $re1 = '(^|[^\])(\\\)+'; // escaped wildcards
@@ -190,6 +184,7 @@ function PMA_analyseShowGrant($rs_usr, &$is_create_priv, &$db_to_create) {
         if (($show_grants_str == 'ALL') || ($show_grants_str == 'ALL PRIVILEGES') || ($show_grants_str == 'CREATE') || strpos($show_grants_str, 'CREATE')) {
             if ($show_grants_dbname == '*') {
                 $is_create_priv = TRUE;
+                $is_reload_priv = TRUE;
                 $db_to_create   = '';
                 break;
             } // end if
@@ -215,7 +210,7 @@ function PMA_analyseShowGrant($rs_usr, &$is_create_priv, &$db_to_create) {
     if (PMA_MYSQL_INT_VERSION >= 40102) {
         $rs_usr = PMA_DBI_try_query('SHOW GRANTS', $userlink, PMA_DBI_QUERY_STORE);
         if ($rs_usr) {
-            PMA_analyseShowGrant($rs_usr,$is_create_priv, $db_to_create);
+            PMA_analyseShowGrant($rs_usr,$is_create_priv, $db_to_create, $is_reload_priv);
             PMA_DBI_free_result($rs_usr);
             unset($rs_usr);
         }
@@ -275,7 +270,7 @@ function PMA_analyseShowGrant($rs_usr, &$is_create_priv, &$db_to_create) {
                 }
                 unset($local_query);
                 if ($rs_usr) {
-                    PMA_analyseShowGrant($rs_usr,$is_create_priv, $db_to_create);
+                    PMA_analyseShowGrant($rs_usr,$is_create_priv, $db_to_create, $is_reload_priv);
                     PMA_DBI_free_result($rs_usr);
                     unset($rs_usr);
                 } // end if
@@ -400,7 +395,16 @@ function PMA_analyseShowGrant($rs_usr, &$is_create_priv, &$db_to_create) {
     </tr>
             <?php
         }
-
+        ?>
+    <tr><?php
+            echo '        ' . ($str_iconic_list != '' ? sprintf($str_iconic_list,'<a href="./server_engines.php?'.$common_url_query.'">','b_engine.png',$strStorageEngines,'</a>') : $str_normal_list);
+?>
+        <td>
+                <a href="./server_engines.php?<?php echo $common_url_query; ?>">
+                    <?php echo $strStorageEngines; ?></a>&nbsp;
+        </td>
+    </tr>
+        <?php
         if ($is_reload_priv) {
             echo "\n";
             ?>
@@ -494,7 +498,7 @@ function PMA_analyseShowGrant($rs_usr, &$is_create_priv, &$db_to_create) {
             ?>
     <tr>
 <?php
-            echo '        ' . ($str_iconic_list != '' ? sprintf($str_iconic_list,'<a href="index.php?'.$common_url_query.'&amp;old_usr='.urlencode($PHP_AUTH_USER).'">','s_loggoff.png',$strChangePassword,'</a>') : $str_normal_list);
+            echo '        ' . ($str_iconic_list != '' ? sprintf($str_iconic_list,'<a href="index.php?'.$common_url_query.'&amp;old_usr='.urlencode($PHP_AUTH_USER).'">','s_loggoff.png',$strLogout,'</a>') : $str_normal_list);
 ?>
         <td>
 

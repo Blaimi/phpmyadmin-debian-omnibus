@@ -4,14 +4,14 @@
    Transformations  -  FAQ  -  Developers  -  Credits  -  Translators
    ______________________________________________________________________
 
-                      phpMyAdmin 2.6.1-pl3 Documentation
+                      phpMyAdmin 2.6.2-rc1 Documentation
 
      * SourceForge phpMyAdmin project page   [ http://www.phpmyadmin.net/ ] 
      * Local documents:
           + Version history: ChangeLog
           + General notes: README
           + License: LICENSE
-     * Documentation version: $Id: Documentation.html,v 2.103.2.5 2005/03/03        20:54:24 rabus Exp $
+     * Documentation version: $Id: Documentation.html,v 2.122 2005/04/03 22:       42:31 lem9 Exp $
 
 Requirements
 
@@ -203,16 +203,17 @@ Configuration
 
    $cfg['PmaAbsoluteUri'] string
           Sets  here the complete URL (with full path) to your phpMyAdmin
-          version. E.g.
+          installation's directory. E.g.
           http://www.your_web.net/path_to_your_phpMyAdmin_directory/.
-          phpMyAdmin needs this setting, because of requirements of the HTTP
-          protocol, explained in RFC2616, section 14.30.
+          Starting with version 2.3.0, it is advisable to try leaving this
+          blank. In most cases phpMyAdmin automatically detects the proper
+          setting. Additional details are in the configuration file. If you
+          leave it blank, see the notes for
+          $cfg['PmaAbsoluteUri_DisableWarning']; you probably want to change
+          that to TRUE.
           Don't forget the slash at the end of your URL. The URL must contain
           characters that are valid for a URL, and on some servers, the path is
           case-sensitive.
-          Starting with version 2.3.0, you can try to leave this parameter
-          empty, because the program tries to auto-detect its proper value.
-          Additional details are in the configuration file.
 
    $cfg['PmaAbsoluteUri_DisableWarning'] boolean
           By default, when you leave $cfg['PmaAbsoluteUri'] empty, and the
@@ -790,12 +791,12 @@ Configuration
    $cfg['DefaultLang'] string
           Defines  the default language to use, if not browser-defined or
           user-defined.
-          See the select_lang.inc.php script to know the valid values for this
+          See the select_lang.lib.php script to know the valid values for this
           setting.
 
    $cfg['Lang'] string
           Force:  always  use  this  language  (must  be  defined  in the
-          select_lang.inc.php script).
+          select_lang.lib.php script).
 
    $cfg['DefaultCharset'] string
           Default character set to use for recoding of MySQL queries. This must
@@ -1662,6 +1663,12 @@ FAQ - Frequently Asked Questions
 
    If you do not want to use your own symbols and buttons, remove the direct   ory "img" in "your_theme_name". phpMyAdmin will use the default icons an   d buttons (from the system-theme "original").
 
+    [2.8] I get "Missing parameters" errors, what can I do?
+
+   Here are a few points to check:
+     * In config.inc.php, try to leave the $cfg['PmaAbsoluteUri']directive e       mpty. See also FAQ 4.7.
+     * Maybe you have a broken PHP installation or you need to upgrade your       Zend Optimizer. See http://bugs.php.net/bug.php?id=31134.
+
   [3. Known limitations]
 
     [3.1] When using HTTP authentication, an user who logged out can not
@@ -1731,6 +1738,10 @@ FAQ - Frequently Asked Questions
     [3.11] The number of records for InnoDB tables is not correct.
 
    phpMyAdmin uses a quick method to get the row count, and this method only    returns an approximate count in the case of InnoDB tables. See $cfg['Ma   xExactCount'] for a way to modify those results, but this could have a s   erious impact on performance.
+
+    [3.12] What are the phpMyAdmin limitations for MySQL 3?
+
+   The number of records in queries containing COUNT and GROUP BY is not cor   rectly calculated. Also, sorting results of a query like "SELECT * from   table GROUP BY" ... is problematic.
 
   [4. ISPs, multi-user installations ]
 
@@ -1874,6 +1885,10 @@ FAQ - Frequently Asked Questions
      * Security settings in IE and/or Microsoft Security Center are too high       , thus blocking scripts execution.
      * The Windows Firewall is blocking Apache and MySQL. You must allow htt       p ports (80 or 443) and MySQL port (usually 3306) in the "in" and "out"
        directions.
+
+    [5.17] With Firefox, I cannot delete rows of data or drop a database.
+
+   Many users have confirmed that the Tabbrowser Extensions plugin they inst   alled in their Firefox is causing the problem.
 
   [6. Using phpMyAdmin]
 
@@ -2082,10 +2097,10 @@ FAQ - Frequently Asked Questions
 
    Yes. If a bookmark has the same label as a table name, it will be execute   d.
 
-    [6.23] Export: I heard phpMyAdmin can export MS Excel files, how can I
-    enable that?
+    [6.23] Export: I heard phpMyAdmin can export Microsoft Excel files, how can
+    I enable that?
 
-   You can either export as CSV suitable for MS Excel, which works out of th   e box or you can try native experimental MS Excel exporter. This export   has several problems, most important are limitation of cell content to 2   55 chars and no support for charsets, so think carefully whether you wan   t to enable this.. For enabling this you need to set $cfg['TempDir'] to   place where web server user can write (for example './tmp') and install   PEAR module Spreadsheet_Excel_Writer into php include path. The installa   tion can be done by following command:
+   Current version does support direct export ot Microsoft Excel and Word ve   rsions 2000 and newer. If you need export older versions, you can use CS   V suitable for Microsoft Excel, which works out of the box or you can tr   y native experimental MS Excel exporter. This export has several problem   s, most important are limitation of cell content to 255 chars and no sup   port for charsets, so think carefully whether you want to enable this..   For enabling this you need to set $cfg['TempDir'] to place where web ser   ver user can write (for example './tmp') and install PEAR module Spreads   heet_Excel_Writer into php include path. The installation can be done by    following command:
     pear -d preferred_state=beta install -a Spreadsheet_Excel_Writer
 
    First part of switches set we want to install beta version of that module    (no stable version available yet) and then we tell pear we want to sati   sfy dependencies.
@@ -2097,6 +2112,11 @@ FAQ - Frequently Asked Questions
     cd phpMyAdmin
     mkdir tmp
     chmod o+rwx tmp
+
+    [6.24] Now that phpMyAdmin supports native MySQL 4.1.x column comments,
+    what happens to my column comments stored in pmadb?
+
+   Automatic migration of a table's pmadb-style column comments to the nativ   e ones is done whenever you enter Structure page for this table.
 
   [7. phpMyAdmin project]
 
@@ -2171,6 +2191,10 @@ FAQ - Frequently Asked Questions
      * There is no firewall blocking requests from the Web server to the att       acking host.
 
    Version 2.5.7-pl1 was released with a fix for this vulnerability.
+
+    [8.3] About new security alerts
+
+   Please refer to http://www.phpmyadmin.net for the complete list of securi   ty alerts.
 
 Developers Information
 

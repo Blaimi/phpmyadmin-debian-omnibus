@@ -1,5 +1,5 @@
 <?php
-/* $Id: server_binlog.php,v 2.3 2004/11/09 15:40:03 nijel Exp $ */
+/* $Id: server_binlog.php,v 2.4 2005/02/26 23:16:59 nijel Exp $ */
 // vim: expandtab sw=4 ts=4 sts=4:
 
 
@@ -88,7 +88,7 @@ foreach ($serverProcesses as $value) {
         <td bgcolor="<?php echo $useBgcolorOne ? $cfg['BgcolorOne'] : $cfg['BgcolorTwo']; ?>" align="right">&nbsp;<?php echo $value['Pos']; ?>&nbsp;</td>
         <td bgcolor="<?php echo $useBgcolorOne ? $cfg['BgcolorOne'] : $cfg['BgcolorTwo']; ?>">&nbsp;<?php echo $value['Event_type']; ?>&nbsp;</td>
         <td bgcolor="<?php echo $useBgcolorOne ? $cfg['BgcolorOne'] : $cfg['BgcolorTwo']; ?>" align="right">&nbsp;<?php echo $value['Server_id']; ?>&nbsp;</td>
-        <td bgcolor="<?php echo $useBgcolorOne ? $cfg['BgcolorOne'] : $cfg['BgcolorTwo']; ?>" align="right">&nbsp;<?php echo $value['Orig_log_pos']; ?>&nbsp;</td>
+        <td bgcolor="<?php echo $useBgcolorOne ? $cfg['BgcolorOne'] : $cfg['BgcolorTwo']; ?>" align="right">&nbsp;<?php echo isset($value['Orig_log_pos']) ? $value['Orig_log_pos'] : $value['End_log_pos']; ?>&nbsp;</td>
         <td bgcolor="<?php echo $useBgcolorOne ? $cfg['BgcolorOne'] : $cfg['BgcolorTwo']; ?>">&nbsp;<?php echo htmlspecialchars($value['Info']); ?>&nbsp;</td>
     </tr>
 <?php

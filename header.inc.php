@@ -1,5 +1,5 @@
 <?php
-/* $Id: header.inc.php,v 2.22 2004/10/30 00:32:56 lem9 Exp $ */
+/* $Id: header.inc.php,v 2.28 2005/03/23 11:51:56 lem9 Exp $ */
 // vim: expandtab sw=4 ts=4 sts=4:
 
 if (empty($GLOBALS['is_header_sent'])) {
@@ -61,6 +61,11 @@ if (empty($GLOBALS['is_header_sent'])) {
         && typeof(parent.document.title) == 'string') {
         parent.document.title = '<?php echo $title; ?>';
     }
+
+    document.write('<style type="text/css">');
+    document.write('img.lightbulb { cursor: pointer; }');
+    document.write('<\/style>');
+    
     <?php
     // Add some javascript instructions if required
     if (isset($js_to_run) && $js_to_run == 'functions.js') {
@@ -143,6 +148,7 @@ if (empty($GLOBALS['is_header_sent'])) {
     }
     ?>
     <body bgcolor="<?php echo $GLOBALS['cfg']['RightBgColor'] . '"' . $bkg_img; ?>>
+    <div id="TooltipContainer" name="TooltipContainer" onmouseover="holdTooltip();" onmouseout="swapTooltip('default');"></div>
     <?php
     include('./config.header.inc.php');
 
@@ -186,12 +192,17 @@ if (empty($GLOBALS['is_header_sent'])) {
                . '</td>' . "\n\n";
 
             if (!empty($GLOBALS['table'])) {
+                if (PMA_MYSQL_INT_VERSION >= 50000) {
+                    require_once('./tbl_properties_table_info.php');
+                } else {
+                    $tbl_is_view = FALSE;
+                }
                 echo '        '
                    . '<td class="serverinfo"><div></div></td>' . "\n" . '            '
-                   . '<td class="serverinfo">' . $GLOBALS['strTable'] . ':&nbsp;'
+                   . '<td class="serverinfo">' . (isset($GLOBALS['tbl_is_view']) && $GLOBALS['tbl_is_view'] ? $GLOBALS['strView'] : $GLOBALS['strTable']) . ':&nbsp;'
                    . '<a href="' . $GLOBALS['cfg']['DefaultTabTable'] . '?' . PMA_generate_common_url($GLOBALS['db'], $GLOBALS['table']) . '">';
                 if ($GLOBALS['cfg']['MainPageIconic']) {
-                    echo '<img src="' . $GLOBALS['pmaThemeImage'] . 's_tbl.png" width="16" height="16" border="0" alt="' . htmlspecialchars($GLOBALS['table']) . '" />';
+                    echo '<img src="' . $GLOBALS['pmaThemeImage'] . (isset($GLOBALS['tbl_is_view']) && $GLOBALS['tbl_is_view'] ? 'b_views' : 's_tbl') . '.png" width="16" height="16" border="0" alt="' . htmlspecialchars($GLOBALS['table']) . '" />';
                 }
                 echo htmlspecialchars($GLOBALS['table']) . '</a>' . "\n"
                    . '</td>' . "\n\n";

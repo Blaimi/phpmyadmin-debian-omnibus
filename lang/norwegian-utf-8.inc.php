@@ -1,5 +1,5 @@
 <?php
-/* $Id: norwegian-utf-8.inc.php,v 2.63 2004/12/30 20:42:34 lem9 Exp $ */
+/* $Id: norwegian-utf-8.inc.php,v 2.77 2005/03/30 19:23:41 lem9 Exp $ */
 
 /**
  * Translated by Sven-Erik Andersen <sven-erik.andersen at pkf107.no>
@@ -686,7 +686,6 @@ $strTransformation_text_plain__formatted = 'Bevarer original formatering av felt
 $strTransformation_text_plain__imagelink = 'Viser et bilde og en link, feltet inneholder filnavnet; første verdi er et prefiks slik som "http://domain.com/", andre verdien er bredden i piksler, tredje er høyden.';
 $strTransformation_text_plain__link = 'Viser en link, feltet inneholder filnavnet, ; første verdi er et prefiks slik som "http://domain.com/", andre verdien er en tittel for linken.';
 $strTransformation_text_plain__substr = 'Viser bare en delstreng. Første verdien er antall tegn fra starten hvor din tekst begynner (Standard: 0). Andre verdien er hvor mange tegn som skal returneres. Hvis den er tom så returneres resten av teksten. Den tredje verdien definerer hvilke tegn som vil bli lagt til resultatet når en delstreng blir returnert (Standard: ...).';
-$strTransformation_text_plain__unformatted = 'Vis HTML kode som HTML enheter. Ingen HTML formatering blir vist.';
 $strTruncateQueries = 'Forkort vist spørring';
 $strTurkish = 'tyrkisk';
 $strType = 'Type';
@@ -754,4 +753,56 @@ $strMbOverloadWarning = 'You have enabled mbstring.func_overload in your PHP con
 
 $strSQLExportCompatibility = 'SQL export compatibility';  //to translate
 
+$strView = 'View';  //to translate
+$strViewHasBeenDropped = 'View %s has been dropped';  //to translate
+$strEngines = 'Engines';  //to translate
+$strStorageEngines = 'Storage Engines';  //to translate
+$strStorageEngine = 'Storage Engine';  //to translate
+$strNoDetailsForEngine = 'There is no detailed status information available for this storage engine.';  //to translate
+$strDefaultEngine = '%s is the default storage engine on this MySQL server.';  //to translate
+$strEngineAvailable = '%s is available on this MySQL server.';  //to translate
+$strEngineUnsupported = 'This MySQL server does not support the %s storage engine.';  //to translate
+$strEngineDisabled = '%s has been disabled for this MySQL server.';  //to translate
+$strMyISAMSortBufferSize = 'Sort buffer size';  //to translate
+$strMyISAMSortBufferSizeDesc = 'The buffer that is allocated when sorting MyISAM indexes during a REPAIR TABLE or when creating indexes with CREATE INDEX or ALTER TABLE.';  //to translate
+$strMyISAMDataPointerSize = 'Data pointer size';  //to translate
+$strMyISAMDataPointerSizeDesc = 'The default pointer size in bytes, to be used by CREATE TABLE for MyISAM tables when no MAX_ROWS option is specified.';  //to translate
+$strMyISAMRecoverOptions = 'Automatic recovery mode';  //to translate
+$strMyISAMRecoverOptionsDesc = 'The mode for automatic recovery of crashed MyISAM tables, as set via the --myisam-recover server startup option.';  //to translate
+$strMyISAMRepairThreads = 'Repair threads';  //to translate
+$strMyISAMRepairThreadsDesc = 'If this value is greater than 1, MyISAM table indexes are created in parallel (each index in its own thread) during the Repair by sorting process.';  //to translate
+$strMyISAMMaxSortFileSize = 'Maximum size for temporary sort files';  //to translate
+$strMyISAMMaxSortFileSizeDesc = 'The maximum size of the temporary file MySQL is allowed to use while re-creating a MyISAM index (during REPAIR TABLE, ALTER TABLE, or LOAD DATA INFILE).';  //to translate
+$strMyISAMMaxExtraSortFileSize = 'Maximum size for temporary files on index creation';  //to translate
+$strMyISAMMaxExtraSortFileSizeDesc = 'If the temporary file used for fast MyISAM index creation would be larger than using the key cache by the amount specified here, prefer the key cache method.';  //to translate
+$strLongOperation = 'This operation could be long. Proceed anyway?';  //to translate
+$strVersionInformation = 'Version information';  //to translate
+$strInnoDBDataHomeDir = 'Data home directory';  //to translate
+$strInnoDBDataHomeDirDesc = 'The common part of the directory path for all InnoDB data files.';  //to translate
+$strInnoDBDataFilePath = 'Data files';  //to translate
+$strInnoDBAutoextendIncrement = 'Autoextend increment';  //to translate
+$strInnoDBAutoextendIncrementDesc = ' The increment size for extending the size of an autoextending tablespace when it becomes full.';  //to translate
+$strBufferPool = 'Buffer Pool';  //to translate
+$strBufferPoolUsage = 'Buffer Pool Usage';  //to translate
+$strDataPages = 'Pages containing data';  //to translate
+$strFreePages = 'Free pages';  //to translate
+$strBusyPages = 'Busy pages';  //to translate
+$strDirtyPages = 'Dirty pages';  //to translate
+$strPagesToBeFlushed = 'Pages to be flushed';  //to translate
+$strLatchedPages = 'Latched pages';  //to translate
+$strBufferPoolActivity = 'Buffer Pool Activity';  //to translate
+$strReadRequests = 'Read requests';  //to translate
+$strWriteRequests = 'Write requests';  //to translate
+$strBufferReadMisses = 'Read misses';  //to translate
+$strBufferReadMissesInPercent = 'Read misses in %';  //to translate
+$strBufferWriteWaits = 'Write waits';  //to translate
+$strBufferWriteWaitsInPercent = 'Write waits in %';  //to translate
+$strHTMLExcel = 'Microsoft Excel 2000';  //to translate
+$strHTMLExcelOptions = 'Microsoft Excel 2000 export options';  //to translate
+$strHTMLWord = 'Microsoft Word 2000';  //to translate
+$strHTMLWordOptions = 'Microsoft Word 2000 export options';  //to translate
+$strInnoDBBufferPoolSizeDesc = 'The size of the memory buffer InnoDB uses to cache data and indexes of its tables.';  //to translate
+$strInnoDBBufferPoolSize = 'Buffer pool size';  //to translate
+$strInnoDBPages = 'pages';  //to translate
+$strSocketProblem = '(or the local MySQL server\'s socket is not correctly configured)';  //to translate
 ?>

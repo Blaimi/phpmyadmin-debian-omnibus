@@ -1,7 +1,6 @@
 <?php
-/* $Id: tbl_create.php,v 2.12 2004/12/26 22:47:40 lem9 Exp $ */
+/* $Id: tbl_create.php,v 2.14 2005/03/31 21:51:47 lem9 Exp $ */
 // vim: expandtab sw=4 ts=4 sts=4:
-
 
 /**
  * Get some core libraries
@@ -59,6 +58,9 @@ if (isset($submit_num_fields)) {
         if (empty($field_name[$i]) && $field_name[$i] != '0') {
             continue;
         }
+        // TODO: maybe move this logic and the one of PMA_generateAlterTable()
+        // to a central place
+
         $query = PMA_backquote($field_name[$i]) . ' ' . $field_type[$i];
         if ($field_length[$i] != ''
             && !preg_match('@^(DATE|DATETIME|TIME|TINYBLOB|TINYTEXT|BLOB|TEXT|MEDIUMBLOB|MEDIUMTEXT|LONGBLOB|LONGTEXT)$@i', $field_type[$i])) {
@@ -69,7 +71,9 @@ if (isset($submit_num_fields)) {
         } else if (PMA_MYSQL_INT_VERSION >= 40100 && !empty($field_collation[$i])) {
             $query .= PMA_generateCharsetQueryPart($field_collation[$i]);
         }
-        if ($field_default[$i] != '') {
+        if (isset($field_default_current_timestamp[$i]) && $field_default_current_timestamp[$i]) {
+            $query .= ' DEFAULT CURRENT_TIMESTAMP';
+        } elseif ($field_default[$i] != '') {
             if (strtoupper($field_default[$i]) == 'NULL') {
                 $query .= ' DEFAULT NULL';
             } else {
@@ -142,7 +146,7 @@ if (isset($submit_num_fields)) {
     }
     unset($unique);
 
-    // Builds the fulltextes statements
+    // Builds the FULLTEXT statements
     $fulltext     = '';
     $fulltext_cnt = (isset($field_fulltext) ? count($field_fulltext) : 0);
     for ($i = 0; $i < $fulltext_cnt; $i++) {
@@ -194,7 +198,7 @@ if (isset($submit_num_fields)) {
         $cfgRelation = PMA_getRelationsParam();
 
         // garvin: Update comment table, if a comment was set.
-        if (isset($field_comments) && is_array($field_comments) && $cfgRelation['commwork']) {
+        if (isset($field_comments) && is_array($field_comments) && ($cfgRelation['commwork'] || PMA_MYSQL_INT_VERSION >= 40100)) {
             foreach ($field_comments AS $fieldindex => $fieldcomment) {
                 PMA_setComment($db, $table, $field_name[$fieldindex], $fieldcomment);
             }
@@ -239,7 +243,7 @@ if ($abort == FALSE) {
     else {
         $action = 'tbl_create.php';
         require('./tbl_properties.inc.php');
-        // Diplays the footer
+        // Displays the footer
         echo "\n";
         require_once('./footer.inc.php');
    }

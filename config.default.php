@@ -1,5 +1,5 @@
 <?php
-/* $Id: config.inc.php,v 2.48 2004/12/28 12:48:27 nijel Exp $ */
+/* $Id: config.inc.php,v 2.52 2005/03/16 17:22:08 lem9 Exp $ */
 // vim: expandtab sw=4 ts=4 sts=4:
 
 /**
@@ -55,7 +55,8 @@ $cfg['PmaNoRelation_DisableWarning']  = FALSE;
 /**
  * The 'cookie' auth_type uses blowfish algorithm to encrypt the password. If
  * at least one server configuration uses 'cookie' auth_type, enter here a
- * passphrase that will be used by blowfish.
+ * passphrase that will be used by blowfish. The maximum length seems to be 46
+ * characters.
  */
 $cfg['blowfish_secret'] = '';
 
@@ -308,13 +309,21 @@ $cfg['DefaultTabTable']       = 'tbl_properties_structure.php';
  * Export defaults
  */
 
-$cfg['Export']['format']                    = 'sql';  // sql/latex/excel/csv/xml/xls
+$cfg['Export']['format']                    = 'sql';  // sql/latex/excel/csv/xml/xls/hmtlexcel/htmlword
 $cfg['Export']['compression']               = 'none'; // none/zip/gzip/bzip2
 
 $cfg['Export']['asfile']                    = FALSE;
 $cfg['Export']['onserver']                  = FALSE;
 $cfg['Export']['onserver_overwrite']        = FALSE;
 $cfg['Export']['remember_file_template']    = TRUE;
+
+$cfg['Export']['htmlexcel_columns']         = FALSE;
+$cfg['Export']['htmlexcel_null']            = 'NULL';
+
+$cfg['Export']['htmlword_structure']        = TRUE;
+$cfg['Export']['htmlword_data']             = TRUE;
+$cfg['Export']['htmlword_columns']          = FALSE;
+$cfg['Export']['htmlword_null']             = 'NULL';
 
 $cfg['Export']['xls_columns']               = FALSE;
 $cfg['Export']['xls_null']                  = 'NULL';
@@ -661,6 +670,9 @@ $cfg['ColumnTypes'] = array(
 );
 
 // Attributes
+// Note: the "ON UPDATE CURRENT_TIMESTAMP" attribute is added dynamically 
+// for MySQL >= 4.1.2, in tbl_properties.inc.php
+
 $cfg['AttributeTypes'] = array(
    '',
    'BINARY',
@@ -829,5 +841,5 @@ set_magic_quotes_runtime(0);
 /**
  * File Revision - do not change either!
  */
-$cfg['FileRevision'] = '$Revision: 2.48 $';
+$cfg['FileRevision'] = '$Revision: 2.52 $';
 ?>

@@ -1,5 +1,5 @@
 <?php
-/* $Id: pdf_pages.php,v 2.12 2004/10/08 11:14:07 garvinhicking Exp $ */
+/* $Id: pdf_pages.php,v 2.13 2005/02/22 03:24:16 lem9 Exp $ */
 // vim: expandtab sw=4 ts=4 sts=4:
 
 /**
@@ -301,6 +301,9 @@ while ($temp_sh_page = @PMA_DBI_fetch_assoc($page_rs)) {
 
 // garvin: Display WYSIWYG-PDF parts?
 if ($cfg['WYSIWYG-PDF']) {
+    if (!isset($_POST['with_field_names']) && !isset($_POST['showwysiwyg'])) {
+        $with_field_names = TRUE;
+    }
 ?>
 <script type="text/javascript" src="./libraries/dom-drag.js"></script>
 <form method="post" action="pdf_pages.php" name="dragdrop">
@@ -330,8 +333,10 @@ foreach ($array_sh_page AS $key => $temp_sh_page) {
     $fields_cnt = PMA_DBI_num_rows($fields_rs);
 
     echo '<div id="table_' . $i . '" class="pdflayout_table"><u>' . $temp_sh_page['table_name'] . '</u>';
-    while ($row = PMA_DBI_fetch_assoc($fields_rs)) {
-        echo '<br />' . htmlspecialchars($row['Field']) . "\n";
+    if (isset($with_field_names)) {
+        while ($row = PMA_DBI_fetch_assoc($fields_rs)) {
+            echo '<br />' . htmlspecialchars($row['Field']) . "\n";
+        }
     }
     echo '</div>' . "\n";
     PMA_DBI_free_result($fields_rs);
@@ -439,6 +444,7 @@ function resetDrag() {
 
         echo "\n" . '    <input type="hidden" name="c_table_rows" value="' . ($i + 1) . '" />';
         echo ($cfg['WYSIWYG-PDF'] ? "\n" . '    <input type="hidden" name="showwysiwyg" value="' . ((isset($showwysiwyg) && $showwysiwyg == '1') ? '1' : '0') . '" />' : '');
+        echo "\n" . '    <input type="checkbox" name="with_field_names" ' . (isset($with_field_names) ? 'checked="checked"' : ''). ' />' . $strColumnNames . '<br />';
         echo "\n" . '    <input type="submit" value="' . $strGo . '" />';
         echo "\n" . '</form>' . "\n\n";
     } // end if
@@ -483,7 +489,7 @@ function resetDrag() {
     <?php echo PMA_generate_common_hidden_inputs($db); ?>
     <input type="hidden" name="pdf_page_number" value="<?php echo $chpage; ?>" />
 
-    <?php echo $strDisplayPDF; ?>:&nbsp;<br />
+    <?php echo '<br /><b>' . $strDisplayPDF . '</b>'; ?>:&nbsp;<br />
     <input type="checkbox" name="show_grid" id="show_grid_opt" /><label for="show_grid_opt"><?php echo $strShowGrid; ?></label><br />
     <input type="checkbox" name="show_color" id="show_color_opt" checked="checked" /><label for="show_color_opt"><?php echo $strShowColor; ?></label><br />
     <input type="checkbox" name="show_table_dimension" id="show_table_dim_opt" /><label for="show_table_dim_opt"><?php echo $strShowTableDimension; ?></label><br />

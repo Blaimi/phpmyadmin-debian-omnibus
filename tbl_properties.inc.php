@@ -1,14 +1,15 @@
 <?php
-/* $Id: tbl_properties.inc.php,v 2.18 2005/01/07 11:48:44 nijel Exp $ */
+/* $Id: tbl_properties.inc.php,v 2.27 2005/03/31 20:32:04 lem9 Exp $ */
 // vim: expandtab sw=4 ts=4 sts=4:
-
 // Check parameters
+
 require_once('./libraries/common.lib.php');
 PMA_checkParameters(array('db','table','action','num_fields'));
 
 
-// Get available character sets
+// Get available character sets and storage engines
 require_once('./libraries/mysql_charsets.lib.php');
+require_once('./libraries/storage_engines.lib.php');
 
 ?>
 <?php if ($cfg['CtrlArrowsMoving']) { ?>
@@ -18,6 +19,23 @@ require_once('./libraries/mysql_charsets.lib.php');
 <!--
 var switch_movement = <?php echo $cfg['DefaultPropDisplay'] == 'horizontal' ? '0' : '1'; ?>;
 document.onkeydown = onKeyDownArrowsHandler;
+// -->
+</script>
+<?php } 
+    // here, the div_x_7 represents a div id which contains
+    // the default current timestamp checkbox and label 
+    
+    if (PMA_MYSQL_INT_VERSION >= 40102) { ?>
+<script type="text/javascript" language="javascript">
+<!--
+function display_field_options(field_type, i) {
+    if (field_type == 'TIMESTAMP') {
+        getElement('div_' + i + '_7').style.display = 'block';
+    } else {
+        getElement('div_' + i + '_7').style.display = 'none';
+    }
+    return true;
+}
 // -->
 </script>
 <?php } ?>
@@ -115,7 +133,6 @@ if (!$is_backup) {
     $header_cells[] = $cfg['PropertiesIconic'] ? '<img src="' . $pmaThemeImage . 'b_ftext.png" width="16" height="16" alt="' . $strIdxFulltext . '" title="' . $strIdxFulltext . '" />' : $strIdxFulltext;
 }
 
-
 require_once('./libraries/relation.lib.php');
 require_once('./libraries/transformations.lib.php');
 $cfgRelation = PMA_getRelationsParam();
@@ -176,7 +193,9 @@ for ($i = 0 ; $i < $num_fields; $i++) {
 
         $submit_length    = (isset($field_length) && isset($field_length[$i]) ? $field_length[$i] : FALSE);
         $submit_attribute = (isset($field_attribute) && isset($field_attribute[$i]) ? $field_attribute[$i] : FALSE);
-
+        
+        $submit_default_current_timestamp = (isset($field_default_current_timestamp) && isset($field_default_current_timestamp[$i]) ? TRUE : FALSE);
+        
         if (isset($field_comments) && isset($field_comments[$i])) {
             $comments_map[$row['Field']] = $field_comments[$i];
         }
@@ -214,7 +233,7 @@ for ($i = 0 ; $i < $num_fields; $i++) {
 
     $content_cells[$i][$ci] .= "\n" . '<input id="field_' . $i . '_' . ($ci - $ci_offset) . '" type="text" name="field_name[]" size="10" maxlength="64" value="' . (isset($row) && isset($row['Field']) ? str_replace('"', '&quot;', $row['Field']) : '') . '" class="textfield" title="' . $strField . '" />';
     $ci++;
-    $content_cells[$i][$ci] = '<select name="field_type[]" id="field_' . $i . '_' . ($ci - $ci_offset) . '">' . "\n";
+    $content_cells[$i][$ci] = '<select name="field_type[]" id="field_' . $i . '_' . ($ci - $ci_offset) . '" onchange="display_field_options(this.value,' . $i .')" >' . "\n";
 
     if (empty($row['Type'])) {
         $row['Type'] = '';
@@ -256,10 +275,14 @@ for ($i = 0 ; $i < $num_fields; $i++) {
         $length = $submit_length;
     }
 
+    // rtrim the type, for cases like "float unsigned"
+    $type = rtrim($type);
+    $type_upper = strtoupper($type);
+
     $cnt_column_types = count($cfg['ColumnTypes']);
     for ($j = 0; $j < $cnt_column_types; $j++) {
         $content_cells[$i][$ci] .= '                <option value="'. $cfg['ColumnTypes'][$j] . '"';
-        if (strtoupper($type) == strtoupper($cfg['ColumnTypes'][$j])) {
+        if ($type_upper == strtoupper($cfg['ColumnTypes'][$j])) {
             $content_cells[$i][$ci] .= ' selected="selected"';
         }
         $content_cells[$i][$ci] .= '>' . $cfg['ColumnTypes'][$j] . '</option>' . "\n";
@@ -298,22 +321,40 @@ for ($i = 0 ; $i < $num_fields; $i++) {
         $ci++;
     }
 
-    $content_cells[$i][$ci] = '<select name="field_attribute[]" id="field_' . $i . '_' . ($ci - $ci_offset) . '">' . "\n";
+    $content_cells[$i][$ci] = '<select style="font-size: ' . $font_smallest . ';" name="field_attribute[]" id="field_' . $i . '_' . ($ci - $ci_offset) . '">' . "\n";
 
-    $strAttribute     = '';
+    $attribute     = '';
     if ($binary) {
-        $strAttribute = 'BINARY';
+        $attribute = 'BINARY';
     }
     if ($unsigned) {
-        $strAttribute = 'UNSIGNED';
+        $attribute = 'UNSIGNED';
     }
     if ($zerofill) {
-        $strAttribute = 'UNSIGNED ZEROFILL';
+        $attribute = 'UNSIGNED ZEROFILL';
     }
 
     if (isset($submit_attribute) && $submit_attribute != FALSE) {
-        $strAttribute = $submit_attribute;
+        $attribute = $submit_attribute;
     }
+
+    // MySQL 4.1.2+ TIMESTAMP options
+    // (if on_update_current_timestamp is set, then it's TRUE)
+    if (isset($row['Field']) && isset($analyzed_sql[0]['create_table_fields'][$row['Field']]['on_update_current_timestamp'])) {
+        $attribute = 'ON UPDATE CURRENT_TIMESTAMP';
+    }
+    if ((isset($row['Field']) && isset($analyzed_sql[0]['create_table_fields'][$row['Field']]['default_current_timestamp']))
+     || $submit_default_current_timestamp  ) {
+        $default_current_timestamp = TRUE; 
+    } else {
+        $default_current_timestamp = FALSE; 
+    }
+
+    // Dynamically add ON UPDATE CURRENT_TIMESTAMP to the possible attributes
+    if (PMA_MYSQL_INT_VERSION >= 40102 && !in_array('ON UPDATE CURRENT_TIMESTAMP', $cfg['AttributeTypes'])) {
+        $cfg['AttributeTypes'][] = 'ON UPDATE CURRENT_TIMESTAMP';
+    }
+
 
     $cnt_attribute_types = count($cfg['AttributeTypes']);
     for ($j = 0;$j < $cnt_attribute_types; $j++) {
@@ -321,7 +362,7 @@ for ($i = 0 ; $i < $num_fields; $i++) {
             continue;
         }
         $content_cells[$i][$ci] .= '                <option value="'. $cfg['AttributeTypes'][$j] . '"';
-        if (strtoupper($strAttribute) == strtoupper($cfg['AttributeTypes'][$j])) {
+        if (strtoupper($attribute) == strtoupper($cfg['AttributeTypes'][$j])) {
             $content_cells[$i][$ci] .= ' selected="selected"';
         }
         $content_cells[$i][$ci] .= '>' . $cfg['AttributeTypes'][$j] . '</option>' . "\n";
@@ -356,7 +397,28 @@ for ($i = 0 ; $i < $num_fields; $i++) {
         $content_cells[$i][$ci] = "\n";
     }
 
+    // for a TIMESTAMP, do not show CURRENT_TIMESTAMP as a default value
+    if (PMA_MYSQL_INT_VERSION >= 40102 
+        && $type_upper == 'TIMESTAMP'
+        && $default_current_timestamp
+        && isset($row)
+        && isset($row['Default'])) {
+        $row['Default'] = '';
+    }
+
     $content_cells[$i][$ci] .= '<input id="field_' . $i . '_' . ($ci - $ci_offset) . '" type="text" name="field_default[]" size="12" value="' . (isset($row) && isset($row['Default']) ? str_replace('"', '&quot;', $row['Default']) : '') . '" class="textfield" />';
+    if (PMA_MYSQL_INT_VERSION >= 40102) {
+        if ($type_upper == 'TIMESTAMP') {
+            $tmp_display_type = 'block';
+        } else {
+            $tmp_display_type = 'none';
+        }
+        $content_cells[$i][$ci] .= '<br /><div id="div_' . $i . '_' . ($ci - $ci_offset) . '" style="white-space: nowrap; display: ' . $tmp_display_type . '"><input id="field_' . $i . '_' . ($ci - $ci_offset) . 'a" type="checkbox" name="field_default_current_timestamp[' . $i . ']"';
+        if ($default_current_timestamp) {
+            $content_cells[$i][$ci] .= ' checked="checked" ';
+        }
+        $content_cells[$i][$ci] .= ' /><label for="field_' . $i . '_' . ($ci - $ci_offset) . 'a" style="font-size: ' . $font_smallest . ';">CURRENT_TIMESTAMP</label></div>'; 
+    }
     $ci++;
 
     $content_cells[$i][$ci] = '<select name="field_extra[]" id="field_' . $i . '_' . ($ci - $ci_offset) . '">';
@@ -597,16 +659,7 @@ if ($action == 'tbl_create.php') {
         ?>
         <td width="25">&nbsp;</td>
         <td>
-            <select name="tbl_type">
-                <option <?php echo (isset($tbl_type) && $tbl_type == 'Default' ? 'selected="checked"' : ''); ?> value="Default"><?php echo $strDefault; ?></option>
-                <option <?php echo (isset($tbl_type) && $tbl_type == 'MYISAM' ? 'selected="checked"' : ''); ?> value="MYISAM">MyISAM</option>
-                <option <?php echo (isset($tbl_type) && $tbl_type == 'HEAP' ? 'selected="checked"' : ''); ?> value="HEAP">Heap</option>
-                <option <?php echo (isset($tbl_type) && $tbl_type == 'MERGE' ? 'selected="checked"' : ''); ?> value="MERGE">Merge</option>
-                <?php if (isset($tbl_bdb)) { ?><option <?php echo (isset($tbl_type) && $tbl_type == 'BDB' ? 'selected="checked"' : ''); ?> value="BDB">Berkeley DB</option><?php } ?>
-                <?php if (isset($tbl_gemini)) { ?><option <?php echo (isset($tbl_type) && $tbl_type == 'GEMINI' ? 'selected="checked"' : ''); ?> value="GEMINI">Gemini</option><?php } ?>
-                <?php if (isset($tbl_innodb)) { ?><option <?php echo (isset($tbl_type) && $tbl_type == 'INNO DB' ? 'selected="checked"' : ''); ?> value="InnoDB">INNO DB</option><?php } ?>
-                <?php if (isset($tbl_isam)) { ?><option <?php echo (isset($tbl_type) && $tbl_type == 'ISAM' ? 'selected="checked"' : ''); ?> value="ISAM">ISAM</option><?php } ?>
-            </select>
+<?php echo PMA_generateEnginesDropdown('tbl_type', NULL, (isset($tbl_type) ? $tbl_type : NULL), FALSE, 3); ?>
         </td>
         <?php
         if (PMA_MYSQL_INT_VERSION >= 40100) {

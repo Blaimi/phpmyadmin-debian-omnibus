@@ -1,5 +1,5 @@
 <?php
-/* $Id: common.lib.php,v 2.111.2.1 2005/01/16 14:37:30 lem9 Exp $ */
+/* $Id: common.lib.php,v 2.128 2005/04/01 20:59:46 lem9 Exp $ */
 // vim: expandtab sw=4 ts=4 sts=4:
 
 /**
@@ -156,6 +156,36 @@ require_once('./libraries/select_lang.lib.php');
  * reference the constants, else PHP 3.0.16 won't be happy.
  */
 require_once('./libraries/defines.lib.php');
+
+
+/**
+ * Sanitizes $message, taking into account our special codes
+ * for formatting
+ *
+ * @param   string   the message
+ *
+ * @return  string   the sanitized message
+ *
+ * @access  public
+ */
+function PMA_sanitize($message)
+{
+    $replace_pairs = array(
+        '<'     => '&lt;',
+        '>'     => '&gt;',
+        '[i]'   => '<i>',
+        '[/i]'  => '</i>',
+        '[b]'   => '<b>',
+        '[br]'  => '<br />',
+        '[/b]'  => '</b>',
+    );
+    return strtr($message, $replace_pairs);
+}
+
+// XSS
+if (isset($convcharset)) {
+    $convcharset = PMA_sanitize($convcharset);
+}
 
 if ($is_minimum_common == FALSE) {
     /**
@@ -556,7 +586,8 @@ if ($is_minimum_common == FALSE) {
      */
      function PMA_showHint($hint_message)
      {
-         return '<img src="' . $GLOBALS['pmaThemeImage'] . 'b_tipp.png" width="16" height="16" border="0" alt="' . $hint_message . '" title="' . $hint_message . '" align="middle" />';
+         //return '<img class="lightbulb" src="' . $GLOBALS['pmaThemeImage'] . 'b_tipp.png" width="16" height="16" border="0" alt="' . $hint_message . '" title="' . $hint_message . '" align="middle" onclick="alert(\'' . PMA_jsFormat($hint_message, FALSE) . '\');" />';
+         return '<img class="lightbulb" src="' . $GLOBALS['pmaThemeImage'] . 'b_tipp.png" width="16" height="16" border="0" alt="Tip" title="Tip" align="middle" onmouseover="pmaTooltip(\'' .  PMA_jsFormat($hint_message, FALSE) . '\'); return false;" onmouseout="swapTooltip(\'default\'); return false;" />';
      }
 
     /**
@@ -671,19 +702,30 @@ if ($is_minimum_common == FALSE) {
 
         // feature request #1036254:
         // Add a link by MySQL-Error #1062 - Duplicate entry
-        // 2004-10-20 by mk.keck
+        // 2004-10-20 by mkkeck
+        // 2005-01-17 modified by mkkeck bugfix
         if (substr($error_message, 1, 4) == '1062') {
-        // TODO: do not assume that the error message is in English
-        // and do not use mysql_result()
-
-            // explode the entry and the column
-            $arr_mysql_val_key = explode('entry \'',$tmp_mysql_error);
-            $arr_mysql_val_key = explode('\' for key',$arr_mysql_val_key[1]);
-            // get the duplicate value
-            $string_duplicate_val = trim(strtolower($arr_mysql_val_key[0]));
-            // get the field name ...
-            $string_duplicate_key = mysql_result(mysql_query("SHOW FIELDS FROM " . $table), ($arr_mysql_val_key[1]-1), 0);
-            $duplicate_sql_query = "SELECT * FROM " . $table . " WHERE " . $string_duplicate_key . " LIKE '" . $string_duplicate_val . "'";
+            // get the duplicate entry
+            $mysql_error_values = array();
+            $mysql_error_words  = explode(' ',$tmp_mysql_error);
+            foreach ($mysql_error_words as $mysql_error_word) {
+                if (strstr($mysql_error_word, "'")) {
+                   $mysql_error_values = explode('-', preg_replace("/'/", "", $mysql_error_word));
+                   break; // exit 'foreach'
+                }
+            }
+            $duplicate_sql_query = '';
+            if (isset($mysql_error_values[0])) {
+                $tmp_fields = PMA_DBI_get_fields($db, $table, NULL);
+                foreach ($tmp_fields as $tmp_field) {
+                    $duplicate_sql_query .= (($duplicate_sql_query!='') ? ' OR ' : '') . $tmp_field['Field'] . " LIKE '" . $mysql_error_values[0] . "'";
+                }
+            }
+            if ($duplicate_sql_query!='') {
+                $duplicate_sql_query = "SELECT * FROM " . $table . " WHERE (" . $duplicate_sql_query . ")";
+            } else {
+                $duplicate_sql_query = "SELECT * FROM " . $table . "";
+            }
             echo '        <form method="post" action="read_dump.php" style="padding: 0px; margin: 0px">' ."\n"
                     . '            <input type="hidden" name="sql_query" value="' . $duplicate_sql_query . '" />' . "\n"
                     . '            ' . PMA_generate_common_hidden_inputs($db, $table) . "\n"
@@ -1114,6 +1156,11 @@ h1    {font-family: sans-serif; font-size: large; font-weight: bold}
         }
     }
 
+    // some variables used mostly for cookies:
+    $pma_uri_parts = parse_url($cfg['PmaAbsoluteUri']);
+    $cookie_path   = substr($pma_uri_parts['path'], 0, strrpos($pma_uri_parts['path'], '/')) . '/';
+    $is_https      = (isset($pma_uri_parts['scheme']) && $pma_uri_parts['scheme'] == 'https') ? 1 : 0;
+
     $dblist       = array();
 
     /**
@@ -1241,18 +1288,16 @@ h1    {font-family: sans-serif; font-size: large; font-weight: bold}
         // must be open after this one so it would be default one for all the
         // scripts)
         if ($cfg['Server']['controluser'] != '') {
-            $dbh = PMA_DBI_connect($cfg['Server']['controluser'], $cfg['Server']['controlpass']);
+            $dbh = PMA_DBI_connect($cfg['Server']['controluser'], $cfg['Server']['controlpass'], TRUE);
+        } else {
+            $dbh = PMA_DBI_connect($cfg['Server']['user'], $cfg['Server']['password'], TRUE);
         } // end if ... else
 
         // Pass #1 of DB-Config to read in master level DB-Config will go here
         // Robbat2 - May 11, 2002
 
         // Connects to the server (validates user's login)
-        $userlink = PMA_DBI_connect($cfg['Server']['user'], $cfg['Server']['password']);
-
-        if (empty($dbh)) {
-            $dbh = $userlink;
-        }
+        $userlink = PMA_DBI_connect($cfg['Server']['user'], $cfg['Server']['password'], FALSE);
 
         // Pass #2 of DB-Config to read in user level DB-Config will go here
         // Robbat2 - May 11, 2002
@@ -1297,10 +1342,13 @@ h1    {font-family: sans-serif; font-size: large; font-weight: bold}
                 }
                 if ($is_show_dbs && ereg('(^|[^\])(_|%)', $dblist[$i])) {
                     $local_query = 'SHOW DATABASES LIKE \'' . $dblist[$i] . '\'';
-                    $rs          = PMA_DBI_query($local_query, $dbh);
-                    // "SHOW DATABASES" statement is disabled
+                    // here, a PMA_DBI_query() could fail silently
+                    // if SHOW DATABASES is disabled
+                    $rs          = PMA_DBI_try_query($local_query, $dbh);
+
                     if ($i == 0
                         && (substr(PMA_DBI_getError($dbh), 1, 4) == 1045)) {
+                        // "SHOW DATABASES" statement is disabled
                         $true_dblist[] = str_replace('\\_', '_', str_replace('\\%', '%', $dblist[$i]));
                         $is_show_dbs   = FALSE;
                     }
@@ -1521,21 +1569,24 @@ h1    {font-family: sans-serif; font-size: large; font-weight: bold}
      * @param   string   the current database name
      * @param   string   the current table name
      * @param   boolean  whether to retain or to displays the result
+     * @param   boolean  whether to force an exact count
      *
      * @return  mixed    the number of records if retain is required, true else
      *
      * @access  public
      */
-    function PMA_countRecords($db, $table, $ret = FALSE)
+    function PMA_countRecords($db, $table, $ret = FALSE, $force_exact = FALSE)
     {
         global $err_url, $cfg;
-        $result       = PMA_DBI_query('SHOW TABLE STATUS FROM ' . PMA_backquote($db) . ' LIKE \'' . PMA_sqlAddslashes($table, TRUE) . '\';');
-        $showtable    = PMA_DBI_fetch_assoc($result);
-        $num     = (isset($showtable['Rows']) ? $showtable['Rows'] : 0);
-        if ($num < $cfg['MaxExactCount']) {
-            unset($num);
+        if (!$force_exact) {
+            $result       = PMA_DBI_query('SHOW TABLE STATUS FROM ' . PMA_backquote($db) . ' LIKE \'' . PMA_sqlAddslashes($table, TRUE) . '\';');
+            $showtable    = PMA_DBI_fetch_assoc($result);
+            $num     = (isset($showtable['Rows']) ? $showtable['Rows'] : 0);
+            if ($num < $cfg['MaxExactCount']) {
+                unset($num);
+            }
+            PMA_DBI_free_result($result);
         }
-        PMA_DBI_free_result($result);
 
         if (!isset($num)) {
             $result    = PMA_DBI_query('SELECT COUNT(*) AS num FROM ' . PMA_backquote($db) . '.' . PMA_backquote($table));
@@ -1577,30 +1628,6 @@ if (typeof(window.parent) != 'undefined'
             <?php
             unset($GLOBALS['reload']);
         }
-    }
-
-    /**
-     * Sanitizes $message, taking into account our special codes
-     * for formatting
-     *
-     * @param   string   the message
-     *
-     * @return  string   the sanitized message
-     *
-     * @access  public
-     */
-    function PMA_sanitize($message)
-    {
-        $replace_pairs = array(
-            '<'     => '&lt;',
-            '>'     => '&gt;',
-            '[i]'   => '<i>',
-            '[/i]'  => '</i>',
-            '[b]'   => '<b>',
-            '[br]'  => '<br />',
-            '[/b]'  => '</b>',
-        );
-        return strtr($message, $replace_pairs);
     }
 
     /**
@@ -2211,7 +2238,10 @@ if (typeof(document.getElementById) != 'undefined'
     /**
      * Function added to avoid path disclosures.
      * Called by each script that needs parameters, it displays
-     * an error message and, by defaults, stops the execution.
+     * an error message and, by default, stops the execution.
+     *
+     * Not sure we could use a strMissingParameter message here,
+     * would have to check if the error message file is always available
      *
      * @param   array   The names of the parameters needed by the calling
      *                  script.
@@ -2231,7 +2261,7 @@ if (typeof(document.getElementById) != 'undefined'
 
         foreach ($params AS $param) {
             if (!isset($GLOBALS[$param])) {
-                $error_message .= $reported_script_name . ': Missing parameter: ' . $param . '<br />';
+                $error_message .= $reported_script_name . ': Missing parameter: ' . $param . ' <a href="./Documentation.html#faqmissingparameters" target="documentation"> (FAQ 2.8)</a><br />';
                 $found_error = TRUE;
             }
         }
@@ -2488,7 +2518,46 @@ if (typeof(document.getElementById) != 'undefined'
         $gotopage .= ' </select>';
 
         return $gotopage;
-    }
+    } // end function
+
+
+    function PMA_generateAlterTable($oldcol, $newcol, $full_field_type, $collation, $null, $default, $default_current_timestamp, $extra, $comment='') {
+
+        // $default_current_timestamp has priority over $default
+        // TODO: on the interface, some js to clear the default value
+        // when the default current_timestamp is checked
+
+        $query = PMA_backquote($oldcol) . ' ' . PMA_backquote($newcol) . ' '
+            . $full_field_type;
+        if (PMA_MYSQL_INT_VERSION >= 40100 && !empty($collation) && $collation != 'NULL' && preg_match('@^(TINYTEXT|TEXT|MEDIUMTEXT|LONGTEXT|VARCHAR|CHAR)$@i', $full_field_type)) {
+            $query .= PMA_generateCharsetQueryPart($collation);
+        }
+
+        if (!empty($null)) {
+            $query .= ' NOT NULL';
+        } else {
+            $query .= ' NULL';
+        }
+
+        if ($default_current_timestamp && strtoupper($full_field_type) == 'TIMESTAMP') {
+            $query .= ' DEFAULT CURRENT_TIMESTAMP';
+            // 0 is empty in PHP
+        } elseif (!empty($default) || $default == '0') {
+            if (strtoupper($default) == 'NULL') {
+                $query .= ' DEFAULT NULL';
+            } else {
+                $query .= ' DEFAULT \'' . PMA_sqlAddslashes($default) . '\'';
+            }
+        }
+
+        if (!empty($extra)) {
+            $query .= ' ' . $extra;
+        }
+        if (PMA_MYSQL_INT_VERSION >= 40100 && !empty($comment)) {
+            $query .= " COMMENT '" . PMA_sqlAddslashes($comment) . "'";
+        }
+        return $query;
+    } // end function
 
 } // end if: minimal common.lib needed?
 

@@ -1,14 +1,14 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-US" lang="en-US">
-<!-- $Id: Documentation.html,v 2.103.2.5 2005/03/03 20:54:24 rabus Exp $ -->
+<!-- $Id: Documentation.html,v 2.122 2005/04/03 22:42:31 lem9 Exp $ -->
 <!--
     vim: expandtab ts=4 sw=4 sts=4 tw=78
 -->
 
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
-    <title>phpMyAdmin 2.6.1-pl3 - Documentation</title>
+    <title>phpMyAdmin 2.6.2-rc1 - Documentation</title>
     <link rel="stylesheet" type="text/css" href="docs.css" />
 </head>
 
@@ -31,7 +31,7 @@
 <hr noshade="noshade" width="100%" />
 </div>
 
-<h1>phpMyAdmin 2.6.1-pl3 Documentation</h1>
+<h1>phpMyAdmin 2.6.2-rc1 Documentation</h1>
 
 
 <!-- TOP MENU -->
@@ -51,7 +51,7 @@
     </li>
     <li>
         Documentation version:
-        <i>$Id: Documentation.html,v 2.103.2.5 2005/03/03 20:54:24 rabus Exp $</i>
+        <i>$Id: Documentation.html,v 2.122 2005/04/03 22:42:31 lem9 Exp $</i>
     </li>
 </ul>
 
@@ -391,19 +391,20 @@ GRANT SELECT, INSERT, UPDATE, DELETE ON &lt;pma_db&gt;.* TO 'pma'@'localhost';
 <dl>
     <dt><b>$cfg['PmaAbsoluteUri']</b> string</dt>
     <dd>
-        Sets here the complete URL (with full path) to your phpMyAdmin version.
+        Sets here the complete URL (with full path) to your phpMyAdmin 
+        installation's directory.
         E.g. <tt>http://www.your_web.net/path_to_your_phpMyAdmin_directory/</tt>.
         <br /><br />
-        phpMyAdmin needs this setting, because of requirements of the HTTP
-        protocol, explained in RFC2616, section 14.30.
+        Starting with version 2.3.0, it is advisable to try leaving this 
+        blank. In most cases phpMyAdmin automatically detects the proper 
+        setting. Additional details are in the configuration file. If you 
+        leave it blank, see the notes for 
+        <tt>$cfg['PmaAbsoluteUri_DisableWarning']</tt>; you probably want 
+        to change that to <tt>TRUE</tt>.
         <br /><br />
         Don't forget the slash at the end of your URL. The URL must contain
         characters that are valid for a URL, and on some servers, the path
         is case-sensitive.
-        <br /><br />
-        Starting with version 2.3.0, you can try to leave this parameter
-        empty, because the program tries to auto-detect its proper value.
-        Additional details are in the configuration file.
         <br /><br />
     </dd>
     <dt><b>$cfg['PmaAbsoluteUri_DisableWarning']</b> boolean</dt>
@@ -435,7 +436,7 @@ GRANT SELECT, INSERT, UPDATE, DELETE ON &lt;pma_db&gt;.* TO 'pma'@'localhost';
         Starting with version 2.5.2, the 'cookie' auth_type uses blowfish
         algorithm to encrypt the password.
         <br />
-        If you are using the 'cookie' auth_type, enter here a random 
+        If you are using the 'cookie' auth_type, enter here a random
         passphrase of your choice. It will be used internally by the blowfish
         algorithm: you won't be prompted for this passphrase. The maximum
         number of characters for this parameter seems to be 46.
@@ -859,7 +860,7 @@ GRANT SELECT, INSERT, UPDATE, DELETE ON &lt;pma_db&gt;.* TO 'pma'@'localhost';
     <dd>
         Because release 2.5.0 introduced the new MIME-transformation support, the
         column_info table got enhanced with three new fields. If the above variable is
-        set to TRUE (default) phpMyAdmin will check if you have the latest table structure
+        set to <tt>TRUE</tt> (default) phpMyAdmin will check if you have the latest table structure
         available. If not, it will emit a warning to the superuser.<br /><br />
 
         You can disable this checking behavior by setting the variable to false, which
@@ -1032,7 +1033,7 @@ GRANT SELECT, INSERT, UPDATE, DELETE ON &lt;pma_db&gt;.* TO 'pma'@'localhost';
     <dd>
         Define whether phpMyAdmin will output the results of each query of a
         multi-query statement embedded into the SQL output as inline comments.
-        Defaults to TRUE.
+        Defaults to <tt>TRUE</tt>.
         <br /><br />
     </dd>
     <dt>
@@ -1103,7 +1104,7 @@ GRANT SELECT, INSERT, UPDATE, DELETE ON &lt;pma_db&gt;.* TO 'pma'@'localhost';
     </dd>
     <dt><b>$cfg['LeftDisplayLogo'] </b>boolean</dt>
     <dd>Defines whether to display the phpMyAdmin logo at the top of the left frame or not.
-Defaults to TRUE. <br />
+Defaults to <tt>TRUE</tt>. <br />
     <br />
     </dd>
     <dt><b>$cfg['LeftDisplayServers'] </b>boolean</dt>
@@ -1337,7 +1338,7 @@ Defaults to FALSE (drop-down). <br />
     <dd>
         Defines the default language to use, if not browser-defined or
         user-defined.<br />
-        See the <i>select_lang.inc.php</i> script to know the valid values for
+        See the <i>select_lang.lib.php</i> script to know the valid values for
         this setting.
         <br /><br />
     </dd>
@@ -1345,7 +1346,7 @@ Defaults to FALSE (drop-down). <br />
     <dt><b>$cfg['Lang'] </b>string</dt>
     <dd>
         Force: always use this language (must be defined in the
-        <i>select_lang.inc.php</i> script).
+        <i>select_lang.lib.php</i> script).
         <br /><br />
     </dd>
 
@@ -1452,7 +1453,7 @@ Defaults to FALSE (drop-down). <br />
 
     <dt><b>$cfg['LeftPointerEnable'] </b>boolean</dt>
     <dd>
-        A value of TRUE activates the left pointer (when LeftFrameLight is FALSE).
+        A value of <tt>TRUE</tt> activates the left pointer (when LeftFrameLight is <tt>FALSE</tt>).
         <br /><br />
     </dd>
 
@@ -1601,7 +1602,7 @@ Defaults to FALSE (drop-down). <br />
         <b>$cfg['ShowPropertyComments'] </b>boolean<br />
     </dt>
     <dd>
-        By setting the corresponding variable to TRUE you can enable the
+        By setting the corresponding variable to <tt>TRUE</tt> you can enable the
         display of column comments in Browse or Property display. In browse
         mode, the comments are show inside the header. In property mode,
         comments are displayed using a CSS-formatted dashed-line below the
@@ -1702,7 +1703,7 @@ Defaults to FALSE (drop-down). <br />
         use that feature. It currently is only tested with Internet Explorer 6
         and Mozilla 1.x.
         <br /><br />
-        If $cfg['QueryHistoryDB'] is set to TRUE, all your Queries are logged
+        If $cfg['QueryHistoryDB'] is set to <tt>TRUE</tt>, all your Queries are logged
         to a table, which has to be created by you (see <a
         href="#history">$cfg['Servers'][$i]['history']</a>).  If set to FALSE,
         all your queries will be appended to the form, but only as long as
@@ -1720,7 +1721,7 @@ Defaults to FALSE (drop-down). <br />
         uncheck the button whenever you definitely want the query window to
         get updated even though you have made alterations.
         <br /><br />
-        If $cfg['QueryHistoryDB'] is set to TRUE you can specify the amount of
+        If $cfg['QueryHistoryDB'] is set to <tt>TRUE</tt> you can specify the amount of
         saved history items using $cfg['QueryHistoryMax'].
         <br /><br />
         The query window also has a custom tabbed look to group the features.
@@ -1794,7 +1795,7 @@ Defaults to FALSE (drop-down). <br />
 
     <dt><b>$cfg['SetHttpHostTitle'] </b>string</dt>
     <dd>
-        If <tt>$cfg['ShowHttpHostTitle']</tt> is TRUE, it shows the real
+        If <tt>$cfg['ShowHttpHostTitle']</tt> is <tt>TRUE</tt>, it shows the real
         HTTP host name, unless an alternate name is set here.
     <br /><br />
     </dd>
@@ -2703,15 +2704,14 @@ To create a new, empty mimetype please see libraries/transformations/template_ge
 </h4>
 <p>
     Yes. This procedure was tested with phpMyAdmin 2.6.1, PHP 4.3.9 in ISAPI
-    mode under IIS 5.1. 
+    mode under IIS 5.1.</p>
     <ol>
         <li>In your <tt>php.ini</tt> file, set <tt>cgi.rfc2616_headers = 0</tt></li>
- 
+
         <li>In <tt>Web Site Properties -> File/Directory Security -> Anonymous Access</tt> dialog box, check the <tt>Anonymous access</tt> checkbox and uncheck any other checkboxes (i.e. uncheck <tt>Basic authentication</tt>, <tt>Integrated Windows authentication</tt>, and <tt>Digest</tt> if it's enabled.) Click <tt>OK</tt>. </li>
- 
+
         <li>In <tt>Custom Errors</tt>, select the range of <tt>401;1</tt> through <tt>401;5</tt> and click the <tt>Set to Default</tt> button. </li>
     </ol>
-</p>
 
 <a name="faqconfig"></a><br />
 <h3>[2. Configuration]</h3>
@@ -2870,6 +2870,25 @@ To create a new, empty mimetype please see libraries/transformations/template_ge
     directory &quot;img&quot; in &quot;your_theme_name&quot;. phpMyAdmin will
     use the default icons and buttons (from the system-theme &quot;original&quot;).
     </p>
+<a name="faqmissingparameters"></a><br />
+<h4>
+    [2.8] I get &quot;Missing parameters&quot; errors, what can I do?
+</h4>
+<p>
+    Here are a few points to check:</p>
+    <ul>
+        <li>
+        In <tt>config.inc.php</tt>, try to leave the
+        <tt>$cfg['PmaAbsoluteUri']</tt>directive empty. See also FAQ 4.7.
+        </li>
+        <li>
+        Maybe you have a broken PHP installation or you need to upgrade
+        your Zend Optimizer. See
+        <a href="http://bugs.php.net/bug.php?id=31134">
+        http://bugs.php.net/bug.php?id=31134</a>.
+        </li>
+    </ul>
+
 <a name="faqlimitations"></a><br />
 <h3>[3. Known limitations]</h3>
 <a name="login_bug"></a><br />
@@ -3007,6 +3026,14 @@ To create a new, empty mimetype please see libraries/transformations/template_ge
     only returns an approximate count in the case of InnoDB tables. See
     <tt>$cfg['MaxExactCount']</tt> for a way to modify those results, but
     this could have a serious impact on performance.
+</p>
+<h4>
+    [3.12] What are the phpMyAdmin limitations for MySQL 3?
+</h4>
+<p>
+    The number of records in queries containing COUNT and GROUP BY is
+    not correctly calculated. Also, sorting results of a query like
+    &quot;SELECT * from table GROUP BY&quot; ... is problematic.
 </p>
 
 <a name="faqmultiuser"></a><br />
@@ -3279,7 +3306,7 @@ To create a new, empty mimetype please see libraries/transformations/template_ge
     happens after that, only a blank screen.
 </h4>
 <p>
-    Having $cfg['QueryFrameJS'] set to TRUE, this leads to a bug in Opera6, because it
+    Having $cfg['QueryFrameJS'] set to <tt>TRUE</tt>, this leads to a bug in Opera6, because it
     is not able to interpret frameset definitiions written by JavaScript. Please upgrade
     to Opera7 at least.
 </p>
@@ -3291,14 +3318,14 @@ To create a new, empty mimetype please see libraries/transformations/template_ge
 </p>
 <h4>
     [5.16] With Internet Explorer, I get &quot;Access is denied&quot;
-    Javascript errors. Or I cannot make phpMyAdmin work under Windows. 
+    Javascript errors. Or I cannot make phpMyAdmin work under Windows.
 </h4>
 <p>
-    Please check the following points:
+    Please check the following points:</p>
     <ul>
         <li>
-            Maybe you have defined your <tt>PmaAbsoluteUri</tt> setting 
-            in <tt>config.inc.php</tt> to an IP address and you are starting 
+            Maybe you have defined your <tt>PmaAbsoluteUri</tt> setting
+            in <tt>config.inc.php</tt> to an IP address and you are starting
             phpMyAdmin with a URL containing a domain name, or the reverse situation.
         </li>
         <li>
@@ -3310,7 +3337,12 @@ To create a new, empty mimetype please see libraries/transformations/template_ge
             allow http ports (80 or 443) and MySQL port (usually 3306)
             in the &quot;in&quot; and &quot;out&quot; directions.
         </li>
-    </ul> 
+    </ul>
+<h4>
+    [5.17] With Firefox, I cannot delete rows of data or drop a database.
+</h4>
+<p> Many users have confirmed that the Tabbrowser Extensions plugin they
+    installed in their Firefox is causing the problem.
 </p>
 
 <a name="faqusing"></a><br />
@@ -3743,18 +3775,20 @@ To create a new, empty mimetype please see libraries/transformations/template_ge
 </p>
 <h4>
     <a name="faq6_23"></a>
-    [6.23] Export: I heard phpMyAdmin can export MS Excel files, how can I
-    enable that?
+    [6.23] Export: I heard phpMyAdmin can export Microsoft Excel files, how
+    can I enable that?
 </h4>
 <p>
-    You can either export as CSV suitable for MS Excel, which works out of the
-    box or you can try native <b>experimental</b> MS Excel exporter. <b>This
-    export has several problems, most important are limitation of cell content
-    to 255 chars and no support for charsets, so think carefully whether you
-    want to enable this.</b>.  For enabling this you need to set
-    $cfg['TempDir'] to place where web server user can write (for example
-    <tt>'./tmp'</tt>) and install PEAR module Spreadsheet_Excel_Writer into
-    php include path. The installation can be done by following command:
+    Current version does support direct export ot Microsoft Excel and Word
+    versions 2000 and newer. If you need export older versions, you can use
+    CSV suitable for Microsoft Excel, which works out of the box or you can
+    try native <b>experimental</b> MS Excel exporter. <b>This export has
+    several problems, most important are limitation of cell content to 255
+    chars and no support for charsets, so think carefully whether you want to
+    enable this.</b>.  For enabling this you need to set $cfg['TempDir'] to
+    place where web server user can write (for example <tt>'./tmp'</tt>) and
+    install PEAR module Spreadsheet_Excel_Writer into php include path. The
+    installation can be done by following command:
 </p>
 <pre>
     pear -d preferred_state=beta install -a Spreadsheet_Excel_Writer
@@ -3780,6 +3814,13 @@ To create a new, empty mimetype please see libraries/transformations/template_ge
     mkdir tmp
     chmod o+rwx tmp
 </pre>
+<h4>
+    [6.24] Now that phpMyAdmin supports native MySQL 4.1.x column comments,
+    what happens to my column comments stored in pmadb?
+</h4>
+<p> Automatic migration of a table's pmadb-style column comments to the native
+    ones is done whenever you enter Structure page for this table.
+</p>
 <a name="faqproject"></a><br />
 <h3>[7. phpMyAdmin project]</h3>
 
@@ -3932,7 +3973,7 @@ To create a new, empty mimetype please see libraries/transformations/template_ge
     </li>
     <li>
     In config.inc.php, <tt>$cfg['LeftFrameLight']</tt> is set to FALSE
-    (the default value of this parameter is TRUE).
+    (the default value of this parameter is <tt>TRUE</tt>).
     </li>
     <li>
     There is no firewall blocking requests from the Web server to the
@@ -3942,6 +3983,14 @@ To create a new, empty mimetype please see libraries/transformations/template_ge
 <p>
     <br />
     Version 2.5.7-pl1 was released with a fix for this vulnerability.
+</p>
+<h4>
+    [8.3] About new security alerts
+</h4>
+<p>
+    Please refer to
+    <a href="http://www.phpmyadmin.net">http://www.phpmyadmin.net</a>
+    for the complete list of security alerts.
 </p>
 
 <!-- DEVELOPERS -->

@@ -1,11 +1,10 @@
 <?php
-/* $Id: db_operations.php,v 2.4 2004/10/22 09:41:57 nijel Exp $ */
+/* $Id: db_operations.php,v 2.6 2005/03/09 15:36:49 lem9 Exp $ */
 // vim: expandtab sw=4 ts=4 sts=4:
 
 require_once('./libraries/grab_globals.lib.php');
 require_once('./libraries/common.lib.php');
 require_once('./libraries/mysql_charsets.lib.php');
-
 /**
  * Rename database
  */
@@ -47,14 +46,29 @@ if (isset($db) &&
         } else {
             $pma_uri_parts = parse_url($cfg['PmaAbsoluteUri']);
             if (isset($switch_to_new) && $switch_to_new == 'true') {
-                setcookie('pma_switch_to_new', 'true', 0, substr($pma_uri_parts['path'], 0, strrpos($pma_uri_parts['path'], '/')), '', ($pma_uri_parts['scheme'] == 'https'));
+                setcookie('pma_switch_to_new', 'true', 0, $GLOBALS['cookie_path'], '' , $GLOBALS['is_https']);
                 $db         = $newname;
             } else {
-                setcookie('pma_switch_to_new', '', 0, substr($pma_uri_parts['path'], 0, strrpos($pma_uri_parts['path'], '/')), '', ($pma_uri_parts['scheme'] == 'https'));
+                setcookie('pma_switch_to_new', '', 0, $GLOBALS['cookie_path'], '' , $GLOBALS['is_https']);
             }
         }
     }
 }
+/**
+ * Settings for relations stuff
+ */
+
+require_once('./libraries/relation.lib.php');
+$cfgRelation = PMA_getRelationsParam();
+
+/**
+ * Check if comments were updated
+ * (must be done before displaying the menu tabs)
+ */
+if ($cfgRelation['commwork'] && isset($db_comment) && $db_comment == 'true') {
+    PMA_SetComment($db, '', '(db_comment)', $comment);
+}
+
 /**
  * Prepares the tables list if the user where not redirected to this script
  * because there is no table in the database ($is_info is TRUE)
@@ -104,19 +118,6 @@ echo '     <td align="right">';
 echo '             ' . '&nbsp;<input type="submit" value="' . $strGo . '" />' . "\n";
 echo '     </td> </tr>';
 echo '        </form>';
-
-/**
- * Settings for relations stuff
- */
-require_once('./libraries/relation.lib.php');
-$cfgRelation = PMA_getRelationsParam();
-
-/**
- * Check if comments were updated
- */
-if ($cfgRelation['commwork'] && isset($db_comment) && $db_comment == 'true') {
-    PMA_SetComment($db, '', '(db_comment)', $comment);
-}
 
 echo '<table border="0" cellpadding="2" cellspacing="0">';
 if ($cfgRelation['commwork']) {

@@ -1,5 +1,5 @@
 <?php
-/* $Id: server_collations.php,v 2.7 2004/08/12 15:13:19 nijel Exp $ */
+/* $Id: server_collations.php,v 2.8 2005/03/29 18:09:46 rabus Exp $ */
 // vim: expandtab sw=4 ts=4 sts=4:
 
 
@@ -84,7 +84,7 @@ foreach ($mysql_charsets as $current_charset) {
     $useBgcolorOne = TRUE;
     foreach ($mysql_collations[$current_charset] as $current_collation) {
         $i++;
-        echo '            <tr>' . "\n"
+        echo '            <tr' . ($mysql_collations_available[$current_collation] ? '' : ' class="disabled"') . '>' . "\n"
            . '                <td bgcolor="' . ($mysql_default_collations[$current_charset] == $current_collation ? $cfg['BrowseMarkerColor'] : ($useBgcolorOne ? $cfg['BgcolorOne'] : $cfg['BgcolorTwo'])) . '">' . "\n"
            . '                    &nbsp;' . htmlspecialchars($current_collation) . '&nbsp;' . "\n"
            . '                </td>' . "\n"

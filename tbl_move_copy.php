@@ -1,5 +1,5 @@
 <?php
-/* $Id: tbl_move_copy.php,v 2.12 2004/10/20 17:29:05 nijel Exp $ */
+/* $Id: tbl_move_copy.php,v 2.13 2005/03/06 21:10:53 nijel Exp $ */
 // vim: expandtab sw=4 ts=4 sts=4:
 
 /**
@@ -44,11 +44,11 @@ if (isset($new_name) && trim($new_name) != '') {
         } else {
             $pma_uri_parts = parse_url($cfg['PmaAbsoluteUri']);
             if (isset($switch_to_new) && $switch_to_new == 'true') {
-                setcookie('pma_switch_to_new', 'true', 0, substr($pma_uri_parts['path'], 0, strrpos($pma_uri_parts['path'], '/')), '', ($pma_uri_parts['scheme'] == 'https'));
+                setcookie('pma_switch_to_new', 'true', 0, $GLOBALS['cookie_path'], '' , $GLOBALS['is_https']);
                 $db        = $target_db;
                 $table     = $new_name;
             } else {
-                setcookie('pma_switch_to_new', '', 0, substr($pma_uri_parts['path'], 0, strrpos($pma_uri_parts['path'], '/')), '', ($pma_uri_parts['scheme'] == 'https'));
+                setcookie('pma_switch_to_new', '', 0, $GLOBALS['cookie_path'], '' , $GLOBALS['is_https']);
             }
         }
     }

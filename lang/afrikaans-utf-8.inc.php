@@ -1,5 +1,5 @@
 <?php
-/* $Id: afrikaans-utf-8.inc.php,v 2.51 2004/12/28 16:34:44 nijel Exp $ */
+/* $Id: afrikaans-utf-8.inc.php,v 2.65 2005/03/30 19:18:54 lem9 Exp $ */
 
 /*
      translated by Andreas Pauley <pauley@buitegroep.org.za>
@@ -569,7 +569,6 @@ $strMIME_without = 'MIME-types printed in italics do not have a seperate transfo
 $strMIME_description = 'Description';//to translate
 $strMIME_nodescription = 'No Description is available for this transformation.<br />Please ask the author, what %s does.';//to translate
 $strTransformation_text_plain__formatted = 'Preserves original formatting of the field. No Escaping is done.';//to translate
-$strTransformation_text_plain__unformatted = 'Displays HTML code as HTML entities. No HTML formatting is shown.';//to translate
 $strTransformation_image_jpeg__link = 'Displays a link to this image (direct blob download, i.e.).';//to translate
 $strInnodbStat = 'InnoDB Status';  //to translate
 $strUpdComTab = 'Please see Documentation on how to update your Column_comments Table';  //to translate
@@ -688,7 +687,7 @@ $strConstraintsForDumped = 'Constraints for dumped tables';  //to translate
 $strConstraintsForTable = 'Constraints for table';  //to translate
 $strBookmarkOptions = 'Bookmark options';  //to translate
 $strCreationDates = 'Creation/Update/Check dates';  //to translate
-$strCheckOverhead = 'Check overheaded';  //to translate
+$strCheckOverhead = 'Check tables with overhead';  //to translate
 $strExcelEdition = 'Excel edition';  //to translate
 $strDelayedInserts = 'Use delayed inserts';  //to translate
 $strSQLExportType = 'Export type';  //to translate
@@ -760,4 +759,56 @@ $strSQLExportCompatibility = 'SQL export compatibility';  //to translate
 $strMbOverloadWarning = 'You have enabled mbstring.func_overload in your PHP configuration. This option is incompatible with phpMyAdmin and might cause breaking of some data!';  //to translate
 $strMbExtensionMissing = 'The mbstring PHP extension was not found and you seem to be using multibyte charset. Without mbstring extension phpMyAdmin is unable to split strings correctly and it may result in unexpected results.';  //to translate
 $strAfterInsertNext = 'Edit next row';  //to translate
+$strView = 'View';  //to translate
+$strViewHasBeenDropped = 'View %s has been dropped';  //to translate
+$strEngines = 'Engines';  //to translate
+$strStorageEngines = 'Storage Engines';  //to translate
+$strStorageEngine = 'Storage Engine';  //to translate
+$strNoDetailsForEngine = 'There is no detailed status information available for this storage engine.';  //to translate
+$strDefaultEngine = '%s is the default storage engine on this MySQL server.';  //to translate
+$strEngineAvailable = '%s is available on this MySQL server.';  //to translate
+$strEngineUnsupported = 'This MySQL server does not support the %s storage engine.';  //to translate
+$strEngineDisabled = '%s has been disabled for this MySQL server.';  //to translate
+$strMyISAMSortBufferSize = 'Sort buffer size';  //to translate
+$strMyISAMSortBufferSizeDesc = 'The buffer that is allocated when sorting MyISAM indexes during a REPAIR TABLE or when creating indexes with CREATE INDEX or ALTER TABLE.';  //to translate
+$strMyISAMDataPointerSize = 'Data pointer size';  //to translate
+$strMyISAMDataPointerSizeDesc = 'The default pointer size in bytes, to be used by CREATE TABLE for MyISAM tables when no MAX_ROWS option is specified.';  //to translate
+$strMyISAMRecoverOptions = 'Automatic recovery mode';  //to translate
+$strMyISAMRecoverOptionsDesc = 'The mode for automatic recovery of crashed MyISAM tables, as set via the --myisam-recover server startup option.';  //to translate
+$strMyISAMRepairThreads = 'Repair threads';  //to translate
+$strMyISAMRepairThreadsDesc = 'If this value is greater than 1, MyISAM table indexes are created in parallel (each index in its own thread) during the Repair by sorting process.';  //to translate
+$strMyISAMMaxSortFileSize = 'Maximum size for temporary sort files';  //to translate
+$strMyISAMMaxSortFileSizeDesc = 'The maximum size of the temporary file MySQL is allowed to use while re-creating a MyISAM index (during REPAIR TABLE, ALTER TABLE, or LOAD DATA INFILE).';  //to translate
+$strMyISAMMaxExtraSortFileSize = 'Maximum size for temporary files on index creation';  //to translate
+$strMyISAMMaxExtraSortFileSizeDesc = 'If the temporary file used for fast MyISAM index creation would be larger than using the key cache by the amount specified here, prefer the key cache method.';  //to translate
+$strLongOperation = 'This operation could be long. Proceed anyway?';  //to translate
+$strVersionInformation = 'Version information';  //to translate
+$strInnoDBDataHomeDir = 'Data home directory';  //to translate
+$strInnoDBDataHomeDirDesc = 'The common part of the directory path for all InnoDB data files.';  //to translate
+$strInnoDBDataFilePath = 'Data files';  //to translate
+$strInnoDBAutoextendIncrement = 'Autoextend increment';  //to translate
+$strInnoDBAutoextendIncrementDesc = ' The increment size for extending the size of an autoextending tablespace when it becomes full.';  //to translate
+$strBufferPool = 'Buffer Pool';  //to translate
+$strBufferPoolUsage = 'Buffer Pool Usage';  //to translate
+$strDataPages = 'Pages containing data';  //to translate
+$strFreePages = 'Free pages';  //to translate
+$strBusyPages = 'Busy pages';  //to translate
+$strDirtyPages = 'Dirty pages';  //to translate
+$strPagesToBeFlushed = 'Pages to be flushed';  //to translate
+$strLatchedPages = 'Latched pages';  //to translate
+$strBufferPoolActivity = 'Buffer Pool Activity';  //to translate
+$strReadRequests = 'Read requests';  //to translate
+$strWriteRequests = 'Write requests';  //to translate
+$strBufferReadMisses = 'Read misses';  //to translate
+$strBufferReadMissesInPercent = 'Read misses in %';  //to translate
+$strBufferWriteWaits = 'Write waits';  //to translate
+$strBufferWriteWaitsInPercent = 'Write waits in %';  //to translate
+$strHTMLExcel = 'Microsoft Excel 2000';  //to translate
+$strHTMLExcelOptions = 'Microsoft Excel 2000 export options';  //to translate
+$strHTMLWord = 'Microsoft Word 2000';  //to translate
+$strHTMLWordOptions = 'Microsoft Word 2000 export options';  //to translate
+$strInnoDBBufferPoolSizeDesc = 'The size of the memory buffer InnoDB uses to cache data and indexes of its tables.';  //to translate
+$strInnoDBBufferPoolSize = 'Buffer pool size';  //to translate
+$strInnoDBPages = 'pages';  //to translate
+$strSocketProblem = '(or the local MySQL server\'s socket is not correctly configured)';  //to translate
 ?>

@@ -1,38 +1,88 @@
 <?php
-/* $Id: grab_globals.lib.php,v 1.3 2001/11/25 12:20:48 loic1 Exp $ */
+/* $Id: grab_globals.lib.php,v 2.5.4.4 2005/02/24 17:38:31 rabus Exp $ */
+// vim: expandtab sw=4 ts=4 sts=4:
 
 
 /**
  * This library grabs the names and values of the variables sent or posted to a
- * script in the '$HTTP_*_VARS' arrays and sets simple globals variables from
- * them
+ * script in the $_* arrays and sets simple globals variables from them. It does
+ * the same work for the $PHP_SELF, $HTTP_ACCEPT_LANGUAGE and
+ * $HTTP_AUTHORIZATION variables.
  *
  * loic1 - 2001/25/11: use the new globals arrays defined with php 4.1+
  */
-if (!defined('PMA_GRAB_GLOBALS_INCLUDED')) {
-    define('PMA_GRAB_GLOBALS_INCLUDED', 1);
 
-    if (!empty($_GET)) {
-        extract($_GET);
-    } else if (!empty($HTTP_GET_VARS)) {
-        extract($HTTP_GET_VARS);
-    } // end if
-
-    if (!empty($_POST)) {
-        extract($_POST);
-    } else if (!empty($HTTP_POST_VARS)) {
-        extract($HTTP_POST_VARS);
-    } // end if
-
-    if (!empty($_FILES)) {
-        while (list($name, $value) = each($_FILES)) {
-            $$name = $value['tmp_name'];
+function PMA_gpc_extract($array, &$target) {
+    if (!is_array($array)) {
+        return FALSE;
+    }
+    $is_magic_quotes = get_magic_quotes_gpc();
+    foreach ($array AS $key => $value) {
+        /**
+         * 2005-02-22, rabus:
+         *
+         * This is just an ugly hotfix to avoid changing internal config
+         * parameters.
+         *
+         * Currently, the following variable names are rejected when found in
+         * $_GET or $_POST: cfg, GLOBALS, str* and _*
+         *
+         * Warning: this also affects array keys:
+         * Variables like $_GET['harmless']['cfg'] will also be rejected!
+         */
+        if (is_string($key) && (
+            $key == 'cfg'
+            || $key == 'GLOBALS'
+            || substr($key, 0, 3) == 'str'
+            || $key{0} == '_')) {
+            continue;
         }
-    } else if (!empty($HTTP_POST_FILES)) {
-        while (list($name, $value) = each($HTTP_POST_FILES)) {
-            $$name = $value['tmp_name'];
-        }
-    } // end if
 
-} // $__PMA_GRAB_GLOBALS_LIB__
+        if (is_array($value)) {
+            // there could be a variable coming from a cookie of
+            // another application, with the same name as this array
+            unset($target[$key]);
+
+            PMA_gpc_extract($value, $target[$key]);
+        } else if ($is_magic_quotes) {
+            $target[$key] = stripslashes($value);
+        } else {
+            $target[$key] = $value;
+        }
+    }
+    return TRUE;
+}
+
+if (!empty($_GET)) {
+    PMA_gpc_extract($_GET, $GLOBALS);
+} // end if
+
+if (!empty($_POST)) {
+    PMA_gpc_extract($_POST, $GLOBALS);
+} // end if
+
+if (!empty($_FILES)) {
+    foreach ($_FILES AS $name => $value) {
+        $$name = $value['tmp_name'];
+        ${$name . '_name'} = $value['name'];
+    }
+} // end if
+
+if (!empty($_SERVER)) {
+    $server_vars = array('PHP_SELF', 'HTTP_ACCEPT_LANGUAGE', 'HTTP_AUTHORIZATION');
+    foreach ($server_vars as $current) {
+        if (isset($_SERVER[$current])) {
+            $$current = $_SERVER[$current];
+        } elseif (!isset($$current)) {
+            $$current = '';
+        }
+    }
+    unset($server_vars, $current);
+} // end if
+
+// Security fix: disallow accessing serious server files via "?goto="
+if (isset($goto) && strpos(' ' . $goto, '/') > 0 && substr($goto, 0, 2) != './') {
+    unset($goto);
+} // end if
+
 ?>

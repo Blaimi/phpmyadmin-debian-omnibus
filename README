@@ -1,25 +1,27 @@
-$Id: README,v 1.7 2001/08/03 09:19:35 swix Exp $ 
+$Id: README,v 2.24.2.3 2005/02/24 17:40:05 rabus Exp $
 
 phpMyAdmin - Readme
 ===================
 
-  A set of PHP-scripts to adminstrate MySQL over the WWW.
+  A set of PHP-scripts to manage MySQL over the web.
 
-  Version 2.2.0 - August 2001
-  ---------------------------
-  http://phpwizard.net/projects/phpMyAdmin/
-  http://phpmyadmin.sourceforge.net/
+  Version 2.6.1-pl2
+  -----------------
+  http://www.phpmyadmin.net/
 
-    Copyright (C) 1998-2000 Tobias Ratschiller <tobias@phpwizard.net>
-    Copyright (C) 2001-     Olivier Müller <om@omnis.ch>
-                            Loïc Chapeaux <lolo@phpHeaven.net>
-			    Marc Delisle <DelislMa@CollegeSherbrooke.qc.ca>
-			    [check Documentation.txt/.html file for more details]
+    Copyright (C) 1998-2000 Tobias Ratschiller <tobias_at_ratschiller.com>
+    Copyright (C) 2001-2005 Marc Delisle <DelislMa_at_CollegeSherbrooke.qc.ca>
+                            Olivier Müller <om_at_omnis.ch>
+                            Robin Johnson <robbat2_at_users.sourceforge.net>
+                            Alexander M. Turek <me_at_derrabus.de>
+                            Michal Cihar <michal_at_cihar.com>
+                            Garvin Hicking <me_at_supergarv.de>
+                            Michael Keck <mkkeck_at_users.sourceforge.net>
+                            [check Documentation.txt/.html file for more details]
 
     This program is free software; you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation; either version 2 of the License, or
-    (at your option) any later version.
+    it under the terms of the GNU General Public License version 2,
+    as published by the Free Software Foundation.
 
     This program is distributed in the hope that it will be useful,
     but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -30,13 +32,13 @@ phpMyAdmin - Readme
     along with this program; if not, write to the Free Software
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
-  Requirements: 
-    PHP3 (>= 3.0.8) or PHP4
-    MySQL (tested with 3.21.x, 3.22.x and 3.23.x)
+  Requirements:
+    php 4.1.0 or later
+    MySQL 3.23.32 or later
     a web-browser (doh!)
-                
+
   Summary:
-    phpMyAdmin is intended to handle the adminstration of MySQL over the WWW.
+    phpMyAdmin is intended to handle the administration of MySQL over the WWW.
     Currently it can:
       - create and drop databases
       - create, copy, drop and alter tables
@@ -46,26 +48,26 @@ phpMyAdmin - Readme
       - load text files into tables
       - create and read dumps of tables
       - export and import CSV data
-      - administer one single database
-      - communicate in more than 20 different languages
+      - administer one single database as well as a whole database server
+      - communicate in 47 different languages
 
   Download:
-    You can get the newest version at http://phpmyadmin.sourceforge.net/.
+    You can get the newest version at http://www.phpmyadmin.net/.
 
   Credits:
     Please see the Documentation.txt/.html file.
-   
+
   Installation:
     Please see the Documentation.txt/.html file.
-  
+
   ChangeLog:
     Now in ChangeLog
-  
+
   Documentation:
     Basic documentation available in Documentation.txt/.html
 
   Support:
-    There is a support forum under http://phpwizard.net/phorum/list.php?f=1 
+    See reference about support forums under http://www.phpmyadmin.net/
 
 
     Enjoy!
@@ -73,9 +75,9 @@ phpMyAdmin - Readme
 
 
   PS: Please, don't send us emails with question like "How do I compile
-      PHP3 with MySQL-support". We do answer all emails regarding 
-      phpMyAdmin, but we just don't have the time to be your free helpdesk.
-      Please send your questions to the appropiate mailinglists.
-      Before contacting us, please read the Documentation.html (esp. the 
+      PHP with MySQL-support". We just don't have the time to be your
+      free helpdesk.
+      Please send your questions to the appropriate mailinglists / forums.
+      Before contacting us, please read the Documentation.html (esp. the
       FAQ part).
 

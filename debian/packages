@@ -1,4 +1,4 @@
-# $Id: /trunk/debian/dists/phpmyadmin/debian/packages 33 2005-03-07T12:47:46.548799Z dexter  $
+# $Id: /trunk/debian/dists/phpmyadmin/debian/packages 36 2005-03-11T10:20:48.283947Z dexter  $
 
 # If the debian/rules or debian/control file is missing, rebuild the file:
 #
@@ -226,7 +226,7 @@ Postinst: bash
                          fi
                      else
                          if [ ! -f /etc/$webserver/mods-enabled/cgi.load -a ! -h /etc/$webserver/mods-enabled/cgi.load -a \
-                              ! -f /etc/$webserver/mods-enabled/fastcgi.load -a ! -h /etc/$webserver/mods-enabled/fastcgi.load -a ]; then
+                              ! -f /etc/$webserver/mods-enabled/fastcgi.load -a ! -h /etc/$webserver/mods-enabled/fastcgi.load ]; then
                              ln -s /etc/$webserver/mods-available/cgi.load /etc/$webserver/mods-enabled/cgi.load
                          fi
                      fi

@@ -1,3 +1,9 @@
+phpmyadmin (3:2.6.1-pl3-2) unstable; urgency=high
+
+  * Fixed the bug in postinst introduced in last upload. Closes: #299034.
+
+ -- Piotr Roszatycki <dexter@debian.org>  Fri, 11 Mar 2005 11:14:05 +0100
+
 phpmyadmin (3:2.6.1-pl3-1) unstable; urgency=high
 
   * New upstream release.

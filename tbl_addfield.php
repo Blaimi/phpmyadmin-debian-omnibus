@@ -1,5 +1,5 @@
 <?php
-/* $Id: tbl_addfield.php,v 2.11.2.1 2005/02/03 19:56:54 rabus Exp $ */
+/* $Id: tbl_addfield.php,v 2.14 2005/04/01 17:03:32 lem9 Exp $ */
 // vim: expandtab sw=4 ts=4 sts=4:
 
 /**
@@ -50,8 +50,13 @@ if (isset($submit_num_fields)) {
         } // end if
     } // end for
     // Builds the field creation statement and alters the table
+
+    // TODO: check to see if this logic is exactly the same
+    //       as in tbl_create.php, and move to an include file
+
     for ($i = 0; $i < $field_cnt; ++$i) {
-        if (empty($field_name[$i])) {
+        // '0' is also empty for php :-(
+        if (empty($field_name[$i]) && $field_name[$i] != '0') {
             continue;
         }
 
@@ -67,7 +72,10 @@ if (isset($submit_num_fields)) {
             $query .= ' CHARACTER SET ' . $tmp_charset . ' COLLATE ' . $field_collation[$i];
             unset($tmp_charset);
         }
-        if ($field_default[$i] != '') {
+
+        if (isset($field_default_current_timestamp[$i]) && $field_default_current_timestamp[$i]) {
+            $query .= ' DEFAULT CURRENT_TIMESTAMP';
+        } elseif ($field_default[$i] != '') {
             if (strtoupper($field_default[$i]) == 'NULL') {
                 $query .= ' DEFAULT NULL';
             } else {
@@ -197,7 +205,11 @@ if (isset($submit_num_fields)) {
         $cfgRelation = PMA_getRelationsParam();
 
         // garvin: Update comment table, if a comment was set.
-        if (isset($field_comments) && is_array($field_comments) && $cfgRelation['commwork']) {
+        // lem9: FIXME: here we take care of native comments and
+        //       pmadb-style comments, however, in the case of
+        //       native comments, users do not see the COMMENT clause
+        //       when SQL query is displayed
+        if (isset($field_comments) && is_array($field_comments) && ($cfgRelation['commwork'] || PMA_MYSQL_INT_VERSION >= 40100)) {
             foreach ($field_comments AS $fieldindex => $fieldcomment) {
                 PMA_setComment($db, $table, $field_name[$fieldindex], $fieldcomment);
             }

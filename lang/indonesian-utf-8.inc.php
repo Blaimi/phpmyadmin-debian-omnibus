@@ -1,5 +1,5 @@
 <?php
-/* $Id: indonesian-utf-8.inc.php,v 2.59 2005/01/09 21:09:37 lem9 Exp $ */
+/* $Id: indonesian-utf-8.inc.php,v 2.74 2005/03/30 19:22:53 lem9 Exp $ */
 
 $charset = 'utf-8';
 $allow_recoding = TRUE;
@@ -191,6 +191,7 @@ $strDatabasesStatsHeavyTraffic = 'Perhatian: Menggiatkan statistik database deng
 $strDbPrivileges = 'Hak (privileges) khusus terhadap Database';
 $strDbSpecific = 'database-spesifik';
 $strDefault = 'Default';
+$strDefaultEngine = '%s adalah mesin penyimpan utama pada server MySQL ini.';
 $strDefaultValueHelp = 'Untuk nilai (value) default cukup diisi single value saja tanpa menggunakan backslash, escaping atau quotes dan dengan menggunakan format sbb.: a';
 $strDefragment = 'Defragmentasikan tabel';
 $strDelOld = 'Halaman ini berisi referensi tentang tabel yang sudah tidak ada. Apakah Anda ingin hapus referensi yang bersangkutan?';
@@ -232,6 +233,10 @@ $strEncloseInTransaction = 'Menyertakan ekspor dalam transaksi';
 $strEnd = 'Terakhir';
 $strEndCut = 'Akhiri potong (CUT)';
 $strEndRaw = 'AKHIRI mentah (RAW)';
+$strEngineAvailable = '%s siap untuk digunakan pada server MySQL ini.';
+$strEngineDisabled = '%s dimatikan untuk server MySQL ini.';
+$strEngineUnsupported = 'Server MySQL ini tidak mendukung mesin penyimpan %s.';
+$strEngines = 'Mesin';
 $strEnglish = 'Bahasa Ingris';
 $strEnglishPrivileges = ' Catatan: Nama privilege MySQL dalam bahasa Ingris ';
 $strError = 'Error';
@@ -361,6 +366,7 @@ $strLogUsername = 'Nama Pengguna:';
 $strLogin = 'Login';
 $strLoginInformation = 'Informasi Login';
 $strLogout = 'Logout';
+$strLongOperation = 'Aktifitas ini membutuhkan waktu yang lama. Tetap melanjutkan?';
 
 $strMIMETypesForTable = 'TIPE MIME UNTUK TABEL';
 $strMIME_MIMEtype = 'Tipe MIME';
@@ -385,6 +391,18 @@ $strMoveTableOK = 'Tabel %s telah dipindahkan ke %s.';
 $strMoveTableSameNames = 'Memindahkan tabel ke diri-sendiri tidak bisa dilakukan!';
 $strMultilingual = 'berbagai bahasa';
 $strMustSelectFile = 'Anda perlu pilih file untuk disisipkan terlebih dahulu.';
+$strMyISAMDataPointerSize = 'Ukuran petunjuk data (Data Pointer)';
+$strMyISAMDataPointerSizeDesc = 'Ukuran standar dari petunjuk (Pointer) dalam Byte untuk digunakan oleh CREATE TABLE untuk tabel jenis MyISAM bila pilihan MAX_ROWS tidak ditentukan.';
+$strMyISAMMaxExtraSortFileSize = 'Ukuran maksimal untuk file sementara pada pembuatan indeks';
+$strMyISAMMaxExtraSortFileSizeDesc = 'Jika ukuran file sementara untuk pembuatan Indeks MyISAM Cepat lebih besar dibandingkan dengan ukuran Key Cache yang disebut disini, disarankan untuk menggunakan metode Key Cache.';
+$strMyISAMMaxSortFileSize = 'Ukuran maksimal untuk penyortiran file sementara';
+$strMyISAMMaxSortFileSizeDesc = 'Ukuran maksimal untuk file sementara yang diperbolehkan untuk digunakan oleh MySQL pada saat pembuatan ulang sebuah indeks MyISAM (sewaktu menjalankan REPAIR TABLE, ALTER TABLE, atau LOAD DATA INFILE).';
+$strMyISAMRecoverOptions = 'Modus restorasi otomatis';
+$strMyISAMRecoverOptionsDesc = 'Modus untuk restorasi secara otomatis sebuah tabel MyISAM yang telah runtuh sesuai dengan pengaturan melalui pilihan --myisam-recover pada startup server.';
+$strMyISAMRepairThreads = 'Perbaiki proses';
+$strMyISAMRepairThreadsDesc = 'Jika nilai ini lebih besar dari 1, pembuatan indeks MyISAM akan dijalankan dalam modus paralel (setiap indeks memiliki proses tersendiri) selama perbaikan dijalankan oleh proses penyortiran.';
+$strMyISAMSortBufferSize = 'Urutkan ukuran Buffer';
+$strMyISAMSortBufferSizeDesc = 'Buffer yang dialokasikan bila menyortir indeks MyISAM pada saat REPAIR TABLE atau pada saat membuat indeks dengan cara CREATE INDEX atau cara ALTER TABLE.';
 $strMySQLCharset = 'Charset MySQL';
 $strMySQLConnectionCollation = 'Penyortiran koneksi MySQL';
 $strMySQLReloaded = 'MySQL telah di-reload.';
@@ -402,6 +420,7 @@ $strNoActivity = 'Tidak ada aktifitas selama %s detik atau lebih. Silakan login 
 $strNoDatabases = 'Database tidak ditemukan';
 $strNoDatabasesSelected = 'Database belum dipilih.';
 $strNoDescription = 'tanpa keterangan';
+$strNoDetailsForEngine = 'Informasi secara rinci tentang keadaan mesin penyimpan ini tidak ditemukan.';
 $strNoDropDatabases = 'Perintah "HAPUS DATABASE" dimatikan.';
 $strNoExplain = 'Melewati keterangan SQL';
 $strNoFrames = 'Lebih mudah untuk menggunakan phpMyAdmin dengan browser yang <b>mendukung frame</b>.';
@@ -632,6 +651,8 @@ $strStatCreateTime = 'Pembuatan';
 $strStatUpdateTime = 'Update terakhir';
 $strStatement = 'Keterangan';
 $strStatus = 'Status';
+$strStorageEngine = 'Mesin Penyimpan';
+$strStorageEngines = 'Mesin Penyimpan';
 $strStrucCSV = 'Data CSV';
 $strStrucData = 'Struktur dan data';
 $strStrucDrop = 'Berikut \'HAPUS TABEL\'';
@@ -687,7 +708,6 @@ $strTransformation_text_plain__formatted = 'Menyimpan format asli dari field. Es
 $strTransformation_text_plain__imagelink = 'Tampilkan sebuah gambar dan sebuah Link, nama file berada dalam field; pilihan utama adalah awalan seperti "http://domain.com/", pilihan kedua adalah lebar dalam piksel, pilihan ketiga adalah tingginya.';
 $strTransformation_text_plain__link = 'Tampilkan sebuah Link, nama file berada dalam field; pilihan utama adalah awalan seperti  "http://domain.com/", pilihan kedua adalah judul untuk Link tersebut.';
 $strTransformation_text_plain__substr = 'Hanya menampilkan sebagian dari sebuah String. Pilihan pertama adalah sebuah Offset untuk menentukan tempat dari permulaan teks Anda (Default 0). Pilihan kedua adalah sebuah Offset untuk menentukan jumlah teks yang akan dikembalikan. Bila ditinggal kosong, seluruh teks yang tersisa akan dibalikkan. Pilihan ketiga mendefinisikan Chars yang akan ditambahkan pada Output bila sebuah Substring dibalikkan (Default: ...) .';
-$strTransformation_text_plain__unformatted = 'Tampilkan kode HTML sebagai perwujudan HTML. Format dari HTML tidak ditampilkan.';
 $strTruncateQueries = 'Potongkan pencarian yang ditampilkan';
 $strTurkish = 'Bahasa Turki';
 $strType = 'Jenis';
@@ -723,9 +743,12 @@ $strValidateSQL = 'Mengesahkan (validate) SQL';
 $strValidatorError = 'Pengesahan SQL tidak dapat disahkan. Mohon periksa kembali ekstension PHP yang diperlukan seperti yang tercatat dalam %sdokumentasi%s.';
 $strValue = 'Nilai';
 $strVar = 'Variabel';
+$strVersionInformation = 'Informasi tentang versi';
+$strView = 'Gambarkan';
 $strViewDump = 'Tampilkan Dump (Skema) dari tabel';
 $strViewDumpDB = 'Tampilkan Dump (Skema) dari database';
 $strViewDumpDatabases = 'Tampilkan Dump (skema) dari database';
+$strViewHasBeenDropped = 'Pandangan %s telah dibubarkan';
 
 $strWebServerUploadDirectory = 'direktori upload pada web-server';
 $strWebServerUploadDirectoryError = 'Direktori yang telah ditetapkan untuk meng-upload tidak dapat dihubungi';
@@ -744,5 +767,45 @@ $strYes = 'Ya';
 
 $strZeroRemovesTheLimit = 'Perhatian: Perubahan pilihan ini ke posisi 0 (zero) akan menghapus batas yang telah ditentukan.';
 $strZip = 'Dikompress dengan Zip';
+
+// To translate:
+
+$strBufferPool = 'Buffer Pool';  //to translate
+$strBufferPoolActivity = 'Buffer Pool Activity';  //to translate
+$strBufferPoolUsage = 'Buffer Pool Usage';  //to translate
+$strBufferReadMisses = 'Read misses';  //to translate
+$strBufferReadMissesInPercent = 'Read misses in %';  //to translate
+$strBufferWriteWaits = 'Write waits';  //to translate
+$strBufferWriteWaitsInPercent = 'Write waits in %';  //to translate
+$strBusyPages = 'Busy pages';  //to translate
+
+$strDataPages = 'Pages containing data';  //to translate
+$strDirtyPages = 'Dirty pages';  //to translate
+
+$strFreePages = 'Free pages';  //to translate
+
+$strHTMLExcel = 'Microsoft Excel 2000';  //to translate
+$strHTMLExcelOptions = 'Microsoft Excel 2000 export options';  //to translate
+$strHTMLWord = 'Microsoft Word 2000';  //to translate
+$strHTMLWordOptions = 'Microsoft Word 2000 export options';  //to translate
+
+$strInnoDBAutoextendIncrement = 'Autoextend increment';  //to translate
+$strInnoDBAutoextendIncrementDesc = ' The increment size for extending the size of an autoextending tablespace when it becomes full.';  //to translate
+$strInnoDBBufferPoolSize = 'Buffer pool size';  //to translate
+$strInnoDBBufferPoolSizeDesc = 'The size of the memory buffer InnoDB uses to cache data and indexes of its tables.';  //to translate
+$strInnoDBDataFilePath = 'Data files';  //to translate
+$strInnoDBDataHomeDir = 'Data home directory';  //to translate
+$strInnoDBDataHomeDirDesc = 'The common part of the directory path for all InnoDB data files.';  //to translate
+$strInnoDBPages = 'pages';  //to translate
+
+$strLatchedPages = 'Latched pages';  //to translate
+
+$strPagesToBeFlushed = 'Pages to be flushed';  //to translate
+
+$strReadRequests = 'Read requests';  //to translate
+
+$strSocketProblem = '(or the local MySQL server\'s socket is not correctly configured)';  //to translate
+
+$strWriteRequests = 'Write requests';  //to translate
 
 ?>

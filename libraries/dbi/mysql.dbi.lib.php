@@ -1,5 +1,5 @@
 <?php
-/* $Id: mysql.dbi.lib.php,v 2.33 2004/09/28 10:41:49 rabus Exp $ */
+/* $Id: mysql.dbi.lib.php,v 2.37 2005/03/24 20:57:00 rabus Exp $ */
 // vim: expandtab sw=4 ts=4 sts=4:
 
 /**
@@ -32,7 +32,7 @@ if (!defined('PMA_MYSQL_CLIENT_API')) {
     }
 }
 
-function PMA_DBI_connect($user, $password) {
+function PMA_DBI_connect($user, $password, $is_controluser = FALSE) {
     global $cfg, $php_errormsg;
 
     $server_port   = (empty($cfg['Server']['port']))
@@ -70,7 +70,7 @@ function PMA_DBI_connect($user, $password) {
         PMA_auth_fails();
     } // end if
     
-    PMA_DBI_postConnect($link);
+    PMA_DBI_postConnect($link, $is_controluser);
 
     return $link;
 }
@@ -160,7 +160,11 @@ function PMA_DBI_fetch_row($result) {
 }
 
 function PMA_DBI_free_result($result) {
-    return @mysql_free_result($result);
+    if (!is_bool($result)) {
+        return mysql_free_result($result);
+    } else {
+        return 0;
+    }
 }
 
 function PMA_DBI_getError($link = NULL) {
@@ -192,7 +196,9 @@ function PMA_DBI_getError($link = NULL) {
     }
 
 // Some errors messages cannot be obtained by mysql_error()
-    if ($error && $error == 2003) {
+    if ($error && $error == 2002) {
+        $error = '#' . ((string) $error) . ' - ' . $GLOBALS['strServerNotResponding'] . ' ' . $GLOBALS['strSocketProblem'];
+    } elseif ($error && $error == 2003) {
         $error = '#' . ((string) $error) . ' - ' . $GLOBALS['strServerNotResponding'];
     } elseif ($error && defined('PMA_MYSQL_INT_VERSION') && PMA_MYSQL_INT_VERSION >= 40100) {
         $error = '#' . ((string) $error) . ' - ' . $error_message;
@@ -214,7 +220,11 @@ function PMA_DBI_close($link = NULL) {
 }
 
 function PMA_DBI_num_rows($result) {
-    return mysql_num_rows($result);
+    if (!is_bool($result)) {
+        return mysql_num_rows($result);
+    } else {
+        return 0;
+    }
 }
 
 function PMA_DBI_insert_id($link = NULL) {

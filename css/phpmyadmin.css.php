@@ -1,5 +1,5 @@
 <?php
-/* $Id: phpmyadmin.css.php,v 2.33 2004/12/28 14:21:48 nijel Exp $ */
+/* $Id: phpmyadmin.css.php,v 2.34 2005/03/06 23:23:46 nijel Exp $ */
 // vim: expandtab sw=4 ts=4 sts=4:
 
 chdir('..');
@@ -40,6 +40,11 @@ if ($js_frame == 'left') {
     if (@file_exists($tmp_file)) {
         include($tmp_file);
     } // end of include theme_print.css.php
+    ?>
+table#serverinfo,td.serverinfo,table.noborder,table.noborder td {
+    border: none;
+}
+    <?php
 } else {
 /************************************************************************************
  * RIGHT FRAME

@@ -1,5 +1,5 @@
 <?php
-/* $Id: config.auth.lib.php,v 2.9 2004/10/20 15:50:52 nijel Exp $ */
+/* $Id: config.auth.lib.php,v 2.10 2005/03/01 14:52:54 lem9 Exp $ */
 // vim: expandtab sw=4 ts=4 sts=4:
 
 // +--------------------------------------------------------------------------+
@@ -146,6 +146,14 @@ h1       {font-family: <?php echo $right_font_family; ?>; font-size: <?php echo 
     <?php
     echo "\n";
     $GLOBALS['is_header_sent'] = TRUE;
+
+    //TODO: I have included this div from header.inc.php to work around
+    //      an undefined variable in tooltip.js, when the server
+    //      is not responding. Work has to be done to merge all code that
+    //      starts the page (DOCTYPE and this div) to one place
+    ?>
+    <div id="TooltipContainer" name="TooltipContainer" onmouseover="holdTooltip();" onmouseout="swapTooltip('default');"></div>
+    <?php
 
     // if we display the "Server not responding" error, do not confuse users
     // by telling them they have a settings problem 

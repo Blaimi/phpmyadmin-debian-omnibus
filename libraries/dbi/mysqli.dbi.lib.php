@@ -1,5 +1,5 @@
 <?php
-/* $Id: mysqli.dbi.lib.php,v 2.30.2.2 2005/02/24 01:15:52 lem9 Exp $ */
+/* $Id: mysqli.dbi.lib.php,v 2.36 2005/03/24 20:57:00 rabus Exp $ */
 // vim: expandtab sw=4 ts=4 sts=4:
 
 /**
@@ -46,7 +46,7 @@ define('NUM_FLAG',          32768);
 define('PART_KEY_FLAG',     16384);
 define('UNIQUE_FLAG',       65536);
 
-function PMA_DBI_connect($user, $password) {
+function PMA_DBI_connect($user, $password, $is_controluser = FALSE) {
     global $cfg, $php_errormsg;
 
     $server_port   = (empty($cfg['Server']['port']))
@@ -74,7 +74,7 @@ function PMA_DBI_connect($user, $password) {
         PMA_auth_fails();
     } // end if
 
-    PMA_DBI_postConnect($link);
+    PMA_DBI_postConnect($link, $is_controluser);
 
     return $link;
 }
@@ -113,6 +113,11 @@ function PMA_DBI_try_query($query, $link = NULL, $options = 0) {
         $query = PMA_convert_charset($query);
     }
     return mysqli_query($link, $query, $method);
+    // From the PHP manual:
+    // "note: returns TRUE on success or FALSE on failure. For SELECT,
+    // SHOW, DESCRIBE or EXPLAIN, mysqli_query() will return a result object"
+    // so, do not use the return value to feed mysqli_num_rows() if it's
+    // a boolean
 }
 
 // The following function is meant for internal use only.
@@ -171,7 +176,11 @@ function PMA_DBI_fetch_row($result) {
 }
 
 function PMA_DBI_free_result($result) {
-    return @mysqli_free_result($result);
+    if (!is_bool($result)) {
+        return mysqli_free_result($result);
+    } else {
+        return 0;
+    }
 }
 
 function PMA_DBI_getError($link = NULL) {
@@ -203,7 +212,7 @@ function PMA_DBI_getError($link = NULL) {
 
 
     if ($error && $error == 2002) {
-        $error = '#' . ((string) $error) . ' - ' . $GLOBALS['strServerNotResponding'];
+        $error = '#' . ((string) $error) . ' - ' . $GLOBALS['strServerNotResponding'] . ' ' . $GLOBALS['strSocketProblem'];
     } elseif ($error && defined('PMA_MYSQL_INT_VERSION') && PMA_MYSQL_INT_VERSION >= 40100) {
         $error = '#' . ((string) $error) . ' - ' . $error_message;
     } elseif ($error) {
@@ -224,7 +233,12 @@ function PMA_DBI_close($link = NULL) {
 }
 
 function PMA_DBI_num_rows($result) {
-    return @mysqli_num_rows($result);
+    // see the note for PMA_DBI_try_query();
+    if (!is_bool($result)) {
+        return @mysqli_num_rows($result);
+    } else {
+        return 0;
+    }
 }
 
 function PMA_DBI_insert_id($link = '') {

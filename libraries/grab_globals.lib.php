@@ -1,5 +1,5 @@
 <?php
-/* $Id: grab_globals.lib.php,v 2.5.4.5 2005/03/03 20:39:28 rabus Exp $ */
+/* $Id: grab_globals.lib.php,v 2.11 2005/03/03 20:59:24 rabus Exp $ */
 // vim: expandtab sw=4 ts=4 sts=4:
 
 
@@ -26,9 +26,6 @@ function PMA_gpc_extract($array, &$target, $sanitize = TRUE) {
          *
          * Currently, the following variable names are rejected when found in
          * $_GET or $_POST: cfg, GLOBALS, str* and _*
-         *
-         * Warning: this also affects array keys:
-         * Variables like $_GET['harmless']['cfg'] will also be rejected!
          */
         if ($sanitize && is_string($key) && (
             $key == 'cfg'

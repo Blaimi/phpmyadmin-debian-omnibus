@@ -1,5 +1,5 @@
 <?php
-/* $Id: db_details.php,v 2.16 2004/10/08 11:14:06 garvinhicking Exp $ */
+/* $Id: db_details.php,v 2.17 2005/03/07 21:30:57 lem9 Exp $ */
 // vim: expandtab sw=4 ts=4 sts=4:
 
 
@@ -224,7 +224,7 @@ if ($cfg['Bookmark']['db'] && $cfg['Bookmark']['table']) {
         echo '        <select name="id_bookmark">' . "\n";
         echo '            <option value=""></option>' . "\n";
         foreach ($bookmark_list AS $key => $value) {
-            echo '            <option value="' . htmlspecialchars($value) . '">' . htmlspecialchars($key) . '</option>' . "\n";
+            echo '            <option value="' . htmlspecialchars($key) . '">' . htmlspecialchars($value) . '</option>' . "\n";
         }
         echo '        </select>' . "\n";
         echo '    </td></tr><tr bgcolor="' . $cfg['BgcolorOne'] . '"><td colspan="2">';

@@ -1,4 +1,80 @@
-Information about 2.6.1-rc2
+Information about 2.6.2-rc1
+
+   Improvements:
+
+     * MySQL 4.1.x native column comments
+     * MySQL 5.0: Basic detection mechanism for views:
+
+          * Views are no longer displayed as tables in use
+          * Ability to drop views
+
+     * MySQL 5.0: Interface fixes and hardcoded virtual relations for
+       information_schema
+     * MySQL 4.1: Better automatic detection for available storage engines
+     * New storage engines overview page
+
+          * Plugin-like infrastructure for storage engine status monitors
+          * Overview of startup variables and current values
+          * MySQL 5.0 / InnoDB: Buffer pool activity monitor
+
+     * MySQL 4.1.2+ TIMESTAMP options
+     * Export: Native Microsoft Word 2000 and Excel 2000 formats
+     * PDF schema visual editor: column names now optional
+     * MySQL 5.0.3 new Japanese charsets support (cp932, eucjpms)
+     * Parser: added missing date and time MySQL functions
+     * Documentation: explain all Export options handling
+     * Cookie paths: added / to end of path
+     * Show database comments at more places
+     * Better use of print styles in themes
+     * Bookmarks: sort by label, remove the number before each label
+     * Better protection against possible collation conflicts and out-of-sync
+       errors in PMADB queries
+     * Relation view: removed pmadb-style comments handling (now available
+       just on the Structure page)
+     * FAQ about using HTTP authentication under IIS
+     * New editions for some language files (especially ISO-8859-15)
+     * (rc1)  English messages improvements
+
+   Fixes:
+
+     * Detection of SELECT query to display on multiple submits
+     * PDF schema: missing header
+     * A failed connection was not properly detected
+     * Problem with Japanese language under MySQL 4.1.x
+     * Export
+
+          * Various errors under mysqli extension
+          * SQL format under Safari browser
+          * Do not offer export modes not available in current MySQL version
+
+     * Changing the type of a FLOAT unsigned column
+     * Adding field with collation
+     * Calendar popup and TIMESTAMP field under MySQL 4.1.x
+     * PHP 4.1.x: wrong parameter count (mcrypt.lib.php)
+     * Problem when SHOW DATABASES is disabled
+     * Copy table: commands out of sync
+     * User management
+
+          * Host not changing with editing user
+          * Escaping character removed by error
+
+     * MySQL 5.0.x: "No database selected" error
+     * Print view: displaying of indexes
+     * Cookie auth: error when blowfish_secret is empty
+     * MySQL 4.1.2: "Reload MySQL" link not seen
+     * MySQL 5 server binlog compatibility
+     * PDF pages generation: wrong documentation
+     * Inserted row id was not always correctly reported
+     * (rc1)  Do not offer unavailable collations
+     * (rc1)  XSS vulnerability on "convcharset"
+     * (rc1)  Do not allow to drop information_schema
+     * (rc1)  Undefined offset (on the left panel)
+     * (rc1)  Problem copying InnoDB table with foreign-key constraints to a
+       table in the same database
+
+ ----------------------------------------------------------------------
+
+Information about 2.6.1-pl3
 
    Upgrade note:
 

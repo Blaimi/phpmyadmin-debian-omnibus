@@ -1,5 +1,5 @@
 <?php
-/* $Id: tbl_move_copy.php,v 1.2 2004/12/28 11:11:12 nijel Exp $ */
+/* $Id: tbl_move_copy.php,v 1.4 2005/04/01 21:56:01 lem9 Exp $ */
 // vim: expandtab sw=4 ts=4 sts=4:
 
 /**
@@ -48,7 +48,10 @@ function PMA_duplicate_table_info($work, $pma_table, $get_fields, $where_fields,
         $table_copy_query = 'SELECT ' . implode(', ', $select_parts)
                           . ' FROM ' . PMA_backquote($cfgRelation[$pma_table])
                           . ' WHERE ' . implode(' AND ', $where_parts);
-        $table_copy_rs    = PMA_query_as_cu($table_copy_query);
+        
+        // must use PMA_DBI_QUERY_STORE here, since we execute another
+        // query inside the loop
+        $table_copy_rs    = PMA_query_as_cu($table_copy_query, TRUE, PMA_DBI_QUERY_STORE);
 
         while ($table_copy_row = @PMA_DBI_fetch_assoc($table_copy_rs)) {
             $value_parts = array();
@@ -96,8 +99,8 @@ function PMA_table_move_copy($source_db, $source_table, $target_db, $target_tabl
     $source = PMA_backquote($source_db) . '.' . PMA_backquote($source_table);
     if (empty($target_db)) $target_db = $source_db;
 
-    // This could avoid some problems with replicated databases, when
-    // moving table from replicated one to not replicated one
+    // Doing a select_db could avoid some problems with replicated databases,
+    // when moving table from replicated one to not replicated one
     PMA_DBI_select_db($target_db);
 
     $target = PMA_backquote($target_db) . '.' . PMA_backquote($target_table);
@@ -147,14 +150,32 @@ function PMA_table_move_copy($source_db, $source_table, $target_db, $target_tabl
 
         if (($move || isset($GLOBALS['constraints'])) && isset($GLOBALS['sql_constraints'])) {
             $parsed_sql =  PMA_SQP_parse($GLOBALS['sql_constraints']);
-
             $i = 0;
-            while ($parsed_sql[$i]['type'] != 'quote_backtick') $i++;
 
-            /* no need to PMA_backquote() */
+            // find the first quote_backtick, it must be the source table name
+            while ($parsed_sql[$i]['type'] != 'quote_backtick') {
+                $i++;
+            }
+
+            // replace it by the target table name, no need to PMA_backquote()
             $parsed_sql[$i]['data'] = $target;
 
-            /* Generate query back */
+            // now we must remove all quote_backtick that follow a CONSTRAINT
+            // keyword, because a constraint name must be unique in a db
+
+            $cnt = $parsed_sql['len'] - 1;
+
+            for ($j = $i; $j < $cnt; $j++) {
+                if ($parsed_sql[$j]['type'] == 'alpha_reservedWord'
+		&& strtoupper($parsed_sql[$j]['data']) == 'CONSTRAINT') {
+                    if ($parsed_sql[$j+1]['type'] == 'quote_backtick') {
+                        $parsed_sql[$j+1]['data'] = '';
+                    }
+                }
+            }
+
+
+            // Generate query back
             $GLOBALS['sql_constraints'] = PMA_SQP_formatHtml($parsed_sql, 'query_only');
             $result          = PMA_DBI_query($GLOBALS['sql_constraints']);
             if (isset($sql_query)) {

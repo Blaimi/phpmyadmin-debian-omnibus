@@ -1,5 +1,5 @@
 <?php
-/* $Id: tbl_row_delete.php,v 2.15 2004/12/28 13:54:36 nijel Exp $ */
+/* $Id: tbl_row_action.php,v 2.16 2005/03/13 13:25:40 lem9 Exp $ */
 // vim: expandtab sw=4 ts=4 sts=4:
 require_once('./libraries/grab_globals.lib.php');
 require_once('./libraries/common.lib.php');
@@ -98,8 +98,8 @@ if (!empty($submit_mult)) {
 
         case 'row_delete':
         default:
-            $action = 'tbl_row_delete.php';
-            $err_url = 'tbl_row_delete.php?' . PMA_generate_common_url($db, $table);
+            $action = 'tbl_row_action.php';
+            $err_url = 'tbl_row_action.php?' . PMA_generate_common_url($db, $table);
             if (!isset($mult_btn)) {
                 $original_sql_query = $sql_query;
                 $original_url_query = $url_query;

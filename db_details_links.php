@@ -1,5 +1,5 @@
 <?php
-/* $Id: db_details_links.php,v 2.12 2004/10/21 10:18:12 nijel Exp $ */
+/* $Id: db_details_links.php,v 2.14 2005/03/07 15:10:19 nijel Exp $ */
 // vim: expandtab sw=4 ts=4 sts=4:
 
 
@@ -40,6 +40,9 @@ if (!$cfg['AllowUserDropDatabase']) {
     $cfg['AllowUserDropDatabase'] = PMA_DBI_select_db('mysql');
     PMA_DBI_select_db($db);
 }
+// rabus: Don't even try to drop information_schema. You won't be able to.
+// Believe me. You won't.
+$cfg['AllowUserDropDatabase'] = $cfg['AllowUserDropDatabase'] && !(PMA_MYSQL_INT_VERSION >= 50000 && $db == 'information_schema');
 if ($cfg['AllowUserDropDatabase']) {
     $lnk5 = 'sql.php';
     $arg5 = $url_query . '&amp;sql_query='
@@ -92,6 +95,29 @@ if (!$cfg['LightTabs']) {
        . '</table>';
 } else {
     echo '<br />';
+}
+
+/**
+ * Settings for relations stuff
+ */
+require_once('./libraries/relation.lib.php');
+$cfgRelation = PMA_getRelationsParam();
+
+// Get additional information about tables for tooltip is done in db_details_db_info.php only once
+if ($cfgRelation['commwork']) {
+    $comment = PMA_getComments($db);
+
+    /**
+     * Displays table comment
+     */
+    if (is_array($comment)) {
+        ?>
+    <!-- DB comment -->
+    <p id="dbComment"><i>
+        <?php echo htmlspecialchars(implode(' ', $comment)) . "\n"; ?>
+    </i></p>
+        <?php
+    } // end if
 }
 
 /**

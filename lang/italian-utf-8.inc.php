@@ -1,8 +1,8 @@
 <?php
-/* $Id: italian-utf-8.inc.php,v 2.57 2005/01/09 20:36:50 lem9 Exp $ */
+/* $Id: italian-utf-8.inc.php,v 2.73 2005/03/30 19:23:00 lem9 Exp $ */
 
 /**
- * Translated by: Pietro Danesi <danone at users.sourceforge.net>  2002-03-29
+ * translated by: Pietro Danesi <danone at users.sourceforge.net>  2002-03-29
  * Revised by:    "DPhantom" <dphantom at users.sourceforge.net>  2002-04-16
  */
 
@@ -196,6 +196,7 @@ $strDatabasesStatsHeavyTraffic = 'N.B.: Abilitare qui le statistiche del Databas
 $strDbPrivileges = 'Privilegi specifici al database';
 $strDbSpecific = 'specifico del database';
 $strDefault = 'Predefinito';
+$strDefaultEngine = '%s è il motore di memorizzazione predefinito su questo server MySQL.';
 $strDefaultValueHelp = 'Per i valori predefiniti, prego inserire un singolo valore, senza backslashes escaping o virgolette, utilizzando questo formato: a';
 $strDefragment = 'Deframmenta la tabella';
 $strDelOld = 'La Pagina corrente contiene Riferimenti a Tabelle che non esistono più. Volete cancellare questi Riferimenti?';
@@ -237,6 +238,10 @@ $strEncloseInTransaction = 'Includi export in una transazione';
 $strEnd = 'Fine';
 $strEndCut = 'FINE CUT';
 $strEndRaw = 'FINE RAW';
+$strEngineAvailable = '%s è disponibile su questo server MySQL.';
+$strEngineDisabled = '%s è stato disabilitato su questo server MySQL.';
+$strEngineUnsupported = 'Questo server MySQL non supporta il motore di memorizzazione %s.';
+$strEngines = 'Motori';
 $strEnglish = 'Inglese';
 $strEnglishPrivileges = 'Nota: i nomi dei privilegi di MySQL sono in Inglese';
 $strError = 'Errore';
@@ -390,6 +395,18 @@ $strMoveTableOK = 'La tabella %s è stata spostata in %s.';
 $strMoveTableSameNames = 'Impossibile spostare la tabella su se stessa!';
 $strMultilingual = 'multilingua';
 $strMustSelectFile = 'Si dovrebbe selezionare il file che si vuole inserire.';
+$strMyISAMDataPointerSize = 'Domensione del puntatore dati';
+$strMyISAMDataPointerSizeDesc = 'Dimensione del puntatore predefinito in Bytes, che deve essere usata da CREATE TABLE per le tabelle MyISAM quando non è stata specificata l\'opzione MAX_ROWS.';
+$strMyISAMMaxExtraSortFileSize = 'Dimensione massima per i files temporanei nella creazione di un indice';
+$strMyISAMMaxExtraSortFileSizeDesc = 'Se il file temporaneo è usato per la creazione veloce di un indice MyISAM, occuperebbe più spazio dell\'utilizzo del metodo key cache con la quantità ivi specificata: perciò si deve prediligere il metodo key cache.';
+$strMyISAMMaxSortFileSize = 'Dimensione massima dei file temporanei di ordinamento';
+$strMyISAMMaxSortFileSizeDesc = 'La dimensione massima dei file temporanei MySQL può essere utilizzata nella rigenerazione di un indice MyISAM (durante un REPAIR TABLE, ALTER TABLE, o LOAD DATA INFILE).';
+$strMyISAMRecoverOptions = 'Modalità di ripristino automatico';
+$strMyISAMRecoverOptionsDesc = 'La modalità di irppristino automatico di tabelle MyISAM corrotte, come impostato tramite l\'opzione di lan cio del server --myisam-recover.';
+$strMyISAMRepairThreads = 'Thread di riparazione';
+$strMyISAMRepairThreadsDesc = 'Se questo valore è maggiore di 1, gli indici della tabella MyISAM vengono creati in parallelo (ogni indice nel suo thread) durante il processo di ordinamento Repair by.';
+$strMyISAMSortBufferSize = 'Ordina la dimensione del buffer';
+$strMyISAMSortBufferSizeDesc = 'Il buffer che viene allocato nell\'ordinamento degli indici MyISAM durante un REPAIR TABLE o nella creazione degli indici con CREATE INDEX o ALTER TABLE.';
 $strMySQLCharset = 'Set di caratteri MySQL';
 $strMySQLConnectionCollation = 'collazione della connessione di MySQL';
 $strMySQLReloaded = 'MySQL riavviato.';
@@ -407,6 +424,7 @@ $strNoActivity = 'Nessuna attività da %s secondi o più, si prega di autenticar
 $strNoDatabases = 'Nessun database';
 $strNoDatabasesSelected = 'Nessun database selezionato.';
 $strNoDescription = 'nessuna Description';
+$strNoDetailsForEngine = 'Non è disponibile nessuna informazione dettagliata sullo stato di questo motore di memorizzazione.';
 $strNoDropDatabases = 'I comandi "DROP DATABASE" sono disabilitati.';
 $strNoExplain = 'Non Spiegare SQL';
 $strNoFrames = 'phpMyAdmin funziona meglio con browser che supportano frames';
@@ -519,7 +537,6 @@ $strQBEIns = 'Aggiungi';
 $strQueryFrame = 'Finestra della Query';
 $strQueryOnDb = 'SQL-query sul database <b>%s</b>:';
 $strQuerySQLHistory = 'Storico dell\'SQL';
-$strQueryStatistics = '<b>Statistiche delle Query</b>: Dal suo avvio, sono state inviate al server %s queries.';
 $strQueryTime = 'La query ha impiegato %01.4f sec';
 $strQueryType = 'Tipo di Query';
 $strQueryWindowLock = 'Non sovrascrivere questa query da fuori della finestra';
@@ -637,6 +654,8 @@ $strStatCreateTime = 'Creazione';
 $strStatUpdateTime = 'Ultimo cambiamento';
 $strStatement = 'Istruzioni';
 $strStatus = 'Stato';
+$strStorageEngine = 'Motore di Memorizzazione';
+$strStorageEngines = 'Motori di Memorizzazione';
 $strStrucCSV = 'dati CSV';
 $strStrucData = 'Struttura e dati';
 $strStrucDrop = 'Aggiungi DROP TABLE';
@@ -692,7 +711,6 @@ $strTransformation_text_plain__formatted = 'Preserva l\'originale formattazione 
 $strTransformation_text_plain__imagelink = 'Mostra un collegamento ad una immagine esterna; il campo contiene il nome del file; la prima opzione è un prefisso come "http://tuodominio.com/", la seconda opzione è la larghezza in pixel, la terza è l\'altezza.';
 $strTransformation_text_plain__link = 'Mostra un collegamento, il campo contiene il nome del file; la prima opzione è un prefisso come "http://tuodominio.com/", la seconda opzione è un titolo per il collegamento.';
 $strTransformation_text_plain__substr = 'Mostra soltanto una parte della stringa. La prima opzione è l\'offset che serve a definire dove inizia l\'output del vostro testo (Prefinito: 0). La seconda opzione è un offset che indica quanto testo viene restituito. Se vuoto, restituisce tutto il testo rimanente. La terza opzione definisce quali caratteri saranno aggiunti in fondo all\'output quando una soptto-stringa viene restituita (Predefinito: ...) .';
-$strTransformation_text_plain__unformatted = 'Mostra il codice HTML come entità HTML. Nessuna formattazione HTML viene applicata.';
 $strTruncateQueries = 'Tronca le Query Mostrate';
 $strTurkish = 'Turco';
 $strType = 'Tipo';
@@ -728,9 +746,11 @@ $strValidateSQL = 'Valida SQL';
 $strValidatorError = 'L\' SQL validator non può essere inizializzato. Prego controllare di avere installato le estensioni php necessarie come descritto nella %sdocumentazione%s.';
 $strValue = 'Valore';
 $strVar = 'Variabile';
+$strView = 'Vista';
 $strViewDump = 'Visualizza dump (schema) della tabella';
 $strViewDumpDB = 'Visualizza dump (schema) del database';
 $strViewDumpDatabases = 'Visualizza il dump (schema) dei databases';
+$strViewHasBeenDropped = 'La vista %s è stata eliminata';
 
 $strWebServerUploadDirectory = 'directory di upload del web-server';
 $strWebServerUploadDirectoryError = 'La directory impostata per l\'upload non può essere trovata';
@@ -750,4 +770,40 @@ $strYes = ' Si ';
 $strZeroRemovesTheLimit = 'N.B.: 0 (zero) significa nessun limite.';
 $strZip = '"compresso con zip"';
 
+// To translate:
+
+$strLongOperation = 'This operation could be long. Proceed anyway?';  //to translate
+
+$strVersionInformation = 'Version information';  //to translate
+
+$strInnoDBDataHomeDir = 'Data home directory';  //to translate
+$strInnoDBDataHomeDirDesc = 'The common part of the directory path for all InnoDB data files.';  //to translate
+$strInnoDBDataFilePath = 'Data files';  //to translate
+$strInnoDBAutoextendIncrement = 'Autoextend increment';  //to translate
+$strInnoDBAutoextendIncrementDesc = ' The increment size for extending the size of an autoextending tablespace when it becomes full.';  //to translate
+$strBufferPool = 'Buffer Pool';  //to translate
+$strBufferPoolUsage = 'Buffer Pool Usage';  //to translate
+$strDataPages = 'Pages containing data';  //to translate
+$strFreePages = 'Free pages';  //to translate
+$strBusyPages = 'Busy pages';  //to translate
+$strDirtyPages = 'Dirty pages';  //to translate
+$strPagesToBeFlushed = 'Pages to be flushed';  //to translate
+$strLatchedPages = 'Latched pages';  //to translate
+$strBufferPoolActivity = 'Buffer Pool Activity';  //to translate
+$strReadRequests = 'Read requests';  //to translate
+$strWriteRequests = 'Write requests';  //to translate
+$strBufferReadMisses = 'Read misses';  //to translate
+$strBufferReadMissesInPercent = 'Read misses in %';  //to translate
+$strBufferWriteWaits = 'Write waits';  //to translate
+$strBufferWriteWaitsInPercent = 'Write waits in %';  //to translate
+$strHTMLExcel = 'Microsoft Excel 2000';  //to translate
+$strHTMLExcelOptions = 'Microsoft Excel 2000 export options';  //to translate
+$strHTMLWord = 'Microsoft Word 2000';  //to translate
+$strHTMLWordOptions = 'Microsoft Word 2000 export options';  //to translate
+$strInnoDBBufferPoolSizeDesc = 'The size of the memory buffer InnoDB uses to cache data and indexes of its tables.';  //to translate
+$strInnoDBBufferPoolSize = 'Buffer pool size';  //to translate
+$strInnoDBPages = 'pages';  //to translate
+$strSocketProblem = '(or the local MySQL server\'s socket is not correctly configured)';  //to translate
+
+$strQueryStatistics = '<b>Query statistics</b>: Since its startup, %s queries have been sent to the server.';
 ?>

@@ -1,5 +1,5 @@
 <?php
-/* $Id: tbl_properties_structure.php,v 2.31 2004/10/25 13:28:19 nijel Exp $ */
+/* $Id: tbl_properties_structure.php,v 2.35 2005/03/16 17:22:04 lem9 Exp $ */
 // vim: expandtab sw=4 ts=4 sts=4:
 
 require_once('./libraries/grab_globals.lib.php');
@@ -79,11 +79,28 @@ PMA_DBI_free_result($result);
 $fields_rs   = PMA_DBI_query('SHOW FULL FIELDS FROM ' . PMA_backquote($table) . ';', NULL, PMA_DBI_QUERY_STORE);
 $fields_cnt  = PMA_DBI_num_rows($fields_rs);
 
+// Get more complete field information
+// For now, this is done just for MySQL 4.1.2+ new TIMESTAMP options
+// but later, if the analyser returns more information, it
+// could be executed for any MySQL version and replace
+// the info given by SHOW FULL FIELDS FROM.
 
+if (PMA_MYSQL_INT_VERSION >= 40102) {
+    $show_create_table_query = 'SHOW CREATE TABLE '
+        . PMA_backquote($db) . '.' . PMA_backquote($table);
+    $show_create_table_res = PMA_DBI_query($show_create_table_query);
+    list(,$show_create_table) = PMA_DBI_fetch_row($show_create_table_res);
+    PMA_DBI_free_result($show_create_table_res);
+    unset($show_create_table_res, $show_create_table_query);
+    $analyzed_sql = PMA_SQP_analyze(PMA_SQP_parse($show_create_table));
+}
 
 /**
  * Displays the table structure ('show table' works correct since 3.23.03)
  */
+
+$i = 0;
+
 ?>
 
 <!-- TABLE INFORMATION -->
@@ -92,18 +109,19 @@ $fields_cnt  = PMA_DBI_num_rows($fields_rs);
     <?php echo PMA_generate_common_hidden_inputs($db, $table); ?>
 <table border="<?php echo $cfg['Border']; ?>" cellpadding="2" cellspacing="1">
 <tr>
-    <th id="th1">&nbsp;</th>
-    <th id="th2">&nbsp;<?php echo $strField; ?>&nbsp;</th>
-    <th id="th3"><?php echo $strType; ?></th>
-<?php echo PMA_MYSQL_INT_VERSION >= 40100 ? '    <th>' . $strCollation . '</th>' . "\n" : ''; ?>
-    <th id="th4"><?php echo $strAttr; ?></th>
-    <th id="th5"><?php echo $strNull; ?></th>
-    <th id="th6"><?php echo $strDefault; ?></th>
-    <th id="th7"><?php echo $strExtra; ?></th>
-    <th colspan="6" id="th8"><?php echo $strAction; ?></th>
+<?php echo $tbl_is_view ? '' : '    <th id="th' . ++$i . '">&nbsp;</th>' . "\n"; ?>
+    <th id="th<?php echo ++$i; ?>">&nbsp;<?php echo $strField; ?>&nbsp;</th>
+    <th id="th<?php echo ++$i; ?>"><?php echo $strType; ?></th>
+<?php echo PMA_MYSQL_INT_VERSION >= 40100 ? '    <th id="th' . ++$i . '">' . $strCollation . '</th>' . "\n" : ''; ?>
+    <th id="th<?php echo ++$i; ?>"><?php echo $strAttr; ?></th>
+    <th id="th<?php echo ++$i; ?>"><?php echo $strNull; ?></th>
+    <th id="th<?php echo ++$i; ?>"><?php echo $strDefault; ?></th>
+    <th id="th<?php echo ++$i; ?>"><?php echo $strExtra; ?></th>
+<?php echo $tbl_is_view ? '' : '    <th colspan="6" id="th' . ++$i . '">' . $strAction . '</th>' . "\n"; ?>
 </tr>
 
 <?php
+unset($i);
 $comments_map = array();
 $mime_map = array();
 
@@ -212,16 +230,23 @@ while ($row = PMA_DBI_fetch_assoc($fields_rs)) {
         $type_mime = '';
     }
 
-    $strAttribute     = '&nbsp;';
+    $attribute     = '&nbsp;';
     if ($binary) {
-        $strAttribute = 'BINARY';
+        $attribute = 'BINARY';
     }
     if ($unsigned) {
-        $strAttribute = 'UNSIGNED';
+        $attribute = 'UNSIGNED';
     }
     if ($zerofill) {
-        $strAttribute = 'UNSIGNED ZEROFILL';
+        $attribute = 'UNSIGNED ZEROFILL';
     }
+    
+    // MySQL 4.1.2+ TIMESTAMP options
+    // (if on_update_current_timestamp is set, then it's TRUE)
+    if (isset($analyzed_sql[0]['create_table_fields'][$row['Field']]['on_update_current_timestamp'])) {
+        $attribute = 'ON UPDATE CURRENT_TIMESTAMP';
+    }
+
     if (!isset($row['Default'])) {
         if ($row['Null'] != '') {
             $row['Default'] = '<i>NULL</i>';
@@ -298,16 +323,25 @@ while ($row = PMA_DBI_fetch_assoc($fields_rs)) {
 
     ?>
 <tr <?php echo $on_mouse; ?>>
+    <?php
+    if (!$tbl_is_view) {
+        ?>
     <td align="center" bgcolor="<?php echo $bgcolor; ?>">
         <input type="checkbox" name="selected_fld[]" value="<?php echo $field_encoded; ?>" id="checkbox_row_<?php echo $i; ?>" <?php echo $checked; ?> />
     </td>
+        <?php
+    }
+    ?>
     <td <?php echo $click_mouse; ?> bgcolor="<?php echo $bgcolor; ?>" nowrap="nowrap">&nbsp;<label onclick="return (document.getElementById('checkbox_row_<?php echo $i; ?>') ? false : true)" for="checkbox_row_<?php echo $i; ?>"><?php echo $field_name; ?></label>&nbsp;</td>
     <td <?php echo $click_mouse; ?> bgcolor="<?php echo $bgcolor; ?>"<?php echo $type_nowrap; ?>><?php echo $type; echo $type_mime; ?><bdo dir="ltr"></bdo></td>
 <?php echo PMA_MYSQL_INT_VERSION >= 40100 ? '    <td bgcolor="' . $bgcolor . '" ' . $click_mouse . '>' . (empty($field_charset) ? '&nbsp;' : '<dfn title="' . PMA_getCollationDescr($field_charset) . '">' . $field_charset . '</dfn>') . '</td>' . "\n" : '' ?>
-    <td <?php echo $click_mouse; ?> bgcolor="<?php echo $bgcolor; ?>" nowrap="nowrap"><?php echo $strAttribute; ?></td>
+    <td <?php echo $click_mouse; ?> bgcolor="<?php echo $bgcolor; ?>" nowrap="nowrap" style="font-size: <?php echo $font_smallest; ?>"><?php echo $attribute; ?></td>
     <td <?php echo $click_mouse; ?> bgcolor="<?php echo $bgcolor; ?>"><?php echo (($row['Null'] == '') ? $strNo : $strYes); ?>&nbsp;</td>
     <td <?php echo $click_mouse; ?> bgcolor="<?php echo $bgcolor; ?>" nowrap="nowrap"><?php if (isset($row['Default'])) echo $row['Default']; ?>&nbsp;</td>
     <td <?php echo $click_mouse; ?> bgcolor="<?php echo $bgcolor; ?>" nowrap="nowrap"><?php echo $row['Extra']; ?>&nbsp;</td>
+    <?php
+    if (!$tbl_is_view) {
+        ?>
     <td align="center" bgcolor="<?php echo $bgcolor; ?>">
         <a href="tbl_alter.php?<?php echo $url_query; ?>&amp;field=<?php echo $field_encoded; ?>">
             <?php echo $titles['Change']; ?></a>
@@ -389,7 +423,8 @@ while ($row = PMA_DBI_fetch_assoc($fields_rs)) {
     </td>
         <?php
         } // end if... else...
-    echo "\n"
+        echo "\n";
+    } // end if (!$tbl_is_view)
     ?>
 </tr>
     <?php
@@ -398,8 +433,10 @@ while ($row = PMA_DBI_fetch_assoc($fields_rs)) {
 
 echo "\n";
 
-$checkall_url = 'tbl_properties_structure.php?' . PMA_generate_common_url($db,$table);
-?>
+if (!$tbl_is_view) {
+
+    $checkall_url = 'tbl_properties_structure.php?' . PMA_generate_common_url($db,$table);
+    ?>
 
 <tr>
     <td colspan="<?php echo PMA_MYSQL_INT_VERSION >= 40100 ? '14' : '13'; ?>">
@@ -418,43 +455,46 @@ $checkall_url = 'tbl_properties_structure.php?' . PMA_generate_common_url($db,$t
                 <td>
                     <?php
 
-if ($cfg['PropertiesIconic']) {
-    PMA_buttonOrImage('submit_mult', 'mult_submit', 'submit_mult_change', $strChange, 'b_edit.png');
-    // Drop button if there is at least two fields
-    if ($fields_cnt > 1) {
-        PMA_buttonOrImage('submit_mult', 'mult_submit', 'submit_mult_drop', $strDrop, 'b_drop.png');
-    }
-    PMA_buttonOrImage('submit_mult', 'mult_submit', 'submit_mult_primary', $strPrimary, 'b_primary.png');
-    PMA_buttonOrImage('submit_mult', 'mult_submit', 'submit_mult_index', $strIndex, 'b_index.png');
-    PMA_buttonOrImage('submit_mult', 'mult_submit', 'submit_mult_unique', $strUnique, 'b_unique.png');
-    if ((!empty($tbl_type) && $tbl_type == 'MYISAM')) {
-        PMA_buttonOrImage('submit_mult', 'mult_submit', 'submit_mult_fulltext', $strIdxFulltext, 'b_ftext.png');
-    }
-} else {
-    echo '<input type="submit" name="submit_mult" value="' . $strChange . '" title="' . $strChange . '" />' . "\n";
-    // Drop button if there is at least two fields
-    if ($fields_cnt > 1) {
+    if ($cfg['PropertiesIconic']) {
+        PMA_buttonOrImage('submit_mult', 'mult_submit', 'submit_mult_change', $strChange, 'b_edit.png');
+        // Drop button if there is at least two fields
+        if ($fields_cnt > 1) {
+            PMA_buttonOrImage('submit_mult', 'mult_submit', 'submit_mult_drop', $strDrop, 'b_drop.png');
+        }
+        PMA_buttonOrImage('submit_mult', 'mult_submit', 'submit_mult_primary', $strPrimary, 'b_primary.png');
+        PMA_buttonOrImage('submit_mult', 'mult_submit', 'submit_mult_index', $strIndex, 'b_index.png');
+        PMA_buttonOrImage('submit_mult', 'mult_submit', 'submit_mult_unique', $strUnique, 'b_unique.png');
+        if ((!empty($tbl_type) && $tbl_type == 'MYISAM')) {
+            PMA_buttonOrImage('submit_mult', 'mult_submit', 'submit_mult_fulltext', $strIdxFulltext, 'b_ftext.png');
+        }
+    } else {
+        echo '<input type="submit" name="submit_mult" value="' . $strChange . '" title="' . $strChange . '" />' . "\n";
+        // Drop button if there is at least two fields
+        if ($fields_cnt > 1) {
+            echo '&nbsp;<i>' . $strOr . '</i>&nbsp;' . "\n"
+               . '<input type="submit" name="submit_mult" value="' . $strDrop . '" title="' . $strDrop . '" />' . "\n";
+        }
         echo '&nbsp;<i>' . $strOr . '</i>&nbsp;' . "\n"
-           . '<input type="submit" name="submit_mult" value="' . $strDrop . '" title="' . $strDrop . '" />' . "\n";
-    }
-    echo '&nbsp;<i>' . $strOr . '</i>&nbsp;' . "\n"
-       . '<input type="submit" name="submit_mult" value="' . $strPrimary . '" title="' . $strPrimary . '" />' . "\n";
-    echo '&nbsp;<i>' . $strOr . '</i>&nbsp;' . "\n"
-       . '<input type="submit" name="submit_mult" value="' . $strIndex . '" title="' . $strIndex . '" />' . "\n";
-    echo '&nbsp;<i>' . $strOr . '</i>&nbsp;' . "\n"
-       . '<input type="submit" name="submit_mult" value="' . $strUnique . '" title="' . $strUnique . '" />' . "\n";
-    if ((!empty($tbl_type) && $tbl_type == 'MYISAM')) {
+           . '<input type="submit" name="submit_mult" value="' . $strPrimary . '" title="' . $strPrimary . '" />' . "\n";
         echo '&nbsp;<i>' . $strOr . '</i>&nbsp;' . "\n"
-           . '<input type="submit" name="submit_mult" value="' . $strIdxFulltext . '" title="' . $strIdxFulltext . '" />' . "\n";
+           . '<input type="submit" name="submit_mult" value="' . $strIndex . '" title="' . $strIndex . '" />' . "\n";
+        echo '&nbsp;<i>' . $strOr . '</i>&nbsp;' . "\n"
+           . '<input type="submit" name="submit_mult" value="' . $strUnique . '" title="' . $strUnique . '" />' . "\n";
+        if ((!empty($tbl_type) && $tbl_type == 'MYISAM')) {
+            echo '&nbsp;<i>' . $strOr . '</i>&nbsp;' . "\n"
+               . '<input type="submit" name="submit_mult" value="' . $strIdxFulltext . '" title="' . $strIdxFulltext . '" />' . "\n";
+        }
     }
-}
 
-?>
+    ?>
                 </td>
             </tr>
         </table>
     </td>
 </tr>
+    <?php
+}
+?>
 </table>
 </form>
 
@@ -462,10 +502,11 @@ if ($cfg['PropertiesIconic']) {
 
 
 <?php
-/**
- * Work on the table
- */
-?>
+if (!$tbl_is_view) {
+    /**
+     * Work on the table
+     */
+    ?>
 <!-- TABLE WORK -->
 <!-- Printable view of the table -->
 <a href="tbl_printview.php?<?php echo $url_query; ?>"><?php
@@ -475,12 +516,12 @@ if ($cfg['PropertiesIconic']) {
     echo $strPrintView;
     ?></a>&nbsp;&nbsp;&nbsp;
 
-<?php
-// if internal relations are available, or the table type is INNODB
-// ($tbl_type comes from tbl_properties_table_info.php)
+    <?php
+    // if internal relations are available, or the table type is INNODB
+    // ($tbl_type comes from tbl_properties_table_info.php)
 
-if ($cfg['Server']['relation'] || $tbl_type=="INNODB") {
-?>
+    if ($cfg['Server']['relation'] || $tbl_type=="INNODB") {
+        ?>
 <!-- Work on Relations -->
 <a href="tbl_relation.php?<?php echo $url_query; ?>"><?php
     if ($cfg['PropertiesIconic']) {
@@ -488,9 +529,9 @@ if ($cfg['Server']['relation'] || $tbl_type=="INNODB") {
     }
     echo $strRelationView;
 ?></a>&nbsp;&nbsp;&nbsp;
-<?php
-}
-?>
+        <?php
+    }
+    ?>
 <!-- Let MySQL propose the optimal structure -->
 <a href="sql.php?<?php echo $url_query; ?>&amp;session_max_rows=all&amp;sql_query=<?php echo urlencode('SELECT * FROM ' . PMA_backquote($table) . ' PROCEDURE ANALYSE()'); ?>"><?php
     if ($cfg['PropertiesIconic']) {
@@ -526,7 +567,9 @@ if ($cfg['Server']['relation'] || $tbl_type=="INNODB") {
 
 <hr />
 
-<?php
+    <?php
+}
+
 /**
  * If there are more than 20 rows, displays browse/select/insert/empty/drop
  * links again
@@ -541,57 +584,58 @@ if ($fields_cnt > 20) {
 echo "\n\n";
 
 
-/**
- * Displays indexes
- */
-?>
+if (!$tbl_is_view) {
+    /**
+     * Displays indexes
+     */
+    ?>
 <!-- Indexes, space usage and row statistics -->
 <table border="0" cellspacing="0" cellpadding="0">
 <tr>
     <td valign="top">
-<?php
-define('PMA_IDX_INCLUDED', 1);
-require ('./tbl_indexes.php');
-?>
+    <?php
+    define('PMA_IDX_INCLUDED', 1);
+    require ('./tbl_indexes.php');
+    ?>
     </td>
 
-<?php
-/**
- * Displays Space usage and row statistics
- */
-// BEGIN - Calc Table Space - staybyte - 9 June 2001
-// loic1, 22 feb. 2002: updated with patch from
-//                      Joshua Nye <josh at boxcarmedia.com> to get valid
-//                      statistics whatever is the table type
-if ($cfg['ShowStats']) {
-    $nonisam     = FALSE;
-    $is_innodb = (isset($showtable['Type']) && $showtable['Type'] == 'InnoDB');
-    if (isset($showtable['Type']) && !preg_match('@ISAM|HEAP@i', $showtable['Type'])) {
-        $nonisam = TRUE;
-    }
-    if ($nonisam == FALSE || $is_innodb) {
-        // Gets some sizes
-        $mergetable     = FALSE;
-        if (isset($showtable['Type']) && $showtable['Type'] == 'MRG_MyISAM') {
-            $mergetable = TRUE;
+    <?php
+    /**
+     * Displays Space usage and row statistics
+     */
+    // BEGIN - Calc Table Space - staybyte - 9 June 2001
+    // loic1, 22 feb. 2002: updated with patch from
+    //                      Joshua Nye <josh at boxcarmedia.com> to get valid
+    //                      statistics whatever is the table type
+    if ($cfg['ShowStats']) {
+        $nonisam     = FALSE;
+        $is_innodb = (isset($showtable['Type']) && $showtable['Type'] == 'InnoDB');
+        if (isset($showtable['Type']) && !preg_match('@ISAM|HEAP@i', $showtable['Type'])) {
+            $nonisam = TRUE;
         }
-        list($data_size, $data_unit)         = PMA_formatByteDown($showtable['Data_length']);
-        if ($mergetable == FALSE) {
-            list($index_size, $index_unit)   = PMA_formatByteDown($showtable['Index_length']);
-        }
-        if (isset($showtable['Data_free']) && $showtable['Data_free'] > 0) {
-            list($free_size, $free_unit)     = PMA_formatByteDown($showtable['Data_free']);
-            list($effect_size, $effect_unit) = PMA_formatByteDown($showtable['Data_length'] + $showtable['Index_length'] - $showtable['Data_free']);
-        } else {
-            list($effect_size, $effect_unit) = PMA_formatByteDown($showtable['Data_length'] + $showtable['Index_length']);
-        }
-        list($tot_size, $tot_unit)           = PMA_formatByteDown($showtable['Data_length'] + $showtable['Index_length']);
-        if ($table_info_num_rows > 0) {
-            list($avg_size, $avg_unit)       = PMA_formatByteDown(($showtable['Data_length'] + $showtable['Index_length']) / $showtable['Rows'], 6, 1);
-        }
+        if ($nonisam == FALSE || $is_innodb) {
+            // Gets some sizes
+            $mergetable     = FALSE;
+            if (isset($showtable['Type']) && $showtable['Type'] == 'MRG_MyISAM') {
+                $mergetable = TRUE;
+            }
+            list($data_size, $data_unit)         = PMA_formatByteDown($showtable['Data_length']);
+            if ($mergetable == FALSE) {
+                list($index_size, $index_unit)   = PMA_formatByteDown($showtable['Index_length']);
+            }
+            if (isset($showtable['Data_free']) && $showtable['Data_free'] > 0) {
+                list($free_size, $free_unit)     = PMA_formatByteDown($showtable['Data_free']);
+                list($effect_size, $effect_unit) = PMA_formatByteDown($showtable['Data_length'] + $showtable['Index_length'] - $showtable['Data_free']);
+            } else {
+                list($effect_size, $effect_unit) = PMA_formatByteDown($showtable['Data_length'] + $showtable['Index_length']);
+            }
+            list($tot_size, $tot_unit)           = PMA_formatByteDown($showtable['Data_length'] + $showtable['Index_length']);
+            if ($table_info_num_rows > 0) {
+                list($avg_size, $avg_unit)       = PMA_formatByteDown(($showtable['Data_length'] + $showtable['Index_length']) / $showtable['Rows'], 6, 1);
+            }
 
-        // Displays them
-        ?>
+            // Displays them
+            ?>
 
     <!-- Space usage -->
     <td width="20">&nbsp;</td>
@@ -608,20 +652,20 @@ if ($cfg['ShowStats']) {
             <td bgcolor="<?php echo $cfg['BgcolorTwo']; ?>" align="right" nowrap="nowrap"><?php echo $data_size; ?></td>
             <td bgcolor="<?php echo $cfg['BgcolorTwo']; ?>"><?php echo $data_unit; ?></td>
         </tr>
-        <?php
-        if (isset($index_size)) {
-            echo "\n";
-            ?>
+            <?php
+            if (isset($index_size)) {
+                echo "\n";
+                ?>
         <tr>
             <td bgcolor="<?php echo $cfg['BgcolorTwo']; ?>" style="padding-right: 10px"><?php echo $strIndex; ?></td>
             <td bgcolor="<?php echo $cfg['BgcolorTwo']; ?>" align="right" nowrap="nowrap"><?php echo $index_size; ?></td>
             <td bgcolor="<?php echo $cfg['BgcolorTwo']; ?>"><?php echo $index_unit; ?></td>
         </tr>
-            <?php
-        }
-        if (isset($free_size)) {
-            echo "\n";
-            ?>
+                <?php
+            }
+            if (isset($free_size)) {
+                echo "\n";
+                ?>
         <tr style="color: #bb0000">
             <td bgcolor="<?php echo $cfg['BgcolorTwo']; ?>" style="padding-right: 10px"><?php echo $strOverhead; ?></td>
             <td bgcolor="<?php echo $cfg['BgcolorTwo']; ?>" align="right" nowrap="nowrap"><?php echo $free_size; ?></td>
@@ -632,22 +676,22 @@ if ($cfg['ShowStats']) {
             <td bgcolor="<?php echo $cfg['BgcolorOne']; ?>" align="right" nowrap="nowrap"><?php echo $effect_size; ?></td>
             <td bgcolor="<?php echo $cfg['BgcolorOne']; ?>"><?php echo $effect_unit; ?></td>
         </tr>
-            <?php
-        }
-        if (isset($tot_size) && $mergetable == FALSE) {
-            echo "\n";
-        ?>
+                <?php
+            }
+            if (isset($tot_size) && $mergetable == FALSE) {
+                echo "\n";
+            ?>
         <tr>
             <td bgcolor="<?php echo $cfg['BgcolorOne']; ?>" style="padding-right: 10px"><?php echo $strTotalUC; ?></td>
             <td bgcolor="<?php echo $cfg['BgcolorOne']; ?>" align="right" nowrap="nowrap"><?php echo $tot_size; ?></td>
             <td bgcolor="<?php echo $cfg['BgcolorOne']; ?>"><?php echo $tot_unit; ?></td>
         </tr>
-            <?php
-        }
-        // Optimize link if overhead
-        if (isset($free_size) && ($tbl_type == 'MYISAM' || $tbl_type == 'BDB')) {
-            echo "\n";
-            ?>
+                <?php
+            }
+            // Optimize link if overhead
+            if (isset($free_size) && ($tbl_type == 'MYISAM' || $tbl_type == 'BDB')) {
+                echo "\n";
+                ?>
         <tr>
             <td colspan="3" align="center" bgcolor="<?php echo $cfg['BgcolorTwo']; ?>">
                 <a href="sql.php?<?php echo $url_query; ?>&pos=0&amp;sql_query=<?php echo urlencode('OPTIMIZE TABLE ' . PMA_backquote($table)); ?>"><?php
@@ -658,10 +702,10 @@ if ($cfg['ShowStats']) {
                 ?></a>
             </td>
         </tr>
-            <?php
-        }
-        echo "\n";
-        ?>
+                <?php
+            }
+            echo "\n";
+            ?>
         </table>
     </td>
 
@@ -674,99 +718,99 @@ if ($cfg['ShowStats']) {
             <th><?php echo $strStatement; ?></th>
             <th align="center"><?php echo $strValue; ?></th>
         </tr>
-        <?php
-        $i = 0;
-        if (isset($showtable['Row_format'])) {
-            $bgcolor = ((++$i%2) ? $cfg['BgcolorTwo'] : $cfg['BgcolorOne']);
-            echo "\n";
-            ?>
+            <?php
+            $i = 0;
+            if (isset($showtable['Row_format'])) {
+                $bgcolor = ((++$i%2) ? $cfg['BgcolorTwo'] : $cfg['BgcolorOne']);
+                echo "\n";
+                ?>
         <tr>
             <td bgcolor="<?php echo $bgcolor; ?>"><?php echo $strFormat; ?></td>
             <td bgcolor="<?php echo $bgcolor; ?>" align="<?php echo $cell_align_left; ?>" nowrap="nowrap">
-            <?php
-            echo '                ';
-            if ($showtable['Row_format'] == 'Fixed') {
-                echo $strFixed;
-            }
-            else if ($showtable['Row_format'] == 'Dynamic') {
-                echo $strDynamic;
-            }
-            else {
-                echo $showtable['Row_format'];
-            }
-            echo "\n";
-            ?>
+                <?php
+                echo '                ';
+                if ($showtable['Row_format'] == 'Fixed') {
+                    echo $strFixed;
+                }
+                else if ($showtable['Row_format'] == 'Dynamic') {
+                    echo $strDynamic;
+                }
+                else {
+                    echo $showtable['Row_format'];
+                }
+                echo "\n";
+                ?>
             </td>
         </tr>
-            <?php
-        }
-        if (PMA_MYSQL_INT_VERSION >= 40100) {
-            $bgcolor = ((++$i%2) ? $cfg['BgcolorTwo'] : $cfg['BgcolorOne']);
-            ?>
+                <?php
+            }
+            if (PMA_MYSQL_INT_VERSION >= 40100 && !empty($tbl_collation)) {
+                $bgcolor = ((++$i%2) ? $cfg['BgcolorTwo'] : $cfg['BgcolorOne']);
+                ?>
         <tr>
             <td bgcolor="<?php echo $bgcolor; ?>"><?php echo $strCollation; ?></td>
             <td bgcolor="<?php echo $bgcolor; ?>" align="<?php echo $cell_align_left; ?>" nowrap="nowrap">
-            <?php
-            echo '<dfn title="' . PMA_getCollationDescr($tbl_collation) . '">' . $tbl_collation . '</dfn>';
-            ?>
+                <?php
+                echo '<dfn title="' . PMA_getCollationDescr($tbl_collation) . '">' . $tbl_collation . '</dfn>';
+                ?>
             </td>
         </tr>
-            <?php
-        }
-        if (!$is_innodb && isset($showtable['Rows'])) {
-            $bgcolor = ((++$i%2) ? $cfg['BgcolorTwo'] : $cfg['BgcolorOne']);
-            echo "\n";
-            ?>
+                <?php
+            }
+            if (!$is_innodb && isset($showtable['Rows'])) {
+                $bgcolor = ((++$i%2) ? $cfg['BgcolorTwo'] : $cfg['BgcolorOne']);
+                echo "\n";
+                ?>
         <tr>
             <td bgcolor="<?php echo $bgcolor; ?>"><?php echo $strRows; ?></td>
             <td bgcolor="<?php echo $bgcolor; ?>" align="right" nowrap="nowrap">
                 <?php echo number_format($showtable['Rows'], 0, $number_decimal_separator, $number_thousands_separator) . "\n"; ?>
             </td>
         </tr>
-            <?php
-        }
-        if (!$is_innodb && isset($showtable['Avg_row_length']) && $showtable['Avg_row_length'] > 0) {
-            $bgcolor = ((++$i%2) ? $cfg['BgcolorTwo'] : $cfg['BgcolorOne']);
-            echo "\n";
-            ?>
+                <?php
+            }
+            if (!$is_innodb && isset($showtable['Avg_row_length']) && $showtable['Avg_row_length'] > 0) {
+                $bgcolor = ((++$i%2) ? $cfg['BgcolorTwo'] : $cfg['BgcolorOne']);
+                echo "\n";
+                ?>
         <tr>
             <td bgcolor="<?php echo $bgcolor; ?>"><?php echo $strRowLength; ?>&nbsp;&oslash;</td>
             <td bgcolor="<?php echo $bgcolor; ?>" align="right" nowrap="nowrap">
                 <?php echo number_format($showtable['Avg_row_length'], 0, $number_decimal_separator, $number_thousands_separator) . "\n"; ?>
             </td>
         </tr>
-            <?php
-        }
-        if (!$is_innodb && isset($showtable['Data_length']) && $showtable['Rows'] > 0 && $mergetable == FALSE) {
-            $bgcolor = ((++$i%2) ? $cfg['BgcolorTwo'] : $cfg['BgcolorOne']);
-            echo "\n";
-            ?>
+                <?php
+            }
+            if (!$is_innodb && isset($showtable['Data_length']) && $showtable['Rows'] > 0 && $mergetable == FALSE) {
+                $bgcolor = ((++$i%2) ? $cfg['BgcolorTwo'] : $cfg['BgcolorOne']);
+                echo "\n";
+                ?>
         <tr>
             <td bgcolor="<?php echo $bgcolor; ?>"><?php echo $strRowSize; ?>&nbsp;&oslash;</td>
             <td bgcolor="<?php echo $bgcolor; ?>" align="right" nowrap="nowrap">
                 <?php echo $avg_size . ' ' . $avg_unit . "\n"; ?>
             </td>
         </tr>
-            <?php
-        }
-        if (isset($showtable['Auto_increment'])) {
-            $bgcolor = ((++$i%2) ? $cfg['BgcolorTwo'] : $cfg['BgcolorOne']);
-            echo "\n";
-            ?>
+                <?php
+            }
+            if (isset($showtable['Auto_increment'])) {
+                $bgcolor = ((++$i%2) ? $cfg['BgcolorTwo'] : $cfg['BgcolorOne']);
+                echo "\n";
+                ?>
         <tr>
             <td bgcolor="<?php echo $bgcolor; ?>"><?php echo $strNext; ?>&nbsp;Autoindex</td>
             <td bgcolor="<?php echo $bgcolor; ?>" align="right" nowrap="nowrap">
                 <?php echo number_format($showtable['Auto_increment'], 0, $number_decimal_separator, $number_thousands_separator) . "\n"; ?>
             </td>
         </tr>
-            <?php
-        }
-        echo "\n";
-
-        if (isset($showtable['Create_time'])) {
-            $bgcolor = ((++$i%2) ? $cfg['BgcolorTwo'] : $cfg['BgcolorOne']);
+                <?php
+            }
             echo "\n";
-            ?>
+
+            if (isset($showtable['Create_time'])) {
+                $bgcolor = ((++$i%2) ? $cfg['BgcolorTwo'] : $cfg['BgcolorOne']);
+                echo "\n";
+                ?>
         <tr>
             <td bgcolor="<?php echo $bgcolor; ?>"><?php echo $strStatCreateTime; ?></td>
             <td<?php if($theme=='original' || $theme==''){ echo ' style="font-size:' . $font_smaller . '"'; } ?> align="right" bgcolor="<?php echo $bgcolor; ?>" nowrap="nowrap">
@@ -774,13 +818,13 @@ if ($cfg['ShowStats']) {
             </td>
         </tr>
                 <?php
-        }
-        echo "\n";
-
-        if (isset($showtable['Update_time'])) {
-            $bgcolor = ((++$i%2) ? $cfg['BgcolorTwo'] : $cfg['BgcolorOne']);
+            }
             echo "\n";
-            ?>
+
+            if (isset($showtable['Update_time'])) {
+                $bgcolor = ((++$i%2) ? $cfg['BgcolorTwo'] : $cfg['BgcolorOne']);
+                echo "\n";
+                ?>
         <tr>
             <td bgcolor="<?php echo $bgcolor; ?>"><?php echo $strStatUpdateTime; ?></td>
             <td<?php if($theme=='original' || $theme==''){ echo ' style="font-size:' . $font_smaller . '"'; } ?> align="right" bgcolor="<?php echo $bgcolor; ?>" nowrap="nowrap">
@@ -788,35 +832,37 @@ if ($cfg['ShowStats']) {
             </td>
         </tr>
                 <?php
-        }
-        echo "\n";
-
-        if (isset($showtable['Check_time'])) {
-            $bgcolor = ((++$i%2) ? $cfg['BgcolorTwo'] : $cfg['BgcolorOne']);
+            }
             echo "\n";
-            ?>
+
+            if (isset($showtable['Check_time'])) {
+                $bgcolor = ((++$i%2) ? $cfg['BgcolorTwo'] : $cfg['BgcolorOne']);
+                echo "\n";
+                ?>
         <tr>
             <td bgcolor="<?php echo $bgcolor; ?>"><?php echo $strStatCheckTime; ?></td>
             <td<?php if($theme=='original' || $theme==''){ echo ' style="font-size:' . $font_smaller . '"'; } ?> align="right" bgcolor="<?php echo $bgcolor; ?>" nowrap="nowrap">
                 <?php echo PMA_localisedDate(strtotime($showtable['Check_time'])) . "\n"; ?>
             </td>
         </tr>
-            <?php
-        }
-        echo "\n";
-        ?>
+                <?php
+            }
+            echo "\n";
+            ?>
         </table>
     </td>
-        <?php
+            <?php
+        }
     }
-}
-// END - Calc Table Space
-echo "\n";
-?>
+    // END - Calc Table Space
+    echo "\n";
+    ?>
 </tr>
 </table>
 <hr />
-<?php
+    <?php
+} // end if (!$tbl_is_view)
+
 /**
  * Query box, bookmark, insert data from textfile
  */

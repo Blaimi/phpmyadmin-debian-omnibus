@@ -1,5 +1,5 @@
 <?php
-/* $Id: server_links.inc.php,v 2.10 2004/10/21 10:18:12 nijel Exp $ */
+/* $Id: server_links.inc.php,v 2.13 2005/01/20 00:06:40 rabus Exp $ */
 // vim: expandtab sw=4 ts=4 sts=4:
 
 // Check parameters
@@ -53,6 +53,7 @@ if ($cfg['ShowMysqlVars']) {
 if (PMA_MYSQL_INT_VERSION >= 40100) {
     echo PMA_printTab(($GLOBALS['cfg']['MainPageIconic'] ? '<img src="' . $GLOBALS['pmaThemeImage'] . 's_asci.png" width="16" height="16" border="0" hspace="2" align="middle" alt="'.$strCharsets.'" />' : '') . $strCharsets, 'server_collations.php', $url_query);
 }
+echo PMA_printTab(($GLOBALS['cfg']['MainPageIconic'] ? '<img src="' . $GLOBALS['pmaThemeImage'] . 'b_engine.png" width="16" height="16" border="0" hspace="2" align="middle" alt="' . $strEngines . '" />' : '') . $strEngines, 'server_engines.php', $url_query);
 if ($is_superuser) {
     echo PMA_printTab(($GLOBALS['cfg']['MainPageIconic'] ? '<img src="' . $GLOBALS['pmaThemeImage'] . 's_rights.png" width="16" height="16" border="0" hspace="2" align="middle" alt="'.$strPrivileges.'" />' : '') . $strPrivileges, 'server_privileges.php', $url_query);
 }

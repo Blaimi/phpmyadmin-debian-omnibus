@@ -1,7 +1,6 @@
 <?php
-/* $Id: tbl_alter.php,v 2.12 2005/01/01 19:34:05 nijel Exp $ */
+/* $Id: tbl_alter.php,v 2.15 2005/03/31 21:51:48 lem9 Exp $ */
 // vim: expandtab sw=4 ts=4 sts=4:
-
 
 /**
  * Gets some core libraries
@@ -57,30 +56,17 @@ if (isset($do_save_data)) {
         } else {
             $query .= ', CHANGE ';
         }
-        $query .= PMA_backquote($field_orig[$i]) . ' ' . PMA_backquote($field_name[$i]) . ' ' . $field_type[$i];
-        // Some field types shouldn't have lengths
+
+        $full_field_type = $field_type[$i];
         if ($field_length[$i] != ''
             && !preg_match('@^(DATE|DATETIME|TIME|TINYBLOB|TINYTEXT|BLOB|TEXT|MEDIUMBLOB|MEDIUMTEXT|LONGBLOB|LONGTEXT)$@i', $field_type[$i])) {
-            $query .= '(' . $field_length[$i] . ')';
+            $full_field_type .= '(' . $field_length[$i] . ')';
         }
         if ($field_attribute[$i] != '') {
-            $query .= ' ' . $field_attribute[$i];
-        } else if (PMA_MYSQL_INT_VERSION >= 40100 && $field_collation[$i] != '' && preg_match('@^(TINYTEXT|TEXT|MEDIUMTEXT|LONGTEXT|VARCHAR|CHAR)$@i', $field_type[$i])) {
-            $query .= PMA_generateCharsetQueryPart($field_collation[$i]);
+            $full_field_type .= ' ' . $field_attribute[$i];
         }
-        if ($field_default[$i] != '') {
-            if (strtoupper($field_default[$i]) == 'NULL') {
-                $query .= ' DEFAULT NULL';
-            } else {
-                $query .= ' DEFAULT \'' . PMA_sqlAddslashes($field_default[$i]) . '\'';
-            }
-        }
-        if ($field_null[$i] != '') {
-            $query .= ' ' . $field_null[$i];
-        }
-        if ($field_extra[$i] != '') {
-            $query .= ' ' . $field_extra[$i];
-        }
+        // take care of native MySQL comments here
+        $query .= PMA_generateAlterTable($field_orig[$i], $field_name[$i], $full_field_type, (PMA_MYSQL_INT_VERSION >= 40100 && $field_collation[$i] != '' ? $field_collation[$i] : ''), $field_null[$i], $field_default[$i], $field_default_current_timestamp[$i], $field_extra[$i], (PMA_MYSQL_INT_VERSION >= 40100 && $field_comments[$i] != '' ? $field_comments[$i] : ''));
     } // end for
 
     // To allow replication, we first select the db to use and then run queries
@@ -101,10 +87,11 @@ if (isset($do_save_data)) {
 
         $cfgRelation = PMA_getRelationsParam();
 
+        // take care of pmadb internal comments here
         // garvin: Update comment table, if a comment was set.
-        if (isset($field_comments) && is_array($field_comments) && $cfgRelation['commwork']) {
+        if (PMA_MYSQL_INT_VERSION < 40100 && isset($field_comments) && is_array($field_comments) && $cfgRelation['commwork']) {
             foreach ($field_comments AS $fieldindex => $fieldcomment) {
-                PMA_setComment($db, $table, $field_name[$fieldindex], $fieldcomment, $field_orig[$fieldindex]);
+                PMA_setComment($db, $table, $field_name[$fieldindex], $fieldcomment, $field_orig[$fieldindex], 'pmadb');
             }
         }
 
@@ -191,9 +178,27 @@ if ($abort == FALSE) {
         $fields_meta[] = PMA_DBI_fetch_assoc($result);
         PMA_DBI_free_result($result);
     }
-
     $num_fields  = count($fields_meta);
     $action      = 'tbl_alter.php';
+
+    // Get more complete field information
+    // For now, this is done just for MySQL 4.1.2+ new TIMESTAMP options
+    // but later, if the analyser returns more information, it
+    // could be executed for any MySQL version and replace
+    // the info given by SHOW FULL FIELDS FROM.
+    // TODO: put this code into a require()
+    // or maybe make it part of PMA_DBI_get_fields();
+
+    if (PMA_MYSQL_INT_VERSION >= 40102) {
+        $show_create_table_query = 'SHOW CREATE TABLE '
+            . PMA_backquote($db) . '.' . PMA_backquote($table);
+        $show_create_table_res = PMA_DBI_query($show_create_table_query);
+        list(,$show_create_table) = PMA_DBI_fetch_row($show_create_table_res);
+        PMA_DBI_free_result($show_create_table_res);
+        unset($show_create_table_res, $show_create_table_query);
+        $analyzed_sql = PMA_SQP_analyze(PMA_SQP_parse($show_create_table));
+    }
+
     require('./tbl_properties.inc.php');
 }
 

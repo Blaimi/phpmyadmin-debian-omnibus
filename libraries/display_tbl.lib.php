@@ -1,5 +1,5 @@
 <?php
-/* $Id: display_tbl.lib.php,v 2.71 2004/12/09 18:27:10 lem9 Exp $ */
+/* $Id: display_tbl.lib.php,v 2.74 2005/03/13 13:23:08 lem9 Exp $ */
 // vim: expandtab sw=4 ts=4 sts=4:
 
 /**
@@ -209,6 +209,13 @@ function PMA_displayTableNavigation($pos_next, $pos_prev, $encoded_query)
     global $num_rows, $unlim_num_rows, $pos, $session_max_rows;
     global $disp_direction, $repeat_cells;
     global $dontlimitchars;
+    global $is_innodb;
+    global $showtable;
+
+    // FIXME: move this to a central place
+    // FIXME: for other future table types
+    $is_innodb = (isset($showtable['Type']) && $showtable['Type'] == 'InnoDB');
+
     ?>
 
 <!-- Navigation bar -->
@@ -329,12 +336,19 @@ function PMA_displayTableNavigation($pos_next, $pos_prev, $encoded_query)
         <?php echo PMA_generate_common_hidden_inputs($db, $table); ?>
         <input type="hidden" name="sql_query" value="<?php echo $encoded_query; ?>" />
         <input type="hidden" name="pos" value="<?php echo @((ceil($unlim_num_rows / $session_max_rows)- 1) * $session_max_rows); ?>" />
+        <?php
+        if ($is_innodb && $unlim_num_rows > $GLOBALS['cfg']['MaxExactCount']) {
+            echo '<input type="hidden" name="find_real_end" value="1" />' . "\n";
+            // no backquote around this message
+            $onclick = ' onclick="return confirmAction(\'' . PMA_jsFormat($GLOBALS['strLongOperation'], FALSE) . '\')"';
+        }
+        ?>
         <input type="hidden" name="session_max_rows" value="<?php echo $session_max_rows; ?>" />
         <input type="hidden" name="disp_direction" value="<?php echo $disp_direction; ?>" />
         <input type="hidden" name="repeat_cells" value="<?php echo $repeat_cells; ?>" />
         <input type="hidden" name="goto" value="<?php echo $goto; ?>" />
         <input type="hidden" name="dontlimitchars" value="<?php echo $dontlimitchars; ?>" />
-        <input type="submit" name="navig" value="<?php echo $caption4; ?>"<?php echo $title4; ?> />
+        <input type="submit" name="navig" value="<?php echo $caption4; ?>"<?php echo $title4; ?> <?php echo (empty($onclick) ? '' : $onclick); ?>/>
     </form>
 </td>
         <?php
@@ -561,7 +575,7 @@ function PMA_displayTableHeaders(&$is_display, &$fields_meta, $fields_cnt = 0, $
     // Start of form for multi-rows delete
 
     if ($is_display['del_lnk'] == 'dr' || $is_display['del_lnk'] == 'kp' ) {
-        echo '<form method="post" action="tbl_row_delete.php" name="rowsDeleteForm">' . "\n";
+        echo '<form method="post" action="tbl_row_action.php" name="rowsDeleteForm">' . "\n";
         echo PMA_generate_common_hidden_inputs($db, $table, 1);
         echo '<input type="hidden" name="disp_direction" value="' . $disp_direction . '" />' . "\n";
         echo '<input type="hidden" name="repeat_cells"   value="' . $repeat_cells   . '" />' . "\n";

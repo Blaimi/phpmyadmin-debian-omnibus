@@ -43,11 +43,13 @@ Allow from all
     <IfModule !mod_php5_filter.c>
     <IfModule !mod_php5_hooks.c>
     <IfModule !mod_fastcgi.c>
+    <IfModule !mod_fcgid.c>
     <IfModule mod_actions.c>
     <IfModule mod_cgi.c>
         AddType application/x-httpd-php .php
 
         Action application/x-httpd-php /cgi-bin/php
+    </IfModule>
     </IfModule>
     </IfModule>
     </IfModule>

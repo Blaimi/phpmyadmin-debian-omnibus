@@ -288,8 +288,6 @@ div.error div.head {
 .syntax_quote              {white-space: pre;}
 .syntax_quote_backtick     {}
 
-/* some new styles added 20047-05-05 by Michael Keck (mkkeck) */
-
 /* tables */
 .tblError {
     border:           1px solid #cc0000;
@@ -490,6 +488,22 @@ img, input, select, button {
     vertical-align: middle;
 }
 
+/* disabled text */
+.disabled, .disabled a:link, disabled a:active, .disabled a:visited {
+    font-family:      Verdana, Arial, Helvetica, sans-serif;
+    font-size:        10px;
+    color:            #666666;
+}
+.disabled a:hover {
+    font-family:      Verdana, Arial, Helvetica, sans-serif;
+    font-size:        10px;
+    color:            #666666;
+    text-decoration:  none;
+}
+tr.disabled td, td.disabled {
+    background-color: #cccccc;
+}
+
 <?php if (isset($js_isDOM) && $js_isDOM != '0') { ?>
 /* some styles for IDs: */
 #buttonNo{
@@ -525,4 +539,18 @@ img, input, select, button {
    font-size:   11px;
 }
 <?php } ?>
-/* end of some new styles added 20047-05-05 by Michael Keck (mkkeck) */
+#TooltipContainer {
+    position:   absolute;
+    z-index:    99;
+    width:      250px;
+    height:     50px;
+    overflow:   auto;
+    visibility: hidden;
+    background-color: #ffffcc;
+    color:            #006600;
+    border:           1px solid #000000;
+    padding:          5px;
+    font-family:      Verdana, Arial, Helvetica, sans-serif;
+    font-size:        10px;
+}
+

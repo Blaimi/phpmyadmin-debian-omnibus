@@ -1,5 +1,5 @@
 <?php
-/* $Id: estonian-utf-8.inc.php,v 2.59.2.1 2005/01/24 00:58:42 lem9 Exp $ */
+/* $Id: estonian-utf-8.inc.php,v 2.75 2005/03/30 19:21:49 lem9 Exp $ */
 
 $charset = 'utf-8';
 $allow_recoding = TRUE;
@@ -115,8 +115,8 @@ $strChangeCopyModeRevoke = ' ... kanna kõik aktiivsed privileegid üle vanast j
 $strChangeCopyUser = 'Vaheta logimisinformatsiooni / Kopeeri kasutaja';
 $strChangeDisplay = 'Vali väli mida kuvada';
 $strChangePassword = 'Muuda parooli';
-$strCharset = 'Täheseade';
-$strCharsetOfFile = 'Faili tähekodeering:';
+$strCharset = 'Tähetabel';
+$strCharsetOfFile = 'Faili tähetabel:';
 $strCharsets = 'Tähetabelid';
 $strCharsetsAndCollations = 'Tähetabelid ja määrangud';
 $strCheckAll = 'Märgista kõik';
@@ -191,6 +191,7 @@ $strDatabasesStatsHeavyTraffic = 'Märkus: Lubades siin andmebaasi statistika v�
 $strDbPrivileges = 'Andmebaas-spetsiifilised privileegid';
 $strDbSpecific = 'andmebaasipõhine';
 $strDefault = 'Vaikimisi';
+$strDefaultEngine = '%s on vaikimisi varundusmootor sellele MySQL serverile.';
 $strDefaultValueHelp = 'Vaikimisi väärtuse jaoks sisestage lihtsalt üksik väärtus, ilma kaldkriipsudega varjestamata ning jutumärkideta, kasutades järgmist kirjakuju: a';
 $strDefragment = 'Defrgamenteeri tabel';
 $strDelOld = 'Antud lehel on viiteid tabelitele mida enam ei ole. Kas te soovite kustutada need viited?';
@@ -232,6 +233,10 @@ $strEncloseInTransaction = 'Lisa eksport ülekandesse';
 $strEnd = 'Lõpp';
 $strEndCut = 'LÕPETA LÕIGE';
 $strEndRaw = 'LÕPETA PUHAS';
+$strEngineAvailable = '%s on saadaval selles MySQL serveris.';
+$strEngineDisabled = '%s on keelatud selles MySQL serveris.';
+$strEngineUnsupported = 'See MySQL server ei toeta %s varundusmootorit.';
+$strEngines = 'Mootor';
 $strEnglish = 'Inglise';
 $strEnglishPrivileges = ' Märkus: MySQL privileegide nimed on ingliskeelsed ';
 $strError = 'Viga';
@@ -361,6 +366,7 @@ $strLogUsername = 'Kasutajanimi:';
 $strLogin = 'Sisselogimine';
 $strLoginInformation = 'Logimise informatsioon';
 $strLogout = 'Logi välja';
+$strLongOperation = 'See tegevus võib võtta kaua aega. Jätkan?';
 
 $strMIMETypesForTable = 'MIME TÜÜBID TABELILE';
 $strMIME_MIMEtype = 'MIME-tüüp';
@@ -374,7 +380,7 @@ $strMIME_transformation_options = 'Transformeerimise seaded';
 $strMIME_transformation_options_note = 'Palun sisestage transformatsiooniks vajalikud väärtused, kasutades järgmist formaati: \'a\',\'b\',\'c\'...<br />Kui teil on vaja edastada kaldkriips ("\") või ülakoma ("\'") nende väärtuste seas, varjestage see tagurpidi kaldkriipsuga (näiteks \'\\\\xyz\' või \'a\\\'b\').';
 $strMIME_without = 'MIME-tüübid kursiivis ei oma eraldi transofrmatsiooni funktsiooni';
 $strMaximumSize = 'Maksimaalne suurus: %s%s';
-$strMbExtensionMissing = 'Ei leitud mbstring PHP extension was not found and you seem to be using multibyte charset. Without mbstring extension phpMyAdmin is unable to split strings correctly and it may result in unexpected results.';
+$strMbExtensionMissing = 'Ei leitud mbstring PHP lisa ja tundub, et te kasutate mitmebaidilist tähetabelit. Ilma mbstring lisata ei suuda phpMyAdmin poolitada teksti korrektselt ja tulemus võib olla ootustele mittevastav.';
 $strMbOverloadWarning = 'Te olete lubanud mbstring.func_overload oma PHP konfiguratsioonis. See seade ei ühildu phpMyAdminiga ja võib osade andmete kadumist põhjustada!';
 $strModifications = 'Muutused salvestatud';
 $strModify = 'Muuda';
@@ -385,6 +391,18 @@ $strMoveTableOK = 'Tabel %s viidu üle andmebaasi %s.';
 $strMoveTableSameNames = 'Ei saa tabelit iseendasse liigutada!';
 $strMultilingual = 'mitmekeelne';
 $strMustSelectFile = 'Palun valige fail mida soovite lisada.';
+$strMyISAMDataPointerSize = 'Andmeviida suurus';
+$strMyISAMDataPointerSizeDesc = 'Vaikimisi viida suurus baitides, mida kasutatakse CREATE TABLE käsuga MyISAM tabelite jaoks kui MAX_ROWS seade on määramata.';
+$strMyISAMMaxExtraSortFileSize = 'Maksimaalne failisuurus ajutiste failide jaoks indeksi genereerimisel';
+$strMyISAMMaxExtraSortFileSizeDesc = 'Kui ajutine fail mida kasutatakse kiire MyISAM indeksi loomiseks on suurem kui kasutada siin määratud võtmecache suurust, siis eelistage võtmecache meetodit.';
+$strMyISAMMaxSortFileSize = 'Maksimaalne suurus ajutiste sorteeringufailide jaoks';
+$strMyISAMMaxSortFileSizeDesc = 'Maksimaalne failisuurus MySQL-i ajutise faili jaoks mida kasutatakse MyISAM indeksi uuesti genereerimiseks (REPAIR TABLE, ALTER TABLE või LOAD DATA INFILE).';
+$strMyISAMRecoverOptions = 'Automaatne taastamine';
+$strMyISAMRecoverOptionsDesc = 'Automaatne taastamine purunenud MyISAM tabelitele, aktiveeritakse võtmega --myisam-recover serveri käivitamisel.';
+$strMyISAMRepairThreads = 'Paranda lõimud';
+$strMyISAMRepairThreadsDesc = 'Kui see väärtus on suurem kui 1 siis MyISAM tabeli indeksid luuakse paralleelselt (iga indeks oma lõimus) sorteerimise teel parandamise ajal.';
+$strMyISAMSortBufferSize = 'Sordi puhvri suurus';
+$strMyISAMSortBufferSizeDesc = 'Puhver mis hõivatakse kui sorteeritakse MyISAM indekseid REPAIR TABLE ajal või kui luuakse indekseid CREATE INDEX või ALTER TABLE käskudega.';
 $strMySQLCharset = 'MySQLi tähetabel';
 $strMySQLConnectionCollation = 'MySQL ühenduse kollatsioon';
 $strMySQLReloaded = 'MySQL uuesti laetud.';
@@ -402,6 +420,7 @@ $strNoActivity = 'Ebaaktiivne %s sekundit või rohkem, palun sisenege uuesti';
 $strNoDatabases = 'Pole andmebaase';
 $strNoDatabasesSelected = 'Ühtegi andmebaasi ei ole valitud.';
 $strNoDescription = 'pole kirjeldust';
+$strNoDetailsForEngine = 'Detailne seisuinformatsioon antud varundusmootori kohta puudub.';
 $strNoDropDatabases = '"DROP DATABASE" käsud keelatud.';
 $strNoExplain = 'Jäta SQL-i seletamine vahele';
 $strNoFrames = 'phpMyAdmin on sõbralikum <b>frame toetava</b> browseriga.';
@@ -632,6 +651,8 @@ $strStatCreateTime = 'Loodud';
 $strStatUpdateTime = 'Viimane muudatus';
 $strStatement = 'Parameerid';
 $strStatus = 'Staatus';
+$strStorageEngine = 'Varundusmootor';
+$strStorageEngines = 'Varundusmootorid';
 $strStrucCSV = 'CSV andmed';
 $strStrucData = 'Struktuur ja andmed';
 $strStrucDrop = 'Lisa DROP TABLE';
@@ -687,7 +708,6 @@ $strTransformation_text_plain__formatted = 'Hoiab alles originaalset välja form
 $strTransformation_text_plain__imagelink = 'Kuvab pildi ja lingi, väli sisaldab failinime; esimene seade on eelnev tekst nagu "http://domain.com/", teine seade on laius pikslites, kolmas on kõrgus.';
 $strTransformation_text_plain__link = 'Kuvab lingi, väli sisaldab failinime; esimene seade on eelnev tekst näiteks "http://domain.com/", teine seade on nimi lingile.';
 $strTransformation_text_plain__substr = 'Näitab ainult osa tekstist. Esimene seade on määrang kust positsioonilt teie teksti kuva hakkab.(vaikimisi 0). Teine seade on kuipalju teksti tagastatakse, kui see tühjaks jätta, tagastatakse kogu allesjäänud tekst. Kolmas seade defineerib mis tekst lisatakse väljundi lõppu kui saadud tekst tagastatakse. (vaikimisi: ...) .';
-$strTransformation_text_plain__unformatted = 'Näitab HTML koodi puhta tekstina. HTML formateerimist ei näidata.';
 $strTruncateQueries = 'Lühenda näidatavad päringud';
 $strTurkish = 'Türgi';
 $strType = 'Tüüp';
@@ -723,9 +743,12 @@ $strValidateSQL = 'Kontrolli SQL-i';
 $strValidatorError = 'SQL-i valideerijat ei suudetud avada. Palun kontrollige, et te olete installinud vastavad php moodulid nagu on kirjeldatud %sdokumentatsioonis%s.';
 $strValue = 'Väärtus';
 $strVar = 'Muutuja';
+$strVersionInformation = 'Versiooni info';
+$strView = 'Vaade';
 $strViewDump = 'Vaata tabeli väljundit (skeemi)';
 $strViewDumpDB = 'Vaata andmebaasi väljundit (skeemi)';
 $strViewDumpDatabases = 'Näita andmebaaside sisu (skeemi)';
+$strViewHasBeenDropped = 'Vaade %s on kustutatud';
 
 $strWebServerUploadDirectory = 'webiserveri üleslaadimiskataloogi';
 $strWebServerUploadDirectoryError = 'Kataloog mille Te üleslaadimiseks sättisite ei ole ligipääsetav';
@@ -744,5 +767,45 @@ $strYes = 'Jah';
 
 $strZeroRemovesTheLimit = 'Märkus: Märkides antud seaded 0 (null) , eemaldate limiidi.';
 $strZip = '"zipitud"';
+
+// To translate:
+
+$strBufferPool = 'Buffer Pool';  //to translate
+$strBufferPoolActivity = 'Buffer Pool Activity';  //to translate
+$strBufferPoolUsage = 'Buffer Pool Usage';  //to translate
+$strBufferReadMisses = 'Read misses';  //to translate
+$strBufferReadMissesInPercent = 'Read misses in %';  //to translate
+$strBufferWriteWaits = 'Write waits';  //to translate
+$strBufferWriteWaitsInPercent = 'Write waits in %';  //to translate
+$strBusyPages = 'Busy pages';  //to translate
+
+$strDataPages = 'Pages containing data';  //to translate
+$strDirtyPages = 'Dirty pages';  //to translate
+
+$strFreePages = 'Free pages';  //to translate
+
+$strHTMLExcel = 'Microsoft Excel 2000';  //to translate
+$strHTMLExcelOptions = 'Microsoft Excel 2000 export options';  //to translate
+$strHTMLWord = 'Microsoft Word 2000';  //to translate
+$strHTMLWordOptions = 'Microsoft Word 2000 export options';  //to translate
+
+$strInnoDBAutoextendIncrement = 'Autoextend increment';  //to translate
+$strInnoDBAutoextendIncrementDesc = ' The increment size for extending the size of an autoextending tablespace when it becomes full.';  //to translate
+$strInnoDBBufferPoolSize = 'Buffer pool size';  //to translate
+$strInnoDBBufferPoolSizeDesc = 'The size of the memory buffer InnoDB uses to cache data and indexes of its tables.';  //to translate
+$strInnoDBDataFilePath = 'Data files';  //to translate
+$strInnoDBDataHomeDir = 'Data home directory';  //to translate
+$strInnoDBDataHomeDirDesc = 'The common part of the directory path for all InnoDB data files.';  //to translate
+$strInnoDBPages = 'pages';  //to translate
+
+$strLatchedPages = 'Latched pages';  //to translate
+
+$strPagesToBeFlushed = 'Pages to be flushed';  //to translate
+
+$strReadRequests = 'Read requests';  //to translate
+
+$strSocketProblem = '(or the local MySQL server\'s socket is not correctly configured)';  //to translate
+
+$strWriteRequests = 'Write requests';  //to translate
 
 ?>

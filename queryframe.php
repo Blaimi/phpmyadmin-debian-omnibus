@@ -1,5 +1,5 @@
 <?php
-/* $Id: queryframe.php,v 2.20 2004/11/06 19:44:42 mkkeck Exp $ */
+/* $Id: queryframe.php,v 2.21 2005/02/17 17:43:57 lem9 Exp $ */
 // vim: expandtab sw=4 ts=4 sts=4:
 
 /**
@@ -225,7 +225,7 @@ if ($cfg['MainPageIconic']) {
     ?>
     <script type="text/javascript">
     <!--
-    document.writeln('<a href="<?php echo $href; ?>" <?php echo $target . ' ' . $onclick; ?> class="item"><?php echo addslashes($query_frame_link_text); ?></a>');
+    document.writeln('<a href="<?php echo $href; ?>" <?php echo $target . ' ' . $onclick; ?> class="item"><?php echo addslashes($query_frame_link_text); ?><\/a>');
     //-->
     </script>
     <noscript>
@@ -291,14 +291,13 @@ if ($num_dbs > 1) {
         </tr>
         <tr>
             <td nowrap="nowrap">
+    <form method="post" action="index.php" name="left" target="_parent" style="margin: 0px; padding: 0px;">
     <script type="text/javascript" language="javascript">
     <!--
-        document.writeln('<form method="post" action="left.php" name="left" target="nav" style="margin: 0px; padding: 0px;">');
+        document.left.action="left.php";
+        document.left.target="nav";
     //-->
     </script>
-    <noscript>
-        <form method="post" action="index.php" name="left" target="_parent" style="margin: 0px; padding: 0px;">
-    </noscript>
     <?php
         echo PMA_generate_common_hidden_inputs();
         echo '        <input type="hidden" name="hash" value="' . $hash . '" />' . "\n";
@@ -394,8 +393,10 @@ if ($num_dbs > 1) {
         } // end for $i (db list)
         ?>
         </select>
-        <noscript><input type="submit" name="Go" value="<?php echo $strGo; ?>" /></noscript>
-    </form>
+        <noscript>
+            <input type="submit" name="Go" value="<?php echo $strGo; ?>" />
+        </noscript>
+        </form>
             </td>
         </tr>
     </table>

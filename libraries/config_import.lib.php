@@ -1,5 +1,5 @@
 <?php
-/* $Id: config_import.lib.php,v 2.40 2004/12/28 12:48:34 nijel Exp $ */
+/* $Id: config_import.lib.php,v 2.42 2005/03/06 14:54:15 nijel Exp $ */
 // vim: expandtab sw=4 ts=4 sts=4:
 
 
@@ -1118,7 +1118,7 @@ if (!isset($cfg['Export'])) {
 
 if (!isset($cfg['Export']['format'])) {
     $cfg['Export']['format'] = 'sql';
-} // sql/latex/excel/csv/xml/xls
+} // sql/latex/excel/csv/xml/xls/htmlexcel/htmlword
 if (!isset($cfg['Export']['compression'])) {
     $cfg['Export']['compression'] = 'none';
 } // none/zip/gzip/bzip2
@@ -1140,6 +1140,24 @@ if (!isset($cfg['Export']['csv_null'])) {
 }
 if (!isset($cfg['Export']['csv_columns'])) {
     $cfg['Export']['csv_columns'] = FALSE;
+}
+if (!isset($cfg['Export']['htmlexcel_null'])) {
+    $cfg['Export']['htmlexcel_null']                = 'NULL';
+}
+if (!isset($cfg['Export']['htmlexcel_columns'])) {
+    $cfg['Export']['htmlexcel_columns'] = FALSE;
+}
+if (!isset($cfg['Export']['htmlword_structure'])) {
+    $cfg['Export']['htmlword_structure'] = TRUE;
+}
+if (!isset($cfg['Export']['htmlword_data'])) {
+    $cfg['Export']['htmlword_data'] = TRUE;
+}
+if (!isset($cfg['Export']['htmlword_null'])) {
+    $cfg['Export']['htmlword_null']                = 'NULL';
+}
+if (!isset($cfg['Export']['htmlword_columns'])) {
+    $cfg['Export']['htmlword_columns'] = FALSE;
 }
 if (!isset($cfg['Export']['xls_null'])) {
     $cfg['Export']['xls_null']                = 'NULL';

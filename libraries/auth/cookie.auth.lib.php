@@ -1,5 +1,5 @@
 <?php
-/* $Id: cookie.auth.lib.php,v 2.23.2.1 2005/02/23 18:07:19 lem9 Exp $ */
+/* $Id: cookie.auth.lib.php,v 2.25 2005/03/06 21:10:53 nijel Exp $ */
 // vim: expandtab sw=4 ts=4 sts=4:
 
 // +--------------------------------------------------------------------------+
@@ -15,10 +15,8 @@ if (!isset($coming_from_common)) {
 
 // Gets the default font sizes
 PMA_setFontSizes();
-// Defines the cookie path and whether the server is using https or not
-$pma_uri_parts = parse_url($cfg['PmaAbsoluteUri']);
-$cookie_path   = substr($pma_uri_parts['path'], 0, strrpos($pma_uri_parts['path'], '/'));
-$is_https      = (isset($pma_uri_parts['scheme']) && $pma_uri_parts['scheme'] == 'https') ? 1 : 0;
+
+// timestamp for login timeout
 $current_time  = time();
 
 // Uses faster mcrypt library if available
@@ -618,7 +616,7 @@ global $conn_error, $server;
     if (isset($GLOBALS['allowDeny_forbidden']) && $GLOBALS['allowDeny_forbidden']) {
         $conn_error = $GLOBALS['strAccessDenied'];
     } else if (isset($GLOBALS['no_activity']) && $GLOBALS['no_activity']) {
-        $conn_error = sprintf($GLOBALS['strNoActivity'],$GLOBALS['cfg']['LoginCookieValidity']);  
+        $conn_error = sprintf($GLOBALS['strNoActivity'],$GLOBALS['cfg']['LoginCookieValidity']);
     } else if (PMA_DBI_getError()) {
         $conn_error = PMA_DBI_getError();
     } else if (isset($php_errormsg)) {

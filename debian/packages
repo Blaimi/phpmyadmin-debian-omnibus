@@ -1,4 +1,4 @@
-# $Id: /trunk/debian/dists/phpmyadmin/debian/packages 36 2005-03-11T10:20:48.283947Z dexter  $
+# $Id:  $
 
 # If the debian/rules or debian/control file is missing, rebuild the file:
 #
@@ -212,21 +212,28 @@ Postinst: bash
                      if [ ! -f /etc/$webserver/mods-enabled/actions.load -a ! -h /etc/$webserver/mods-enabled/actions.load ]; then
                          ln -s /etc/$webserver/mods-available/actions.load /etc/$webserver/mods-enabled/actions.load
                      fi
-                     if [ -f /etc/apache2/mods-available/php4.load ]; then
+                     if [ -f /etc/apache2/mods-available/php4.load -a -f /usr/lib/apache2/modules/libphp4.so ]; then
                          if [ ! -f /etc/$webserver/mods-enabled/php4.load -a ! -h /etc/$webserver/mods-enabled/php4.load -a \
                               ! -f /etc/$webserver/mods-enabled/php5.load -a ! -h /etc/$webserver/mods-enabled/php5.load -a \
-                              ! -f /etc/$webserver/mods-enabled/php5_filter.load -a ! -h /etc/$webserver/mods-enabled/php5_filter.load ]; then
+                              ! -f /etc/$webserver/mods-enabled/php5_filter.load -a ! -h /etc/$webserver/mods-enabled/php5_filter.load -a \
+                              ! -f /etc/$webserver/mods-enabled/fcgid.load -a ! -h /etc/$webserver/mods-enabled/fcgid.load -a \
+                              ! -f /etc/$webserver/mods-enabled/fastcgi.load -a ! -h /etc/$webserver/mods-enabled/fastcgi.load ]; then
+                             ln -s /etc/$webserver/mods-available/php4.conf /etc/$webserver/mods-enabled/php4.conf
                              ln -s /etc/$webserver/mods-available/php4.load /etc/$webserver/mods-enabled/php4.load
                          fi
-                     elif [ -f /etc/apache2/mods-available/php5.load ]; then
+                     elif [ -f /etc/apache2/mods-available/php5.load -a -f /usr/lib/apache2/modules/mod_php5.so ]; then
                          if [ ! -f /etc/$webserver/mods-enabled/php4.load -a ! -h /etc/$webserver/mods-enabled/php4.load -a \
                               ! -f /etc/$webserver/mods-enabled/php5.load -a ! -h /etc/$webserver/mods-enabled/php5.load -a \
-                              ! -f /etc/$webserver/mods-enabled/php5_filter.load -a ! -h /etc/$webserver/mods-enabled/php5_filter.load ]; then
+                              ! -f /etc/$webserver/mods-enabled/php5_filter.load -a ! -h /etc/$webserver/mods-enabled/php5_filter.load -a \
+                              ! -f /etc/$webserver/mods-enabled/fcgid.load -a ! -h /etc/$webserver/mods-enabled/fcgid.load -a \
+                              ! -f /etc/$webserver/mods-enabled/fastcgi.load -a ! -h /etc/$webserver/mods-enabled/fastcgi.load ]; then
+                             ln -s /etc/$webserver/mods-available/php5.conf /etc/$webserver/mods-enabled/php5.conf
                              ln -s /etc/$webserver/mods-available/php5.load /etc/$webserver/mods-enabled/php5.load
                          fi
                      else
                          if [ ! -f /etc/$webserver/mods-enabled/cgi.load -a ! -h /etc/$webserver/mods-enabled/cgi.load -a \
-                              ! -f /etc/$webserver/mods-enabled/fastcgi.load -a ! -h /etc/$webserver/mods-enabled/fastcgi.load ]; then
+                              ! -f /etc/$webserver/mods-enabled/fastcgi.load -a ! -h /etc/$webserver/mods-enabled/fastcgi.load -a \
+                              ! -f /etc/$webserver/mods-enabled/fcgid.load -a ! -h /etc/$webserver/mods-enabled/fcgid.load ]; then
                              ln -s /etc/$webserver/mods-available/cgi.load /etc/$webserver/mods-enabled/cgi.load
                          fi
                      fi

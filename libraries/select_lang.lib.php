@@ -1,5 +1,5 @@
 <?php
-/* $Id: select_lang.lib.php,v 2.14 2004/10/12 21:29:07 rabus Exp $ */
+/* $Id: select_lang.lib.php,v 2.17 2005/03/27 00:23:10 rabus Exp $ */
 // vim: expandtab sw=4 ts=4 sts=4:
 
 
@@ -73,12 +73,14 @@ $available_languages = array(
     'da-iso-8859-1'     => array('da|danish', 'danish-iso-8859-1', 'da'),
     'da-utf-8'          => array('da|danish', 'danish-utf-8', 'da'),
     'de-iso-8859-1'     => array('de|german', 'german-iso-8859-1', 'de'),
+    'de-iso-8859-15'    => array('de|german', 'german-iso-8859-15', 'de'),
     'de-utf-8'          => array('de|german', 'german-utf-8', 'de'),
     'el-iso-8859-7'     => array('el|greek',  'greek-iso-8859-7', 'el'),
     'el-utf-8'          => array('el|greek',  'greek-utf-8', 'el'),
     'en-iso-8859-1'     => array('en|english',  'english-iso-8859-1', 'en'),
     'en-utf-8'          => array('en|english',  'english-utf-8', 'en'),
     'es-iso-8859-1'     => array('es|spanish', 'spanish-iso-8859-1', 'es'),
+    'es-iso-8859-15'    => array('es|spanish', 'spanish-iso-8859-15', 'es'),
     'es-utf-8'          => array('es|spanish', 'spanish-utf-8', 'es'),
     'et-iso-8859-1'     => array('et|estonian', 'estonian-iso-8859-1', 'et'),
     'et-utf-8'          => array('et|estonian', 'estonian-utf-8', 'et'),
@@ -87,8 +89,10 @@ $available_languages = array(
     'fa-win1256'        => array('fa|persian', 'persian-windows-1256', 'fa'),
     'fa-utf-8'          => array('fa|persian', 'persian-utf-8', 'fa'),
     'fi-iso-8859-1'     => array('fi|finnish', 'finnish-iso-8859-1', 'fi'),
+    'fi-iso-8859-15'    => array('fi|finnish', 'finnish-iso-8859-15', 'fi'),
     'fi-utf-8'          => array('fi|finnish', 'finnish-utf-8', 'fi'),
     'fr-iso-8859-1'     => array('fr|french', 'french-iso-8859-1', 'fr'),
+    'fr-iso-8859-15'    => array('fr|french', 'french-iso-8859-15', 'fr'),
     'fr-utf-8'          => array('fr|french', 'french-utf-8', 'fr'),
     'gl-iso-8859-1'     => array('gl|galician', 'galician-iso-8859-1', 'gl'),
     'gl-utf-8'          => array('gl|galician', 'galician-utf-8', 'gl'),
@@ -103,6 +107,7 @@ $available_languages = array(
     'id-iso-8859-1'     => array('id|indonesian', 'indonesian-iso-8859-1', 'id'),
     'id-utf-8'          => array('id|indonesian', 'indonesian-utf-8', 'id'),
     'it-iso-8859-1'     => array('it|italian', 'italian-iso-8859-1', 'it'),
+    'it-iso-8859-15'    => array('it|italian', 'italian-iso-8859-15', 'it'),
     'it-utf-8'          => array('it|italian', 'italian-utf-8', 'it'),
     'ja-euc'            => array('ja|japanese', 'japanese-euc', 'ja'),
     'ja-sjis'           => array('ja|japanese', 'japanese-sjis', 'ja'),
@@ -117,14 +122,17 @@ $available_languages = array(
     'ms-iso-8859-1'     => array('ms|malay', 'malay-iso-8859-1', 'ms'),
     'ms-utf-8'          => array('ms|malay', 'malay-utf-8', 'ms'),
     'nl-iso-8859-1'     => array('nl|dutch', 'dutch-iso-8859-1', 'nl'),
+    'nl-iso-8859-15'    => array('nl|dutch', 'dutch-iso-8859-15', 'nl'),
     'nl-utf-8'          => array('nl|dutch', 'dutch-utf-8', 'nl'),
     'no-iso-8859-1'     => array('no|norwegian', 'norwegian-iso-8859-1', 'no'),
     'no-utf-8'          => array('no|norwegian', 'norwegian-utf-8', 'no'),
     'pl-iso-8859-2'     => array('pl|polish', 'polish-iso-8859-2', 'pl'),
+    'pl-win1250'        => array('pl|polish', 'polish-windows-1250', 'pl'),
     'pl-utf-8'          => array('pl|polish', 'polish-utf-8', 'pl'),
     'ptbr-iso-8859-1'   => array('pt[-_]br|brazilian portuguese', 'brazilian_portuguese-iso-8859-1', 'pt-BR'),
     'ptbr-utf-8'        => array('pt[-_]br|brazilian portuguese', 'brazilian_portuguese-utf-8', 'pt-BR'),
     'pt-iso-8859-1'     => array('pt|portuguese', 'portuguese-iso-8859-1', 'pt'),
+    'pt-iso-8859-15'    => array('pt|portuguese', 'portuguese-iso-8859-15', 'pt'),
     'pt-utf-8'          => array('pt|portuguese', 'portuguese-utf-8', 'pt'),
     'ro-iso-8859-1'     => array('ro|romanian', 'romanian-iso-8859-1', 'ro'),
     'ro-utf-8'          => array('ro|romanian', 'romanian-utf-8', 'ro'),
@@ -218,26 +226,6 @@ if (!isset($cfg['DefaultLang']) && isset($cfgDefaultLang)) {
     $cfg['DefaultLang'] = $cfgDefaultLang;
     unset($cfgLang);
 }
-
-/**
- *
- * 2004-02-15 rabus: Deactivated the code temporarily:
- *            We need to allow UTF-8 in order to be MySQL 4.1 compatible!
-
-// Disable UTF-8 if $cfg['AllowAnywhereRecoding'] has been set to FALSE.
-if (!isset($cfg['AllowAnywhereRecoding']) || !$cfg['AllowAnywhereRecoding']) {
-    $available_language_files               = $available_languages;
-    $available_languages                    = array();
-    foreach ($available_language_files AS $tmp_lang => $tmp_lang_data) {
-        if (substr($tmp_lang, -5) != 'utf-8') {
-            $available_languages[$tmp_lang] = $tmp_lang_data;
-        }
-    } // end while
-    unset($tmp_lang, $tmp_lang_data, $available_language_files);
-} // end if
-
- *
- */
 
 // MySQL charsets map
 $mysql_charset_map = array(

@@ -1,5 +1,5 @@
 <?php
-/* $Id: tbl_query_box.php,v 2.29.2.1 2005/01/24 00:23:19 lem9 Exp $ */
+/* $Id: tbl_query_box.php,v 2.32 2005/03/07 21:30:57 lem9 Exp $ */
 // vim: expandtab sw=4 ts=4 sts=4:
 
 // Check parameters
@@ -120,11 +120,11 @@ if ($cfg['QueryFrame'] && $cfg['QueryFrameJS'] && isset($is_inside_querywindow) 
        . '        </noscript>';
 } else {
 ?>
-        <form method="post" action="read_dump.php"<?php if ($is_upload) echo ' enctype="multipart/form-data"'; ?> onsubmit="return checkSqlQuery(this)" name="sqlform">
+        <form method="post" action="read_dump.php"<?php if ($is_upload) echo ' enctype="multipart/form-data"'; ?> onsubmit="return checkSqlQuery(this)" name="sqlform" style="padding: 0px; magin: 0px;">
 <?php
 }
 ?>
-            <table border="0" cellpadding="2" cellspacing="0">
+            <table border="0" cellpadding="2" cellspacing="0" id="sqlcontainer" name="sqlcontainer">
 <?php
 // for better administration
 $querybox_hidden_fields = '                    <input type="hidden" name="is_js_confirmed" value="0" />' . "\n"
@@ -434,7 +434,7 @@ if (!isset($is_inside_querywindow) ||
             echo '            <select name="id_bookmark" style="vertical-align: middle">' . "\n";
             echo '                <option value=""></option>' . "\n";
             foreach($bookmark_list AS $key => $value) {
-                echo '                <option value="' . $value . '">' . htmlspecialchars($key) . '</option>' . "\n";
+                echo '                <option value="' . htmlspecialchars($key) . '">' . htmlspecialchars($value) . '</option>' . "\n";
             }
             echo '            </select>' . "&nbsp;&nbsp;&nbsp;\n";
             echo '            ' . $strVar;

@@ -1,3 +1,13 @@
+phpmyadmin (3:2.6.2-rc1-1) unstable; urgency=high
+
+  * New upstream release.
+  * Security fix: Cross-Site Scripting vulnerability.
+    See http://www.phpmyadmin.net/home_page/security.php?issue=PMASA-2005-3
+    Closes: #303142.
+  * Don't enable PHP if mod_fcgid is loaded in Apache 2.x.
+
+ -- Piotr Roszatycki <dexter@debian.org>  Tue,  5 Apr 2005 15:17:25 +0200
+
 phpmyadmin (3:2.6.1-pl3-2) unstable; urgency=high
 
   * Fixed the bug in postinst introduced in last upload. Closes: #299034.

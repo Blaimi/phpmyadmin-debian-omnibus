@@ -1,5 +1,5 @@
 <?php
-/* $Id: latvian-utf-8.inc.php,v 2.59 2004/12/30 20:46:58 lem9 Exp $ */
+/* $Id: latvian-utf-8.inc.php,v 2.74 2005/03/30 19:23:22 lem9 Exp $ */
 
 /**
  * Latvian language file by Sandis Jērics <sandisj at parks.lv>
@@ -508,7 +508,6 @@ $strPrivDescUsage = 'Nav privilēģiju.';
 $strPrivileges = 'Privilēģijas';
 $strPrivilegesReloaded = 'Privilēģijas tika veiksmīgi pārlādētas.';
 $strProcesslist = 'Procesu saraksts';
-$strProperties = 'Īpašības';
 $strPutColNames = 'Likt kolonnu nosaukumus pirmajā rindā';
 
 $strQBE = 'Vaicājums pēc parauga';
@@ -689,7 +688,6 @@ $strTransformation_text_plain__formatted = 'Saglabā lauka oriģinālo formatēj
 $strTransformation_text_plain__imagelink = 'Parāda attēlu un linku, lauks satur faila nosauumu; pirmā opcija ir prefikss, piemēram, "http://domens.lv/", otrā opcija ir platums pikseļos, trešā ir augstums.';
 $strTransformation_text_plain__link = 'Parāda attēlu un linku, lauks satur faila nosauumu; pirmā opcija ir prefikss, piemēram, "http://domens.lv/", otrā opcija ir linka nosaukums.';
 $strTransformation_text_plain__substr = 'Parāda tikai virknes daļu. Pirmā opcija ir nobīde, kas nosaka, kur Jūsu teksts sākas (noklusējums 0). Otrā opcija ir atgriežamā teksta garums. Ja tukša, atgriež visu atlikušo tekstu. Trešā opcija nosaka rakstzīmes, kas tiks pievienotas apgrieztās virknes galā (noklusējums: ...) .';
-$strTransformation_text_plain__unformatted = 'Parāda HTML kā HTML simbolus. HTML formatējums netiek rādīts.';
 $strTruncateQueries = 'Ierobežot parādīto vaicājumu garumu';
 $strTurkish = 'Turku';
 $strType = 'Tips';
@@ -755,4 +753,56 @@ $strMbOverloadWarning = 'You have enabled mbstring.func_overload in your PHP con
 
 $strSQLExportCompatibility = 'SQL export compatibility';  //to translate
 
+$strView = 'View';  //to translate
+$strViewHasBeenDropped = 'View %s has been dropped';  //to translate
+$strEngines = 'Engines';  //to translate
+$strStorageEngines = 'Storage Engines';  //to translate
+$strStorageEngine = 'Storage Engine';  //to translate
+$strNoDetailsForEngine = 'There is no detailed status information available for this storage engine.';  //to translate
+$strDefaultEngine = '%s is the default storage engine on this MySQL server.';  //to translate
+$strEngineAvailable = '%s is available on this MySQL server.';  //to translate
+$strEngineUnsupported = 'This MySQL server does not support the %s storage engine.';  //to translate
+$strEngineDisabled = '%s has been disabled for this MySQL server.';  //to translate
+$strMyISAMSortBufferSize = 'Sort buffer size';  //to translate
+$strMyISAMSortBufferSizeDesc = 'The buffer that is allocated when sorting MyISAM indexes during a REPAIR TABLE or when creating indexes with CREATE INDEX or ALTER TABLE.';  //to translate
+$strMyISAMDataPointerSize = 'Data pointer size';  //to translate
+$strMyISAMDataPointerSizeDesc = 'The default pointer size in bytes, to be used by CREATE TABLE for MyISAM tables when no MAX_ROWS option is specified.';  //to translate
+$strMyISAMRecoverOptions = 'Automatic recovery mode';  //to translate
+$strMyISAMRecoverOptionsDesc = 'The mode for automatic recovery of crashed MyISAM tables, as set via the --myisam-recover server startup option.';  //to translate
+$strMyISAMRepairThreads = 'Repair threads';  //to translate
+$strMyISAMRepairThreadsDesc = 'If this value is greater than 1, MyISAM table indexes are created in parallel (each index in its own thread) during the Repair by sorting process.';  //to translate
+$strMyISAMMaxSortFileSize = 'Maximum size for temporary sort files';  //to translate
+$strMyISAMMaxSortFileSizeDesc = 'The maximum size of the temporary file MySQL is allowed to use while re-creating a MyISAM index (during REPAIR TABLE, ALTER TABLE, or LOAD DATA INFILE).';  //to translate
+$strMyISAMMaxExtraSortFileSize = 'Maximum size for temporary files on index creation';  //to translate
+$strMyISAMMaxExtraSortFileSizeDesc = 'If the temporary file used for fast MyISAM index creation would be larger than using the key cache by the amount specified here, prefer the key cache method.';  //to translate
+$strLongOperation = 'This operation could be long. Proceed anyway?';  //to translate
+$strVersionInformation = 'Version information';  //to translate
+$strInnoDBDataHomeDir = 'Data home directory';  //to translate
+$strInnoDBDataHomeDirDesc = 'The common part of the directory path for all InnoDB data files.';  //to translate
+$strInnoDBDataFilePath = 'Data files';  //to translate
+$strInnoDBAutoextendIncrement = 'Autoextend increment';  //to translate
+$strInnoDBAutoextendIncrementDesc = ' The increment size for extending the size of an autoextending tablespace when it becomes full.';  //to translate
+$strBufferPool = 'Buffer Pool';  //to translate
+$strBufferPoolUsage = 'Buffer Pool Usage';  //to translate
+$strDataPages = 'Pages containing data';  //to translate
+$strFreePages = 'Free pages';  //to translate
+$strBusyPages = 'Busy pages';  //to translate
+$strDirtyPages = 'Dirty pages';  //to translate
+$strPagesToBeFlushed = 'Pages to be flushed';  //to translate
+$strLatchedPages = 'Latched pages';  //to translate
+$strBufferPoolActivity = 'Buffer Pool Activity';  //to translate
+$strReadRequests = 'Read requests';  //to translate
+$strWriteRequests = 'Write requests';  //to translate
+$strBufferReadMisses = 'Read misses';  //to translate
+$strBufferReadMissesInPercent = 'Read misses in %';  //to translate
+$strBufferWriteWaits = 'Write waits';  //to translate
+$strBufferWriteWaitsInPercent = 'Write waits in %';  //to translate
+$strHTMLExcel = 'Microsoft Excel 2000';  //to translate
+$strHTMLExcelOptions = 'Microsoft Excel 2000 export options';  //to translate
+$strHTMLWord = 'Microsoft Word 2000';  //to translate
+$strHTMLWordOptions = 'Microsoft Word 2000 export options';  //to translate
+$strInnoDBBufferPoolSizeDesc = 'The size of the memory buffer InnoDB uses to cache data and indexes of its tables.';  //to translate
+$strInnoDBBufferPoolSize = 'Buffer pool size';  //to translate
+$strInnoDBPages = 'pages';  //to translate
+$strSocketProblem = '(or the local MySQL server\'s socket is not correctly configured)';  //to translate
 ?>

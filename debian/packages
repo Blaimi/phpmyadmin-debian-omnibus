@@ -1,17 +1,23 @@
+# $Id: /trunk/debian/dists/phpmyadmin/debian/packages 10 2005-02-26T16:54:30.551418Z dexter  $
+
+# If the debian/rules or debian/control file is missing, rebuild the file:
+#
+#   $ yada rebuild control
+#   $ yada rebuild rules
+
 Source: phpmyadmin
 Section: web
 Priority: extra
 Maintainer: Piotr Roszatycki <dexter@debian.org>
-Standards-Version: 3.5.6
-Upstream-Source: <URL:http://phpmyadmin.sourceforge.net/>
+Standards-Version: 3.6.1
+Upstream-Source: <URL:http://ftp.sourceforge.net/p/ph/phpmyadmin/>
 Home-Page: <URL:http://phpmyadmin.sourceforge.net/>
-Description: a set of PHP-scripts to administrate MySQL over the WWW
-Packaged-For: Debian
+Description: set of PHP-scripts to administrate MySQL over the WWW
 Copyright: GPL
-     Copyright (C) 1998-2000 Tobias Ratschiller <tobias_at_phpwizard.net>
+     Copyright (C) 1998-2000 Tobias Ratschiller <tobias.ratschiller_at_maguma.com>
      Copyright (C) 2001-     Marc Delisle <DelislMa_at_CollegeSherbrooke.qc.ca>
-                             Olivier Müller <om_at_omnis.ch>
-                             Loïc Chapeaux <lolo_at_phpHeaven.net>
+                             Olivier Mller <om_at_omnis.ch>
+                             Loc Chapeaux <lolo_at_phpHeaven.net>
                              Robin Johnson <robbat2_at_users.sourceforge.net>
                              Armel Fauveau <armel.fauveau_at_globalis-ms.com>
                              Geert Lund <glund_at_silversoft.dk>
@@ -19,20 +25,21 @@ Copyright: GPL
                              Pete Kelly <webmaster_at_trafficg.com>
                              Steve Alberty <alberty_at_neptunlabs.de>
                              Benjamin Gandon <gandon_at_isia.cma.fr>
+                             Alexander M. Turek <rabus_at_users.sourceforge.net>
+                             Mike Beck <mikebeck_at_users.sourceforge.net>
                              + many other people (check the CREDITS file)
 Major-Changes:
- [001] default configuration with enabled cookie authentification
-Patches: *.diff
-Build: sh
- find -name CVS | xargs rm -rf
-Clean: sh
- find -name CVS | xargs rm -rf
+%`cd debian/patches; ls *.diff | sed -e 's/^/ /'`
+Patches: patches/*.diff
 
 Package: phpmyadmin
 Architecture: all
-Depends: php4 | php3 | php4-cgi | php3-cgi, php4-mysql | php4-cgi-mysql | php3-mysql | php3-cgi-mysql, apache | httpd, wwwconfig-common (>= 0.0.7), []
-Suggests: mysql-doc, mysql-server
-Description: A set of PHP-scripts to administrate MySQL over the WWW.
+Depends: php4 (>= 4.1.0) | php4-cgi (>= 4.1.0) | php5 | php5-cgi
+Depends: php4-mysql | php5-mysql | php5-mysqli
+Depends: apache | apache-perl | apache-ssl | apache2 | httpd
+Depends: []
+Suggests: mysql-server (>= 3.23.36), php4-gd | php5-gd, []
+Description: set of PHP-scripts to administrate MySQL over the WWW
  phpMyAdmin is intended to handle the administration of MySQL over the WWW.
  Currently it can:
    - create and drop databases
@@ -42,143 +49,251 @@ Description: A set of PHP-scripts to administrate MySQL over the WWW.
    - manage keys on fields
    - load text files into tables
    - create and read dumps of tables
-   - export and import CSV data
-   - administer one single database
+   - export and import data to CSV values
+   - administer multiple servers and single databases
+   - check referential integrity
+   - communicate in more than 38 different languages
 Install: sh
- yada install -data -into /usr/share/phpmyadmin *.php badwords.txt
- yada install -data -into /usr/share/phpmyadmin/images images/*
- yada install -data -into /usr/share/phpmyadmin/libraries libraries/*.*
- yada install -data -into /usr/share/phpmyadmin/libraries/auth libraries/auth/*
- yada install -dir /etc/phpmyadmin
- for i in config footer header; do
-     mv -f $ROOT/usr/share/phpmyadmin/$i.inc.php $ROOT/etc/phpmyadmin/
-     ln -s /etc/phpmyadmin/$i.inc.php $ROOT/usr/share/phpmyadmin/
- done
- yada install -data -into /usr/share/phpmyadmin/lang lang/*.inc.php
- yada install -data -into /usr/share/phpmyadmin Documentation.html
+ yada install -data -into /usr/share/phpmyadmin *.php *.css
+ yada copy -data -into /usr/share/phpmyadmin css lang libraries themes
+ yada remove -data -into /usr/share/phpmyadmin/libraries/lang *.sh
+ yada remove -data -into /usr/share/phpmyadmin/libraries/transformations *.sh
+ yada install -data -into /usr/share/phpmyadmin Documentation.html translators.html
  yada install -data -into /usr/share/phpmyadmin ChangeLog INSTALL README
- yada install -conffile -into /etc/phpmyadmin -as apache.conf debian/phpmyadmin.apache.conf
- yada install -doc README TODO
- yada install -doc Documentation.html
+ yada install -dir /etc/phpmyadmin
+ yada install -conf -ucf -subdir phpmyadmin debian/conf/config.inc.php
+ yada install -conf -ucf -subdir phpmyadmin debian/conf/apache.conf
+ yada install -conf -ucf -subdir phpmyadmin debian/conf/htaccess
+ yada install -conf -ucf -subdir phpmyadmin config.header.inc.php
+ yada install -conf -ucf -subdir phpmyadmin config.footer.inc.php
+ yada symlink -into /usr/share/phpmyadmin -as .htaccess /etc/phpmyadmin/htaccess
+ yada symlink -into /var/www /usr/share/phpmyadmin
+ yada symlink -into /usr/share/phpmyadmin /etc/phpmyadmin/config.header.inc.php
+ yada symlink -into /usr/share/phpmyadmin /etc/phpmyadmin/config.footer.inc.php
+ yada remove -into /usr/share/phpmyadmin config.default.php
+ yada install -doc README TODO CREDITS
+ yada install -doc Documentation.html translators.html
  yada install -doc -as changelog ChangeLog
  yada install -doc -as README.Debian debian/README
+ yada install -doc -as NEWS.Debian -gzip debian/NEWS
+ yada install -doc -as NEWS debian/NEWS.upstream
+ yada install -doc -subdir scripts scripts/*
 Templates:
- Template: phpmyadmin/changed-extension
- Type: note
- Description: The extension of phpmyadmin files was changed.
-  In this release the *.php3 files were renamed to *.php. Please update
-  your HTTP server configuration and your /etc/phpmyadmin directory.
- Description-de: Die Dateiendung der phpmyadmin-Dateien wurde geändert.
-  In dieser Version wurden die *.php3-Dateien nach *.php umbenannt.
-  Die aktualisieren Sie die Konfiguration Ihres Webservers und
-  das Verzeichnis /etc/phpmyadmin.
- Description-pl: Rozszerzenia plików pakietu phpmyadmin zosta³y zmienione.
-  W tej wersji pakietu pliki *.php3 zosta³y wymienione na pliki *.php.
-  Proszê zaktualizowaæ konfiguracjê serwera HTTP oraz katalogu
-  /etc/phpmyadmin.
+ Template: phpmyadmin/reconfigure-webserver
+ Type: multiselect
+ Choices: apache, apache-ssl, apache-perl, apache2
+ Default: apache, apache-ssl, apache-perl, apache2
+ _Description: Which web server would you like to reconfigure automatically?
+  phpMyAdmin supports any web server that PHP does, but this automatic
+  configuration process only supports Apache.
  .
- Template: phpmyadmin/webserver
- Type: select
- Choices: Apache, Apache-SSL, Both, None
- Choices-pl: Apache, Apache-SSL, Obydwa, ¯aden
- Default: ${webserver}
- Description: Which web server would you like to reconfigure automatically?
-  phpMyAdmin supports any web server that php3/php4 does, but this
-  automatic configuration process only supports Apache and Apache-SSL.
- Description-pl: Który serwer WWW przekonfigurowaæ automatycznie?
-  phpMyAdmin dzia³a z dowolnym serwerem WWW który obs³uguje pliki php3/php4,
-  ale automatyczna konfiguracja dzia³a tylko dla Apache i Apache-SSL.
+ Template: phpmyadmin/restart-webserver
+ Type: boolean
+ Default: false
+ _Description: Do you want me to restart ${webserver} now?
+  Remember that in order to activate the new configuration
+  ${webserver} has to be restarted. You can also restart ${webserver}
+  manually executing /etc/init.d/${webserver} restart
 Config: bash
- if [ "$1" = "upgrade" -a -n "$2" ] && \
-   dpkg --compare-versions "$2" lt-nl "2.1.0.1-2"; then
-     db_input low phpmyadmin/changed-extension || true
-     db_go
- fi
- .
- db_subst "phpmyadmin/webserver" "webserver" "Apache" || true
- db_input medium "phpmyadmin/webserver" || true
+ db_input medium phpmyadmin/reconfigure-webserver || true
  db_go
 Preinst: bash
  if [ "$1" = "upgrade" -a -n "$2" ] && \
    dpkg --compare-versions "$2" lt-nl "2.1.0.1-2"; then
      if [ -d /etc/phpmyadmin ]; then
          for i in config footer header; do
- 	     mv -f /etc/phpmyadmin/$i.inc.php3 /etc/phpmyadmin/$i.inc.php || true
- 	 done
+             mv -f /etc/phpmyadmin/$i.inc.php3 /etc/phpmyadmin/$i.inc.php || true
+         done
      fi
  fi
+ if [ "$1" = "upgrade" -a -n "$2" ] && \
+   dpkg --compare-versions "$2" lt-nl "2.5.6-rc2-1"; then
+     if [ -d /etc/phpmyadmin ]; then
+         for i in footer header; do
+             mv -f /etc/phpmyadmin/$i.inc.php /etc/phpmyadmin/$i.inc.php.dpkg-old || true
+             ucf --purge /etc/phpmyadmin/$i.inc.php
+         done
+     fi
+ fi
+ if [ "$1" = "upgrade" -a -n "$2" ] && \
+   dpkg --compare-versions "$2" lt-nl "2:2.6.1-rc2-1"; then
+     if [ -h /etc/$webserver/conf.d/phpmyadmin ]; then
+         mv /etc/$webserver/conf.d/phpmyadmin /etc/$webserver/conf.d/phpmyadmin.conf
+     fi
+ fi
+ .
+ mkdir -p /etc/phpmyadmin
+ md5sum /etc/phpmyadmin/apache.conf 2>/dev/null >/etc/phpmyadmin/apache.conf.md5sum || true
 Postinst: bash
+ if ! md5sum -c /etc/phpmyadmin/apache.conf.md5sum 2>/dev/null; then
+     restart_required=yes
+ else
+     restart_required=no
+ fi
+ rm -f /etc/phpmyadmin/apache.conf.md5sum
+ .
+ if [ "$1" = "configure" -a -f /etc/phpmyadmin/blowfish_secret.inc.php ] \
+   && dpkg --compare-versions "$2" lt-nl "1:2.5.7-pl1-2"; then
+     chgrp www-data /etc/phpmyadmin/blowfish_secret.inc.php
+     chmod 640 /etc/phpmyadmin/blowfish_secret.inc.php
+ fi
+ .
  if [ "$1" = "configure" ]; then
-     db_get "phpmyadmin/webserver"
-     webserver="$RET"
-     case "$webserver" in
-         Apache)        webservers="apache";;
- 	 Apache-SSL)	webservers="apache-ssl";;
- 	 Both)		webservers="apache apache-ssl";;
- 	 *)		webservers="";;
-     esac
+     if [ ! -f /etc/phpmyadmin/blowfish_secret.inc.php ]; then
+         touch /etc/phpmyadmin/blowfish_secret.inc.php
+         chgrp www-data /etc/phpmyadmin/blowfish_secret.inc.php
+         chmod 640 /etc/phpmyadmin/blowfish_secret.inc.php
+         printf "<?php\n\$cfg['blowfish_secret'] = '%s';\n?>\n" \
+         `perl -le 'print map{("a".."z","A".."Z",0..9)[int(rand(62))]}(1..16)'` \
+             >> /etc/phpmyadmin/blowfish_secret.inc.php
+     fi
  .
-     . /usr/share/wwwconfig-common/php.get
+     db_get phpmyadmin/reconfigure-webserver
+     webservers="$RET"
+     restart=""
  .
-     for server in $webservers; do
- 	 if [ "$phpver" = "php4" ]; then
- 	     extension=".php"
-             typestr="application/x-httpd-php"
-             . /usr/share/wwwconfig-common/apache-addtype_all.sh
- 	     [ "$status" = "uncommented" -o "$status" = "added" -o "$status" = "lineadded" ] && restart="$server $restart"
- 	 elif [ "$phpver" = "php3" ]; then
- 	     extension=".php"
-             typestr="application/x-httpd-php3"
-             . /usr/share/wwwconfig-common/apache-addtype_all.sh
- 	     [ "$status" = "uncommented" -o "$status" = "added" -o "$status" = "lineadded" ] && restart="$server $restart"
- 	 fi
+     for webserver in $webservers; do
+         webserver=${webserver%,}
+         test -x /usr/sbin/$webserver || continue
  .
-         . /usr/share/wwwconfig-common/apache-php.sh
- 	 [ "$status" = "uncomment" ] && restart="$server $restart"
+         case "$webserver" in
+             apache|apache-perl|apache-ssl)
+                 if [ -x /usr/sbin/modules-config ]; then
+                     if [ -f /usr/lib/apache/1.3/libphp4.so ]; then
+                         if ! grep -qs "^LoadModule php4_module " /etc/$webserver/modules.conf && \
+                            ! grep -qs "^LoadModule php5_module " /etc/$webserver/modules.conf; then
+                             modules-config $webserver enable mod_php4
+                         fi
+                     elif [ -f /usr/lib/apache/1.3/mod_php5.so ]; then
+                         if ! grep -qs "^LoadModule php4_module " /etc/$webserver/modules.conf && \
+                            ! grep -qs "^LoadModule php5_module " /etc/$webserver/modules.conf; then
+                             modules-config $webserver enable mod_php5
+                         fi
+                     else
+                         if [ -f /usr/lib/apache/1.3/mod_actions.so ]; then
+                             if ! grep -qs "^LoadModule action_module " /etc/$webserver/modules.conf; then
+                                 modules-config $webserver enable mod_actions
+                             fi
+                         fi
+                         if [ -f /usr/lib/apache/1.3/mod_cgi.so ]; then
+                             if ! grep -qs "^LoadModule cgi_module " /etc/$webserver/modules.conf; then
+                                 modules-config $webserver enable mod_cgi
+                             fi
+                         fi
+                     fi
+                 fi
+                 if grep -qs "^Include /etc/phpmyadmin/apache.conf" /etc/$webserver/httpd.conf; then
+                     mv -f /etc/$webserver/httpd.conf /etc/$webserver/httpd.conf.old.phpmyadmin
+                     grep -v "^Include /etc/phpmyadmin/apache.conf" /etc/$webserver/httpd.conf.old.phpmyadmin \
+                         > /etc/$webserver/httpd.conf
+                 fi
+                 if ! grep -qs "^Include /etc/$webserver/conf.d" /etc/$webserver/httpd.conf; then
+                     cp -f /etc/$webserver/httpd.conf /etc/$webserver/httpd.conf.old.phpmyadmin
+                     echo "Include /etc/$webserver/conf.d/*.conf" >> /etc/$webserver/httpd.conf
+                 fi
+                 if [ -f /etc/$webserver/httpd.conf.old.phpmyadmin ]; then
+                     mv -f /etc/$webserver/httpd.conf.old.phpmyadmin /etc/$webserver/httpd.conf.old
+                 fi
+                 mkdir -p /etc/$webserver/conf.d
+                 ;;
+             apache2)
+                 if [ -d /etc/$webserver/mods-enabled ]; then
+                     if [ ! -f /etc/$webserver/mods-enabled/actions.load -a ! -h /etc/$webserver/mods-enabled/actions.load ]; then
+                         ln -s /etc/$webserver/mods-available/actions.load /etc/$webserver/mods-enabled/actions.load
+                     fi
+                     if [ -f /etc/apache2/mods-available/php4.load ]; then
+                         if [ ! -f /etc/$webserver/mods-enabled/php4.load -a ! -h /etc/$webserver/mods-enabled/php4.load -a \
+                              ! -f /etc/$webserver/mods-enabled/php5.load -a ! -h /etc/$webserver/mods-enabled/php5.load ]; then
+                             ln -s /etc/$webserver/mods-available/php4.load /etc/$webserver/mods-enabled/php4.load
+                         fi
+                     elif [ -f /etc/apache2/mods-available/php5.load ]; then
+                         if [ ! -f /etc/$webserver/mods-enabled/php4.load -a ! -h /etc/$webserver/mods-enabled/php4.load -a \
+                              ! -f /etc/$webserver/mods-enabled/php5.load -a ! -h /etc/$webserver/mods-enabled/php5.load ]; then
+                             ln -s /etc/$webserver/mods-available/php5.load /etc/$webserver/mods-enabled/php5.load
+                         fi
+                     else
+                         if [ ! -f /etc/$webserver/mods-enabled/cgi.load -a ! -h /etc/$webserver/mods-enabled/cgi.load ]; then
+                             ln -s /etc/$webserver/mods-available/cgi.load /etc/$webserver/mods-enabled/cgi.load
+                         fi
+                     fi
+                 fi
+                 ;;
+         esac
  .
- 	 includefile=/etc/phpmyadmin/apache.conf
- 	 . /usr/share/wwwconfig-common/apache-include_all.sh
- 	 [ "$status" = "uncomment" -o "$status" = "include" ] && restart="$server $restart"
+         case "$webserver" in
+             apache|apache-perl|apache-ssl|apache2)
+                 if [ ! -f /etc/$webserver/conf.d/phpmyadmin.conf -a ! -h /etc/$webserver/conf.d/phpmyadmin.conf ]; then
+                     ln -s /etc/phpmyadmin/apache.conf /etc/$webserver/conf.d/phpmyadmin.conf
+                 fi
+                 if [ "$restart_required" = "yes" ]; then
+                     db_reset phpmyadmin/restart-webserver || true
+                     db_subst phpmyadmin/restart-webserver webserver "$webserver"
+                     db_input high phpmyadmin/restart-webserver || true
+                     db_go
+                     db_get phpmyadmin/restart-webserver
+                     if [ "$RET" = "true" ]; then
+                         restart="$restart $webserver"
+                     fi
+                 fi
+                 ;;
+         esac
+     done
  .
- 	 index=index.php
- 	 . /usr/share/wwwconfig-common/apache-index_all.sh
- 	 [ "$status" = "added" ] && restart="$server $restart"
-     done     
- .
-     servers="apache-ssl apache"
-     . /usr/share/wwwconfig-common/restart.sh
+     for webserver in $restart; do
+         webserver=${webserver%,}
+         if [ -x /usr/sbin/invoke-rc.d ]; then
+             invoke-rc.d $webserver restart
+         else
+             /etc/init.d/$webserver restart
+         fi
+     done
  fi
 Postrm: bash
- if [ -f /usr/share/wwwconfig-common/apache-uninclude_all.sh ]; then
-     db_get "phpmyadmin/webserver"
-     webserver="$RET"
-     case "$webserver" in
-         Apache)	webservers="apache";;
-         Apache-SSL)	webservers="apache-ssl";;
-         Both)		webservers="apache apache-ssl";;
-         *)		webservers="";;
-     esac
-     includefile=/etc/phpmyadmin/apache.conf
+ if [ "$1" = "purge" ]; then
+     rm -f /etc/phpmyadmin/apache.conf.md5sum
+     rm -f /etc/phpmyadmin/blowfish_secret.inc.php
  .
-     if [ "$1" = "purge" ]; then
-         for server in $webservers; do
-             . /usr/share/wwwconfig-common/apache-uninclude_all.sh
- 	     if [ "$status" = "purge" ]; then
- 	         restart="$restart $server"
- 	     fi
-         done
-         test -d /etc/phpmyadmin && rm -rf /etc/phpmyadmin
-     fi
+     db_get phpmyadmin/reconfigure-webserver
+     webservers="$RET"
+     restart=""
  .
-     if [ "$1" = "remove" ]; then
-         for server in $webservers; do
-             . /usr/share/wwwconfig-common/apache-cominclude_all.sh
- 	     if [ "$status" = "comment" ]; then
- 	         restart="$restart $server"
- 	     fi
-         done
-     fi
+     for webserver in $webservers; do
+         webserver=${webserver%,}
  .
-     servers="apache-ssl apache"
-     . /usr/share/wwwconfig-common/restart.sh
+         case "$webserver" in
+             apache|apache-perl|apache-ssl|apache2)
+                 rm -f /etc/$webserver/conf.d/phpmyadmin.conf
+                 test -x /usr/sbin/$webserver || continue
+                 db_reset phpmyadmin/restart-webserver
+                 db_subst phpmyadmin/restart-webserver webserver "$webserver"
+                 db_input phpmyadmin/restart-webserver high || true
+                 db_go
+                 db_get phpmyadmin/restart-webserver
+                 if [ "$RET" = "true" ]; then
+                     restart="$restart $webserver"
+                 fi
+                 ;;
+         esac
+     done
+ .
+     for webserver in $restart; do
+         webserver=${webserver%,}
+         if [ -x /usr/sbin/invoke-rc.d ]; then
+             invoke-rc.d $webserver restart
+         else
+             /etc/init.d/$webserver restart
+         fi
+     done
+ .
+     for ext in '~' '%' .bak .dpkg-tmp .dpkg-new .dpkg-old .dpkg-dist; do
+         rm -f "/etc/phpmyadmin/footer.inc.php$ext"
+     done
+     for ext in '~' '%' .bak .dpkg-tmp .dpkg-new .dpkg-old .dpkg-dist; do
+         rm -f "/etc/phpmyadmin/header.inc.php$ext"
+     done
+ .
+     rmdir --ignore-fail-on-non-empty /etc/phpmyadmin || true
+     rmdir --parents --ignore-fail-on-non-empty /etc/apache/conf.d || true
  fi
+Overrides:
+ postinst-uses-db-input

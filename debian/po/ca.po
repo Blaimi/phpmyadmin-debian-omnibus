@@ -1,0 +1,50 @@
+# phpmyadmin (debconf) translation to Catalan.
+# Copyright (C) 2004 Free Software Foundation, Inc.
+# Aleix Badia i Bosch <abadia@ica.es>, 2004
+# Steve Langasek <vorlon@debian.org>, 2004
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: phpmyadmin_2.5.5-pl1-1_templates\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2004-06-25 11:28+0200\n"
+"PO-Revision-Date: 2004-01-31 19:57GMT\n"
+"Last-Translator: Aleix Badia i Bosch <abadia@ica.es>\n"
+"Language-Team: Debian L10n Catalan <debian-l10n-catalan@lists.debian.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#. Type: multiselect
+#. Description
+#: ../templates:5
+msgid "Which web server would you like to reconfigure automatically?"
+msgstr "Quin servidor de web voldríeu reconfigurar automàticament?"
+
+#. Type: multiselect
+#. Description
+#: ../templates:5
+msgid ""
+"phpMyAdmin supports any web server that PHP does, but this automatic "
+"configuration process only supports Apache."
+msgstr ""
+"El phpMyAdmin suporta qualsevol servidor web que suporti PHP, però el "
+"procés de configuració automàtica només suporta l'Apache."
+
+#. Type: boolean
+#. Description
+#: ../templates:12
+msgid "Do you want me to restart ${webserver} now?"
+msgstr "Voleu que reiniciï el ${webserver}?"
+
+#. Type: boolean
+#. Description
+#: ../templates:12
+msgid ""
+"Remember that in order to activate the new configuration ${webserver} has to "
+"be restarted. You can also restart ${webserver} manually executing /etc/init."
+"d/${webserver} restart"
+msgstr ""
+"Recordeu que per activar la nova configuració s'ha de reiniciar el "
+"${webserver}. També podeu reiniciar el ${webserver} manualment executant /"
+"etc/init.d/${webserver} restart"

@@ -1,0 +1,15 @@
+diff -ru phpMyAdmin-2.6.0-rc1/main.php phpMyAdmin-2.6.0-rc1.debian/main.php
+--- phpMyAdmin-2.6.0-rc1/main.php	2004-08-03 13:08:20.000000000 +0200
++++ phpMyAdmin-2.6.0-rc1.debian/main.php	2004-08-09 12:04:08.000000000 +0200
+@@ -718,9 +718,11 @@
+  * modified: 2004-05-05 mkkeck
+  */
+ 
++if (0) :  // commented out for Debian package
+ if (PMA_PHP_INT_VERSION == 40203 && @extension_loaded('mbstring')) {
+     echo '<div class="warning">' . $strPHP40203 . '</div>' . "\n";
+ }
++endif;
+ 
+ /**
+  * Warning for old PHP version

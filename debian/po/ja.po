@@ -1,0 +1,59 @@
+#
+#    Translators, if you are not familiar with the PO format, gettext
+#    documentation is worth reading, especially sections dedicated to
+#    this format, e.g. by running:
+#         info -n '(gettext)PO Files'
+#         info -n '(gettext)Header Entry'
+#
+#    Some information specific to po-debconf are available at
+#            /usr/share/doc/po-debconf/README-trans
+#         or http://www.debian.org/intl/l10n/po-debconf/README-trans
+#
+#    Developers do not need to manually edit POT or PO files.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2004-06-25 11:28+0200\n"
+"PO-Revision-Date: 2003-11-20 11:13+0900\n"
+"Last-Translator: Hideki Yamane <henrich@samba.gr.jp>\n"
+"Language-Team: Japanese <debian-japanese@lists.debian.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=EUC-JP\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#. Type: multiselect
+#. Description
+#: ../templates:5
+msgid "Which web server would you like to reconfigure automatically?"
+msgstr "どの web サーバを自動的に再設定しますか?"
+
+#. Type: multiselect
+#. Description
+#: ../templates:5
+msgid ""
+"phpMyAdmin supports any web server that PHP does, but this automatic "
+"configuration process only supports Apache."
+msgstr ""
+"phpMyAdmin は PHP が動作する web サーバをサポートしていますが、この自動設定"
+"プロセスは Apache のみサポートしています。"
+
+#. Type: boolean
+#. Description
+#: ../templates:12
+msgid "Do you want me to restart ${webserver} now?"
+msgstr "${webserver} をすぐに再起動しますか?"
+
+#. Type: boolean
+#. Description
+#: ../templates:12
+msgid ""
+"Remember that in order to activate the new configuration ${webserver} has to "
+"be restarted. You can also restart ${webserver} manually executing /etc/init."
+"d/${webserver} restart"
+msgstr ""
+"${webserver} の新規設定を有効にするためには再起動が必要なことに留意してくださ"
+"い。手動で /etc/init.d/${webserver} restart を実行することでも再起動ができま"
+"す。"

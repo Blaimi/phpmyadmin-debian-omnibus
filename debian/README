@@ -4,11 +4,17 @@ phpmyadmin for Debian
 
 USAGE
 
-  The application should be available at http://localhost/phpmyadmin/
+  The application will be available at http://localhost/phpmyadmin/
   after install.
   
-  Please note, the password can not be empty. You can change the password for
-  your database with 'mysqladmin password <new-password>' command.
+
+CONFIGURATION
+
+  The package installs symlink into /var/www directory. You can also add
+
+    Alias /phpmyadmin /usr/share/phpmyadmin
+
+  to the /etc/phpmyadmin/apache.conf file.
 
 
 SECURITY
@@ -18,10 +24,5 @@ SECURITY
   This file has to be readable by www-data user, so it can be readable
   by anyone who can run its own CGI script!
   
-  Remember, that phpMyAdmin needs an access to mysql table. You should
-  give additional priviliges for a user, i.e.:
-  
-  GRANT USAGE ON mysql.* TO 'username@localhost'
 
-
- -- Piotr Roszatycki <dexter@debian.org>  Tue, 18 Dec 2001 13:54:59 +0100
+ -- Piotr Roszatycki <dexter@debian.org>  Fri, 25 Jun 2004 10:44:22 +0200

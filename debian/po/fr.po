@@ -1,0 +1,58 @@
+#
+#    Translators, if you are not familiar with the PO format, gettext
+#    documentation is worth reading, especially sections dedicated to
+#    this format, e.g. by running:
+#         info -n '(gettext)PO Files'
+#         info -n '(gettext)Header Entry'
+#
+#    Some information specific to po-debconf are available at
+#            /usr/share/doc/po-debconf/README-trans
+#         or http://www.debian.org/intl/l10n/po-debconf/README-trans
+#
+#    Developers do not need to manually edit POT or PO files.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: phpmyadmin 2.5.1-1\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2004-06-25 11:28+0200\n"
+"PO-Revision-Date: 2003-11-10 18:29+0100\n"
+"Last-Translator: Christian Perrier <bubulle@debian.org>\n"
+"Language-Team: French <debian-l10n-french@lists.debian.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=iso-8859-15\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#. Type: multiselect
+#. Description
+#: ../templates:5
+msgid "Which web server would you like to reconfigure automatically?"
+msgstr "Serveur web à reconfigurer automatiquement :"
+
+#. Type: multiselect
+#. Description
+#: ../templates:5
+msgid ""
+"phpMyAdmin supports any web server that PHP does, but this automatic "
+"configuration process only supports Apache."
+msgstr ""
+"Phpmyadmin gère tous les serveurs web supportés par PHP, mais cette "
+"procédure automatique de configuration ne prend en charge qu'Apache."
+
+#. Type: boolean
+#. Description
+#: ../templates:12
+msgid "Do you want me to restart ${webserver} now?"
+msgstr "Faut-il redémarrer ${webserver} maintenant ?"
+
+#. Type: boolean
+#. Description
+#: ../templates:12
+msgid ""
+"Remember that in order to activate the new configuration ${webserver} has to "
+"be restarted. You can also restart ${webserver} manually executing /etc/init."
+"d/${webserver} restart"
+msgstr ""
+"Veuillez noter que, pour mettre en service la nouvelle configuration, "
+"${webserver} doit être redémarré. Vous pouvez également le redémarrer avec "
+"la commande « /etc/init.d/${webserver} restart »."

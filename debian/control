@@ -2,14 +2,14 @@ Source: phpmyadmin
 Maintainer: Piotr Roszatycki <dexter@debian.org>
 Section: web
 Priority: extra
-Standards-Version: 3.5.6
-Build-Depends-Indep: grep-dctrl, yada (>= 0.9.9)
+Standards-Version: 3.6.1
+Build-Depends-Indep: yada (>= 0.30), po-debconf
 
 Package: phpmyadmin
 Architecture: all
-Depends: php4 | php3 | php4-cgi | php3-cgi, php4-mysql | php4-cgi-mysql | php3-mysql | php3-cgi-mysql, apache | httpd, wwwconfig-common (>= 0.0.7), ${phpmyadmin:Depends}
-Suggests: mysql-doc, mysql-server
-Description: A set of PHP-scripts to administrate MySQL over the WWW.
+Depends: php4 (>= 4.1.0) | php4-cgi (>= 4.1.0) | php5 | php5-cgi, php4-mysql | php5-mysql | php5-mysqli, apache | apache-perl | apache-ssl | apache2 | httpd, ${phpmyadmin:Depends}
+Suggests: mysql-server (>= 3.23.36), php4-gd | php5-gd, ${phpmyadmin:Suggests}
+Description: set of PHP-scripts to administrate MySQL over the WWW
  phpMyAdmin is intended to handle the administration of MySQL over the WWW.
  Currently it can:
    - create and drop databases
@@ -19,5 +19,7 @@ Description: A set of PHP-scripts to administrate MySQL over the WWW.
    - manage keys on fields
    - load text files into tables
    - create and read dumps of tables
-   - export and import CSV data
-   - administer one single database
+   - export and import data to CSV values
+   - administer multiple servers and single databases
+   - check referential integrity
+   - communicate in more than 38 different languages

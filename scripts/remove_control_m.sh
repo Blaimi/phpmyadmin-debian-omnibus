@@ -1,4 +1,9 @@
 #!/bin/sh
+#
+# $Id: remove_control_m.sh,v 2.0 2003/11/18 15:20:45 nijel Exp $
+#
+# Script to remove ^M from files for DOS <-> UNIX conversions
+#
 
 if [ $# != 1 ]
 then

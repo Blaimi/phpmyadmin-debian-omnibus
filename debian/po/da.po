@@ -1,0 +1,59 @@
+# translation of phpmyadmin_2.5.6-rc2-1_templates.po to Danish
+#
+#    Translators, if you are not familiar with the PO format, gettext
+#    documentation is worth reading, especially sections dedicated to
+#    this format, e.g. by running:
+#         info -n '(gettext)PO Files'
+#         info -n '(gettext)Header Entry'
+#    Some information specific to po-debconf are available at
+#            /usr/share/doc/po-debconf/README-trans
+#         or http://www.debian.org/intl/l10n/po-debconf/README-trans#
+#    Developers do not need to manually edit POT or PO files.
+# Claus Hindsgaul <claus_h@image.dk>, 2004.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: phpmyadmin_2.5.6-rc2-1_templates\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2004-06-25 11:28+0200\n"
+"PO-Revision-Date: 2004-02-26 19:45+0100\n"
+"Last-Translator: Claus Hindsgaul <claus_h@image.dk>\n"
+"Language-Team: Danish <dansk@klid.dk>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: KBabel 1.0.2\n"
+
+#. Type: multiselect
+#. Description
+#: ../templates:5
+msgid "Which web server would you like to reconfigure automatically?"
+msgstr "Hvilken webserver ønsker du at få sat op automatisk?"
+
+#. Type: multiselect
+#. Description
+#: ../templates:5
+msgid ""
+"phpMyAdmin supports any web server that PHP does, but this automatic "
+"configuration process only supports Apache."
+msgstr ""
+"phpMyAdmin understøtter enhver webserver, som PHP gør, men denne "
+"automatiske opsætningsproces understøtter kun Apache."
+
+#. Type: boolean
+#. Description
+#: ../templates:12
+msgid "Do you want me to restart ${webserver} now?"
+msgstr "Skal jeg genstarte ${webserver} nu?"
+
+#. Type: boolean
+#. Description
+#: ../templates:12
+msgid ""
+"Remember that in order to activate the new configuration ${webserver} has to "
+"be restarted. You can also restart ${webserver} manually executing /etc/init."
+"d/${webserver} restart"
+msgstr ""
+"Husk at ${webserver} skal genstartes for at aktivere den nye opsætning. Du "
+"kan også selv genstarte ${webserver} ved at køre '/etc/init.d/${webserver} "
+"restart'."

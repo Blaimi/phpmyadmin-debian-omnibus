@@ -1,0 +1,12 @@
+phpmyadmin (1:2.5.7-1) unstable; urgency=low
+
+  The configuration is splitted to the /etc/phpmyadmin/config.inc.php and
+  /usr/share/phpmyadmin/config.inc.php files.
+  
+  The local configuration from /etc overrides global configuration.
+  
+  I suggest to install maintainer's version of configuration file and
+  customize it later.
+
+ -- Piotr Roszatycki <dexter@debian.org>  Fri, 25 Jun 2004 10:27:26 +0200
+

@@ -1,60 +1,75 @@
 <?php
-/* $Id: tbl_addfield.php,v 1.22 2001/11/23 01:03:20 loic1 Exp $ */
-
+/* $Id: tbl_addfield.php,v 2.11.2.1 2005/02/03 19:56:54 rabus Exp $ */
+// vim: expandtab sw=4 ts=4 sts=4:
 
 /**
  * Get some core libraries
  */
-require('./libraries/grab_globals.lib.php');
-if (isset($submit)) {
-    $js_to_run = 'functions.js';
-}
-require('./header.inc.php');
+require_once('./libraries/grab_globals.lib.php');
+$js_to_run = 'functions.js';
+require_once('./header.inc.php');
+
+// Check parameters
+PMA_checkParameters(array('db', 'table'));
 
 
 /**
  * Defines the url to return to in case of error in a sql statement
  */
-$err_url = 'tbl_properties.php'
-         . '?lang=' . $lang
-         . '&amp;server=' . $server
-         . '&amp;db=' . urlencode($db)
-         . '&amp;table=' . urlencode($table);
-
+$err_url = 'tbl_properties.php?' . PMA_generate_common_url($db, $table);
 
 /**
  * The form used to define the field to add has been submitted
  */
-if (isset($submit)) {
+$abort = false;
+if (isset($submit_num_fields)) {
+    if (isset($orig_after_field)) {
+        $after_field = $orig_after_field;
+    }
+    if (isset($orig_field_where)) {
+        $field_where = $orig_field_where;
+    }
+    $num_fields = $orig_num_fields + $added_fields;
+    $regenerate = TRUE;
+} else if (isset($do_save_data)) {
     $query = '';
 
-    // Builds the field creation statement and alters the table
+    // Transforms the radio button field_key into 3 arrays
     $field_cnt = count($field_name);
     for ($i = 0; $i < $field_cnt; ++$i) {
-        if (get_magic_quotes_gpc()) {
-            $field_name[$i] = stripslashes($field_name[$i]);
-        }
-        if (PMA_MYSQL_INT_VERSION < 32306) {
-            PMA_checkReservedWords($field_name[$i], $err_url);
+        if (isset(${'field_key_' . $i})) {
+            if (${'field_key_' . $i} == 'primary_' . $i) {
+                $field_primary[] = $i;
+            }
+            if (${'field_key_' . $i} == 'index_' . $i) {
+                $field_index[]   = $i;
+            }
+            if (${'field_key_' . $i} == 'unique_' . $i) {
+                $field_unique[]  = $i;
+            }
+        } // end if
+    } // end for
+    // Builds the field creation statement and alters the table
+    for ($i = 0; $i < $field_cnt; ++$i) {
+        if (empty($field_name[$i])) {
+            continue;
         }
 
         $query .= PMA_backquote($field_name[$i]) . ' ' . $field_type[$i];
         if ($field_length[$i] != ''
-            && !eregi('^(DATE|DATETIME|TIME|TINYBLOB|TINYTEXT|BLOB|TEXT|MEDIUMBLOB|MEDIUMTEXT|LONGBLOB|LONGTEXT)$', $field_type[$i])) {
-            if (get_magic_quotes_gpc()) {
-                $query .= '(' . stripslashes($field_length[$i]) . ')';
-            } else {
-                $query .= '(' . $field_length[$i] . ')';
-            }
+            && !preg_match('@^(DATE|DATETIME|TIME|TINYBLOB|TINYTEXT|BLOB|TEXT|MEDIUMBLOB|MEDIUMTEXT|LONGBLOB|LONGTEXT)$@i', $field_type[$i])) {
+            $query .= '(' . $field_length[$i] . ')';
         }
         if ($field_attribute[$i] != '') {
             $query .= ' ' . $field_attribute[$i];
+        } else if (PMA_MYSQL_INT_VERSION >= 40100 && isset($field_collation[$i]) && $field_collation[$i] != '') {
+            list($tmp_charset) = explode('_', $field_collation[$i]);
+            $query .= ' CHARACTER SET ' . $tmp_charset . ' COLLATE ' . $field_collation[$i];
+            unset($tmp_charset);
         }
         if ($field_default[$i] != '') {
             if (strtoupper($field_default[$i]) == 'NULL') {
                 $query .= ' DEFAULT NULL';
-            } else if (get_magic_quotes_gpc()) {
-                $query .= ' DEFAULT \'' . PMA_sqlAddslashes(stripslashes($field_default[$i])) . '\'';
             } else {
                 $query .= ' DEFAULT \'' . PMA_sqlAddslashes($field_default[$i]) . '\'';
             }
@@ -77,117 +92,169 @@ if (isset($submit)) {
             } // end if (auto_increment)
         }
 
-        if ($after_field != '--end--') {
-            // Only the first field can be added somewhere else than at the end
+        if ($field_where != 'last') {
+            // Only the first field can be added somewhere other than at the end
             if ($i == 0) {
-                if ($after_field == '--first--') {
+                if ($field_where == 'first') {
                     $query .= ' FIRST';
                 } else {
-                    if (get_magic_quotes_gpc()) {
-                        $query .= ' AFTER ' . PMA_backquote(stripslashes(urldecode($after_field)));
-                    } else {
-                        $query .= ' AFTER ' . PMA_backquote(urldecode($after_field));
-                    }
+                    $query .= ' AFTER ' . PMA_backquote(urldecode($after_field));
                 }
             } else {
-                if (get_magic_quotes_gpc()) {
-                    $query .= ' AFTER ' . PMA_backquote(stripslashes($field_name[$i-1]));
-                } else {
-                    $query .= ' AFTER ' . PMA_backquote($field_name[$i-1]);
-                }
+                $query .= ' AFTER ' . PMA_backquote($field_name[$i-1]);
             }
         }
         $query .= ', ADD ';
     } // end for
-    $query = ereg_replace(', ADD $', '', $query);
+    $query = preg_replace('@, ADD $@', '', $query);
 
-    $sql_query     = 'ALTER TABLE ' . PMA_backquote($db) . '.' . PMA_backquote($table) . ' ADD ' . $query;
-    $result        = mysql_query($sql_query) or PMA_mysqlDie('', '', '', $err_url);
-    $sql_query_cpy = $sql_query . ';';
+    // To allow replication, we first select the db to use and then run queries
+    // on this db.
+    PMA_DBI_select_db($db) or PMA_mysqlDie(PMA_getError(), 'USE ' . PMA_backquotes($db), '', $err_url);
+    $sql_query     = 'ALTER TABLE ' . PMA_backquote($table) . ' ADD ' . $query;
+    $error_create = FALSE;
+    PMA_DBI_try_query($sql_query) or $error_create = TRUE;
 
-    // Builds the primary keys statements and updates the table
-    $primary = '';
-    if (isset($field_primary)) {
-        $primary_cnt = count($field_primary);
-        for ($i = 0; $i < $primary_cnt; $i++) {
-            $j       = $field_primary[$i];
-            $primary .= PMA_backquote($field_name[$j]) . ', ';
-        } // end for
-        $primary     = ereg_replace(', $', '', $primary);
-        if (!empty($primary)) {
-            $sql_query      = 'ALTER TABLE ' . PMA_backquote($db) . '.' . PMA_backquote($table) . ' ADD PRIMARY KEY (' . $primary . ')';
-            $result         = mysql_query($sql_query) or PMA_mysqlDie('', '', '', $err_url);
-            $sql_query_cpy  .= "\n" . $sql_query . ';';
-        }
-    } // end if
-     
-    // Builds the indexes statements and updates the table
-    $index = '';
-    if (isset($field_index)) {
-        $index_cnt = count($field_index);
-        for ($i = 0; $i < $index_cnt; $i++) {
-            $j     = $field_index[$i];
-            $index .= PMA_backquote($field_name[$j]) . ', ';
-        } // end for
-        $index     = ereg_replace(', $', '', $index);
-        if (!empty($index)) {
-            $sql_query      = 'ALTER TABLE ' . PMA_backquote($db) . '.' . PMA_backquote($table) . ' ADD INDEX (' . $index . ')';
-            $result         = mysql_query($sql_query) or PMA_mysqlDie('', '', '', $err_url);
-            $sql_query_cpy  .= "\n" . $sql_query . ';';
-        }
-    } // end if
-     
-    // Builds the uniques statements and updates the table
-    $unique = '';
-    if (isset($field_unique)) {
-        $unique_cnt = count($field_unique);
-        for ($i = 0; $i < $unique_cnt; $i++) {
-            $j      = $field_unique[$i];
-            $unique .= PMA_backquote($field_name[$j]) . ', ';
-        } // end for
-        $unique = ereg_replace(', $', '', $unique);
-        if (!empty($unique)) {
-            $sql_query      = 'ALTER TABLE ' . PMA_backquote($db) . '.' . PMA_backquote($table) . ' ADD UNIQUE (' . $unique . ')';
-            $result         = mysql_query($sql_query) or PMA_mysqlDie('', '', '', $err_url);
-            $sql_query_cpy  .= "\n" . $sql_query . ';';
-        }
-    } // end if
-     
+    if ($error_create == false) {
 
-    // Builds the fulltext statements and updates the table
-    $fulltext = '';
-    if (PMA_MYSQL_INT_VERSION >= 32323 && isset($field_fulltext)) {
-        $fulltext_cnt = count($field_fulltext);
-        for ($i = 0; $i < $fulltext_cnt; $i++) {
-            $j        = $field_fulltext[$i];
-            $fulltext .= PMA_backquote($field_name[$j]) . ', ';
-        } // end for
-        $fulltext = ereg_replace(', $', '', $fulltext);
-        if (!empty($fulltext)) {
-            $sql_query      = 'ALTER TABLE ' . PMA_backquote($db) . '.' . PMA_backquote($table) . ' ADD FULLTEXT (' . $fulltext . ')';
-            $result         = mysql_query($sql_query) or PMA_mysqlDie('', '', '', $err_url);
-            $sql_query_cpy  .= "\n" . $sql_query . ';';
-        }
-    } // end if
+        $sql_query_cpy = $sql_query . ';';
 
-    // Go back to table properties
-    $sql_query = $sql_query_cpy;
-    unset($sql_query_cpy);
-    $message   = $strTable . ' ' . htmlspecialchars($table) . ' ' . $strHasBeenAltered;
-    include('./tbl_properties.php');
-    exit();
+        // Builds the primary keys statements and updates the table
+        $primary = '';
+        if (isset($field_primary)) {
+            $primary_cnt = count($field_primary);
+            for ($i = 0; $i < $primary_cnt; $i++) {
+                $j       = $field_primary[$i];
+                if (!empty($field_name[$j])) {
+                    $primary .= PMA_backquote($field_name[$j]) . ', ';
+                }
+            } // end for
+            $primary     = preg_replace('@, $@', '', $primary);
+            if (!empty($primary)) {
+                $sql_query      = 'ALTER TABLE ' . PMA_backquote($table) . ' ADD PRIMARY KEY (' . $primary . ');';
+                $result         = PMA_DBI_query($sql_query);
+                $sql_query_cpy  .= "\n" . $sql_query . ';';
+            }
+        } // end if
+
+        // Builds the indexes statements and updates the table
+        $index = '';
+        if (isset($field_index)) {
+            $index_cnt = count($field_index);
+            for ($i = 0; $i < $index_cnt; $i++) {
+                $j     = $field_index[$i];
+                if (!empty($field_name[$j])) {
+                    $index .= PMA_backquote($field_name[$j]) . ', ';
+                }
+            } // end for
+            $index     = preg_replace('@, $@', '', $index);
+            if (!empty($index)) {
+                $sql_query      = 'ALTER TABLE ' . PMA_backquote($table) . ' ADD INDEX (' . $index . ')';
+                $result         = PMA_DBI_query($sql_query);
+                $sql_query_cpy  .= "\n" . $sql_query . ';';
+            }
+        } // end if
+
+        // Builds the uniques statements and updates the table
+        $unique = '';
+        if (isset($field_unique)) {
+            $unique_cnt = count($field_unique);
+            for ($i = 0; $i < $unique_cnt; $i++) {
+                $j      = $field_unique[$i];
+                if (!empty($field_name[$j])) {
+                    $unique .= PMA_backquote($field_name[$j]) . ', ';
+                }
+            } // end for
+            $unique = preg_replace('@, $@', '', $unique);
+            if (!empty($unique)) {
+                $sql_query      = 'ALTER TABLE ' . PMA_backquote($table) . ' ADD UNIQUE (' . $unique . ')';
+                $result         = PMA_DBI_query($sql_query);
+                $sql_query_cpy  .= "\n" . $sql_query . ';';
+            }
+        } // end if
+
+
+        // Builds the fulltext statements and updates the table
+        $fulltext = '';
+        if (isset($field_fulltext)) {
+            $fulltext_cnt = count($field_fulltext);
+            for ($i = 0; $i < $fulltext_cnt; $i++) {
+                $j        = $field_fulltext[$i];
+                $fulltext .= PMA_backquote($field_name[$j]) . ', ';
+            } // end for
+            $fulltext = preg_replace('@, $@', '', $fulltext);
+            if (!empty($fulltext)) {
+                $sql_query      = 'ALTER TABLE ' . PMA_backquote($table) . ' ADD FULLTEXT (' . $fulltext . ')';
+                $result         = PMA_DBI_query($sql_query);
+                $sql_query_cpy  .= "\n" . $sql_query . ';';
+            }
+        } // end if
+
+        // garvin: If comments were sent, enable relation stuff
+        require_once('./libraries/relation.lib.php');
+        require_once('./libraries/transformations.lib.php');
+
+        $cfgRelation = PMA_getRelationsParam();
+
+        // garvin: Update comment table, if a comment was set.
+        if (isset($field_comments) && is_array($field_comments) && $cfgRelation['commwork']) {
+            foreach ($field_comments AS $fieldindex => $fieldcomment) {
+                PMA_setComment($db, $table, $field_name[$fieldindex], $fieldcomment);
+            }
+        }
+
+        // garvin: Update comment table for mime types [MIME]
+        if (isset($field_mimetype) && is_array($field_mimetype) && $cfgRelation['commwork'] && $cfgRelation['mimework'] && $cfg['BrowseMIME']) {
+            foreach ($field_mimetype AS $fieldindex => $mimetype) {
+                PMA_setMIME($db, $table, $field_name[$fieldindex], $mimetype, $field_transformation[$fieldindex], $field_transformation_options[$fieldindex]);
+            }
+        }
+
+        // Go back to the structure sub-page
+        $sql_query = $sql_query_cpy;
+        unset($sql_query_cpy);
+        $message   = $strTable . ' ' . htmlspecialchars($table) . ' ' . $strHasBeenAltered;
+        $active_page = 'tbl_properties_structure.php';
+        require('./tbl_properties_structure.php');
+    } else {
+        PMA_mysqlDie('', '', '', $err_url, FALSE);
+        // garvin: An error happened while inserting/updating a table definition.
+        // to prevent total loss of that data, we embed the form once again.
+        // The variable $regenerate will be used to restore data in tbl_properties.inc.php
+        $num_fields = $orig_num_fields;
+        if (isset($orig_after_field)) {
+            $after_field = $orig_after_field;
+        }
+        if (isset($orig_field_where)) {
+            $field_where = $orig_field_where;
+        }
+        $regenerate = true;
+    }
 } // end do alter table
 
 /**
  * Displays the form used to define the new field
  */
-else{
+if ($abort == FALSE) {
+    /**
+     * Gets tables informations
+     */
+    require('./tbl_properties_common.php');
+    require('./tbl_properties_table_info.php');
+    /**
+     * Displays top menu links
+     */
+    $active_page = 'tbl_properties_structure.php';
+    require('./tbl_properties_links.php');
+    /**
+     * Display the form
+     */
     $action = 'tbl_addfield.php';
-    include('./tbl_properties.inc.php');
+    require('./tbl_properties.inc.php');
 
     // Diplays the footer
     echo "\n";
-    include('./footer.inc.php');
+    require_once('./footer.inc.php');
 }
 
 ?>

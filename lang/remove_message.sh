@@ -1,11 +1,18 @@
 #!/bin/bash
+# $Id: remove_message.sh,v 2.0 2003/11/18 15:20:39 nijel Exp $
 #
 # Shell script that removes a message from all message files (Lem9)
 # it checks for the message, followed by a space
 #
 # Example:  remove_message.sh 'strMessageToRemove' 
 #
-for file in *.inc.php3
+
+if [ $# -ne 1 ] ; then
+    echo "usage: remove_message.sh 'strMessageToRemove'"
+    exit 1
+fi
+    
+for file in *.inc.php
 do
     echo "lines before:" `wc -l $file`
     grep -v "$1 " ${file} > ${file}.new

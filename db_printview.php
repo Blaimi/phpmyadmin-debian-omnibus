@@ -1,84 +1,95 @@
 <?php
-/* $Id: db_printview.php,v 1.16 2001/11/23 19:13:07 loic1 Exp $ */
+/* $Id: db_printview.php,v 2.8 2004/05/20 16:14:08 nijel Exp $ */
+// vim: expandtab sw=4 ts=4 sts=4:
 
 
 /**
  * Gets the variables sent or posted to this script, then displays headers
  */
-require('./libraries/grab_globals.lib.php');
-require('./header.inc.php');
+require_once('./libraries/grab_globals.lib.php');
+require_once('./header.inc.php');
 
+// Check parameters
+require_once('./libraries/common.lib.php');
+
+PMA_checkParameters(array('db'));
 
 /**
  * Defines the url to return to in case of error in a sql statement
  */
-$err_url = 'db_details.php'
-         . '?lang=' . $lang
-         . '&amp;server=' . $server
-         . '&amp;db=' . urlencode($db);
+$err_url = 'db_details.php?' . PMA_generate_common_url($db);
 
+/**
+ * Settings for relations stuff
+ */
+require_once('./libraries/relation.lib.php');
+$cfgRelation = PMA_getRelationsParam();
 
 /**
  * Gets the list of the table in the current db and informations about these
  * tables if possible
  */
 // staybyte: speedup view on locked tables - 11 June 2001
-if (PMA_MYSQL_INT_VERSION >= 32303) {
-    // Special speedup for newer MySQL Versions (in 4.0 format changed)
-    if ($cfgSkipLockedTables == TRUE && PMA_MYSQL_INT_VERSION >= 32330) {
-        $local_query  = 'SHOW OPEN TABLES FROM ' . PMA_backquote($db);
-        $result        = mysql_query($query) or PMA_mysqlDie('', $local_query, '', $err_url);
-        // Blending out tables in use
-        if ($result != FALSE && mysql_num_rows($result) > 0) {
-            while ($tmp = mysql_fetch_array($result)) {
-                // if in use memorize tablename
-                if (eregi('in_use=[1-9]+', $tmp)) {
-                    $sot_cache[$tmp[0]] = TRUE;
-                }
+// Special speedup for newer MySQL Versions (in 4.0 format changed)
+if ($cfg['SkipLockedTables'] == TRUE) {
+    $result = PMA_DBI_query('SHOW OPEN TABLES FROM ' . PMA_backquote($db) . ';');
+    // Blending out tables in use
+    if ($result != FALSE && PMA_DBI_num_rows($result) > 0) {
+        while ($tmp = PMA_DBI_fetch_row($result)) {
+            // if in use memorize tablename
+            if (preg_match('@in_use=[1-9]+@i', $tmp[0])) {
+                $sot_cache[$tmp[0]] = TRUE;
             }
-            mysql_free_result($result);
+        }
+        PMA_DBI_free_result($result);
+        unset($result);
 
-            if (isset($sot_cache)) {
-                $local_query = 'SHOW TABLES FROM ' . PMA_backquote($db);
-                $result      = mysql_query($query) or PMA_mysqlDie('', $local_query, '', $err_url);
-                if ($result != FALSE && mysql_num_rows($result) > 0) {
-                    while ($tmp = mysql_fetch_array($result)) {
-                        if (!isset($sot_cache[$tmp[0]])) {
-                            $local_query = 'SHOW TABLE STATUS FROM ' . PMA_backquote($db) . ' LIKE \'' . addslashes($tmp[0]) . '\'';
-                            $sts_result  = mysql_query($local_query) or PMA_mysqlDie('', $local_query, '', $err_url);
-                            $sts_tmp     = mysql_fetch_array($sts_result);
-                            $tables[]    = $sts_tmp;
-                        } else { // table in use
-                            $tables[]    = array('Name' => $tmp[0]);
-                        }
+        if (isset($sot_cache)) {
+            $result      = PMA_DBI_query('SHOW TABLES FROM ' . PMA_backquote($db) . ';', NULL, PMA_DBI_QUERY_STORE);
+            if ($result != FALSE && PMA_DBI_num_rows($result) > 0) {
+                while ($tmp = PMA_DBI_fetch_row($result)) {
+                    if (!isset($sot_cache[$tmp[0]])) {
+                        $sts_result  = PMA_DBI_query('SHOW TABLE STATUS FROM ' . PMA_backquote($db) . ' LIKE \'' . addslashes($tmp[0]) . '\';');
+                        $sts_tmp     = PMA_DBI_fetch_assoc($sts_result);
+                        $tables[]    = $sts_tmp;
+                    } else { // table in use
+                        $tables[]    = array('Name' => $tmp[0]);
                     }
-                    mysql_free_result($result);
-                    $sot_ready = TRUE;
                 }
+                PMA_DBI_free_result($result);
+                unset($result);
+                $sot_ready = TRUE;
             }
         }
     }
-    if (!isset($sot_ready)) {
-        $local_query = 'SHOW TABLE STATUS FROM ' . PMA_backquote($db);
-        $result      = mysql_query($local_query) or PMA_mysqlDie('', $local_query, '', $err_url);
-        if ($result != FALSE && mysql_num_rows($result) > 0) {
-            while ($sts_tmp = mysql_fetch_array($result)) {
-                $tables[] = $sts_tmp;
-            }
-            mysql_free_result($result);
-        }
-    }
-    $num_tables = (isset($tables) ? count($tables) : 0);
-} // end if (PMA_MYSQL_INT_VERSION >= 32303)
-else {
-    $result     = mysql_list_tables($db);
-    $num_tables = @mysql_numrows($result);
-    for ($i = 0; $i < $num_tables; $i++) {
-        $tables[] = mysql_tablename($result, $i);
-    }
-    mysql_free_result($result);
 }
+if (!isset($sot_ready)) {
+    $result      = PMA_DBI_query('SHOW TABLE STATUS FROM ' . PMA_backquote($db) . ';');
+    if (PMA_DBI_num_rows($result) > 0) {
+        while ($sts_tmp = PMA_DBI_fetch_assoc($result)) {
+            $tables[] = $sts_tmp;
+        }
+        PMA_DBI_free_result($result);
+        unset($res);
+    }
+}
+$num_tables = (isset($tables) ? count($tables) : 0);
 
+if ($cfgRelation['commwork']) {
+    $comment = PMA_getComments($db);
+
+    /**
+     * Displays DB comment
+     */
+    if (is_array($comment)) {
+        ?>
+    <!-- DB comment -->
+    <p><i>
+        <?php echo htmlspecialchars(implode(' ', $comment)) . "\n"; ?>
+    </i></p>
+        <?php
+    } // end if
+}
 
 /**
  * If there is at least one table, displays the printer friendly view, else
@@ -88,28 +99,29 @@ else {
 if ($num_tables == 0) {
     echo $strNoTablesFound;
 }
-// 2. Shows table informations on mysql >= 3.23 - staybyte - 11 June 2001
-else if (PMA_MYSQL_INT_VERSION >= 32300) {
+// 2. Shows table informations on mysql >= 3.23.03 - staybyte - 11 June 2001
+else {
     ?>
 
 <!-- The tables list -->
-<table border="<?php echo $cfgBorder; ?>">
+<table border="<?php echo $cfg['Border']; ?>">
 <tr>
-    <th>&nbsp;<?php echo ucfirst($strTable); ?>&nbsp;</th>
-    <th><?php echo ucfirst($strRecords); ?></th>
-    <th><?php echo ucfirst($strType); ?></th>
+    <th>&nbsp;<?php echo $strTable; ?>&nbsp;</th>
+    <th><?php echo $strRecords; ?></th>
+    <th><?php echo $strType; ?></th>
     <?php
-    if ($cfgShowStats) {
-        echo '<th>' . ucfirst($strSize) . '</th>';
+    if ($cfg['ShowStats']) {
+        echo '<th>' . $strSize . '</th>';
     }
     echo "\n";
     ?>
+    <th><?php echo $strComments; ?></th>
 </tr>
     <?php
     $i = $sum_entries = $sum_size = 0;
-    while (list($keyname, $sts_data) = each($tables)) {
+    foreach ($tables AS $keyname => $sts_data) {
         $table     = $sts_data['Name'];
-        $bgcolor   = ($i++ % 2) ? $cfgBgcolorOne : $cfgBgcolorTwo;
+        $bgcolor   = ($i++ % 2) ? $cfg['BgcolorOne'] : $cfg['BgcolorTwo'];
         echo "\n";
         ?>
 <tr>
@@ -123,14 +135,14 @@ else if (PMA_MYSQL_INT_VERSION >= 32300) {
         if (isset($sts_data['Type'])) {
             if ($sts_data['Type'] == 'MRG_MyISAM') {
                 $mergetable = TRUE;
-            } else if (!eregi('ISAM|HEAP', $sts_data['Type'])) {
+            } else if (!preg_match('@ISAM|HEAP@i', $sts_data['Type'])) {
                 $nonisam    = TRUE;
             }
         }
 
         if (isset($sts_data['Rows'])) {
             if ($mergetable == FALSE) {
-                if ($cfgShowStats && $nonisam == FALSE) {
+                if ($cfg['ShowStats'] && $nonisam == FALSE) {
                     $tblsize                        =  $sts_data['Data_length'] + $sts_data['Index_length'];
                     $sum_size                       += $tblsize;
                     if ($tblsize > 0) {
@@ -138,18 +150,18 @@ else if (PMA_MYSQL_INT_VERSION >= 32300) {
                     } else {
                         list($formated_size, $unit) =  PMA_formatByteDown($tblsize, 3, 0);
                     }
-                } else if ($cfgShowStats) {
+                } else if ($cfg['ShowStats']) {
                     $formated_size                  = '&nbsp;-&nbsp;';
                     $unit                           = '';
                 }
                 $sum_entries                        += $sts_data['Rows'];
             }
             // MyISAM MERGE Table
-            else if ($cfgShowStats && $mergetable == TRUE) {
+            else if ($cfg['ShowStats'] && $mergetable == TRUE) {
                 $formated_size = '&nbsp;-&nbsp;';
                 $unit          = '';
             }
-            else if ($cfgShowStats) {
+            else if ($cfg['ShowStats']) {
                 $formated_size = 'unknown';
                 $unit          = '';
             }
@@ -168,7 +180,7 @@ else if (PMA_MYSQL_INT_VERSION >= 32300) {
         &nbsp;<?php echo (isset($sts_data['Type']) ? $sts_data['Type'] : '&nbsp;'); ?>&nbsp;
     </td>
             <?php
-            if ($cfgShowStats) {
+            if ($cfg['ShowStats']) {
                 echo "\n";
                 ?>
     <td align="right" bgcolor="<?php echo $bgcolor; ?>" nowrap="nowrap">
@@ -186,11 +198,60 @@ else if (PMA_MYSQL_INT_VERSION >= 32300) {
         }
         echo "\n";
         ?>
+    <td bgcolor="<?php echo $bgcolor; ?>">
+        <?php echo $sts_data['Comment']; ?>
+        <?php
+            if (!empty($sts_data['Comment'])) {
+                $needs_break = '<br />';
+            } else {
+                $needs_break = '';
+            }
+
+            if ((isset($sts_data['Create_time']) && !empty($sts_data['Create_time']))
+                 || (isset($sts_data['Update_time']) && !empty($sts_data['Update_time']))
+                 || (isset($sts_data['Check_time']) && !empty($sts_data['Check_time']))) {
+                echo $needs_break;
+                ?>
+                <table border="0" cellpadding="1" cellspacing="1" width="100%">
+                <?php
+
+                if (isset($sts_data['Create_time']) && !empty($sts_data['Create_time'])) {
+                    ?>
+                    <tr>
+                        <td style="font-size: <?php echo $font_smaller; ?>" align="right"><?php echo $strStatCreateTime . ': '; ?></td>
+                        <td style="font-size: <?php echo $font_smaller; ?>" align="right"><?php echo PMA_localisedDate(strtotime($sts_data['Create_time'])); ?></td>
+                    </tr>
+                    <?php
+                }
+
+                if (isset($sts_data['Update_time']) && !empty($sts_data['Update_time'])) {
+                    ?>
+                    <tr>
+                        <td style="font-size: <?php echo $font_smaller; ?>" align="right"><?php echo $strStatUpdateTime . ': '; ?></td>
+                        <td style="font-size: <?php echo $font_smaller; ?>" align="right"><?php echo PMA_localisedDate(strtotime($sts_data['Update_time'])); ?></td>
+                    </tr>
+                    <?php
+                }
+
+                if (isset($sts_data['Check_time']) && !empty($sts_data['Check_time'])) {
+                    ?>
+                    <tr>
+                        <td style="font-size: <?php echo $font_smaller; ?>" align="right"><?php echo $strStatCheckTime . ': '; ?></td>
+                        <td style="font-size: <?php echo $font_smaller; ?>" align="right"><?php echo PMA_localisedDate(strtotime($sts_data['Check_time'])); ?></td>
+                    </tr>
+                    <?php
+                }
+                ?>
+                </table>
+                <?php
+            }
+        ?>
+    </td>
 </tr>
         <?php
     }
     // Show Summary
-    if ($cfgShowStats) {
+    if ($cfg['ShowStats']) {
         list($sum_formated, $unit) = PMA_formatByteDown($sum_size, 3, 1);
     }
     echo "\n";
@@ -206,7 +267,7 @@ else if (PMA_MYSQL_INT_VERSION >= 32300) {
         <b>--</b>
     </th>
     <?php
-    if ($cfgShowStats) {
+    if ($cfg['ShowStats']) {
         echo "\n";
         ?>
     <th align="right" nowrap="nowrap">
@@ -216,49 +277,32 @@ else if (PMA_MYSQL_INT_VERSION >= 32300) {
     }
     echo "\n";
     ?>
+    <th>&nbsp;</th>
 </tr>
 </table>
     <?php
-} // end case mysql >= 3.23
-
-// 3. Shows tables list mysql < 3.23
-else {
-    $i = 0;
-    echo "\n";
-    ?>
-
-<!-- The tables list -->
-<table border="<?php echo $cfgBorder; ?>">
-<tr>
-    <th>&nbsp;<?php echo ucfirst($strTable); ?>&nbsp;</th>
-    <th><?php echo ucfirst($strRecords); ?></th>
-</tr>
-    <?php
-    while ($i < $num_tables) {
-        $bgcolor = ($i % 2) ? $cfgBgcolorOne : $bgcolor = $cfgBgcolorTwo;
-        echo "\n";
-        ?>
-<tr>
-    <td bgcolor="<?php echo $bgcolor; ?>" nowrap="nowrap">
-        <b><?php echo htmlspecialchars($tables[$i]); ?>&nbsp;</b>
-    </td>
-    <td align="right" bgcolor="<?php echo $bgcolor; ?>" nowrap="nowrap">
-        &nbsp;<?php PMA_countRecords($db, $tables[$i]); ?> 
-    </td>
-</tr>
-        <?php
-        $i++;
-    } // end while
-    echo "\n";
-    ?>
-</table>
-    <?php
-} // end if
-
+}
 
 /**
  * Displays the footer
  */
 echo "\n";
-require('./footer.inc.php');
+?>
+<script type="text/javascript" language="javascript1.2">
+<!--
+function printPage()
+{
+    document.getElementById('print').style.visibility = 'hidden';
+    // Do print the page
+    if (typeof(window.print) != 'undefined') {
+        window.print();
+    }
+    document.getElementById('print').style.visibility = '';
+}
+//-->
+</script>
+<?php
+echo '<br /><br />&nbsp;<input type="button" style="visibility: ; width: 100px; height: 25px" id="print" value="' . $strPrint . '" onclick="printPage()">' . "\n";
+
+require_once('./footer.inc.php');
 ?>

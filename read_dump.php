@@ -1,216 +1,73 @@
 <?php
-/* $Id: read_dump.php,v 1.14 2001/12/11 12:11:14 loic1 Exp $ */
-
-
-/**
- * Removes comment lines and splits up large sql files into individual queries
- *
- * Last revision: September 23, 2001 - gandon
- *
- * @param   array    the splitted sql commands
- * @param   string   the sql commands
- * @param   integer  the MySQL release number (because certains php3 versions
- *                   can't get the value of a constant from within a function)
- *
- * @return  boolean  always true
- *
- * @access  public
- */
-function PMA_splitSqlFile(&$ret, $sql, $release)
-{
-    $sql          = trim($sql);
-    $sql_len      = strlen($sql);
-    $char         = '';
-    $string_start = '';
-    $in_string    = FALSE;
-
-    for ($i = 0; $i < $sql_len; ++$i) {
-        $char = $sql[$i];
-
-        // We are in a string, check for not escaped end of strings except for
-        // backquotes that can't be escaped
-        if ($in_string) {
-            for (;;) {
-                $i         = strpos($sql, $string_start, $i);
-                // No end of string found -> add the current substring to the
-                // returned array
-                if (!$i) {
-                    $ret[] = $sql;
-                    return TRUE;
-                }
-                // Backquotes or no backslashes before quotes: it's indeed the
-                // end of the string -> exit the loop
-                else if ($string_start == '`' || $sql[$i-1] != '\\') {
-                    $string_start      = '';
-                    $in_string         = FALSE;
-                    break;
-                }
-                // one or more Backslashes before the presumed end of string...
-                else {
-                    // ... first checks for escaped backslashes
-                    $j                     = 2;
-                    $escaped_backslash     = FALSE;
-                    while ($i-$j > 0 && $sql[$i-$j] == '\\') {
-                        $escaped_backslash = !$escaped_backslash;
-                        $j++;
-                    }
-                    // ... if escaped backslashes: it's really the end of the
-                    // string -> exit the loop
-                    if ($escaped_backslash) {
-                        $string_start  = '';
-                        $in_string     = FALSE;
-                        break;
-                    }
-                    // ... else loop
-                    else {
-                        $i++;
-                    }
-                } // end if...elseif...else
-            } // end for
-        } // end if (in string)
-
-        // We are not in a string, first check for delimiter...
-        else if ($char == ';') {
-            // if delimiter found, add the parsed part to the returned array
-            $ret[]      = substr($sql, 0, $i);
-            $sql        = ltrim(substr($sql, min($i + 1, $sql_len)));
-            $sql_len    = strlen($sql);
-            if ($sql_len) {
-                $i      = -1;
-            } else {
-                // The submited statement(s) end(s) here
-                return TRUE;
-            }
-        } // end else if (is delimiter)
-
-        // ... then check for start of a string,...
-        else if (($char == '"') || ($char == '\'') || ($char == '`')) {
-            $in_string    = TRUE;
-            $string_start = $char;
-        } // end else if (is start of string)
-
-        // ... for start of a comment (and remove this comment if found)...
-        else if ($char == '#'
-                 || ($char == ' ' && $i > 1 && $sql[$i-2] . $sql[$i-1] == '--')) {
-            // starting position of the comment depends on the comment type
-            $start_of_comment = (($sql[$i] == '#') ? $i : $i-2);
-            // if no "\n" exits in the remaining string, checks for "\r"
-            // (Mac eol style)
-            $end_of_comment   = (strpos(' ' . $sql, "\012", $i+2))
-                              ? strpos(' ' . $sql, "\012", $i+2)
-                              : strpos(' ' . $sql, "\015", $i+2);
-            if (!$end_of_comment) {
-                // no eol found after '#', add the parsed part to the returned
-                // array if required and exit
-                if ($start_of_comment > 0) {
-                    $ret[]    = trim(substr($sql, 0, $start_of_comment));
-                }
-                return TRUE;
-            } else {
-                $sql          = substr($sql, 0, $start_of_comment)
-                              . ltrim(substr($sql, $end_of_comment));
-                $sql_len      = strlen($sql);
-                $i--;
-            } // end if...else
-        } // end else if (is comment)
-
-        // ... and finally disactivate the "/*!...*/" syntax if MySQL < 3.22.07
-        else if ($release < 32270
-                 && ($char == '!' && $i > 1  && $sql[$i-2] . $sql[$i-1] == '/*')) {
-            $sql[$i] = ' ';
-        } // end else if
-
-        // loic1: send a fake header to bypass browser timeout
-        header('Expires: 0');
-    } // end for
-
-    // add any rest to the returned array
-    if (!empty($sql) && ereg('[^[:space:]]+', $sql)) {
-        $ret[] = $sql;
-    }
-
-    return TRUE;
-} // end of the 'PMA_splitSqlFile()' function
-
-
-if (!function_exists('is_uploaded_file')) {
-    /**
-     * Emulates the 'is_uploaded_file()' function for old php versions.
-     * Grabbed at the php manual:
-     *     http://www.php.net/manual/en/features.file-upload.php
-     *
-     * @param   string    the name of the file to check
-     *
-     * @return  boolean   wether the file has been uploaded or not
-     *
-     * @access  public
-     */
-    function is_uploaded_file($filename) {
-        if (!$tmp_file = @get_cfg_var('upload_tmp_dir')) {
-            $tmp_file = tempnam('','');
-            $deleted  = @unlink($tmp_file);
-            $tmp_file = dirname($tmp_file);
-        }
-        $tmp_file     .= '/' . basename($filename);
-
-        // User might have trailing slash in php.ini...
-        return (ereg_replace('/+', '/', $tmp_file) == $filename);
-    } // end of the 'is_uploaded_file()' emulated function
-} // end if
-
-
-
-/**
- * Increases the max. allowed time to run a script
- */
-@set_time_limit($cfgExecTimeLimit);
-
+/* $Id: read_dump.php,v 2.32 2004/12/28 14:05:47 nijel Exp $ */
+// vim: expandtab sw=4 ts=4 sts=4:
 
 /**
  * Gets some core libraries
  */
-require('./libraries/grab_globals.lib.php');
-require('./libraries/common.lib.php');
+require_once('./libraries/read_dump.lib.php');
+require_once('./libraries/grab_globals.lib.php');
+require_once('./libraries/common.lib.php');
+
+if (!isset($db)) {
+    $db = '';
+}
+
+/**
+ * Increases the max. allowed time to run a script
+ */
+@set_time_limit($cfg['ExecTimeLimit']);
 
 
 /**
  * Defines the url to return to in case of error in a sql statement
  */
-if (!isset($goto)
-    || ($goto != 'db_details.php' && $goto != 'tbl_properties.php')) {
+if (!isset($goto) || !preg_match('@^(db_details|tbl_properties)(_[a-z]*)?\.php$@i', $goto)) {
     $goto = 'db_details.php';
 }
 $err_url  = $goto
-          . '?lang=' . $lang
-          . '&amp;server=' . $server
-          . '&amp;db=' . urlencode($db)
-          . (($goto == 'tbl_properties.php') ? '&amp;table=' . urlencode($table) : '');
+          . '?' . PMA_generate_common_url($db)
+          . (preg_match('@^tbl_properties(_[a-z]*)?\.php$@', $goto) ? '&amp;table=' . urlencode($table) : '');
 
 
 /**
- * Set up default values for some variables and 
+ * Set up default values for some variables
  */
 $view_bookmark = 0;
 $sql_bookmark  = isset($sql_bookmark) ? $sql_bookmark : '';
 $sql_query     = isset($sql_query)    ? $sql_query    : '';
-$sql_file      = !empty($sql_file)    ? $sql_file     : 'none';
 
+if (!empty($sql_localfile) && !empty($cfg['UploadDir'])) {
+
+    // sanitize $sql_localfile as it comes from a POST
+    $sql_localfile = PMA_securePath($sql_localfile);
+
+    if (substr($cfg['UploadDir'], -1) != '/') {
+        $cfg['UploadDir'] .= '/';
+    }
+    $sql_file  = $cfg['UploadDir'] . $sql_localfile;
+} else if (empty($sql_file)) {
+    $sql_file  = 'none';
+}
 
 /**
  * Bookmark Support: get a query back from bookmark if required
  */
 if (!empty($id_bookmark)) {
-    include('./libraries/bookmark.lib.php');
-    switch($action_bookmark) {
+    require_once('./libraries/bookmark.lib.php');
+    switch ($action_bookmark) {
         case 0: // bookmarked query that have to be run
-            $sql_query = PMA_queryBookmarks($db, $cfgBookmark, $id_bookmark);
+            $sql_query = PMA_queryBookmarks($db, $cfg['Bookmark'], $id_bookmark,'id', (isset($action_bookmark_all) ? TRUE : FALSE));
+            if (isset($bookmark_variable) && !empty($bookmark_variable)) {
+                $sql_query = preg_replace('|/\*(.*)\[VARIABLE\](.*)\*/|imsU', '${1}' . PMA_sqlAddslashes($bookmark_variable) . '${2}', $sql_query);
+            }
             break;
         case 1: // bookmarked query that have to be displayed
-            $sql_query = PMA_queryBookmarks($db, $cfgBookmark, $id_bookmark);
+            $sql_query = PMA_queryBookmarks($db, $cfg['Bookmark'], $id_bookmark);
             $view_bookmark = 1;
             break;
         case 2: // bookmarked query that have to be deleted
-            $sql_query = PMA_deleteBookmarks($db, $cfgBookmark, $id_bookmark);
+            $sql_query = PMA_deleteBookmarks($db, $cfg['Bookmark'], $id_bookmark);
             break;
     }
 } // end if
@@ -219,19 +76,83 @@ if (!empty($id_bookmark)) {
 /**
  * Prepares the sql query
  */
-// Gets the query from a file if required 
+// Gets the query from a file if required
 if ($sql_file != 'none') {
-    if (file_exists($sql_file) && is_uploaded_file($sql_file)) {
-        $sql_query = fread(fopen($sql_file, 'r'), filesize($sql_file));
-        if (get_magic_quotes_runtime() == 1) {
-            $sql_query = stripslashes($sql_query);
+    // file_exists() returns false if open_basedir is set
+
+    if ((is_uploaded_file($sql_file))
+        ||(isset($sql_localfile) && $sql_file == $cfg['UploadDir'] . $sql_localfile)  && file_exists($sql_file)) {
+
+        $open_basedir = @ini_get('open_basedir');
+
+        if (!isset($sql_file_compression)) $sql_file_compression = '';
+
+        // If we are on a server with open_basedir, we must move the file
+        // before opening it. The doc explains how to create the "./tmp"
+        // directory
+
+        if (!empty($open_basedir)) {
+
+            $tmp_subdir = (PMA_IS_WINDOWS ? '.\\tmp\\' : './tmp/');
+
+            // function is_writeable() is valid on PHP3 and 4
+            if (!is_writeable($tmp_subdir)) {
+                $sql_query = PMA_readFile($sql_file, $sql_file_compression);
+                if ($sql_query == FALSE) {
+                    $message = $strFileCouldNotBeRead;
+                }
+            } else {
+                $sql_file_new = $tmp_subdir . basename($sql_file);
+                if (move_uploaded_file($sql_file, $sql_file_new)) {
+                    $sql_query = PMA_readFile($sql_file_new, $sql_file_compression);
+                    if ($sql_query == FALSE) {
+                        $message = $strFileCouldNotBeRead;
+                    }
+                    unlink($sql_file_new);
+                } else {
+                    // Moving uploaded file failed. Falling back to try reading it immediately.
+                    $sql_query = PMA_readFile($sql_file, $sql_file_compression);
+                    if ($sql_query == FALSE) {
+                        $message = $strFileCouldNotBeRead;
+                    }
+                }
+            }
+        } else {
+            // read from the normal upload dir
+            $sql_query = PMA_readFile($sql_file, $sql_file_compression);
+            if ($sql_query == FALSE) {
+                $message = $strFileCouldNotBeRead;
+            }
         }
-    }
+
+        // Convert the file's charset if necessary
+        if (PMA_MYSQL_INT_VERSION < 40100
+            && $cfg['AllowAnywhereRecoding'] && $allow_recoding
+            && isset($charset_of_file) && $charset_of_file != $charset) {
+            $sql_query = PMA_convert_string($charset_of_file, $charset, $sql_query);
+        } else if (PMA_MYSQL_INT_VERSION >= 40100
+            && isset($charset_of_file) && $charset_of_file != 'utf8') {
+            $sql_query = 'SET NAMES \'' . $charset_of_file . "';\n"
+            . $sql_query . "\n"
+            . "SET CHARACTER SET utf8;\n"
+            . "SET SESSION collation_connection ='" . $collation_connection . "';";
+        }
+    } // end uploaded file stuff
 }
-else if (empty($id_bookmark) && get_magic_quotes_gpc() == 1) {
-    $sql_query = stripslashes($sql_query);
-}
-$sql_query = trim($sql_query);
+
+// Kanji convert SQL textfile 2002/1/4 by Y.Kawada
+if (@function_exists('PMA_kanji_str_conv')) {
+    // do not trim here: see bug #1030644
+    //$sql_tmp   = trim($sql_query);
+    $sql_tmp   = $sql_query;
+    PMA_change_enc_order();
+    $sql_query = PMA_kanji_str_conv($sql_tmp, $knjenc, isset($xkana) ? $xkana : '');
+    PMA_change_enc_order();
+} //else {
+    // do not trim here: see bug #1030644
+    //$sql_query = trim($sql_query);
+//}
+
 // $sql_query come from the query textarea, if it's a reposted query gets its
 // 'true' value
 if (!empty($prev_sql_query)) {
@@ -242,19 +163,32 @@ if (!empty($prev_sql_query)) {
 }
 
 // Drop database is not allowed -> ensure the query can be run
-if (!$cfgAllowUserDropDatabase
-    && eregi('DROP[[:space:]]+(IF EXISTS[[:space:]]+)?DATABASE ', $sql_query)) {
+if (!$cfg['AllowUserDropDatabase']
+    && preg_match('@DROP[[:space:]]+(IF EXISTS[[:space:]]+)?DATABASE @i', $sql_query)) {
     // Checks if the user is a Superuser
     // TODO: set a global variable with this information
     // loic1: optimized query
-    $result = @mysql_query('USE mysql');
-    if (mysql_error()) {
-        include('./header.inc.php');
+    if (!($result = PMA_DBI_select_db('mysql'))) {
+        require_once('./header.inc.php');
         PMA_mysqlDie($strNoDropDatabases, '', '', $err_url);
     }
 }
 define('PMA_CHK_DROP', 1);
 
+/**
+ * Store a query as a bookmark before executing it?
+ */
+if (isset($SQLbookmark) && $sql_query != '') {
+    require_once('./libraries/bookmark.lib.php');
+    $bfields = array(
+                 'dbase' => $db,
+                 'user'  => $cfg['Bookmark']['user'],
+                 'query' => urlencode($sql_query),
+                 'label' => $bkm_label
+    );
+
+    PMA_addBookmarks($bfields, $cfg['Bookmark'], (isset($bkm_all_users) && $bkm_all_users == 'true' ? true : false));
+}
 
 /**
  * Executes the query
@@ -266,44 +200,151 @@ if ($sql_query != '') {
 
     // Copy of the cleaned sql statement for display purpose only (see near the
     // beginning of "db_details.php" & "tbl_properties.php")
-    if ($sql_file != 'none' && $pieces_count > 10) {
-         // Be nice with bandwidth...
-        $sql_query_cpy = $sql_query = '';
+
+    // You can either
+    // * specify the amount of maximum pieces per query (having max_*_length set to 0!) or
+    // * specify the amount of maximum chars  per query (having max_*_pieces set to 0!)
+    // - max_nofile_* is used for any queries submitted via copy&paste in the textarea
+    // - max_file_*   is used for any file-submitted query
+    if (!$cfg['VerboseMultiSubmit']) {
+        // Here be the values if the Verbose-Mode (see config.inc.php) is NOT activated
+        $max_nofile_length = 500;
+        $max_nofile_pieces = 0;
+        // Nijel: Here must be some limit, as extended inserts can be really
+        //        huge and parsing them eats megabytes of memory
+        $max_file_length   = 10000;
+        $max_file_pieces   = 10;
     } else {
-        $sql_query_cpy = implode(";\n", $pieces) . ';';
+        // Values for verbose-mode
+        $max_nofile_length = 0;
+        $max_nofile_pieces = 50;
+        // Nijel: Here must be some limit, as extended inserts can be really
+        //        huge and parsing them eats megabytes of memory
+        $max_file_length   = 50000;
+        $max_file_pieces   = 50;
     }
 
-    // Only one query to run
-    if ($pieces_count == 1 && !empty($pieces[0]) && $view_bookmark == 0) {
-        // sql.php will stripslash the query if get_magic_quotes_gpc
-        if (get_magic_quotes_gpc() == 1) {
-            $sql_query = addslashes($pieces[0]);
-        } else {
-            $sql_query = $pieces[0];
-        }
-        if (eregi('^(DROP|CREATE)[[:space:]]+(IF EXISTS[[:space:]]+)?(TABLE|DATABASE)[[:space:]]+(.+)', $sql_query)) {
-            $reload = 1;
-        }
-        include('./sql.php');
-        exit();
-    }
+    if ($sql_file != 'none' &&
+          (($max_file_pieces != 0 && ($pieces_count > $max_file_pieces))
+            ||
+          ($max_file_length != 0 && (strlen($sql_query) > $max_file_length)))) {
+          // Be nice with bandwidth...
+        $sql_query_cpy = $sql_query = '';
+        $save_bandwidth = TRUE;
+        $save_bandwidth_length = $max_file_length;
+        $save_bandwidth_pieces = $max_file_pieces;
+    } else {
 
-    // Runs multiple queries
-    else if (mysql_select_db($db)) {
-        for ($i = 0; $i < $pieces_count; $i++) {
-            $a_sql_query = $pieces[$i];
-            $result = mysql_query($a_sql_query);
-            if ($result == FALSE) { // readdump failed
-                $my_die = $a_sql_query;
-                break;
-            }
-            if (!isset($reload) && eregi('^(DROP|CREATE)[[:space:]]+(IF EXISTS[[:space:]]+)?(TABLE|DATABASE)[[:space:]]+(.+)', $a_sql_query)) {
+        $sql_query_cpy = $sql_query;
+         // Be nice with bandwidth... for now, an arbitrary limit of 500,
+         // could be made configurable but probably not necessary
+        if (($max_nofile_length != 0 && (strlen($sql_query_cpy) > $max_nofile_length))
+              || ($max_nofile_pieces != 0 && $pieces_count > $max_nofile_pieces)) {
+            $sql_query_cpy = $sql_query = '';
+            $save_bandwidth = TRUE;
+            $save_bandwidth_length = $max_nofile_length;
+            $save_bandwidth_pieces = $max_nofile_pieces;
+        }
+    }
+    // really run the query?
+    if ($view_bookmark == 0) {
+        // Only one query to run
+        if ($pieces_count == 1 && !empty($pieces[0]['query'])) {
+            $sql_query = $pieces[0]['query'];
+            // .*? below is non greedy expansion, just in case somebody wants to understand it...
+            if (preg_match('@^((-- |#)[^\n]*\n|/\*.*?\*/)*(DROP|CREATE)[[:space:]]+(IF EXISTS[[:space:]]+)?(TABLE|DATABASE)[[:space:]]+(.+)@im', $sql_query)) {
                 $reload = 1;
             }
-        } // end for
-    } // end else if
+            require('./sql.php');
+        }
+
+        // Runs multiple queries
+        // (Possibly to create a db, so no db was selected in the
+        //  left frame and $db is empty)
+        else if (empty($db) || PMA_DBI_select_db($db)) {
+            $mult = TRUE;
+            $info_msg = '';
+            $info_count = 0;
+
+            // just skip last empty query (can contain just comments at the end)
+            $count = $pieces_count;
+            if ($pieces[$count - 1]['empty']) $count--;
+
+            for ($i = 0; $i < $count; $i++) {
+                $a_sql_query = $pieces[$i]['query'];
+
+                // .*? below is non greedy expansion, just in case somebody wants to understand it...
+                // looks ok here without using PCRE_MULTILINE
+                if ($i == $count - 1 && preg_match('@^((-- |#)[^\n]*\n|/\*.*?\*/)*(SELECT|SHOW)@i', $a_sql_query)) {
+                    $complete_query = $sql_query;
+                    $display_query = $sql_query;
+                    $sql_query = $a_sql_query;
+                    require('./sql.php');
+                }
+                $result = PMA_DBI_try_query($a_sql_query);
+                if ($result == FALSE) { // readdump failed
+                    if (isset($my_die) && $cfg['IgnoreMultiSubmitErrors']) {
+                        $my_die[] = "\n\n" . $a_sql_query;
+                    } elseif ($cfg['IgnoreMultiSubmitErrors']) {
+                        $my_die = array();
+                        $my_die[] = $a_sql_query;
+                    } else {
+                        $my_die = $a_sql_query;
+                    }
+
+                    if ($cfg['VerboseMultiSubmit']) {
+                        $info_msg .= $a_sql_query . '; # ' . $strError . "\n";
+                        $info_count++;
+                    }
+
+                    if (!$cfg['IgnoreMultiSubmitErrors']) {
+                        break;
+                    }
+                } else if ($cfg['VerboseMultiSubmit']) {
+                    $a_num_rows = (int)@PMA_DBI_num_rows($result);
+                    $a_aff_rows = (int)@PMA_DBI_affected_rows();
+                    if ($a_num_rows > 0) {
+                        $a_rows = $a_num_rows;
+                        $a_switch = $strRows . ': ';
+                    } elseif ($a_aff_rows > 0) {
+                        $a_rows = $a_aff_rows;
+                        $a_switch = $strAffectedRows;;
+                    } else {
+                        $a_rows = '';
+                        $a_switch = $strEmptyResultSet;
+                    }
+
+                    $info_msg .= $a_sql_query . "; # " . $a_switch . $a_rows . "\n";
+                    $info_count++;
+                }
+
+                // If a 'USE <db>' SQL-clause was found and the query succeeded, set our current $db to the new one
+                // .*? below is non greedy expansion, just in case somebody wants to understand it...
+                if ($result != FALSE && preg_match('@^((-- |#)^[\n]*|/\*.*?\*/)*USE[[:space:]]*([\S]+)@i', $a_sql_query, $match)) {
+                    $db = trim($match[3]);
+                    $reload = 1;
+                }
+
+                // .*? below is non greedy expansion, just in case somebody wants to understand it...
+                // must check $a_sql_query and use PCRE_MULTILINE
+
+                if (!isset($reload) && preg_match('@^((-- |#)[^\n]*\n|/\*.*?\*/)*(DROP|CREATE)[\s]+(IF EXISTS[[:space:]]+)?(TABLE|DATABASE)[[:space:]]+(.+)@im', $a_sql_query)) {
+                    $reload = 1;
+                }
+            } // end for
+
+            if ($cfg['VerboseMultiSubmit'] && strlen($info_msg) > 0 &&
+                  ((!isset($save_bandwidth) || $save_bandwidth == FALSE) ||
+                  ($save_bandwidth_pieces == 0 && strlen($info_msg) < $save_bandwidth_length) ||
+                  ($save_bandwidth_length == 0 && $info_count < $save_bandwidth_pieces))) {
+                $sql_query = $info_msg;
+            }
+
+        } // end else if
+    } // end if (really run the query)
     unset($pieces);
 } // end if
+
 
 
 /**
@@ -311,8 +352,15 @@ if ($sql_query != '') {
  */
 if (isset($my_die)) {
     $js_to_run = 'functions.js';
-    include('./header.inc.php');
-    PMA_mysqlDie('', $my_die, '', $err_url);
+    require_once('./header.inc.php');
+    if (is_array($my_die)) {
+        foreach ($my_die AS $key => $die_string) {
+            PMA_mysqlDie('', $die_string, '', $err_url, FALSE);
+            echo '<hr />';
+        }
+    } else {
+        PMA_mysqlDie('', $my_die, '', $err_url, TRUE);
+    }
 }
 
 
@@ -326,13 +374,15 @@ if (isset($table) && $table == '') {
 if (isset($db) && $db == '') {
     unset($db);
 }
+
 $is_db = $is_table = FALSE;
 if ($goto == 'tbl_properties.php') {
     if (!isset($table)) {
         $goto     = 'db_details.php';
     } else {
-        $is_table = @mysql_query('SHOW TABLES LIKE \'' . PMA_sqlAddslashes($table, TRUE) . '\'');
-        if (!@mysql_numrows($is_table)) {
+        PMA_DBI_select_db($db);
+        $is_table = PMA_DBI_try_query('SHOW TABLES LIKE \'' . PMA_sqlAddslashes($table, TRUE) . '\'', NULL, PMA_DBI_QUERY_STORE);
+        if (!($is_table && @PMA_DBI_num_rows($is_table))) {
             $goto = 'db_details.php';
             unset($table);
         }
@@ -345,7 +395,7 @@ if ($goto == 'db_details.php') {
     if (!isset($db)) {
         $goto     = 'main.php';
     } else {
-        $is_db    = @mysql_select_db($db);
+        $is_db    = @PMA_DBI_select_db($db);
         if (!$is_db) {
             $goto = 'main.php';
             unset($db);
@@ -356,9 +406,13 @@ if ($goto == 'db_details.php') {
 if (!empty($id_bookmark) && $action_bookmark == 2) {
     $message   = $strBookmarkDeleted;
 } else if (!isset($sql_query_cpy)) {
-    $message   = $strNoQuery;
+    if (empty($message)) {
+        $message   = $strNoQuery;
+    }
 } else if ($sql_query_cpy == '') {
-    $message   = "$strSuccess&nbsp;:<br />$strTheContent ($pieces_count $strInstructions)&nbsp;";
+    $message   = "$strSuccess:[br]$strTheContent ("
+               . (isset($sql_file_name) ? $sql_file_name . ': ' : '')
+               . "$pieces_count $strInstructions)&nbsp;";
 } else {
     $message   = $strSuccess;
 }
@@ -367,7 +421,8 @@ if ($goto == 'db_details.php' || $goto == 'tbl_properties.php') {
     $js_to_run = 'functions.js';
 }
 if ($goto != 'main.php') {
-    include('./header.inc.php');
+    require_once('./header.inc.php');
 }
+$active_page = $goto;
 require('./' . $goto);
 ?>

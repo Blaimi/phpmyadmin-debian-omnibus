@@ -1,4 +1,4 @@
-/* $Id: indexes.js,v 1.2 2001/11/24 16:59:53 loic1 Exp $ */
+/* $Id: indexes.js,v 2.0 2003/11/18 15:20:43 nijel Exp $ */
 
 
 /**

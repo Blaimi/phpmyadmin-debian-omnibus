@@ -1,67 +1,77 @@
 <?php
-/* $Id: tbl_create.php,v 1.20 2001/11/23 01:03:20 loic1 Exp $ */
+/* $Id: tbl_create.php,v 2.12 2004/12/26 22:47:40 lem9 Exp $ */
+// vim: expandtab sw=4 ts=4 sts=4:
 
 
 /**
  * Get some core libraries
  */
-require('./libraries/grab_globals.lib.php');
-if (isset($submit)) {
-    $js_to_run = 'functions.js';
-}
-require('./header.inc.php');
+require_once('./libraries/grab_globals.lib.php');
+$js_to_run = 'functions.js';
+require_once('./header.inc.php');
 
+// Check parameters
+
+require_once('./libraries/common.lib.php');
+
+PMA_checkParameters(array('db', 'table'));
 
 /**
  * Defines the url to return to in case of error in a sql statement
  */
-$err_url = 'tbl_properties.php'
-         . '?lang=' . $lang
-         . '&amp;server=' . $server
-         . '&amp;db=' . urlencode($db)
-         . '&amp;table=' . urlencode($table);
+$err_url = $cfg['DefaultTabTable'] . '?' . PMA_generate_common_url($db, $table);
 
 
 /**
  * Selects the database to work with
  */
-mysql_select_db($db);
+PMA_DBI_select_db($db);
 
 
 /**
  * The form used to define the structure of the table has been submitted
  */
-if (isset($submit)) {
+$abort = FALSE;
+if (isset($submit_num_fields)) {
+    $regenerate = TRUE;
+    $num_fields = $orig_num_fields + $added_fields;
+} else if (isset($do_save_data)) {
     $sql_query = $query_cpy = '';
 
+    // Transforms the radio button field_key into 3 arrays
+    $field_cnt = count($field_name);
+    for ($i = 0; $i < $field_cnt; ++$i) {
+        if (isset(${'field_key_' . $i})) {
+            if (${'field_key_' . $i} == 'primary_' . $i) {
+                $field_primary[] = $i;
+            }
+            if (${'field_key_' . $i} == 'index_' . $i) {
+                $field_index[]   = $i;
+            }
+            if (${'field_key_' . $i} == 'unique_' . $i) {
+                $field_unique[]  = $i;
+            }
+        } // end if
+    } // end for
     // Builds the fields creation statements
-    $fields_cnt = count($field_name);
-    for ($i = 0; $i < $fields_cnt; $i++) {
-        if (empty($field_name[$i])) {
+    for ($i = 0; $i < $field_cnt; $i++) {
+        // '0' is also empty for php :-(
+        if (empty($field_name[$i]) && $field_name[$i] != '0') {
             continue;
         }
-        if (get_magic_quotes_gpc()) {
-            $field_name[$i] = stripslashes($field_name[$i]);
-        }
-        if (PMA_MYSQL_INT_VERSION < 32306) {
-            PMA_checkReservedWords($field_name[$i], $err_url);
-        }
         $query = PMA_backquote($field_name[$i]) . ' ' . $field_type[$i];
-        if ($field_length[$i] != '') {
-            if (get_magic_quotes_gpc()) {
-                $query .= '(' . stripslashes($field_length[$i]) . ')';
-            } else {
-                $query .= '(' . $field_length[$i] . ')';
-            }
+        if ($field_length[$i] != ''
+            && !preg_match('@^(DATE|DATETIME|TIME|TINYBLOB|TINYTEXT|BLOB|TEXT|MEDIUMBLOB|MEDIUMTEXT|LONGBLOB|LONGTEXT)$@i', $field_type[$i])) {
+            $query .= '(' . $field_length[$i] . ')';
         }
         if ($field_attribute[$i] != '') {
             $query .= ' ' . $field_attribute[$i];
+        } else if (PMA_MYSQL_INT_VERSION >= 40100 && !empty($field_collation[$i])) {
+            $query .= PMA_generateCharsetQueryPart($field_collation[$i]);
         }
         if ($field_default[$i] != '') {
             if (strtoupper($field_default[$i]) == 'NULL') {
                 $query .= ' DEFAULT NULL';
-            } else if (get_magic_quotes_gpc()) {
-                $query .= ' DEFAULT \'' . PMA_sqlAddslashes(stripslashes($field_default[$i])) . '\'';
             } else {
                 $query .= ' DEFAULT \'' . PMA_sqlAddslashes($field_default[$i]) . '\'';
             }
@@ -71,26 +81,15 @@ if (isset($submit)) {
         }
         if ($field_extra[$i] != '') {
             $query .= ' ' . $field_extra[$i];
-            // An auto_increment field must be use as a primary key
-            if ($field_extra[$i] == 'AUTO_INCREMENT' && isset($field_primary)) {
-                $primary_cnt = count($field_primary);
-                for ($j = 0; $j < $primary_cnt && $field_primary[$j] != $i; $j++) {
-                    // void
-                } // end for
-                if ($field_primary[$j] == $i) {
-                    $query .= ' PRIMARY KEY';
-                    unset($field_primary[$j]);
-                } // end if
-            } // end if (auto_increment)
         }
         $query .= ', ';
         $sql_query .= $query;
         $query_cpy .= "\n" . '  ' . $query;
     } // end for
-    unset($fields_cnt);
+    unset($field_cnt);
     unset($query);
-    $sql_query = ereg_replace(', $', '', $sql_query);
-    $query_cpy = ereg_replace(', $', '', $query_cpy);
+    $sql_query = preg_replace('@, $@', '', $sql_query);
+    $query_cpy = preg_replace('@, $@', '', $query_cpy);
 
     // Builds the primary keys statements
     $primary     = '';
@@ -98,14 +97,11 @@ if (isset($submit)) {
     for ($i = 0; $i < $primary_cnt; $i++) {
         $j = $field_primary[$i];
         if (!empty($field_name[$j])) {
-            if (get_magic_quotes_gpc()) {
-                $field_name[$j] = stripslashes($field_name[$j]);
-            }
             $primary .= PMA_backquote($field_name[$j]) . ', ';
         }
     } // end for
     unset($primary_cnt);
-    $primary = ereg_replace(', $', '', $primary);
+    $primary = preg_replace('@, $@', '', $primary);
     if (!empty($primary)) {
         $sql_query .= ', PRIMARY KEY (' . $primary . ')';
         $query_cpy .= ',' . "\n" . '  PRIMARY KEY (' . $primary . ')';
@@ -118,14 +114,11 @@ if (isset($submit)) {
     for ($i = 0;$i < $index_cnt; $i++) {
         $j = $field_index[$i];
         if (!empty($field_name[$j])) {
-            if (get_magic_quotes_gpc()) {
-                $field_name[$j] = stripslashes($field_name[$j]);
-            }
             $index .= PMA_backquote($field_name[$j]) . ', ';
         }
     } // end for
     unset($index_cnt);
-    $index = ereg_replace(', $', '', $index);
+    $index = preg_replace('@, $@', '', $index);
     if (!empty($index)) {
         $sql_query .= ', INDEX (' . $index . ')';
         $query_cpy .= ',' . "\n" . '  INDEX (' . $index . ')';
@@ -138,14 +131,11 @@ if (isset($submit)) {
     for ($i = 0; $i < $unique_cnt; $i++) {
         $j = $field_unique[$i];
         if (!empty($field_name[$j])) {
-            if (get_magic_quotes_gpc()) {
-                $field_name[$j] = stripslashes($field_name[$j]);
-            }
            $unique .= PMA_backquote($field_name[$j]) . ', ';
         }
     } // end for
     unset($unique_cnt);
-    $unique = ereg_replace(', $', '', $unique);
+    $unique = preg_replace('@, $@', '', $unique);
     if (!empty($unique)) {
         $sql_query .= ', UNIQUE (' . $unique . ')';
         $query_cpy .= ',' . "\n" . '  UNIQUE (' . $unique . ')';
@@ -158,14 +148,11 @@ if (isset($submit)) {
     for ($i = 0; $i < $fulltext_cnt; $i++) {
         $j = $field_fulltext[$i];
         if (!empty($field_name[$j])) {
-            if (get_magic_quotes_gpc()) {
-                $field_name[$j] = stripslashes($field_name[$j]);
-            }
            $fulltext .= PMA_backquote($field_name[$j]) . ', ';
         }
     } // end for
-    unset($field_fulltext);
-    $fulltext = ereg_replace(', $', '', $fulltext);
+
+    $fulltext = preg_replace('@, $@', '', $fulltext);
     if (!empty($fulltext)) {
         $sql_query .= ', FULLTEXT (' . $fulltext . ')';
         $query_cpy .= ',' . "\n" . '  FULLTEXT (' . $fulltext . ')';
@@ -176,33 +163,67 @@ if (isset($submit)) {
     $sql_query      = 'CREATE TABLE ' . PMA_backquote($table) . ' (' . $sql_query . ')';
     $query_cpy      = 'CREATE TABLE ' . PMA_backquote($table) . ' (' . $query_cpy . "\n" . ')';
 
-    // Adds table type and comments (2 May 2001 - Robbat2)
+    // Adds table type, character set and comments
     if (!empty($tbl_type) && ($tbl_type != 'Default')) {
         $sql_query .= ' TYPE = ' . $tbl_type;
-        $query_cpy .= ' TYPE = ' . $tbl_type;
+        $query_cpy .= "\n" . 'TYPE = ' . $tbl_type;
     }
-    if (PMA_MYSQL_INT_VERSION >= 32300 && !empty($comment)) {
-        if (get_magic_quotes_gpc()) {
-            $comment = stripslashes($comment);
-        }
+    if (PMA_MYSQL_INT_VERSION >= 40100 && !empty($tbl_collation)) {
+        $sql_query .= PMA_generateCharsetQueryPart($tbl_collation);
+        $query_cpy .= "\n" . PMA_generateCharsetQueryPart($tbl_collation);
+    }
+
+    if (!empty($comment)) {
         $sql_query .= ' COMMENT = \'' . PMA_sqlAddslashes($comment) . '\'';
         $query_cpy .= "\n" . 'COMMENT = \'' . PMA_sqlAddslashes($comment) . '\'';
     }
 
     // Executes the query
-    $result    = mysql_query($sql_query) or PMA_mysqlDie('', '', '', $err_url);
-    $sql_query = $query_cpy . ';';
-    unset($query_cpy);
-    $message   = $strTable . ' ' . htmlspecialchars($table) . ' ' . $strHasBeenCreated;
-    include('./tbl_properties.php');
-    exit();
-} // end do create table
+    $error_create = FALSE;
+    $result    = PMA_DBI_try_query($sql_query) or $error_create = TRUE;
 
+    if ($error_create == FALSE) {
+        $sql_query = $query_cpy . ';';
+        unset($query_cpy);
+        $message   = $strTable . ' ' . htmlspecialchars($table) . ' ' . $strHasBeenCreated;
+
+        // garvin: If comments were sent, enable relation stuff
+        require_once('./libraries/relation.lib.php');
+        require_once('./libraries/transformations.lib.php');
+
+        $cfgRelation = PMA_getRelationsParam();
+
+        // garvin: Update comment table, if a comment was set.
+        if (isset($field_comments) && is_array($field_comments) && $cfgRelation['commwork']) {
+            foreach ($field_comments AS $fieldindex => $fieldcomment) {
+                PMA_setComment($db, $table, $field_name[$fieldindex], $fieldcomment);
+            }
+        }
+
+        // garvin: Update comment table for mime types [MIME]
+        if (isset($field_mimetype) && is_array($field_mimetype) && $cfgRelation['commwork'] && $cfgRelation['mimework'] && $cfg['BrowseMIME']) {
+            foreach ($field_mimetype AS $fieldindex => $mimetype) {
+                PMA_setMIME($db, $table, $field_name[$fieldindex], $mimetype, $field_transformation[$fieldindex], $field_transformation_options[$fieldindex]);
+            }
+        }
+
+        require('./' . $cfg['DefaultTabTable']);
+        $abort = TRUE;
+        exit();
+    } else {
+        PMA_mysqlDie('', '', '', $err_url, FALSE);
+        // garvin: An error happened while inserting/updating a table definition.
+        // to prevent total loss of that data, we embed the form once again.
+        // The variable $regenerate will be used to restore data in tbl_properties.inc.php
+        $num_fields = $orig_num_fields;
+        $regenerate = TRUE;
+    }
+} // end do create table
 
 /**
  * Displays the form used to define the structure of the table
  */
-else {
+if ($abort == FALSE) {
     if (isset($num_fields)) {
         $num_fields = intval($num_fields);
     }
@@ -216,19 +237,11 @@ else {
     }
     // Table name and number of fields are valid -> show the form
     else {
-        // Ensures the table name is valid
-        if (get_magic_quotes_gpc()) {
-            $table = stripslashes($table);
-        }
-        if (PMA_MYSQL_INT_VERSION < 32306) {
-            PMA_checkReservedWords($table, $err_url);
-        }
-
         $action = 'tbl_create.php';
-        include('./tbl_properties.inc.php');
+        require('./tbl_properties.inc.php');
         // Diplays the footer
         echo "\n";
-        include('./footer.inc.php');
+        require_once('./footer.inc.php');
    }
 }
 

@@ -85,6 +85,10 @@ Information about 2.6.1-rc2
      * (pl1)  (Japanese) Undefined index
      * (pl1)  (mysqli) Wrong detection of a failed connection
      * (pl2)  Fixed instability introduced in -pl1
+     * (pl3)  Updating of field names starting with "str"
+     * (pl3)  Parser: support of STR_TO_DATE and GET_FORMAT MySQL functions
+     * (pl3)  Privileges management: escaping character removed by error, and
+       host not changing when editing user
 
  ----------------------------------------------------------------------
 

@@ -1,3 +1,22 @@
+phpmyadmin (3:2.6.1-pl3-1) unstable; urgency=high
+
+  * New upstream release.
+  * Fixed annoying bug that a user called 'xx@%' could be created but
+    not removed. Closes: #208539.
+  * Fixed critical bug introduced by php4 compiled with ZTS option. Added
+    003-dl_with_zts.patch. Closes: #297725.
+  * Renamed debian/patches/*.diff to *.patch.
+  * Depends also on php5-fcgi.
+
+ -- Piotr Roszatycki <dexter@debian.org>  Mon,  7 Mar 2005 12:21:00 +0100
+
+phpmyadmin (3:2.6.1-pl2-2) unstable; urgency=low
+
+  * Fixed converting /etc/apache/conf.d/phpmyadmin to phpmyadmin.conf at
+    upgrade time.
+
+ -- Piotr Roszatycki <dexter@debian.org>  Wed,  2 Mar 2005 20:30:29 +0100
+
 phpmyadmin (3:2.6.1-pl2-1) unstable; urgency=high
 
   * New upsteam release.

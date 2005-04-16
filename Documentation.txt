@@ -4,14 +4,14 @@
    Transformations  -  FAQ  -  Developers  -  Credits  -  Translators
    ______________________________________________________________________
 
-                      phpMyAdmin 2.6.2-rc1 Documentation
+                        phpMyAdmin 2.6.2 Documentation
 
      * SourceForge phpMyAdmin project page   [ http://www.phpmyadmin.net/ ] 
      * Local documents:
           + Version history: ChangeLog
           + General notes: README
           + License: LICENSE
-     * Documentation version: $Id: Documentation.html,v 2.122 2005/04/03 22:       42:31 lem9 Exp $
+     * Documentation version: $Id: Documentation.html,v 2.123.2.2 2005/04/16        15:43:25 lem9 Exp $
 
 Requirements
 
@@ -49,7 +49,7 @@ Introduction
      * transform stored data into any format using a set of predefined funct       ions, like displaying BLOB-data as image or download-link or ...
      * support InnoDB tables and foreign keys (see FAQ 3.6)
      * support mysqli, the improved MySQL extension (see FAQ 1.17)
-     * communicate in 47 different languages
+     * communicate in 48 different languages
 
    (*)  phpMyAdmin can compress (Zip, GZip -RFC 1952- or Bzip2 formats) dump   s and CSV exports if you use PHP4 >= 4.0.4 with Zlib support (--with-zli   b) and/or Bzip2 support (--with-bz2).
 

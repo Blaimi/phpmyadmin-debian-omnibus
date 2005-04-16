@@ -1,5 +1,5 @@
 <?php
-/* $Id: tbl_properties_export.php,v 2.9 2004/10/21 10:18:12 nijel Exp $ */
+/* $Id: tbl_properties_export.php,v 2.9.4.1 2005/04/16 14:57:21 lem9 Exp $ */
 // vim: expandtab sw=4 ts=4 sts=4:
 
 
@@ -38,7 +38,8 @@ if (isset($sql_query)) {
         if (!empty($analyzed_sql[0]['from_clause'])) {
             $sql_query .= ' FROM ' . $analyzed_sql[0]['from_clause'];
         }
-        if (isset($primary_key)) {
+
+        if (isset($primary_key) && is_array($primary_key)) {
             $sql_query .= ' WHERE ';
             $conj = '';
             foreach ($primary_key AS $i => $key) {

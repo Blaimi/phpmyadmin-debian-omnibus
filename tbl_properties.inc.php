@@ -1,8 +1,8 @@
 <?php
-/* $Id: tbl_properties.inc.php,v 2.27 2005/03/31 20:32:04 lem9 Exp $ */
+/* $Id: tbl_properties.inc.php,v 2.27.2.1 2005/04/07 17:22:25 lem9 Exp $ */
 // vim: expandtab sw=4 ts=4 sts=4:
 // Check parameters
-
+error_reporting(E_ALL);
 require_once('./libraries/common.lib.php');
 PMA_checkParameters(array('db','table','action','num_fields'));
 
@@ -344,7 +344,7 @@ for ($i = 0 ; $i < $num_fields; $i++) {
         $attribute = 'ON UPDATE CURRENT_TIMESTAMP';
     }
     if ((isset($row['Field']) && isset($analyzed_sql[0]['create_table_fields'][$row['Field']]['default_current_timestamp']))
-     || $submit_default_current_timestamp  ) {
+     || (isset($submit_default_current_timestamp) && $submit_default_current_timestamp)  ) {
         $default_current_timestamp = TRUE; 
     } else {
         $default_current_timestamp = FALSE; 

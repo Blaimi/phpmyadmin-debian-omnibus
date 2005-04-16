@@ -1,5 +1,5 @@
 <?php
-/* $Id: tbl_alter.php,v 2.15 2005/03/31 21:51:48 lem9 Exp $ */
+/* $Id: tbl_alter.php,v 2.15.2.2 2005/04/13 14:41:46 lem9 Exp $ */
 // vim: expandtab sw=4 ts=4 sts=4:
 
 /**
@@ -66,7 +66,8 @@ if (isset($do_save_data)) {
             $full_field_type .= ' ' . $field_attribute[$i];
         }
         // take care of native MySQL comments here
-        $query .= PMA_generateAlterTable($field_orig[$i], $field_name[$i], $full_field_type, (PMA_MYSQL_INT_VERSION >= 40100 && $field_collation[$i] != '' ? $field_collation[$i] : ''), $field_null[$i], $field_default[$i], $field_default_current_timestamp[$i], $field_extra[$i], (PMA_MYSQL_INT_VERSION >= 40100 && $field_comments[$i] != '' ? $field_comments[$i] : ''));
+
+        $query .= PMA_generateAlterTable($field_orig[$i], $field_name[$i], $full_field_type, (PMA_MYSQL_INT_VERSION >= 40100 && $field_collation[$i] != '' ? $field_collation[$i] : ''), $field_null[$i], $field_default[$i], (isset($field_default_current_timestamp[$i]) ? $field_default_current_timestamp[$i] : ''), $field_extra[$i], (PMA_MYSQL_INT_VERSION >= 40100 && isset($field_comments[$i]) && $field_comments[$i] != '' ? $field_comments[$i] : ''));
     } // end for
 
     // To allow replication, we first select the db to use and then run queries

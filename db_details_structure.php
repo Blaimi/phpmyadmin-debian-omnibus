@@ -1,5 +1,5 @@
 <?php
-/* $Id: db_details_structure.php,v 2.48 2005/03/25 11:04:21 rabus Exp $ */
+/* $Id: db_details_structure.php,v 2.48.2.1 2005/04/14 14:42:51 lem9 Exp $ */
 // vim: expandtab sw=4 ts=4 sts=4:
 
 require_once('./libraries/grab_globals.lib.php');
@@ -262,7 +262,7 @@ else {
         }
         ?>
                 </td>
-                <td bgcolor="<?php echo $bgcolor; ?>">
+                <td align="center" bgcolor="<?php echo $bgcolor; ?>">
         <?php
         if (!empty($sts_data['Rows']) || $is_view || (PMA_MYSQL_INT_VERSION >= 50000 && $db == 'information_schema')) {
             echo '<a href="tbl_select.php?' . $tbl_url_query . '">'

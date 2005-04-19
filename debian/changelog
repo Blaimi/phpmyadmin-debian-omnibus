@@ -1,3 +1,19 @@
+phpmyadmin (4:2.6.2-1) unstable; urgency=low
+
+  * New upstream release
+  * NEWS and README.Debian file are documented about problem with logging
+    in with cookie based authentication.
+  * Removed suPHP directive from apache.conf file. Closes: #304018.
+  * Configuration in .htaccess doesn't override global access settings.
+    Closes: #303535.
+  * Updated Brazilian Portuguese debconf templates translation.
+    Closes: #304566.
+  * Apache configuration is installed separately, not through symlinks.
+  * Convert httpd.conf and apache.conf. They have to contain
+    "Include /etc/apache2/conf.d/*.conf" directive.
+
+ -- Piotr Roszatycki <dexter@debian.org>  Tue, 19 Apr 2005 11:51:21 +0200
+
 phpmyadmin (3:2.6.2-rc1-1) unstable; urgency=high
 
   * New upstream release.

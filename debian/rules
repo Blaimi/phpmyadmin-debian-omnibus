@@ -1,6 +1,6 @@
 #!/usr/bin/make -f
 # Generated automatically from debian/packages
-# by yada v0.32, of Fri, 11 Mar 2005
+# by yada v0.33, of Wed,  6 Apr 2005
 
 DEB_HOST_ARCH        := $(shell dpkg-architecture -qDEB_HOST_ARCH)
 DEB_HOST_GNU_CPU     := $(shell dpkg-architecture -qDEB_HOST_GNU_CPU)
@@ -110,10 +110,12 @@ debian/tmp-phpmyadmin/DEBIAN/control: debian/build-indep-stamp debian/control
 	echo -E 'yada install -data -into /usr/share/phpmyadmin ChangeLog INSTALL README';\
 	echo -E 'yada install -dir /etc/phpmyadmin';\
 	echo -E 'yada install -conf -ucf -subdir phpmyadmin debian/conf/config.inc.php';\
-	echo -E 'yada install -conf -ucf -subdir phpmyadmin debian/conf/apache.conf';\
 	echo -E 'yada install -conf -ucf -subdir phpmyadmin debian/conf/htaccess';\
 	echo -E 'yada install -conf -ucf -subdir phpmyadmin config.header.inc.php';\
 	echo -E 'yada install -conf -ucf -subdir phpmyadmin config.footer.inc.php';\
+	echo -E 'for webserver in apache apache-perl apache-ssl apache2; do';\
+	echo -E '    yada install -conf -ucf -into /etc/$$webserver/conf.d -as phpmyadmin.conf debian/conf/apache.conf';\
+	echo -E 'done';\
 	echo -E 'yada symlink -into /usr/share/phpmyadmin -as .htaccess /etc/phpmyadmin/htaccess';\
 	echo -E 'yada symlink -into /var/www /usr/share/phpmyadmin';\
 	echo -E 'yada symlink -into /usr/share/phpmyadmin /etc/phpmyadmin/config.header.inc.php';\

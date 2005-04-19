@@ -1,5 +1,5 @@
 <?php
-/* $Id: common.lib.php,v 2.128 2005/04/01 20:59:46 lem9 Exp $ */
+/* $Id: common.lib.php,v 2.128.2.1 2005/04/07 17:47:36 lem9 Exp $ */
 // vim: expandtab sw=4 ts=4 sts=4:
 
 /**
@@ -2539,7 +2539,7 @@ if (typeof(document.getElementById) != 'undefined'
             $query .= ' NULL';
         }
 
-        if ($default_current_timestamp && strtoupper($full_field_type) == 'TIMESTAMP') {
+        if ($default_current_timestamp && strpos(' ' . strtoupper($full_field_type),'TIMESTAMP') == 1) {
             $query .= ' DEFAULT CURRENT_TIMESTAMP';
             // 0 is empty in PHP
         } elseif (!empty($default) || $default == '0') {

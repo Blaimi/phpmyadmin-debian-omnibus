@@ -1,9 +1,6 @@
 DirectoryIndex index.php
 Options +FollowSymLinks
 
-Order allow,deny
-Allow from all
-
 <IfModule mod_mime.c>
     <IfModule mod_php4.c>
         AddType application/x-httpd-php .php

@@ -2,8 +2,41 @@
 phpMyAdmin - Changelog
 ----------------------
 
-$Id: ChangeLog,v 2.1031 2005/04/01 21:56:56 lem9 Exp $
+$Id: ChangeLog,v 2.1032.2.10 2005/04/16 15:43:59 lem9 Exp $
 $Source: /cvsroot/phpmyadmin/phpMyAdmin/ChangeLog,v $
+
+2005-04-16 Marc Delisle  <lem9@users.sourceforge.net>
+    * lang/chinese_simplified: Updates, thanks to mysf at etang.com 
+    * lang/serbian: Updated, thanks to Mihailo Stefanovic (mikis).
+    * lang/danish: Updated, thanks to AlleyKat - dk_alleykat.
+    * lang/spanish: Updated, thanks to Daniel Hinostroza (hinostroza).
+    * new language: belarusian, thanks to Jaska Zedlik <jz53 at zedlik.com>
+    * tbl_properties_export.php: bug #1180860, error going from Export
+      to Insert tab
+    ### 2.6.2 released
+    
+2005-04-14 Marc Delisle  <lem9@users.sourceforge.net>
+    * db_details_structure.php: Search icon centering
+
+2005-04-13 Marc Delisle  <lem9@users.sourceforge.net>
+    * tbl_alter.php: undefined $field_comments
+
+2005-04-10 Marc Delisle  <lem9@users.sourceforge.net>
+    * lang/bulgarian:  Updated, thanks to Stanislav Yordanov (stanprog).
+    * server_privileges.php: bug #1179969, problem editing a user's profile
+      (and there was a problem also with the detection of
+       an already existing user)
+  
+2005-04-08 Marc Delisle  <lem9@users.sourceforge.net>
+    * lang/catalan update, thanks to Xavier Navarro (xavin).
+
+2005-04-07 Marc Delisle  <lem9@users.sourceforge.net>
+    * tbl_properties.inc.php, tbl_alter.php: bug #1176896, undefined variable
+    * libraries/common.lib.php: wrong test when the field's type is
+      TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+
+2005-04-03 Marc Delisle  <lem9@users.sourceforge.net>
+    ### 2.6.2-rc1 released
 
 2005-04-01 Marc Delisle  <lem9@users.sourceforge.net>
     * tbl_addfield.php: TIMESTAMP options support

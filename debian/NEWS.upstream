@@ -1,4 +1,10 @@
-Information about 2.6.2-rc1
+Information about 2.6.2
+
+   Note:
+
+   If you are using the 'cookie' authentication type, please delete in your
+   browser's data the cookies which relate to phpMyAdmin, before your first
+   use of phpMyAdmin 2.6.2. Thanks to Dmitry Chorine for the information.
 
    Improvements:
 
@@ -34,6 +40,7 @@ Information about 2.6.2-rc1
      * FAQ about using HTTP authentication under IIS
      * New editions for some language files (especially ISO-8859-15)
      * (rc1)  English messages improvements
+     * (final)  New language: belarusian
 
    Fixes:
 
@@ -71,6 +78,8 @@ Information about 2.6.2-rc1
      * (rc1)  Undefined offset (on the left panel)
      * (rc1)  Problem copying InnoDB table with foreign-key constraints to a
        table in the same database
+     * (final)  Problem editing a user's profile
+     * (final)  Error going from Export to Insert tab
 
  ----------------------------------------------------------------------
 

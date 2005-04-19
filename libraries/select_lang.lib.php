@@ -1,5 +1,5 @@
 <?php
-/* $Id: select_lang.lib.php,v 2.17 2005/03/27 00:23:10 rabus Exp $ */
+/* $Id: select_lang.lib.php,v 2.17.2.1 2005/04/16 11:48:30 lem9 Exp $ */
 // vim: expandtab sw=4 ts=4 sts=4:
 
 
@@ -60,6 +60,8 @@ $available_languages = array(
     'ar-utf-8'          => array('ar|arabic', 'arabic-utf-8', 'ar'),
     'az-iso-8859-9'     => array('az|azerbaijani', 'azerbaijani-iso-8859-9', 'az'),
     'az-utf-8'          => array('az|azerbaijani', 'azerbaijani-utf-8', 'az'),
+    'be-win1251'        => array('be|belarusian', 'belarusian-windows-1251', 'be'),
+    'be-utf-8'          => array('be|belarusian', 'belarusian-utf-8', 'be'),
     'bg-win1251'        => array('bg|bulgarian', 'bulgarian-windows-1251', 'bg'),
     'bg-koi8-r'         => array('bg|bulgarian', 'bulgarian-koi8-r', 'bg'),
     'bg-utf-8'          => array('bg|bulgarian', 'bulgarian-utf-8', 'bg'),

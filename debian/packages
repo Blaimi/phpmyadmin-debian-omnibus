@@ -62,10 +62,12 @@ Install: sh
  yada install -data -into /usr/share/phpmyadmin ChangeLog INSTALL README
  yada install -dir /etc/phpmyadmin
  yada install -conf -ucf -subdir phpmyadmin debian/conf/config.inc.php
- yada install -conf -ucf -subdir phpmyadmin debian/conf/apache.conf
  yada install -conf -ucf -subdir phpmyadmin debian/conf/htaccess
  yada install -conf -ucf -subdir phpmyadmin config.header.inc.php
  yada install -conf -ucf -subdir phpmyadmin config.footer.inc.php
+ for webserver in apache apache-perl apache-ssl apache2; do
+     yada install -conf -ucf -into /etc/$webserver/conf.d -as phpmyadmin.conf debian/conf/apache.conf
+ done
  yada symlink -into /usr/share/phpmyadmin -as .htaccess /etc/phpmyadmin/htaccess
  yada symlink -into /var/www /usr/share/phpmyadmin
  yada symlink -into /usr/share/phpmyadmin /etc/phpmyadmin/config.header.inc.php
@@ -131,17 +133,26 @@ Preinst: bash
          fi
      done
  fi
- .
- mkdir -p /etc/phpmyadmin
- md5sum /etc/phpmyadmin/apache.conf 2>/dev/null >/etc/phpmyadmin/apache.conf.md5sum || true
-Postinst: bash
- if ! md5sum -c /etc/phpmyadmin/apache.conf.md5sum 2>/dev/null; then
-     restart_required=yes
- else
-     restart_required=no
+ if [ "$1" = "upgrade" -a -n "$2" ] && \
+   dpkg --compare-versions "$2" lt-nl "3:2.6.2-rc1-2"; then
+     for webserver in apache apache-perl apache-ssl apache2; do
+         if [ -h /etc/$webserver/conf.d/phpmyadmin.conf ]; then
+             cat /etc/$webserver/conf.d/phpmyadmin.conf > /etc/$webserver/conf.d/phpmyadmin.conf.dpkg-tmp
+             rm /etc/$webserver/conf.d/phpmyadmin.conf
+             cp /etc/$webserver/conf.d/phpmyadmin.conf.dpkg-tmp /etc/$webserver/conf.d/phpmyadmin.conf
+         fi
+     done
+     mv -f /etc/phpmyadmin/apache.conf /etc/phpmyadmin/apache.conf.dpkg-old || true
+     ucf --purge /etc/phpmyadmin/apache.conf
+     rm -f /etc/phpmyadmin/apache.conf.md5sum
  fi
- rm -f /etc/phpmyadmin/apache.conf.md5sum
  .
+ for webserver in apache apache-perl apache-ssl apache2; do
+     if [ -f /etc/$webserver/conf.d/phpmyadmin.conf ]; then
+         md5sum /etc/$webserver/conf.d/phpmyadmin.conf 2>/dev/null >/etc/$webserver/conf.d/phpmyadmin.conf.dpkg-md5sum || true
+     fi
+ done
+Postinst: bash
  if [ "$1" = "configure" -a -f /etc/phpmyadmin/blowfish_secret.inc.php ] \
    && dpkg --compare-versions "$2" lt-nl "1:2.5.7-pl1-2"; then
      chgrp www-data /etc/phpmyadmin/blowfish_secret.inc.php
@@ -198,7 +209,7 @@ Postinst: bash
                      grep -v "^Include /etc/phpmyadmin/apache.conf" /etc/$webserver/httpd.conf.old.phpmyadmin \
                          > /etc/$webserver/httpd.conf
                  fi
-                 if ! grep -qs "^Include /etc/$webserver/conf.d" /etc/$webserver/httpd.conf; then
+                 if ! grep -qs "^Include /etc/$webserver/conf\.d" /etc/$webserver/httpd.conf; then
                      cp -f /etc/$webserver/httpd.conf /etc/$webserver/httpd.conf.old.phpmyadmin
                      echo "Include /etc/$webserver/conf.d/*.conf" >> /etc/$webserver/httpd.conf
                  fi
@@ -238,15 +249,21 @@ Postinst: bash
                          fi
                      fi
                  fi
+                 if ! grep -qs "^Include /etc/$webserver/conf\.d/\*.conf" /etc/$webserver/apache2.conf; then
+                     cp -f /etc/$webserver/apache2.conf /etc/$webserver/apache2.conf.old.phpmyadmin
+                     # The workaround for Bug#304786.
+                     sed "s%^Include /etc/$webserver/conf\.d%# &%" /etc/$webserver/apache2.conf.old.phpmyadmin > /etc/$webserver/apache2.conf
+                     echo "Include /etc/$webserver/conf.d/*.conf" >> /etc/$webserver/apache2.conf
+                 fi
+                 if [ -f /etc/$webserver/apache2.conf.old.phpmyadmin ]; then
+                     mv -f /etc/$webserver/apache2.conf.old.phpmyadmin /etc/$webserver/apache2.conf.old
+                 fi
                  ;;
          esac
  .
          case "$webserver" in
              apache|apache-perl|apache-ssl|apache2)
-                 if [ ! -f /etc/$webserver/conf.d/phpmyadmin.conf -a ! -h /etc/$webserver/conf.d/phpmyadmin.conf ]; then
-                     ln -s /etc/phpmyadmin/apache.conf /etc/$webserver/conf.d/phpmyadmin.conf
-                 fi
-                 if [ "$restart_required" = "yes" ]; then
+                 if ! md5sum -c /etc/$webserver/conf.d/phpmyadmin.conf.dpkg-md5sum 2>/dev/null; then
                      db_reset phpmyadmin/restart-webserver || true
                      db_subst phpmyadmin/restart-webserver webserver "$webserver"
                      db_input high phpmyadmin/restart-webserver || true
@@ -268,10 +285,16 @@ Postinst: bash
              /etc/init.d/$webserver restart
          fi
      done
+ .
+     for webserver in apache apache-perl apache-ssl apache2; do
+         rm -f /etc/$webserver/conf.d/phpmyadmin.conf.dpkg-md5sum
+     done
  fi
 Postrm: bash
  if [ "$1" = "purge" ]; then
-     rm -f /etc/phpmyadmin/apache.conf.md5sum
+     for webserver in apache apache-perl apache-ssl apache2; do
+         rm -f /etc/$webserver/conf.d/phpmyadmin.conf.dpkg-md5sum
+     done
      rm -f /etc/phpmyadmin/blowfish_secret.inc.php
  .
      db_get phpmyadmin/reconfigure-webserver
@@ -314,7 +337,6 @@ Postrm: bash
      done
  .
      rmdir --ignore-fail-on-non-empty /etc/phpmyadmin || true
-     rmdir --parents --ignore-fail-on-non-empty /etc/apache/conf.d || true
  fi
 Overrides:
  postinst-uses-db-input

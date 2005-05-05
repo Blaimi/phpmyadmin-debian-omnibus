@@ -1,6 +1,6 @@
-diff -ru phpMyAdmin-2.6.1-rc1.orig/config.inc.php phpMyAdmin-2.6.1-rc1/config.inc.php
---- phpMyAdmin-2.6.1-rc1.orig/config.inc.php	2004-11-03 14:45:25 +0100
-+++ phpMyAdmin-2.6.1-rc1/config.inc.php	2004-12-13 19:52:32 +0100
+diff -Nru phpMyAdmin-2.6.2.orig/config.inc.php phpMyAdmin-2.6.2/config.inc.php
+--- phpMyAdmin-2.6.2.orig/config.inc.php	2005-03-16 18:22:08 +0100
++++ phpMyAdmin-2.6.2/config.inc.php	2005-05-05 12:11:32 +0200
 @@ -44,13 +44,13 @@
   * You should use this if and ONLY if the PmaAbsoluteUri auto-detection
   * works perfectly.
@@ -17,15 +17,15 @@ diff -ru phpMyAdmin-2.6.1-rc1.orig/config.inc.php phpMyAdmin-2.6.1-rc1/config.in
  
  /**
   * The 'cookie' auth_type uses blowfish algorithm to encrypt the password. If
-@@ -58,6 +58,7 @@
-  * passphrase that will be used by blowfish.
+@@ -59,6 +59,7 @@
+  * characters.
   */
  $cfg['blowfish_secret'] = '';
 +include('/etc/phpmyadmin/blowfish_secret.inc.php');
  
  /**
   * Server(s) configuration
-@@ -69,7 +70,7 @@
+@@ -70,7 +71,7 @@
  $cfg['Servers'][$i]['host']          = 'localhost'; // MySQL hostname or IP address
  $cfg['Servers'][$i]['port']          = '';          // MySQL port - leave blank for default port
  $cfg['Servers'][$i]['socket']        = '';          // Path to the socket - leave blank for default socket
@@ -34,7 +34,7 @@ diff -ru phpMyAdmin-2.6.1-rc1.orig/config.inc.php phpMyAdmin-2.6.1-rc1/config.in
  $cfg['Servers'][$i]['extension']     = 'mysql';     // The php MySQL extension to use ('mysql' or 'mysqli')
  $cfg['Servers'][$i]['compress']      = FALSE;       // Use compressed protocol for the MySQL connection
                                                      // (requires PHP >= 4.3.0)
-@@ -80,7 +81,7 @@
+@@ -81,7 +82,7 @@
                                                      // The controluser is also
                                                      // used for all relational
                                                      // features (pmadb)
@@ -43,7 +43,7 @@ diff -ru phpMyAdmin-2.6.1-rc1.orig/config.inc.php phpMyAdmin-2.6.1-rc1/config.in
  $cfg['Servers'][$i]['user']          = 'root';      // MySQL user
  $cfg['Servers'][$i]['password']      = '';          // MySQL password (only needed
                                                      // with 'config' auth_type)
-@@ -825,6 +826,33 @@
+@@ -838,6 +839,13 @@
   */
  set_magic_quotes_runtime(0);
  
@@ -52,26 +52,6 @@ diff -ru phpMyAdmin-2.6.1-rc1.orig/config.inc.php phpMyAdmin-2.6.1-rc1/config.in
 + * Include Debian local configuration
 + */
 +include('/etc/phpmyadmin/config.inc.php');
-+
-+
-+/**
-+ * Load extension if not loaded yet
-+ */
-+$extensions = array();
-+$servers_cnt = count($cfg['Servers']);
-+for ($i = 1; $i <= $servers_cnt; $i++) {
-+    if (isset($cfg['Servers'][$i]) 
-+      && !empty($cfg['Servers'][$i]['host']) 
-+      && isset($cfg['Servers'][$i]['extension'])) {
-+	$extensions[$cfg['Servers'][$i]['extension']] = 1;
-+    }
-+}
-+if (isset($extensions['mysql']) && !@extension_loaded('mysql') && !@get_cfg_var('safe_mode')) {
-+    @dl('mysql.so');
-+}
-+if (isset($extensions['mysqli']) && !@extension_loaded('mysqli') && !@get_cfg_var('safe_mode')) {
-+    @dl('mysqli.so');
-+}
 +
 +
  /**

@@ -1,4 +1,4 @@
-# $Id:  $
+# $Id: /trunk/debian/dists/phpmyadmin/debian/packages 91 2005-05-05T11:32:39.543925Z dexter  $
 
 # If the debian/rules or debian/control file is missing, rebuild the file:
 #
@@ -84,7 +84,7 @@ Templates:
  Template: phpmyadmin/reconfigure-webserver
  Type: multiselect
  Choices: apache, apache-ssl, apache-perl, apache2
- Default: apache, apache-ssl, apache-perl, apache2
+ Default:
  _Description: Which web server would you like to reconfigure automatically?
   phpMyAdmin supports any web server that PHP does, but this automatic
   configuration process only supports Apache.
@@ -129,7 +129,7 @@ Preinst: bash
    dpkg --compare-versions "$2" lt-nl "3:2.6.1-pl2-2"; then
      for webserver in apache apache-perl apache-ssl apache2; do
          if [ -h /etc/$webserver/conf.d/phpmyadmin ] && [ -h /etc/$webserver/conf.d/phpmyadmin.conf ]; then
-             rm /etc/$webserver/conf.d/phpmyadmin
+             rm -f /etc/$webserver/conf.d/phpmyadmin
          fi
      done
  fi
@@ -138,7 +138,7 @@ Preinst: bash
      for webserver in apache apache-perl apache-ssl apache2; do
          if [ -h /etc/$webserver/conf.d/phpmyadmin.conf ]; then
              cat /etc/$webserver/conf.d/phpmyadmin.conf > /etc/$webserver/conf.d/phpmyadmin.conf.dpkg-tmp
-             rm /etc/$webserver/conf.d/phpmyadmin.conf
+             rm -f /etc/$webserver/conf.d/phpmyadmin.conf
              cp /etc/$webserver/conf.d/phpmyadmin.conf.dpkg-tmp /etc/$webserver/conf.d/phpmyadmin.conf
          fi
      done
@@ -146,10 +146,19 @@ Preinst: bash
      ucf --purge /etc/phpmyadmin/apache.conf
      rm -f /etc/phpmyadmin/apache.conf.md5sum
  fi
+ # Trying to fix the mess. Sorry :( See #307275.
+ if [ "$1" = "upgrade" -a -n "$2" ] && \
+   dpkg --compare-versions "$2" lt-nl "4:2.6.2-2"; then
+     if grep -qs "^# Include /etc/apache2/conf\.d/\[^\.#\]\*$" /etc/apache2/apache2.conf; then
+         cp -f /etc/apache2/apache2.conf /etc/apache2/apache2.conf.old.phpmyadmin
+         grep -v "^Include /etc/apache2/conf\.d/\*\.conf" /etc/apache2/apache2.conf.old.phpmyadmin | \
+         sed "s%^# \(Include /etc/apache2/conf\.d/\[^\.#\]\*\)$%\1%" > /etc/apache2/apache2.conf
+     fi
+ fi
  .
  for webserver in apache apache-perl apache-ssl apache2; do
      if [ -f /etc/$webserver/conf.d/phpmyadmin.conf ]; then
-         md5sum /etc/$webserver/conf.d/phpmyadmin.conf 2>/dev/null >/etc/$webserver/conf.d/phpmyadmin.conf.dpkg-md5sum || true
+         md5sum /etc/$webserver/conf.d/phpmyadmin.conf 2>/dev/null >/etc/phpmyadmin/${webserver}_conf.d_phpmyadmin.conf.dpkg-md5sum || true
      fi
  done
 Postinst: bash
@@ -205,16 +214,13 @@ Postinst: bash
                      fi
                  fi
                  if grep -qs "^Include /etc/phpmyadmin/apache.conf" /etc/$webserver/httpd.conf; then
-                     mv -f /etc/$webserver/httpd.conf /etc/$webserver/httpd.conf.old.phpmyadmin
+                     cp -f /etc/$webserver/httpd.conf /etc/$webserver/httpd.conf.old.phpmyadmin
                      grep -v "^Include /etc/phpmyadmin/apache.conf" /etc/$webserver/httpd.conf.old.phpmyadmin \
                          > /etc/$webserver/httpd.conf
                  fi
                  if ! grep -qs "^Include /etc/$webserver/conf\.d" /etc/$webserver/httpd.conf; then
                      cp -f /etc/$webserver/httpd.conf /etc/$webserver/httpd.conf.old.phpmyadmin
-                     echo "Include /etc/$webserver/conf.d/*.conf" >> /etc/$webserver/httpd.conf
-                 fi
-                 if [ -f /etc/$webserver/httpd.conf.old.phpmyadmin ]; then
-                     mv -f /etc/$webserver/httpd.conf.old.phpmyadmin /etc/$webserver/httpd.conf.old
+                     echo "Include /etc/$webserver/conf.d" >> /etc/$webserver/httpd.conf
                  fi
                  mkdir -p /etc/$webserver/conf.d
                  ;;
@@ -249,21 +255,12 @@ Postinst: bash
                          fi
                      fi
                  fi
-                 if ! grep -qs "^Include /etc/$webserver/conf\.d/\*.conf" /etc/$webserver/apache2.conf; then
-                     cp -f /etc/$webserver/apache2.conf /etc/$webserver/apache2.conf.old.phpmyadmin
-                     # The workaround for Bug#304786.
-                     sed "s%^Include /etc/$webserver/conf\.d%# &%" /etc/$webserver/apache2.conf.old.phpmyadmin > /etc/$webserver/apache2.conf
-                     echo "Include /etc/$webserver/conf.d/*.conf" >> /etc/$webserver/apache2.conf
-                 fi
-                 if [ -f /etc/$webserver/apache2.conf.old.phpmyadmin ]; then
-                     mv -f /etc/$webserver/apache2.conf.old.phpmyadmin /etc/$webserver/apache2.conf.old
-                 fi
                  ;;
          esac
  .
          case "$webserver" in
              apache|apache-perl|apache-ssl|apache2)
-                 if ! md5sum -c /etc/$webserver/conf.d/phpmyadmin.conf.dpkg-md5sum 2>/dev/null; then
+                 if ! md5sum -c /etc/phpmyadmin/${webserver}_conf.d_phpmyadmin.conf.dpkg-md5sum 2>/dev/null; then
                      db_reset phpmyadmin/restart-webserver || true
                      db_subst phpmyadmin/restart-webserver webserver "$webserver"
                      db_input high phpmyadmin/restart-webserver || true
@@ -288,12 +285,18 @@ Postinst: bash
  .
      for webserver in apache apache-perl apache-ssl apache2; do
          rm -f /etc/$webserver/conf.d/phpmyadmin.conf.dpkg-md5sum
+         rm -f /etc/phpmyadmin/${webserver}_conf.d_phpmyadmin.conf.dpkg-md5sum
      done
  fi
 Postrm: bash
  if [ "$1" = "purge" ]; then
      for webserver in apache apache-perl apache-ssl apache2; do
          rm -f /etc/$webserver/conf.d/phpmyadmin.conf.dpkg-md5sum
+         rm -f /etc/phpmyadmin/${webserver}_conf.d_phpmyadmin.conf.dpkg-md5sum
+         if [ -h /etc/$webserver/conf.d/phpmyadmin ]; then
+             rm -f /etc/$webserver/conf.d/phpmyadmin
+         fi
+         rm -f /etc/$webserver/*.old.phpmyadmin
      done
      rm -f /etc/phpmyadmin/blowfish_secret.inc.php
  .
@@ -331,9 +334,8 @@ Postrm: bash
  .
      for ext in '~' '%' .bak .dpkg-tmp .dpkg-new .dpkg-old .dpkg-dist; do
          rm -f "/etc/phpmyadmin/footer.inc.php$ext"
-     done
-     for ext in '~' '%' .bak .dpkg-tmp .dpkg-new .dpkg-old .dpkg-dist; do
          rm -f "/etc/phpmyadmin/header.inc.php$ext"
+         rm -f "/etc/phpmyadmin/apache.conf$ext"
      done
  .
      rmdir --ignore-fail-on-non-empty /etc/phpmyadmin || true

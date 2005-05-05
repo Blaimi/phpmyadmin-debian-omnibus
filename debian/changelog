@@ -1,3 +1,13 @@
+phpmyadmin (4:2.6.2-2) unstable; urgency=high
+
+  * Doesn't modify apache2.conf. Try to revert the changes.
+    Closes: #307275 (critical).
+  * Remove obsoleted conffiles and symlinks on purge. Closes: #307415.
+  * The default behaviour is not to autoconfigurate webservers.
+  * Doesn't load the PHP extensions automatically in config.inc.php script.
+
+ -- Piotr Roszatycki <dexter@debian.org>  Thu,  5 May 2005 11:40:46 +0200
+
 phpmyadmin (4:2.6.2-1) unstable; urgency=low
 
   * New upstream release

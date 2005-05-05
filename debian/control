@@ -3,7 +3,7 @@ Maintainer: Piotr Roszatycki <dexter@debian.org>
 Section: web
 Priority: extra
 Standards-Version: 3.6.1
-Build-Depends-Indep: yada (>= 0.33), po-debconf
+Build-Depends-Indep: yada (>= 0.34), po-debconf
 
 Package: phpmyadmin
 Architecture: all

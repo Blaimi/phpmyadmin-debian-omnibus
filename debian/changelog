@@ -1,3 +1,17 @@
+phpmyadmin (4:2.6.2-3) unstable; urgency=high
+
+  * Fix apache2.conf only for 4:2.6.2-1 release. Closes: #307901 (critical),
+    #307275 (critical), #304786 (critical).
+  * Clean up old 'Include /etc/phpmyadmin/apache.conf' from httpd.conf in safe
+    way.
+  * Removed old code which modified httpd.conf if 'Include /etc/apache/conf.d'
+    was missing.
+  * Note for release manager: cleaning up config.inc.php doesn't change the
+    application logic. The autoloading of the PHP extensions is already
+    implemented in the upstream's code.
+
+ -- Piotr Roszatycki <dexter@debian.org>  Sat,  7 May 2005 14:49:49 +0200
+
 phpmyadmin (4:2.6.2-2) unstable; urgency=high
 
   * Doesn't modify apache2.conf. Try to revert the changes.

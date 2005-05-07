@@ -1,4 +1,4 @@
-# $Id: /trunk/debian/dists/phpmyadmin/debian/packages 91 2005-05-05T11:32:39.543925Z dexter  $
+# $Id: /trunk/debian/dists/phpmyadmin/debian/packages 95 2005-05-07T13:41:52.467689Z dexter  $
 
 # If the debian/rules or debian/control file is missing, rebuild the file:
 #
@@ -109,6 +109,19 @@ Preinst: bash
      fi
  fi
  if [ "$1" = "upgrade" -a -n "$2" ] && \
+   dpkg --compare-versions "$2" lt-nl "2.5.4-1"; then
+     for webserver in apache apache-perl apache-ssl; do
+         if grep -qs "^Include /etc/phpmyadmin/apache.conf" /etc/$webserver/httpd.conf; then
+             cp -af /etc/$webserver/httpd.conf /etc/$webserver/httpd.conf.old.phpmyadmin
+             grep -v "^Include /etc/phpmyadmin/apache.conf" /etc/$webserver/httpd.conf \
+                 > /etc/$webserver/httpd.conf.new.phpmyadmin
+             chmod --reference=/etc/$webserver/httpd.conf /etc/$webserver/httpd.conf.new.phpmyadmin
+             chown --reference=/etc/$webserver/httpd.conf /etc/$webserver/httpd.conf.new.phpmyadmin
+             mv -f /etc/$webserver/httpd.conf.new.phpmyadmin /etc/$webserver/httpd.conf
+         fi
+     done
+ fi
+ if [ "$1" = "upgrade" -a -n "$2" ] && \
    dpkg --compare-versions "$2" lt-nl "2.5.6-rc2-1"; then
      if [ -d /etc/phpmyadmin ]; then
          for i in footer header; do
@@ -147,12 +160,14 @@ Preinst: bash
      rm -f /etc/phpmyadmin/apache.conf.md5sum
  fi
  # Trying to fix the mess. Sorry :( See #307275.
- if [ "$1" = "upgrade" -a -n "$2" ] && \
-   dpkg --compare-versions "$2" lt-nl "4:2.6.2-2"; then
+ if [ "$1" = "upgrade" -a "$2" = "4:2.6.2-1" ]; then
      if grep -qs "^# Include /etc/apache2/conf\.d/\[^\.#\]\*$" /etc/apache2/apache2.conf; then
-         cp -f /etc/apache2/apache2.conf /etc/apache2/apache2.conf.old.phpmyadmin
+         cp -af /etc/apache2/apache2.conf /etc/apache2/apache2.conf.old.phpmyadmin
          grep -v "^Include /etc/apache2/conf\.d/\*\.conf" /etc/apache2/apache2.conf.old.phpmyadmin | \
-         sed "s%^# \(Include /etc/apache2/conf\.d/\[^\.#\]\*\)$%\1%" > /etc/apache2/apache2.conf
+         sed "s%^# \(Include /etc/apache2/conf\.d/\[^\.#\]\*\)$%\1%" > /etc/apache2/apache2.conf.new.phpmyadmin
+         chmod --reference=/etc/apache2/apache2.conf /etc/apache2/apache2.conf.new.phpmyadmin
+         chown --reference=/etc/apache2/apache2.conf /etc/apache2/apache2.conf.new.phpmyadmin
+         mv -f /etc/apache2/apache2.conf.new.phpmyadmin /etc/apache2/apache2.conf
      fi
  fi
  .
@@ -213,16 +228,6 @@ Postinst: bash
                          fi
                      fi
                  fi
-                 if grep -qs "^Include /etc/phpmyadmin/apache.conf" /etc/$webserver/httpd.conf; then
-                     cp -f /etc/$webserver/httpd.conf /etc/$webserver/httpd.conf.old.phpmyadmin
-                     grep -v "^Include /etc/phpmyadmin/apache.conf" /etc/$webserver/httpd.conf.old.phpmyadmin \
-                         > /etc/$webserver/httpd.conf
-                 fi
-                 if ! grep -qs "^Include /etc/$webserver/conf\.d" /etc/$webserver/httpd.conf; then
-                     cp -f /etc/$webserver/httpd.conf /etc/$webserver/httpd.conf.old.phpmyadmin
-                     echo "Include /etc/$webserver/conf.d" >> /etc/$webserver/httpd.conf
-                 fi
-                 mkdir -p /etc/$webserver/conf.d
                  ;;
              apache2)
                  if [ -d /etc/$webserver/mods-enabled ]; then

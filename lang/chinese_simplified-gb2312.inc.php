@@ -1,5 +1,5 @@
 <?php
-/* $Id: chinese_simplified-gb2312.inc.php,v 2.34.2.1 2005/04/16 10:17:40 lem9 Exp $ */
+/* $Id: chinese_simplified-gb2312.inc.php,v 2.43 2005/07/29 17:03:07 lem9 Exp $ */
 
 /**
  * Last translation by: Funda Wang <fundawang@en2china.com>
@@ -430,7 +430,6 @@ $strNone = '无';
 $strNotNumber = '这不是一个数字！';
 $strNotOK = '不好';
 $strNotSet = '<b>%s</b> 表找不到或还未在 %s 设定';
-$strNotValidNumber = ' 不是有效的行数！';
 $strNull = 'Null';
 $strNumSearchResultsInTable = '%s 个匹配项 - 于表 <i>%s</i> 中';
 $strNumSearchResultsTotal = '<b>总计：</b> <i>%s</i> 个匹配项';
@@ -804,8 +803,16 @@ $strMyISAMSortBufferSizeDesc = 'The buffer that is allocated when sorting MyISAM
 $strNoDetailsForEngine = 'There is no detailed status information available for this storage engine.';  //to translate
 
 $strPagesToBeFlushed = 'Pages to be flushed';  //to translate
+$strPrivDescAlterDb = 'Allows altering the structure of existing tables as well as changing the default charset and collation of databases.';  //to translate
+$strPrivDescAlterRoutine = 'Allows altering and dropping stored routines.';  //to translate
+$strPrivDescCreateRoutine = 'Allows creating stored routines.';  //to translate
+$strPrivDescCreateUser = 'Allows creating, dropping and renaming unser accounts.';  //to translate
+$strPrivDescCreateView = 'Allows creating new views.';  //to translate
+$strPrivDescExecute5 = 'Allows executing stored routines.';  //to translate
+$strPrivDescShowView = 'Allows performing SHOW CREATE VIEW queries.';  //to translate
 
 $strReadRequests = 'Read requests';  //to translate
+$strRoutines = 'Routines';  //to translate
 
 $strSocketProblem = '(or the local MySQL server\'s socket is not correctly configured)';  //to translate
 $strStorageEngine = 'Storage Engine';  //to translate
@@ -817,4 +824,14 @@ $strViewHasBeenDropped = 'View %s has been dropped';  //to translate
 
 $strWriteRequests = 'Write requests';  //to translate
 
+$strCreateDatabaseBeforeCopying = 'CREATE DATABASE before copying';  //to translate
+$strGeneratePassword = 'Generate Password';  //to translate
+$strGenerate = 'Generate';  //to translate
+$strCopy = 'Copy';  //to translate
+$strTransformation_application_octetstream__hex = 'Displays hexadecimal representation of data.';  //to translate
+$strInvalidFieldCount = 'Table must have at least one field.';  //to translate
+$strInvalidRowNumber = '%d is not valid row number.';  //to translate
+$strInvalidColumnCount = 'Column count has to be larger than zero.';  //to translate
+$strInvalidFieldAddCount = 'You have to add at least one field.';  //to translate
+$strAndThen = 'and then';  //to translate
 ?>

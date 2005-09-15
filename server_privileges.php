@@ -1,5 +1,5 @@
 <?php
-/* $Id: server_privileges.php,v 2.42.2.1 2005/04/10 12:29:48 lem9 Exp $ */
+/* $Id: server_privileges.php,v 2.51 2005/08/07 12:48:11 lem9 Exp $ */
 // vim: expandtab sw=4 ts=4 sts=4:
 
 /**
@@ -547,6 +547,20 @@ function PMA_displayLoginInformationFields($mode = 'new', $indent = 0)
        . $spaces . '    <td bgcolor="' . $cfg['BgcolorTwo'] . '">&nbsp;</td>' . "\n"
        . $spaces . '    <td bgcolor="' . $cfg['BgcolorTwo'] . '">' . "\n"
        . $spaces . '        <input type="password" name="pma_pw2" id="text_pma_pw2" class="textfield" title="' . $GLOBALS['strReType'] . '" onchange="pred_password.value = \'userdefined\';" />' . "\n"
+       . $spaces . '    </td>' . "\n"
+       . $spaces . '</tr>' . "\n"
+       . $spaces . '<tr>' . "\n"
+       . $spaces . '    <td bgcolor="' . $cfg['BgcolorTwo'] . '">' . "\n"
+       . $spaces . '        <label for="text_pma_pw2">' . "\n"
+       . $spaces . '            ' . $GLOBALS['strGeneratePassword'] . ':' . "\n"
+       . $spaces . '        </label>' . "\n"
+       . $spaces . '    </td>' . "\n"
+       . $spaces . '    <td bgcolor="' . $cfg['BgcolorTwo'] . '">' . "\n"
+       . $spaces . '        <input type="button" value="' . $GLOBALS['strGenerate'] . '" onClick="suggestPassword(this.form, \'generated_pw\')">' . "\n"
+       . $spaces . '        <input type="button" value="' . $GLOBALS['strCopy'] . '" onClick="suggestPasswordCopy(this.form)">' . "\n"
+       . $spaces . '        &nbsp;</td>' . "\n"
+       . $spaces . '    <td bgcolor="' . $cfg['BgcolorTwo'] . '">' . "\n"
+       . $spaces . '        <input type="text" name="generated_pw" id="generated_pw" class="textfield"/>' . "\n"
        . $spaces . '    </td>' . "\n"
        . $spaces . '</tr>' . "\n";
 } // end of the 'PMA_displayUserAndHostFields()' function
@@ -1118,7 +1132,7 @@ if (empty($adduser) && empty($checkprivs)) {
                    . '            </label></td></tr>' . "\n"
                    . '            <tr bgcolor="' . $cfg['BgcolorOne'] . '"><td width="16" class="nowrap">&nbsp;</td><td valign="top"><input type="radio" title="' . $strRevokeAndDelete . ' ' . $strRevokeAndDeleteDescr . '" name="mode" id="radio_mode_2" value="2" /></td>' . "\n"
                    . '            <td><label for="radio_mode_2" title="' . $strRevokeAndDelete . ' ' . $strRevokeAndDeleteDescr . '">' . "\n"
-                   . '                ' . wordwrap($strRevokeAndDelete,75,'<br />') . "\n"
+                   . '                ' . $strRevokeAndDelete . "\n"
                    . '            </label></td></tr>' . "\n"
                    . '            <tr bgcolor="' . $cfg['BgcolorOne'] . '"><td width="16" class="nowrap">&nbsp;</td><td valign="top"><input type="radio" title="' . $strDeleteAndFlush . ' ' . $strDeleteAndFlushDescr . '" name="mode" id="radio_mode_3" value="3" /></td>' . "\n"
                    . '            <td><label for="radio_mode_3" title="' . $strDeleteAndFlush . ' ' . $strDeleteAndFlushDescr . '">' . "\n"
@@ -1136,8 +1150,25 @@ if (empty($adduser) && empty($checkprivs)) {
                    . '<div class="tblWarn">' . "\n"
                    . '    ' . sprintf($strFlushPrivilegesNote, '<a href="server_privileges.php?' . $url_query . '&amp;flush_privileges=1">', '</a>') . "\n"
                    . '</div>' . "\n";
+                } else {
+
+                unset ($row);
+                echo '    <br /><table border="0" cellpading="3" cellspacing="0">' . "\n"
+                   . '        <tr bgcolor="' . $cfg['BgcolorOne'] . '"><td '
+                   . ($cfg['PropertiesIconic'] ? 'colspan="3"><b><a href="server_privileges.php?' . $url_query . '&amp;adduser=1"><img src="' . $pmaThemeImage . 'b_usradd.png" width="16" height="16" hspace="2" border="0" align="middle" />' : 'width="20" nowrap="nowrap" align="center" valign="top"><b>&#8226;</b></td><td><b><a href="server_privileges.php?' . $url_query . '&amp;adduser=1">' ). "\n"
+                   . '            ' . $strAddUser . '</a></b>' . "\n"
+                   . '            ' . "\n"
+                   . '        </td></tr>' . "\n" . '        <tr><td colspan="2"></td></tr>'
+                   . '    </table>' . "\n"
+                   . '</form>' . "\n"
+                   . '<div class="tblWarn">' . "\n"
+                   . '    ' . sprintf($strFlushPrivilegesNote, '<a href="server_privileges.php?' . $url_query . '&amp;flush_privileges=1">', '</a>') . "\n"
+                   . '</div>' . "\n";
                 } // end if (display overview)
-        }
+
+         }
+
+
     } else {
 
         // A user was selected -> display the user's properties
@@ -1421,7 +1452,7 @@ if (empty($adduser) && empty($checkprivs)) {
     // check the privileges for a particular database.
     echo '<h2>' . "\n"
        . ($cfg['PropertiesIconic'] ? '<img src="' . $pmaThemeImage . 'b_usrcheck.png" width="16" height="16" border="0" hspace="2" align="middle" />' : '' )
-       . '    ' . sprintf($strUsersHavingAccessToDb, htmlspecialchars($checkprivs)) . "\n"
+       . '    ' . sprintf($strUsersHavingAccessToDb, '<a href="' . $GLOBALS['cfg']['DefaultTabDatabase'] . '?' . PMA_generate_common_url($checkprivs) . '">' .  htmlspecialchars($checkprivs) . '</a>') . "\n"
        . '</h2>' . "\n"
        . '<table border="0" cellpadding="2" cellspacing="1">' . "\n"
        . '    <tr>' . "\n"

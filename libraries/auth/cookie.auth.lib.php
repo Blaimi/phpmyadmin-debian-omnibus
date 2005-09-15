@@ -1,5 +1,5 @@
 <?php
-/* $Id: cookie.auth.lib.php,v 2.25 2005/03/06 21:10:53 nijel Exp $ */
+/* $Id: cookie.auth.lib.php,v 2.26.2.1 2005/09/07 07:20:01 nijel Exp $ */
 // vim: expandtab sw=4 ts=4 sts=4:
 
 // +--------------------------------------------------------------------------+
@@ -255,14 +255,14 @@ if (top != self) {
     <tr>
         <td align="right" bgcolor="<?php echo $GLOBALS['cfg']['BgcolorOne']; ?>"><b><?php echo $GLOBALS['strLogServer']; ?>:&nbsp;</b></td>
         <td align="<?php echo $cell_align; ?>" bgcolor="<?php echo $GLOBALS['cfg']['BgcolorOne']; ?>">
-            <input type="text" name="pma_servername" value="<?php echo (isset($default_server) ? $default_server : ''); ?>" size="24" class="textfield" onfocus="this.select()" />
+            <input type="text" name="pma_servername" value="<?php echo (isset($default_server) ? htmlspecialchars($default_server) : ''); ?>" size="24" class="textfield" onfocus="this.select()" />
         </td>
     </tr>
 <?php } ?>
     <tr>
         <td align="right" bgcolor="<?php echo $GLOBALS['cfg']['BgcolorOne']; ?>"><b><?php echo $GLOBALS['strLogUsername']; ?>&nbsp;</b></td>
         <td align="<?php echo $cell_align; ?>" bgcolor="<?php echo $GLOBALS['cfg']['BgcolorOne']; ?>">
-            <input type="text" name="pma_username" value="<?php echo (isset($default_user) ? $default_user : ''); ?>" size="24" class="textfield" onfocus="this.select()" />
+            <input type="text" name="pma_username" value="<?php echo (isset($default_user) ? htmlspecialchars($default_user) : ''); ?>" size="24" class="textfield" onfocus="this.select()" />
         </td>
     </tr>
     <tr>
@@ -618,7 +618,7 @@ global $conn_error, $server;
     } else if (isset($GLOBALS['no_activity']) && $GLOBALS['no_activity']) {
         $conn_error = sprintf($GLOBALS['strNoActivity'],$GLOBALS['cfg']['LoginCookieValidity']);
     } else if (PMA_DBI_getError()) {
-        $conn_error = PMA_DBI_getError();
+        $conn_error = PMA_sanitize(PMA_DBI_getError());
     } else if (isset($php_errormsg)) {
         $conn_error = $php_errormsg;
     } else {

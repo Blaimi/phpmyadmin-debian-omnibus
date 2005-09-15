@@ -1,5 +1,5 @@
 <?php
-/* $Id: tbl_row_action.php,v 2.16 2005/03/13 13:25:40 lem9 Exp $ */
+/* $Id: tbl_row_action.php,v 2.17 2005/07/10 19:38:54 nijel Exp $ */
 // vim: expandtab sw=4 ts=4 sts=4:
 require_once('./libraries/grab_globals.lib.php');
 require_once('./libraries/common.lib.php');
@@ -113,7 +113,8 @@ if (!empty($submit_mult)) {
             /**
              * Show result of multi submit operation
              */
-            if (!empty($submit_mult) || isset($mult_btn)) {
+            // sql_query is not set when user does not confirm multi-delete
+            if ((!empty($submit_mult) || isset($mult_btn)) && isset($sql_query)) {
                 $disp_message = $strSuccess;
                 $disp_query = $sql_query;
             }

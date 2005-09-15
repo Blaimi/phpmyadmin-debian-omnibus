@@ -1,5 +1,5 @@
 <?php
-/* $Id: header_meta_style.inc.php,v 2.3 2005/03/06 23:23:46 nijel Exp $ */
+/* $Id: header_meta_style.inc.php,v 2.5 2005/07/16 12:59:01 lem9 Exp $ */
 // vim: expandtab sw=4 ts=4 sts=4:
 
 /**
@@ -33,10 +33,11 @@ if (!empty($GLOBALS['cfg']['PmaAbsoluteUri'])) {
 ?>
 <script language="JavaScript" type="text/javascript">
 <!--
-    /* added 2004-06-10 by Michael Keck
+<?php    // added 2004-06-10 by Michael Keck ?>
+    /*
      *       we need this for Backwards-Compatibility and resolving problems
      *       with non DOM browsers, which may have problems with css 2 (like NC 4)
-    */
+     */
     var isDOM      = (typeof(document.getElementsByTagName) != 'undefined'
                       && typeof(document.createElement) != 'undefined')
                    ? 1 : 0;
@@ -47,7 +48,7 @@ if (!empty($GLOBALS['cfg']['PmaAbsoluteUri'])) {
                    ? 1 : 0;
     var capable    = (isDOM || isIE4 || isNS4)
                    ? 1 : 0;
-    // Uggly fix for Opera and Konqueror 2.2 that are half DOM compliant
+    // Ugly fix for Opera and Konqueror 2.2 that are half DOM compliant
     if (capable) {
         if (typeof(window.opera) != 'undefined') {
             var browserName = ' ' + navigator.userAgent.toLowerCase();
@@ -61,10 +62,10 @@ if (!empty($GLOBALS['cfg']['PmaAbsoluteUri'])) {
             }
         } // end if... else if...
     } // end if
-    document.writeln('<link rel="stylesheet" type="text/css" href="<?php echo defined('PMA_PATH_TO_BASEDIR') ? PMA_PATH_TO_BASEDIR : './'; ?>css/phpmyadmin.css.php?lang=<?php echo $GLOBALS['lang']; ?>&amp;js_frame=<?php echo isset($print_view) ? 'print' : 'right'; ?>&amp;js_isDOM=' + isDOM + '" />');
+    document.writeln('<link rel="stylesheet" type="text/css" href="<?php echo defined('PMA_PATH_TO_BASEDIR') ? PMA_PATH_TO_BASEDIR : './'; ?>css/phpmyadmin.css.php?<?php echo PMA_generate_common_url(); ?>&amp;js_frame=<?php echo isset($print_view) ? 'print' : 'right'; ?>&amp;js_isDOM=' + isDOM + '" />');
 //-->
 </script>
 <noscript>
-    <link rel="stylesheet" type="text/css" href="<?php echo defined('PMA_PATH_TO_BASEDIR') ? PMA_PATH_TO_BASEDIR : './'; ?>css/phpmyadmin.css.php?lang=<?php echo $GLOBALS['lang']; ?>&amp;js_frame=<?php echo isset($print_view) ? 'print' : 'right'; ?>" />
+    <link rel="stylesheet" type="text/css" href="<?php echo defined('PMA_PATH_TO_BASEDIR') ? PMA_PATH_TO_BASEDIR : './'; ?>css/phpmyadmin.css.php?<?php echo PMA_generate_common_url(); ?>&amp;js_frame=<?php echo isset($print_view) ? 'print' : 'right'; ?>" />
 </noscript>
-    <link rel="stylesheet" type="text/css" href="<?php echo defined('PMA_PATH_TO_BASEDIR') ? PMA_PATH_TO_BASEDIR : './'; ?>css/print.css" media="print" />
+    <link rel="stylesheet" type="text/css" href="<?php echo defined('PMA_PATH_TO_BASEDIR') ? PMA_PATH_TO_BASEDIR : './'; ?>css/print.css?<?php echo PMA_generate_common_url(); ?>" media="print" />

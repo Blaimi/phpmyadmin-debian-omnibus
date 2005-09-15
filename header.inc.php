@@ -1,5 +1,5 @@
 <?php
-/* $Id: header.inc.php,v 2.28 2005/03/23 11:51:56 lem9 Exp $ */
+/* $Id: header.inc.php,v 2.31.2.1 2005/09/05 22:09:08 lem9 Exp $ */
 // vim: expandtab sw=4 ts=4 sts=4:
 
 if (empty($GLOBALS['is_header_sent'])) {
@@ -41,16 +41,16 @@ if (empty($GLOBALS['is_header_sent'])) {
      */
     $title     = '';
     if ($cfg['ShowHttpHostTitle']) {
-        $title .= (empty($GLOBALS['cfg']['SetHttpHostTitle']) && isset($_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : $GLOBALS['cfg']['SetHttpHostTitle']) . ' >> ';
+        $title .= (empty($GLOBALS['cfg']['SetHttpHostTitle']) && isset($_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : $GLOBALS['cfg']['SetHttpHostTitle']) . ' / ';
     }
     if (!empty($GLOBALS['cfg']['Server']) && isset($GLOBALS['cfg']['Server']['host'])) {
         $title.=str_replace('\'', '\\\'', $GLOBALS['cfg']['Server']['host']);
     }
     if (isset($GLOBALS['db'])) {
-        $title .= ' >> ' . str_replace('\'', '\\\'', $GLOBALS['db']);
+        $title .= ' / ' . str_replace('\'', '\\\'', $GLOBALS['db']);
     }
     if (isset($GLOBALS['table'])) {
-        $title .= (empty($title) ? '' : ' ') . ' >> ' . str_replace('\'', '\\\'', $GLOBALS['table']);
+        $title .= (empty($title) ? '' : ' ') . ' / ' . str_replace('\'', '\\\'', $GLOBALS['table']);
     }
     $title .= ' | phpMyAdmin ' . PMA_VERSION;
     ?>
@@ -59,7 +59,7 @@ if (empty($GLOBALS['is_header_sent'])) {
     // Updates the title of the frameset if possible (ns4 does not allow this)
     if (typeof(parent.document) != 'undefined' && typeof(parent.document) != 'unknown'
         && typeof(parent.document.title) == 'string') {
-        parent.document.title = '<?php echo $title; ?>';
+        parent.document.title = '<?php echo PMA_sanitize($title); ?>';
     }
 
     document.write('<style type="text/css">');
@@ -74,7 +74,6 @@ if (empty($GLOBALS['is_header_sent'])) {
     // js form validation stuff
     var errorMsg0   = '<?php echo str_replace('\'', '\\\'', $GLOBALS['strFormEmpty']); ?>';
     var errorMsg1   = '<?php echo str_replace('\'', '\\\'', $GLOBALS['strNotNumber']); ?>';
-    var errorMsg2   = '<?php echo str_replace('\'', '\\\'', $GLOBALS['strNotValidNumber']); ?>';
     var noDropDbMsg = '<?php echo((!$GLOBALS['cfg']['AllowUserDropDatabase']) ? str_replace('\'', '\\\'', $GLOBALS['strNoDropDatabases']) : ''); ?>';
     var confirmMsg  = '<?php echo(($GLOBALS['cfg']['Confirm']) ? str_replace('\'', '\\\'', $GLOBALS['strDoYouReally']) : ''); ?>';
     var confirmMsgDropDB  = '<?php echo(($GLOBALS['cfg']['Confirm']) ? str_replace('\'', '\\\'', $GLOBALS['strDropDatabaseStrongWarning']) : ''); ?>';
@@ -112,7 +111,6 @@ if (empty($GLOBALS['is_header_sent'])) {
     // js index validation stuff
     var errorMsg0   = '<?php echo str_replace('\'', '\\\'', $GLOBALS['strFormEmpty']); ?>';
     var errorMsg1   = '<?php echo str_replace('\'', '\\\'', $GLOBALS['strNotNumber']); ?>';
-    var errorMsg2   = '<?php echo str_replace('\'', '\\\'', $GLOBALS['strNotValidNumber']); ?>';
     //-->
     </script>
     <script src="libraries/indexes.js" type="text/javascript" language="javascript"></script>
@@ -161,54 +159,71 @@ if (empty($GLOBALS['is_header_sent'])) {
      */
 
     if (PMA_DISPLAY_HEADING) {
-        echo '<table border="0" cellpadding="0" cellspacing="0" id="serverinfo">' . "\n"
-           . '    <tr>' . "\n";
-        $header_url_qry = '?' . PMA_generate_common_url();
-        $server_info = (!empty($cfg['Server']['verbose'])
-                        ? $cfg['Server']['verbose']
-                        : $server_info = $cfg['Server']['host'] . (empty($cfg['Server']['port'])
-                                                                   ? ''
-                                                                   : ':' . $cfg['Server']['port']
-                                                                  )
+        $server_info = (!empty($GLOBALS['cfg']['Server']['verbose'])
+                        ? $GLOBALS['cfg']['Server']['verbose']
+                        : $GLOBALS['cfg']['Server']['host'] . (empty($GLOBALS['cfg']['Server']['port'])
+                                                               ? ''
+                                                               : ':' . $GLOBALS['cfg']['Server']['port']
+                                                              )
                        );
-        echo '        '
-           . '<td class="serverinfo">' . $GLOBALS['strServer'] . ':&nbsp;'
-           . '<a href="' . $GLOBALS['cfg']['DefaultTabServer'] . '?' . PMA_generate_common_url() . '">';
-        if ($GLOBALS['cfg']['MainPageIconic']) {
-            echo '<img src="' . $GLOBALS['pmaThemeImage'] . 's_host.png" width="16" height="16" border="0" alt="' . htmlspecialchars($server_info) . '" />';
+        $item = '<a href="%1$s?%2$s" class="item">';
+        if ( $GLOBALS['cfg']['NavigationBarIconic'] ) {
+            $separator = '        <span class="separator"><img src="' . $GLOBALS['pmaThemeImage'] . 'item_ltr.png" width="5" height="9" alt="-" /></span>' . "\n";
+            $item .= '        <img src="' . $GLOBALS['pmaThemeImage'] . '%5$s" width="16" height="16" alt="" border="0" /> ' . "\n";
+        } else {
+            $separator = '        <span class="separator"> - </span>' . "\n";
         }
-        echo htmlspecialchars($server_info) . '</a>' . "\n"
-           . '</td>' . "\n\n";
 
+        if ( $GLOBALS['cfg']['NavigationBarIconic'] !== true ) {
+            $item .= '%4$s: ';
+        }
+        $item .= '%3$s</a>' . "\n";
+        
+        echo '<div id="serverinfo">' . "\n";
+        printf( $item,
+                $GLOBALS['cfg']['DefaultTabServer'],
+                PMA_generate_common_url(),
+                htmlspecialchars($server_info),
+                $GLOBALS['strServer'],
+                's_host.png' );
+        
         if (!empty($GLOBALS['db'])) {
-            echo '        '
-               . '<td class="serverinfo"><div></div></td>' . "\n" . '            '
-               . '<td class="serverinfo">' . $GLOBALS['strDatabase'] . ':&nbsp;'
-               . '<a href="' . $GLOBALS['cfg']['DefaultTabDatabase'] . '?' . PMA_generate_common_url($GLOBALS['db']) . '">';
-            if ($GLOBALS['cfg']['MainPageIconic']) {
-                echo '<img src="' . $GLOBALS['pmaThemeImage'] . 's_db.png" width="16" height="16" border="0" alt="' . htmlspecialchars($GLOBALS['db']) . '" />';
-            }
-            echo htmlspecialchars($GLOBALS['db']) . '</a>' . "\n"
-               . '</td>' . "\n\n";
-
+            
+            echo $separator;
+            printf( $item,
+                    $GLOBALS['cfg']['DefaultTabDatabase'],
+                    PMA_generate_common_url($GLOBALS['db']),
+                    htmlspecialchars($GLOBALS['db']),
+                    $GLOBALS['strDatabase'],
+                    's_db.png' );
+            
             if (!empty($GLOBALS['table'])) {
-                if (PMA_MYSQL_INT_VERSION >= 50000) {
-                    require_once('./tbl_properties_table_info.php');
-                } else {
-                    $tbl_is_view = FALSE;
-                }
-                echo '        '
-                   . '<td class="serverinfo"><div></div></td>' . "\n" . '            '
-                   . '<td class="serverinfo">' . (isset($GLOBALS['tbl_is_view']) && $GLOBALS['tbl_is_view'] ? $GLOBALS['strView'] : $GLOBALS['strTable']) . ':&nbsp;'
-                   . '<a href="' . $GLOBALS['cfg']['DefaultTabTable'] . '?' . PMA_generate_common_url($GLOBALS['db'], $GLOBALS['table']) . '">';
-                if ($GLOBALS['cfg']['MainPageIconic']) {
-                    echo '<img src="' . $GLOBALS['pmaThemeImage'] . (isset($GLOBALS['tbl_is_view']) && $GLOBALS['tbl_is_view'] ? 'b_views' : 's_tbl') . '.png" width="16" height="16" border="0" alt="' . htmlspecialchars($GLOBALS['table']) . '" />';
-                }
-                echo htmlspecialchars($GLOBALS['table']) . '</a>' . "\n"
-                   . '</td>' . "\n\n";
+                require_once('./tbl_properties_table_info.php');
+
+                echo $separator;
+                printf( $item,
+                        $GLOBALS['cfg']['DefaultTabTable'],
+                        PMA_generate_common_url($GLOBALS['db'], $GLOBALS['table']),
+                        htmlspecialchars($GLOBALS['table']),
+                        (isset($GLOBALS['tbl_is_view']) && $GLOBALS['tbl_is_view'] ? $GLOBALS['strView'] : $GLOBALS['strTable']),
+                        (isset($GLOBALS['tbl_is_view']) && $GLOBALS['tbl_is_view'] ? 'b_views' : 's_tbl') . '.png' );
+                                
+                /**
+                 * Displays table comment
+                 * @uses $show_comment from tbl_properties_table_info.php
+                 * @uses $GLOBALS['avoid_show_comment'] from tbl_relation.php
+                 */
+                if (!empty($show_comment) && !isset($GLOBALS['avoid_show_comment'])) {
+                    if (strstr($show_comment, '; InnoDB free')) {
+                        $show_comment = preg_replace('@; InnoDB free:.*?$@' , '', $show_comment);
+                    }
+                    echo '<!-- Table comment -->' . "\n"
+                       . '<span class="table_comment" id="span_table_comment">&quot;' .  htmlspecialchars($show_comment) . '&quot</span>' . "\n";
+                } // end if
             }
         }
-        echo '    </tr>' . "\n" . '</table>';
+        echo '</div>';
+        
     }
     /**
      * Sets a variable to remember headers have been sent

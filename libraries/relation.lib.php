@@ -1,5 +1,5 @@
 <?php
-/* $Id: relation.lib.php,v 2.34 2005/03/31 21:51:48 lem9 Exp $ */
+/* $Id: relation.lib.php,v 2.37 2005/07/22 18:00:14 lem9 Exp $ */
 // vim: expandtab sw=4 ts=4 sts=4:
 
 /**
@@ -793,7 +793,7 @@ function PMA_purgeHistory($username) {
  *
  * @access  public
  */
-function PMA_foreignDropdown($disp, $foreign_field, $foreign_display, $data, $max = 100) {
+function PMA_foreignDropdown($disp, $foreign_field, $foreign_display, $data, $max) {
     global $cfg;
 
     $ret = '<option value=""></option>' . "\n";
@@ -825,8 +825,8 @@ function PMA_foreignDropdown($disp, $foreign_field, $foreign_display, $data, $ma
            $reloption .= ' selected="selected"';
         } // end if
 
-        $reloptions['id-content'][] = $reloption . '>' . $value . '&nbsp;-&nbsp;' . htmlspecialchars($key) .  '</option>' . "\n";
-        $reloptions['content-id'][] = $reloption . '>' . htmlspecialchars($key) .  '&nbsp;-&nbsp;' . $value . '</option>' . "\n";
+        $reloptions['content-id'][] = $reloption . '>' . $value . '&nbsp;-&nbsp;' . htmlspecialchars($key) .  '</option>' . "\n";
+        $reloptions['id-content'][] = $reloption . '>' . htmlspecialchars($key) .  '&nbsp;-&nbsp;' . $value . '</option>' . "\n";
     } // end while
 
     // the list of keys looks better if not sorted by description
@@ -836,15 +836,30 @@ function PMA_foreignDropdown($disp, $foreign_field, $foreign_display, $data, $ma
         asort($reloptions['content-id']);
     }
 
-    if ($max == -1 || count($reloptions['content-id']) < $max) {
-        $ret .= implode('', $reloptions['content-id']);
-        if (count($reloptions['content-id']) > 0) {
-            $ret .= '<option value=""></option>' . "\n";
-            $ret .= '<option value=""></option>' . "\n";
+    $c = count($cfg['ForeignKeyDropdownOrder']);
+    if($c == 2) {
+        $top = $reloptions[$cfg['ForeignKeyDropdownOrder'][0]];
+        $bot = $reloptions[$cfg['ForeignKeyDropdownOrder'][1]];
+    } elseif($c == 1) {
+        $bot = $reloptions[$cfg['ForeignKeyDropdownOrder'][0]];
+        $top = NULL;
+    } else {
+        $top = $reloptions['id-content'];
+        $bot = $reloptions['content-id'];
+    }
+    $str_bot = implode('', $bot);
+    if($top !== NULL) {
+        $str_top = implode('', $top);
+        $top_count = count($top);
+        if ($max == -1 || $top_count < $max) {
+            $ret .= $str_top;
+            if ($top_count > 0) {
+                $ret .= '<option value=""></option>' . "\n";
+                $ret .= '<option value=""></option>' . "\n";
+            }
         }
     }
-
-    $ret .= implode('', $reloptions['id-content']);
+    $ret .= $str_bot;
 
     return $ret;
 } // end of 'PMA_foreignDropdown()' function

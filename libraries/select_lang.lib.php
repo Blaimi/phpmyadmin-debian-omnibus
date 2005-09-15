@@ -1,5 +1,5 @@
 <?php
-/* $Id: select_lang.lib.php,v 2.17.2.1 2005/04/16 11:48:30 lem9 Exp $ */
+/* $Id: select_lang.lib.php,v 2.23 2005/06/11 10:23:21 lem9 Exp $ */
 // vim: expandtab sw=4 ts=4 sts=4:
 
 
@@ -60,8 +60,10 @@ $available_languages = array(
     'ar-utf-8'          => array('ar|arabic', 'arabic-utf-8', 'ar'),
     'az-iso-8859-9'     => array('az|azerbaijani', 'azerbaijani-iso-8859-9', 'az'),
     'az-utf-8'          => array('az|azerbaijani', 'azerbaijani-utf-8', 'az'),
-    'be-win1251'        => array('be|belarusian', 'belarusian-windows-1251', 'be'),
-    'be-utf-8'          => array('be|belarusian', 'belarusian-utf-8', 'be'),
+
+    'becyr-win1251'     => array('be|belarusian', 'belarusian_cyrillic-windows-1251', 'be'),
+    'becyr-utf-8'       => array('be|belarusian', 'belarusian_cyrillic-utf-8', 'be'),
+    'belat-utf-8'       => array('be[-_]lat|belarusian latin', 'belarusian_latin-utf-8', 'be-lat'),
     'bg-win1251'        => array('bg|bulgarian', 'bulgarian-windows-1251', 'bg'),
     'bg-koi8-r'         => array('bg|bulgarian', 'bulgarian-koi8-r', 'bg'),
     'bg-utf-8'          => array('bg|bulgarian', 'bulgarian-utf-8', 'bg'),
@@ -80,6 +82,7 @@ $available_languages = array(
     'el-iso-8859-7'     => array('el|greek',  'greek-iso-8859-7', 'el'),
     'el-utf-8'          => array('el|greek',  'greek-utf-8', 'el'),
     'en-iso-8859-1'     => array('en|english',  'english-iso-8859-1', 'en'),
+    'en-iso-8859-15'    => array('en|english',  'english-iso-8859-15', 'en'),
     'en-utf-8'          => array('en|english',  'english-utf-8', 'en'),
     'es-iso-8859-1'     => array('es|spanish', 'spanish-iso-8859-1', 'es'),
     'es-iso-8859-15'    => array('es|spanish', 'spanish-iso-8859-15', 'es'),
@@ -121,6 +124,7 @@ $available_languages = array(
     'lt-utf-8'          => array('lt|lithuanian', 'lithuanian-utf-8', 'lt'),
     'lv-win1257'        => array('lv|latvian', 'latvian-windows-1257', 'lv'),
     'lv-utf-8'          => array('lv|latvian', 'latvian-utf-8', 'lv'),
+    'mn-utf-8'          => array('mn|mongolian', 'mongolian-utf-8', 'mn'),
     'ms-iso-8859-1'     => array('ms|malay', 'malay-iso-8859-1', 'ms'),
     'ms-utf-8'          => array('ms|malay', 'malay-utf-8', 'ms'),
     'nl-iso-8859-1'     => array('nl|dutch', 'dutch-iso-8859-1', 'nl'),
@@ -160,6 +164,8 @@ $available_languages = array(
     'th-utf-8'          => array('th|thai', 'thai-utf-8', 'th'),
     'tr-iso-8859-9'     => array('tr|turkish', 'turkish-iso-8859-9', 'tr'),
     'tr-utf-8'          => array('tr|turkish', 'turkish-utf-8', 'tr'),
+    'tt-iso-8859-9'     => array('tt|tatarish', 'tatarish-iso-8859-9', 'tt'),
+    'tt-utf-8'          => array('tt|tatarish', 'tatarish-utf-8', 'tt'),
     'uk-win1251'        => array('uk|ukrainian', 'ukrainian-windows-1251', 'uk'),
     'uk-utf-8'          => array('uk|ukrainian', 'ukrainian-utf-8', 'uk'),
     'zhtw-big5'         => array('zh[-_](tw|hk)|chinese traditional', 'chinese_traditional-big5', 'zh-TW'),

@@ -1,5 +1,5 @@
 <?php
-/* $Id: greek-iso-8859-7.inc.php,v 2.66 2005/03/30 19:22:01 lem9 Exp $ */
+/* $Id: greek-iso-8859-7.inc.php,v 2.74 2005/07/29 17:03:17 lem9 Exp $ */
 
 /* Translated by Kyriakos Xagoraris <theremon at users.sourceforge.net> */
 
@@ -359,7 +359,6 @@ $strNone = 'Κανένα';
 $strNotNumber = 'Αυτό δεν είναι αριθμός!';
 $strNotOK = 'ΛΑΘΟΣ';
 $strNotSet = 'Ο πίνακας <b>%s</b> δεν βρέθηκε ή δεν ορίστηκε στη %s';  
-$strNotValidNumber = ' δεν είναι υπαρκτός αριθμός Εγγραφής!';
 $strNull = 'Κενό';
 $strNumSearchResultsInTable = '%s αποτελέσματα στον πίνακα <i>%s</i>';
 $strNumSearchResultsTotal = '<b>Σύνολο:</b> <i>%s</i> αποτελέσματα';
@@ -804,4 +803,22 @@ $strInnoDBBufferPoolSizeDesc = 'The size of the memory buffer InnoDB uses to cac
 $strInnoDBBufferPoolSize = 'Buffer pool size';  //to translate
 $strInnoDBPages = 'pages';  //to translate
 $strSocketProblem = '(or the local MySQL server\'s socket is not correctly configured)';  //to translate
+$strPrivDescCreateView = 'Allows creating new views.';  //to translate
+$strPrivDescAlterDb = 'Allows altering the structure of existing tables as well as changing the default charset and collation of databases.';  //to translate
+$strPrivDescCreateUser = 'Allows creating, dropping and renaming unser accounts.';  //to translate
+$strPrivDescCreateRoutine = 'Allows creating stored routines.';  //to translate
+$strPrivDescAlterRoutine = 'Allows altering and dropping stored routines.';  //to translate
+$strRoutines = 'Routines';  //to translate
+$strPrivDescShowView = 'Allows performing SHOW CREATE VIEW queries.';  //to translate
+$strPrivDescExecute5 = 'Allows executing stored routines.';  //to translate
+$strCreateDatabaseBeforeCopying = 'CREATE DATABASE before copying';  //to translate
+$strGeneratePassword = 'Generate Password';  //to translate
+$strGenerate = 'Generate';  //to translate
+$strCopy = 'Copy';  //to translate
+$strTransformation_application_octetstream__hex = 'Displays hexadecimal representation of data.';  //to translate
+$strInvalidFieldCount = 'Table must have at least one field.';  //to translate
+$strInvalidRowNumber = '%d is not valid row number.';  //to translate
+$strInvalidColumnCount = 'Column count has to be larger than zero.';  //to translate
+$strInvalidFieldAddCount = 'You have to add at least one field.';  //to translate
+$strAndThen = 'and then';  //to translate
 ?>

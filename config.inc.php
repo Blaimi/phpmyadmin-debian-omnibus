@@ -1,5 +1,5 @@
 <?php
-/* $Id: config.inc.php,v 2.52 2005/03/16 17:22:08 lem9 Exp $ */
+/* $Id: config.inc.php,v 2.65 2005/08/23 23:08:21 lem9 Exp $ */
 // vim: expandtab sw=4 ts=4 sts=4:
 
 /**
@@ -19,7 +19,7 @@ if (!isset($old_error_reporting)) {
 
 
 /**
- * Your phpMyAdmin url
+ * Your phpMyAdmin URL.
  *
  * Complete the variable below with the full url ie
  *    http://www.your_web.net/path_to_your_phpMyAdmin_directory/
@@ -32,19 +32,8 @@ if (!isset($old_error_reporting)) {
  * test to see that the auto-detection code works in your system. A good
  * test is to browse a table, then edit a row and save it.  There will be
  * an error message if phpMyAdmin cannot auto-detect the correct value.
- *
- * If the auto-detection code does work properly, you can set to TRUE the
- * $cfg['PmaAbsoluteUri_DisableWarning'] variable below.
  */
 $cfg['PmaAbsoluteUri'] = '';
-
-
-/**
- * Disable the default warning about $cfg['PmaAbsoluteUri'] not being set
- * You should use this if and ONLY if the PmaAbsoluteUri auto-detection
- * works perfectly.
- */
-$cfg['PmaAbsoluteUri_DisableWarning'] = FALSE;
 
 /**
  * Disable the default warning that is displayed on the DB Details Structure page if
@@ -124,6 +113,11 @@ $cfg['Servers'][$i]['AllowDeny']['order']           // Host authentication order
 $cfg['Servers'][$i]['AllowDeny']['rules']           // Host authentication rules, leave blank for defaults
                                      = array();
 
+/**
+ * If you are configuring for only one server, stop here. You can jump to the next
+ *   section called "Other core phpMyAdmin settings."
+ * The following section allows you to add a second server to this installation.
+ */
 
 $i++;
 $cfg['Servers'][$i]['host']            = '';
@@ -153,6 +147,10 @@ $cfg['Servers'][$i]['AllowDeny']['order']
                                        = '';
 $cfg['Servers'][$i]['AllowDeny']['rules']
                                        = array();
+
+/**
+ * This section allows you to configure a third server for this installation.
+ */
 
 $i++;
 $cfg['Servers'][$i]['host']            = '';
@@ -219,6 +217,8 @@ $cfg['AllowArbitraryServer']    = FALSE;  // allow login to any user entered ser
 // Left frame setup
 $cfg['LeftFrameLight']        = TRUE;    // use a select-based menu and display only the
                                          // current tables in the left frame.
+$cfg['LeftFrameDBTree']       = TRUE;    // turn the select-based light menu into a tree
+$cfg['LeftFrameDBSeparator']  = '_';     // the separator to sub-tree the select-based light menu tree
 $cfg['LeftFrameTableSeparator']= '__';   // Which string will be used to generate table prefixes
                                          // to split/nest tables into multiple categories
 $cfg['LeftFrameTableLevel']   = '1';     // How many sublevels should be displayed when splitting
@@ -245,7 +245,8 @@ $cfg['SuggestDBName']         = TRUE;   // suggest a new DB name if possible (fa
 
 // In browse mode...
 $cfg['ShowBlob']              = FALSE;  // display blob field contents
-$cfg['NavigationBarIconic']   = TRUE;   // do not display text inside navigation bar buttons
+$cfg['NavigationBarIconic']   = 'both'; // Use icons instead of text for the navigation bar buttons
+                                        // and on right panel top menu (server db table) (TRUE|FALSE|'both')
 $cfg['ShowAll']               = FALSE;  // allows to display all the rows
 $cfg['MaxRows']               = 30;     // maximum number of rows to display
 $cfg['Order']                 = 'ASC';  // default for 'ORDER BY' clause (valid
@@ -266,6 +267,11 @@ $cfg['CharEditing']           = 'input';
                                         //  input - allows limiting of input length
                                         //  textarea - allows newlines in fields
 $cfg['InsertRows']            = 2;      // How many rows can be inserted at one time
+
+$cfg['ForeignKeyDropdownOrder'] =       // Sort order for items in a foreign-key dropdown box. 
+    array( 'content-id', 'id-content'); // 'content' is the referenced data, 'id' is the key value.
+$cfg['ForeignKeyMaxLimit'] = 100;       // A dropdown will be used if fewer items are present
+
 
 // For the export features...
 $cfg['ZipDump']               = TRUE;   // Allow the use of zip/gzip/bzip
@@ -309,13 +315,17 @@ $cfg['DefaultTabTable']       = 'tbl_properties_structure.php';
  * Export defaults
  */
 
-$cfg['Export']['format']                    = 'sql';  // sql/latex/excel/csv/xml/xls/hmtlexcel/htmlword
+$cfg['Export']['format']                    = 'sql';  // sql/latex/excel/csv/xml/xls/htmlexcel/htmlword
 $cfg['Export']['compression']               = 'none'; // none/zip/gzip/bzip2
 
 $cfg['Export']['asfile']                    = FALSE;
+$cfg['Export']['charset']                   = '';
 $cfg['Export']['onserver']                  = FALSE;
 $cfg['Export']['onserver_overwrite']        = FALSE;
 $cfg['Export']['remember_file_template']    = TRUE;
+$cfg['Export']['file_template_table']       = '__TABLE__';
+$cfg['Export']['file_template_database']    = '__DB__';
+$cfg['Export']['file_template_server']      = '__SERVER__';
 
 $cfg['Export']['htmlexcel_columns']         = FALSE;
 $cfg['Export']['htmlexcel_null']            = 'NULL';
@@ -547,7 +557,7 @@ $cfg['SetHttpHostTitle']    = '';              // if ShowHttpHostTitle=true, ple
                                              // If not set (or empty), the PMA will get your real Host-Adress.
 
 $cfg['ErrorIconic']          = TRUE;    // show some icons for warning, error and information messages (true|false)?
-$cfg['MainPageIconic']       = TRUE;    // show icons in list on main page, on right panel top menu (server db table)  and on menu tabs (true|false)?
+$cfg['MainPageIconic']       = TRUE;    // show icons in list on main page and on menu tabs (true|false)?
 $cfg['ReplaceHelpImg']       = TRUE;    // show help button instead of strDocumentation (true|false)?
 
 // theme manager
@@ -558,6 +568,7 @@ $cfg['ThemeManager']        = TRUE;          // if you want to use selectable th
 $cfg['ThemeDefault']        = 'original';         // set up default theme, if ThemePath not empty
                                              // you can set up here an valid path to themes or 'original' for
                                              // the original pma-theme
+$cfg['ThemePerServer']      = FALSE;         // allow diferent theme for each configured server
 
 //-----------------------------------------------------------------------------
 
@@ -666,7 +677,8 @@ $cfg['ColumnTypes'] = array(
    'LONGBLOB',
    'LONGTEXT',
    'ENUM',
-   'SET'
+   'SET',
+   'BOOL'
 );
 
 // Attributes
@@ -690,6 +702,7 @@ if ($cfg['ShowFunctionFields']) {
        'UCASE',
        'NOW',
        'PASSWORD',
+       'OLD_PASSWORD',
        'MD5',
        'SHA1',
        'ENCRYPT',
@@ -749,6 +762,7 @@ if ($cfg['ShowFunctionFields']) {
             'LCASE',
             'UCASE',
             'PASSWORD',
+            'OLD_PASSWORD',
             'MD5',
             'SHA1',
             'ENCRYPT',
@@ -823,6 +837,11 @@ $cfg['EnumOperators'] = array(
    '!='
 );
 
+$cfg['SetOperators'] = array(
+   'IN',
+   'NOT IN'
+);
+
 $cfg['NullOperators'] = array(
    'IS NULL',
    'IS NOT NULL'
@@ -841,5 +860,5 @@ set_magic_quotes_runtime(0);
 /**
  * File Revision - do not change either!
  */
-$cfg['FileRevision'] = '$Revision: 2.52 $';
+$cfg['FileRevision'] = '$Revision: 2.65 $';
 ?>

@@ -1,6 +1,10 @@
 #!/bin/sh
 #
-# $Id: create-release.sh,v 2.11 2004/08/23 12:53:01 nijel Exp $
+# $Id: create-release.sh,v 2.12 2005/06/12 20:45:16 lem9 Exp $
+#
+# 2005-06-12, lem9@users.sourceforge.net
+# - cvs server name changed to cvs, because cvs1 no longer works from 
+#   shell.sourceforge.net
 #
 # 2003-08-23, nijel@users.sourceforge.net:
 # - support for creating snapshots outside sourceforge:
@@ -60,7 +64,7 @@
 # - added release todo list
 #
 
-cvsserver=${cvsserver:-cvs1}
+cvsserver=${cvsserver:-cvs}
 
 if [ $# == 0 ]
 then

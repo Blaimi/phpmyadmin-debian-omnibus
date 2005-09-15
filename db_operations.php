@@ -1,12 +1,12 @@
 <?php
-/* $Id: db_operations.php,v 2.6 2005/03/09 15:36:49 lem9 Exp $ */
+/* $Id: db_operations.php,v 2.17 2005/07/22 16:25:22 lem9 Exp $ */
 // vim: expandtab sw=4 ts=4 sts=4:
 
 require_once('./libraries/grab_globals.lib.php');
 require_once('./libraries/common.lib.php');
 require_once('./libraries/mysql_charsets.lib.php');
 /**
- * Rename database
+ * Rename database or Copy database
  */
 if (isset($db) &&
     ((isset($db_rename) && $db_rename == 'true') ||
@@ -14,23 +14,71 @@ if (isset($db) &&
 
     require_once('./libraries/tbl_move_copy.php');
 
-    if (isset($db_rename) && $db_rename == 'true') $move = TRUE;
-    else $move = FALSE;
+    $force_queryframe_reload = TRUE;
+
+    if (isset($db_rename) && $db_rename == 'true') {
+        $move = TRUE;
+    } else {
+        $move = FALSE;
+    }
 
     if (!isset($newname) || empty($newname)) {
         $message = $strDatabaseEmpty;
     } else {
-        $local_query = 'CREATE DATABASE ' . PMA_backquote($newname) . ';';
-        $sql_query = $local_query;
-        PMA_DBI_query($local_query);
-        $tables = PMA_DBI_get_tables($db);
-        foreach ($tables as $table) {
+        if ($move ||
+           (isset($create_database_before_copying) && $create_database_before_copying)) {
+            $local_query = 'CREATE DATABASE ' . PMA_backquote($newname);
+            if (isset($db_collation)) {
+                $local_query .= ' DEFAULT' . PMA_generateCharsetQueryPart($db_collation);
+            }
+            $local_query .= ';';
+            $sql_query = $local_query;
+            PMA_DBI_query($local_query);
+        }
+
+        $tables_full = PMA_DBI_get_tables_full($db);
+        foreach ($tables_full as $table => $tmp) {
             $back = $sql_query;
             $sql_query = '';
-            PMA_table_move_copy($db, $table, $newname, $table, isset($what) ? $what : 'data', $move);
+
+            // value of $what for this table only
+            $this_what = $what;
+
+            if (!isset($tables_full[$table]['Engine'])) {
+                $tables_full[$table]['Engine'] = $tables_full[$table]['Type'];
+            }
+            // do not copy the data from a Merge table
+            // note: on the calling FORM, 'data' means 'structure and data'
+            if ($tables_full[$table]['Engine'] == 'MRG_MyISAM') {
+                if ($this_what == 'data') {
+                    $this_what = 'structure';
+                }
+                if ($this_what == 'dataonly') {
+                    $this_what = 'nocopy';
+                }
+            }
+
+            if ($this_what != 'nocopy') {
+                PMA_table_move_copy($db, $table, $newname, $table, isset($this_what) ? $this_what : 'data', $move);
+            }
+
             $sql_query = $back . $sql_query;
         }
+        unset($table);
+
+        // Duplicate the bookmarks for this db (done once for each db)
+        if ($db != $newname) {
+            $get_fields = array('user','label','query');
+            $where_fields = array('dbase' => $db);
+            $new_fields = array('dbase' => $newname);
+            PMA_duplicate_table_info('bookmarkwork', 'bookmark', $get_fields, $where_fields, $new_fields);
+        }
+
         if ($move) {
+            // cleanup pmadb stuff for this db
+            require_once('./libraries/relation_cleanup.lib.php');
+            PMA_relationsCleanupDatabase($db);
+
             $local_query = 'DROP DATABASE ' . PMA_backquote($db) . ';';
             $sql_query .= "\n" . $local_query;
             PMA_DBI_query($local_query);
@@ -86,11 +134,18 @@ if (empty($is_info)) {
 if (PMA_MYSQL_INT_VERSION >= 40101) {
     $db_collation = PMA_getDbCollation($db);
 }
+if (PMA_MYSQL_INT_VERSION < 50002 || (PMA_MYSQL_INT_VERSION >= 50002 && $db != 'information_schema')) {
+    $is_information_schema = FALSE;
+} else {
+    $is_information_schema = TRUE;
+}
+
+if (!$is_information_schema) {
 ?>
 
 <table border="0" cellpadding="2" cellspacing="0">
     <!-- Create a new table -->
-        <form method="post" action="tbl_create.php" onsubmit="return (emptyFormElements(this, 'table') && checkFormElementInRange(this, 'num_fields', 1))">
+        <form method="post" action="tbl_create.php" onsubmit="return (emptyFormElements(this, 'table') && checkFormElementInRange(this, 'num_fields', '<?php echo str_replace('\'', '\\\'', $GLOBALS['strInvalidFieldCount']); ?>', 1))">
      <tr>
      <td class="tblHeaders" colspan="3" nowrap="nowrap"><?php
         echo PMA_generate_common_hidden_inputs($db);
@@ -100,38 +155,39 @@ if (PMA_MYSQL_INT_VERSION >= 40101) {
                    . htmlspecialchars($GLOBALS['db']) . '</a>';
         // else use
         // $strDBLink = htmlspecialchars($db);
-echo '             ' . sprintf($strCreateNewTable, $strDBLink) . ':&nbsp;' . "\n";
-echo '     </td></tr>';
-echo '     <tr bgcolor="'.$cfg['BgcolorOne'].'"><td nowrap="nowrap">';
-echo '             ' . $strName . ':&nbsp;' . "\n";
-echo '     </td>';
-echo '     <td nowrap="nowrap">';
-echo '             ' . '<input type="text" name="table" maxlength="64" size="30" class="textfield" />';
-echo '     </td><td>&nbsp;</td></tr>';
-echo '     <tr bgcolor="'.$cfg['BgcolorOne'].'"><td nowrap="nowrap">';
-echo '             ' . $strFields . ':&nbsp;' . "\n";
-echo '     </td>';
-echo '     <td nowrap="nowrap">';
-echo '             ' . '<input type="text" name="num_fields" size="2" class="textfield" />' . "\n";
-echo '     </td>';
-echo '     <td align="right">';
-echo '             ' . '&nbsp;<input type="submit" value="' . $strGo . '" />' . "\n";
-echo '     </td> </tr>';
-echo '        </form>';
+    echo '             ' . sprintf($strCreateNewTable, $strDBLink) . ':&nbsp;' . "\n";
+    echo '     </td></tr>';
+    echo '     <tr bgcolor="'.$cfg['BgcolorOne'].'"><td nowrap="nowrap">';
+    echo '             ' . $strName . ':&nbsp;' . "\n";
+    echo '     </td>';
+    echo '     <td nowrap="nowrap">';
+    echo '             ' . '<input type="text" name="table" maxlength="64" size="30" class="textfield" />';
+    echo '     </td><td>&nbsp;</td></tr>';
+    echo '     <tr bgcolor="'.$cfg['BgcolorOne'].'"><td nowrap="nowrap">';
+    echo '             ' . $strFields . ':&nbsp;' . "\n";
+    echo '     </td>';
+    echo '     <td nowrap="nowrap">';
+    echo '             ' . '<input type="text" name="num_fields" size="2" class="textfield" />' . "\n";
+    echo '     </td>';
+    echo '     <td align="right">';
+    echo '             ' . '&nbsp;<input type="submit" value="' . $strGo . '" />' . "\n";
+    echo '     </td> </tr>' . "\n";
+    echo '        </form>' . "\n";
+    echo '</table>' . "\n";
 
-echo '<table border="0" cellpadding="2" cellspacing="0">';
-if ($cfgRelation['commwork']) {
+    echo '<table border="0" cellpadding="2" cellspacing="0">';
+    if ($cfgRelation['commwork']) {
 ?>
     <!-- Alter/Enter db-comment -->
         <tr><td colspan="3"><img src="<?php echo $GLOBALS['pmaThemeImage'] . 'spacer.png'; ?>" width="1" height="1" border="0" alt="" /></td></tr>
 
         <tr>
         <td colspan="3" class="tblHeaders"><?php
-    if ($cfg['PropertiesIconic']) {
-        echo '<img src="' . $pmaThemeImage . 'b_comment.png" border="0" width="16" height="16" hspace="2" align="middle" />';
-    }
-    echo $strDBComment;
-    $comment = PMA_getComments($db);
+        if ($cfg['PropertiesIconic']) {
+            echo '<img src="' . $pmaThemeImage . 'b_comment.png" border="0" width="16" height="16" hspace="2" align="middle" />';
+        }
+        echo $strDBComment;
+        $comment = PMA_getComments($db);
         ?></td></tr>
                                 <form method="post" action="db_operations.php">
         <tr bgcolor="<?php echo $cfg['BgcolorOne']; ?>">
@@ -143,7 +199,7 @@ if ($cfgRelation['commwork']) {
          </td></tr>
         </form>
 <?php
-}
+    }
 ?>
     <!-- Rename database -->
         <tr><td colspan="3"><img src="<?php echo $GLOBALS['pmaThemeImage'] . 'spacer.png'; ?>" width="1" height="1" border="0" alt="" /></td></tr>
@@ -156,6 +212,7 @@ if ($cfgRelation['commwork']) {
         <form method="post" action="db_operations.php"
             onsubmit="return emptyFormElements(this, 'newname')">
                                         <tr bgcolor="<?php echo $cfg['BgcolorOne']; ?>"><td colspan="2"><?php
+          echo '<input type="hidden" name="what" value="data" />';
           echo '<input type="hidden" name="db_rename" value="true" />'
              . PMA_generate_common_hidden_inputs($db);
           ?><input type="text" name="newname" size="30" class="textfield" value="" /></td>
@@ -172,8 +229,12 @@ if ($cfgRelation['commwork']) {
           ?></td></tr>
         <form method="post" action="db_operations.php"
             onsubmit="return emptyFormElements(this, 'newname')">
-                                        <tr bgcolor="<?php echo $cfg['BgcolorOne']; ?>"><td colspan="3"><?php
-          echo '<input type="hidden" name="db_copy" value="true" />'
+        <tr bgcolor="<?php echo $cfg['BgcolorOne']; ?>"><td colspan="3">
+<?php
+          if (isset($db_collation)) {
+              echo '<input type="hidden" name="db_collation" value="' . $db_collation .'" />' . "\n";
+          }
+          echo '<input type="hidden" name="db_copy" value="true" />' . "\n"
              . PMA_generate_common_hidden_inputs($db);
           ?><input type="text" name="newname" size="30" class="textfield" value="" /></td>
         </tr><tr>
@@ -181,7 +242,10 @@ if ($cfgRelation['commwork']) {
                 <input type="radio" name="what" value="structure" id="radio_copy_structure" style="vertical-align: middle" /><label for="radio_copy_structure"><?php echo $strStrucOnly; ?></label>&nbsp;&nbsp;<br />
                 <input type="radio" name="what" value="data" id="radio_copy_data" checked="checked" style="vertical-align: middle" /><label for="radio_copy_data"><?php echo $strStrucData; ?></label>&nbsp;&nbsp;<br />
                 <input type="radio" name="what" value="dataonly" id="radio_copy_dataonly" style="vertical-align: middle" /><label for="radio_copy_dataonly"><?php echo $strDataOnly; ?></label>&nbsp;&nbsp;<br />
+                
 
+                <input type="checkbox" name="create_database_before_copying" value="1" id="checkbox_create_database_before_copying" style="vertical-align: middle" checked="checked" /><label for="checkbox_create_database_before_copying"><?php echo $strCreateDatabaseBeforeCopying; ?></label><br />
+                <input type="checkbox" name="drop_if_exists" value="true" id="checkbox_drop" style="vertical-align: middle" /><label for="checkbox_drop"><?php echo $strStrucDrop; ?></label>&nbsp;&nbsp;<br />
                 <input type="checkbox" name="auto_increment" value="1" id="checkbox_auto_increment" style="vertical-align: middle" /><label for="checkbox_auto_increment"><?php echo $strAddAutoIncrement; ?></label><br />
                 <input type="checkbox" name="constraints" value="1" id="checkbox_constraints" style="vertical-align: middle" /><label for="checkbox_constraints"><?php echo $strAddConstraints; ?></label><br />
                 <?php
@@ -199,42 +263,46 @@ if ($cfgRelation['commwork']) {
 
 <?php
 
-if (PMA_MYSQL_INT_VERSION >= 40101) {
+    if (PMA_MYSQL_INT_VERSION >= 40101) {
     // MySQL supports setting default charsets / collations for databases since
     // version 4.1.1.
-    echo '    <!-- Change database charset -->' . "\n"
-       . '    <tr><td colspan="3"><img src="' . $GLOBALS['pmaThemeImage'] . 'spacer.png' . '" width="1" height="1" border="0" alt="" /></td></tr>' . "\n"
-       . '    <tr><td colspan="3" class="tblHeaders">';
-    if ($cfg['PropertiesIconic']) {
-        echo '<img src="' . $pmaThemeImage . 's_asci.png" border="0" width="16" height="16" hspace="2" align="middle" />';
+        echo '    <!-- Change database charset -->' . "\n"
+           . '    <tr><td colspan="3"><img src="' . $GLOBALS['pmaThemeImage'] . 'spacer.png' . '" width="1" height="1" border="0" alt="" /></td></tr>' . "\n"
+           . '    <tr><td colspan="3" class="tblHeaders">';
+        if ($cfg['PropertiesIconic']) {
+            echo '<img src="' . $pmaThemeImage . 's_asci.png" border="0" width="16" height="16" hspace="2" align="middle" />';
+        }
+        echo '      <label for="select_db_collation">' . $strCollation . '</label>:&nbsp;' . "\n"
+           . '    </td></tr>' . "\n"
+           . '        <form method="post" action="./db_operations.php">' . "\n"
+           . '    <tr bgcolor="' . $cfg['BgcolorOne'] . '"><td colspan="2" nowrap="nowrap">'
+           . PMA_generate_common_hidden_inputs($db, $table, 3)
+           . PMA_generateCharsetDropdownBox(PMA_CSDROPDOWN_COLLATION, 'db_collation', 'select_db_collation', $db_collation, FALSE, 3)
+           . '    </td><td align="right">'
+           . '            <input type="submit" name="submitcollation" value="' . $strGo . '" style="vertical-align: middle" />' . "\n"
+           . '    </td></tr>' . "\n"
+           . '        </form>' . "\n"
+           . '         ' . "\n\n";
     }
-    echo '      <label for="select_db_collation">' . $strCollation . '</label>:&nbsp;' . "\n"
-       . '    </td></tr>' . "\n"
-       . '        <form method="post" action="./db_operations.php">' . "\n"
-       . '    <tr bgcolor="' . $cfg['BgcolorOne'] . '"><td colspan="2" nowrap="nowrap">'
-       . PMA_generate_common_hidden_inputs($db, $table, 3)
-       . PMA_generateCharsetDropdownBox(PMA_CSDROPDOWN_COLLATION, 'db_collation', 'select_db_collation', $db_collation, FALSE, 3)
-       . '    </td><td align="right">'
-       . '            <input type="submit" name="submitcollation" value="' . $strGo . '" style="vertical-align: middle" />' . "\n"
-       . '    </td></tr>' . "\n"
-       . '        </form>' . "\n"
-       . '         ' . "\n\n";
-}
 
-if ($num_tables > 0
-    && !$cfgRelation['allworks'] && $cfg['PmaNoRelation_DisableWarning'] == FALSE) {
-    echo '<tr><td colspan="3"><img src="' . $GLOBALS['pmaThemeImage'] . 'spacer.png' . '" width="1" height="1" border="0" alt="" /></td></tr>'
-        . '<tr><th colspan="3" class="tblHeadError"><div class="errorhead">' . $strError . '</div></th></tr>'
-        . '<tr><td colspan="3" class="tblError">'
-        . sprintf(wordwrap($strRelationNotWorking,65,'<br />'), '<a href="' . $cfg['PmaAbsoluteUri'] . 'chk_rel.php?' . $url_query . '">',  '</a>')
-        . '</td></tr>';
-} // end if
+    if ($num_tables > 0
+        && !$cfgRelation['allworks'] && $cfg['PmaNoRelation_DisableWarning'] == FALSE) {
+        echo '<tr><td colspan="3"><img src="' . $GLOBALS['pmaThemeImage'] . 'spacer.png' . '" width="1" height="1" border="0" alt="" /></td></tr>'
+            . '<tr><th colspan="3" class="tblHeadError"><div class="errorhead">' . $strError . '</div></th></tr>'
+            . '<tr><td colspan="3" class="tblError">'
+            . sprintf(wordwrap($strRelationNotWorking,65,'<br />'), '<a href="' . $cfg['PmaAbsoluteUri'] . 'chk_rel.php?' . $url_query . '">',  '</a>')
+            . '</td></tr>';
+    } // end if
 ?>
 </table>
+<?php
+} // end if (!$is_information_schema)
+// not sure about leaving the PDF dialog for information_schema
 
+?>
 <form method="post" action="pdf_schema.php">
 <?php
-// is this OK to check for 'class' support?
+
 if ($num_tables > 0) {
     $takeaway = $url_query . '&amp;table=' . urlencode($table);
 }

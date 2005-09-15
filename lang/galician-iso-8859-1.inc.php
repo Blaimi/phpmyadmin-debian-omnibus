@@ -1,5 +1,5 @@
 <?php
-/* $Id: galician-iso-8859-1.inc.php,v 2.77 2005/03/30 19:21:58 lem9 Exp $ */
+/* $Id: galician-iso-8859-1.inc.php,v 2.88 2005/08/18 09:41:35 lem9 Exp $ */
 
 /**
  * Translated by Xosé Calvo <xosecalvo at terra.es>
@@ -18,7 +18,7 @@ $day_of_week = array('Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat');
 $month = array('Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec');
 // See http://www.php.net/manual/en/function.strftime.php to define the
 // variable below
-$datefmt = '%B %d, %Y at %I:%M %p';
+$datefmt = '%d de %B de %Y Ã¡s %H:%M';
 
 $timespanfmt = '%s días, %s horas, %s minutos e %s segundos';
 
@@ -153,12 +153,14 @@ $strConnections = 'Conexións';
 $strConstraintsForDumped = 'Limitacións para os volcados das tabelas';  
 $strConstraintsForTable = 'Limitacións para a tabela';  
 $strCookiesRequired = 'A partir de aqui debe permitir cookies.';
+$strCopy = 'Copiar';
 $strCopyDatabaseOK = 'A base de dastos %s copiouse para %s';
 $strCopyTable = 'Copiar a tabela a (base_de_datos<b>.</b>tabela):';
 $strCopyTableOK = 'A tabela \$table copiouse para \$new_name.';
 $strCopyTableSameNames = 'Non se pode copiar unha tabela sobre si mesma';
 $strCouldNotKill = 'phpMyAdmin foi incapaz de finalizar o fío %s.  Probablemente xa está fechado.';
 $strCreate = 'Crear';
+$strCreateDatabaseBeforeCopying = 'CREAR BASE DE DATOS antes de copiar';
 $strCreateIndex = 'Crear un índice en&nbsp;%s&nbsp;colunas';
 $strCreateIndexTopic = 'Crear un novo índice';
 $strCreateNewDatabase = 'Crear unha nova base de datos';
@@ -288,6 +290,8 @@ $strFunction = 'Funcións';
 
 $strGenBy = 'Xerado por';
 $strGeneralRelationFeat = 'Características xerais das relacións';
+$strGeneratePassword = 'Xerar un contrasinal';
+$strGenerate = 'Xerar';
 $strGenTime = 'Xerado en';
 $strGeorgian = 'Xeorxiano';  
 $strGerman = 'AlemÃ¡n';
@@ -326,8 +330,8 @@ $strImportFiles = 'Importar ficheiros';
 $strImportFinished = 'Finalizou a importación';
 $strIndexes = 'Índices';
 $strIndexHasBeenDropped = 'Eliminouse o índice %s';
-$strIndexName = 'Nome do índice&nbsp;:';
 $strIndex = 'Índice';
+$strIndexName = 'Nome do índice&nbsp;:';
 $strIndexType = 'Tipo de índice&nbsp;:';
 $strIndexWarningMultiple = 'Creouse máis dunha chave %s para a columna `%s`';
 $strIndexWarningPrimary = 'Non se lle deberían asignar ambas as dúas chaves PRIMARY e INDEX á columna `%s`';
@@ -354,6 +358,11 @@ $strInstructions = 'Instrucións';
 $strInternalNotNecessary = '* Non se precisa dunha relación interna cando existe tamén en InnoDB.';  
 $strInternalRelations = 'Relacións internas';  
 $strInUse = 'en uso';
+$strInvalidColumnCount = 'O número de columnas ten que ser maior de cero';
+$strInvalidFieldAddCount = 'Ten que engadir un campo polo menos';
+$strInvalidFieldCount = 'A tabela ha de ter, polo menos, un campo.';
+$strInvalidRowCount = 'Ten que engadir polo menos unha fileira.';
+$strInvalidRowNumber = '%d non é un número de fileira válido.';
 
 $strJapanese = 'Xaponés';
 $strJumpToDB = 'Saltar à base de datos &quot;%s&quot;.';
@@ -470,7 +479,6 @@ $strNoThemeSupport = 'Non ten a funcionalidade dos temas. Comprobe a configuraci
 $strNotNumber = 'Non é un número!';
 $strNotOK = 'non conforme';
 $strNotSet = 'Non se atopou a tabela <b>%s</b>ou non se indicou en %s';
-$strNotValidNumber = ' non é un número válido para unha fileira!';
 $strNoUsersFound = 'Non se achou nengun(s) usuario(s).';
 $strNoValidateSQL = 'Saltarse a validacion de';
 $strNull = 'Nulo';
@@ -523,13 +531,19 @@ $strPrint = 'Imprimir';
 $strPrintViewFull = 'Vista previa da impresión (con textos completos)';  
 $strPrintView = 'Visualización previa da impresión';
 $strPrivDescAllPrivileges = 'Inclue todos os privilexios a excepción de GRANT (Conceder).';
+$strPrivDescAlterDb = 'Permite alterar a estrutura de tabelas xa existentes, así como mudar o conxunto de caracteres por omisión e a colación das bases de datos.';
 $strPrivDescAlter = 'Permite alterar a estrutura das tabelas xa existentes.';
+$strPrivDescAlterRoutine = 'Permite alterar e eliminar rotinas armacenadas.';
 $strPrivDescCreateDb = 'Permite crear novas bases de datos e tabelas.';
+$strPrivDescCreateRoutine = 'Permite crear rotinas armacenadas.';
 $strPrivDescCreateTbl = 'Permite crear tabelas novas.';
 $strPrivDescCreateTmpTable = 'Permite crear tabelas temporais.';
+$strPrivDescCreateUser = 'Permite crear, eliminar e mudar o nome das contas de usuario.';
+$strPrivDescCreateView = 'Permite crear vistas novas.';
 $strPrivDescDelete = 'Permite eliminar datos.';
 $strPrivDescDropDb = 'Permite eliminar bases de datos e tabelas.';
 $strPrivDescDropTbl = 'Permite eliminar tabelas.';
+$strPrivDescExecute5 = 'Permite executar rotinas armacenadas.';
 $strPrivDescExecute = 'Permite facer correr procedimentos armacenados. Non funciona nesta versión do MySQL.';
 $strPrivDescFile = 'Permite importar e exportar datos desde e para ficheiros.';
 $strPrivDescGrant = 'Permite acrescentar usuarios e privilexios sen recarregar as tabelas de privilexios.';
@@ -547,6 +561,7 @@ $strPrivDescReplClient = 'Permite-lle ao usuario perguntar onde están os escravo
 $strPrivDescReplSlave = 'Necesario para os escravos de replicación.';
 $strPrivDescSelect = 'Permite gravar datos.';
 $strPrivDescShowDb = 'Permite acceder á listaxe de bases de datos completa';
+$strPrivDescShowView = 'Permite realizar consultas SHOW CREATE VIEW.';
 $strPrivDescShutdown = 'Permite apagar o servidor.';
 $strPrivDescSuper = 'Permite conexións, mesmo chegado ao número máximo de conexións. Ven requerido para a maioría das operación administracións, como configurar as variábeis globais ou matar os fíos doutros usuarios.';
 $strPrivDescUpdate = 'Permite modificar datos.';
@@ -596,6 +611,7 @@ $strRevokeAndDelete = 'Retirar-lles todos os privilexios activos aos usuarios e 
 $strRevokeMessage = 'Retirou-lle os privilexios a %s';
 $strRevoke = 'Revogar';
 $strRomanian = 'Romeno';
+$strRoutines = 'Rotinas';
 $strRowLength = 'Lonxitude da fileira';
 $strRows = 'Fileiras';
 $strRowsFrom = 'fileiras, a comezar da';
@@ -730,6 +746,7 @@ $strTraditionalChinese = 'Chinés tradicional';
 $strTraditionalSpanish = 'Español tradicional';
 $strTraffic = 'Tráfico';
 $strTransformation_application_octetstream__download = 'Mostrar un vínculo para baixar os datos binarios dun campo. A primeira opción é o nome do ficheiro binario. A segunda é un nome posíbel para o campo dunha fileira de tabela que conteña o nome do ficheiro. Se pretende seleccionar a segunda opción, a primeira deberá conter só unha cadea vacia';  
+$strTransformation_application_octetstream__hex = 'Mostra unha representación hexadecimal dos datos.';
 $strTransformation_image_jpeg__inline = 'Mostra unha imaxe reducida vinculábel. Opcións: anchura,altura en píxeles (mantén a proporción orixinal)';
 $strTransformation_image_jpeg__link = 'Mostra un vínculo a esta imaxe (ou sexa, baixada directa de blob).';
 $strTransformation_image_png__inline = 'Ver image/jpeg: na liña';
@@ -799,5 +816,8 @@ $strYes = 'Si';
 
 $strZeroRemovesTheLimit = 'Nota: Se estas opcións se configuran como 0 (cero) elimina-se o limite.';
 $strZip = 'comprimido no formato "zip"';
+
+// To translate:
+$strAndThen = 'and then';  //to translate
 
 ?>

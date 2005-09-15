@@ -1,5 +1,5 @@
 <?php
-/* $Id: server_status.php,v 2.12 2005/03/06 01:06:46 rabus Exp $ */
+/* $Id: server_status.php,v 2.13 2005/05/01 12:43:26 lem9 Exp $ */
 // vim: expandtab sw=4 ts=4 sts=4:
 
 
@@ -249,6 +249,7 @@ if (!empty($serverStatus)) {
             </tr>
         </table>
     </li>
+</ul>
 <?php
 }
 

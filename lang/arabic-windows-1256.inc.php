@@ -1,5 +1,5 @@
 <?php
-/* $Id: arabic-windows-1256.inc.php,v 2.67 2005/03/30 19:19:19 lem9 Exp $ */
+/* $Id: arabic-windows-1256.inc.php,v 2.75 2005/07/29 17:03:05 lem9 Exp $ */
 
 /**
  * Original translation to Arabic by Fisal <fisal77 at hotmail.com>
@@ -386,7 +386,6 @@ $strNone = 'áÇÔÆ';
 $strNotNumber = 'åĞÇ áíÓ ÑŞã!';
 $strNotOK = 'áíÓ ÕÇáÍÇğ';
 $strNotSet = 'ÇáÌÏæá <b>%s</b> ÛíÑ ãæÌæÏ Ãæ ãÍÏÏ İí %s';
-$strNotValidNumber = ' åĞÇ áíÓ ÚÏÏ Õİ ÕÍíÍ!';
 $strNull = 'ÎÇáí';
 $strNumSearchResultsInTable = '%s ãØÇÈŞÉ İí ÇáÌÏæá <i>%s</i>';
 $strNumSearchResultsTotal = '<b>ÇáãÌãæÚ:</b> <i>%s</i>ãØÇÈŞÉ';
@@ -803,4 +802,22 @@ $strInnoDBBufferPoolSizeDesc = 'The size of the memory buffer InnoDB uses to cac
 $strInnoDBBufferPoolSize = 'Buffer pool size';  //to translate
 $strInnoDBPages = 'pages';  //to translate
 $strSocketProblem = '(or the local MySQL server\'s socket is not correctly configured)';  //to translate
+$strPrivDescCreateView = 'Allows creating new views.';  //to translate
+$strPrivDescAlterDb = 'Allows altering the structure of existing tables as well as changing the default charset and collation of databases.';  //to translate
+$strPrivDescCreateUser = 'Allows creating, dropping and renaming unser accounts.';  //to translate
+$strPrivDescCreateRoutine = 'Allows creating stored routines.';  //to translate
+$strPrivDescAlterRoutine = 'Allows altering and dropping stored routines.';  //to translate
+$strRoutines = 'Routines';  //to translate
+$strPrivDescShowView = 'Allows performing SHOW CREATE VIEW queries.';  //to translate
+$strPrivDescExecute5 = 'Allows executing stored routines.';  //to translate
+$strCreateDatabaseBeforeCopying = 'CREATE DATABASE before copying';  //to translate
+$strGeneratePassword = 'Generate Password';  //to translate
+$strGenerate = 'Generate';  //to translate
+$strCopy = 'Copy';  //to translate
+$strTransformation_application_octetstream__hex = 'Displays hexadecimal representation of data.';  //to translate
+$strInvalidFieldCount = 'Table must have at least one field.';  //to translate
+$strInvalidRowNumber = '%d is not valid row number.';  //to translate
+$strInvalidColumnCount = 'Column count has to be larger than zero.';  //to translate
+$strInvalidFieldAddCount = 'You have to add at least one field.';  //to translate
+$strAndThen = 'and then';  //to translate
 ?>

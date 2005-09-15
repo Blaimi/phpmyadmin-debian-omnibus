@@ -1,5 +1,5 @@
 <?php
-/* $Id: text_plain__external.inc.php,v 2.6 2004/12/10 12:18:58 lem9 Exp $ */
+/* $Id: text_plain__external.inc.php,v 2.7 2005/08/14 21:34:01 lem9 Exp $ */
 // vim: expandtab sw=4 ts=4 sts=4:
 
 function PMA_transformation_text_plain__external_nowrap($options = array()) {
@@ -67,7 +67,7 @@ function PMA_transformation_text_plain__external($buffer, $options = array(), $m
         0 => array("pipe", "r"),
         1 => array("pipe", "w")
     );
-    $process = proc_open($program . ' ' . $poptions, $descriptorspec, $pipes);
+    $process = proc_open($program . ' ' . $poptions, $descriptorspec, $pipes = array());
     if (is_resource($process)) {
         fwrite($pipes[0], $buffer);
         fclose($pipes[0]);

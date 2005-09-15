@@ -1,5 +1,5 @@
 <?php
-/* $Id: export.php,v 2.22 2005/03/06 21:10:53 nijel Exp $ */
+/* $Id: export.php,v 2.27.2.1 2005/09/14 17:06:22 lem9 Exp $ */
 // vim: expandtab sw=4 ts=4 sts=4:
 
 /**
@@ -84,6 +84,7 @@ function PMA_exportOutputHandler($line)
                     $write_result = @fwrite($GLOBALS['file_handle'], $dump_buffer);
                     if (!$write_result || ($write_result != strlen($dump_buffer))) {
                         $GLOBALS['message'] = sprintf($GLOBALS['strNoSpace'], htmlspecialchars($save_filename));
+                        $GLOBALS['show_error_header'] = TRUE;
                         return FALSE;
                     }
                 } else {
@@ -105,6 +106,7 @@ function PMA_exportOutputHandler($line)
                 $write_result = @fwrite($GLOBALS['file_handle'], $line);
                 if (!$write_result || ($write_result != strlen($line))) {
                     $GLOBALS['message'] = sprintf($GLOBALS['strNoSpace'], htmlspecialchars($save_filename));
+                    $GLOBALS['show_error_header'] = TRUE;
                     return FALSE;
                 }
                 $time_now = time();
@@ -212,7 +214,7 @@ if ($asfile) {
     // Generate basic dump extension
     if ($type == 'csv') {
         $filename  .= '.csv';
-        $mime_type = 'text/x-comma-separated-values';
+        $mime_type = 'text/comma-separated-values';
     } else if ($type == 'htmlexcel') {
         $filename  .= '.xls';
         $mime_type = 'application/vnd.ms-excel';
@@ -248,9 +250,13 @@ if ($asfile) {
         $mime_type = 'application/x-bzip2';
     } else if (isset($compression) && $compression == 'gzip') {
         $filename  .= '.gz';
-        // needed to avoid recompression by server modules like mod_gzip:
-        $content_encoding = 'x-gzip';
-        $mime_type = 'application/x-gzip';
+        // Needed to avoid recompression by server modules like mod_gzip.
+        // It seems necessary to check about zlib.output_compression
+        // to avoid compressing twice
+        if (!@ini_get('zlib.output_compression')) {
+            $content_encoding = 'x-gzip';
+            $mime_type = 'application/x-gzip';
+        }
     } else if (isset($compression) && $compression == 'zip') {
         $filename  .= '.zip';
         $mime_type = 'application/zip';
@@ -266,12 +272,15 @@ if ($save_on_server) {
     unset($message);
     if (file_exists($save_filename) && empty($onserverover)) {
         $message = sprintf($strFileAlreadyExists, htmlspecialchars($save_filename));
+        $GLOBALS['show_error_header'] = TRUE;
     } else {
         if (is_file($save_filename) && !is_writable($save_filename)) {
             $message = sprintf($strNoPermission, htmlspecialchars($save_filename));
+            $GLOBALS['show_error_header'] = TRUE;
         } else {
             if (!$file_handle = @fopen($save_filename, 'w')) {
                 $message = sprintf($strNoPermission, htmlspecialchars($save_filename));
+                $GLOBALS['show_error_header'] = TRUE;
             }
         }
     }
@@ -304,13 +313,17 @@ if (!$save_on_server) {
         }
         header('Content-Type: ' . $mime_type);
         header('Expires: ' . gmdate('D, d M Y H:i:s') . ' GMT');
-        // lem9 & loic1: IE need specific headers
+        // lem9: Tested behavior of 
+        //       IE 5.50.4807.2300
+        //       IE 6.0.2800.1106 (small glitch, asks twice when I click Open) 
+        //       IE 6.0.2900.2180
+        //       Firefox 1.0.6
+        // in http and https
+        header('Content-Disposition: attachment; filename="' . $filename . '"');
         if (PMA_USR_BROWSER_AGENT == 'IE') {
-            header('Content-Disposition: inline; filename="' . $filename . '"');
             header('Cache-Control: must-revalidate, post-check=0, pre-check=0');
             header('Pragma: public');
         } else {
-            header('Content-Disposition: attachment; filename="' . $filename . '"');
             header('Pragma: no-cache');
         }
     } else {
@@ -564,7 +577,7 @@ else {
      * Close the html tags and add the footers in dump is displayed on screen
      */
     //echo '    </pre>' . "\n";
-    echo '        </textarea>' . "\n"
+    echo '</textarea>' . "\n"
        . '    </form>' . "\n";
     echo '</div>' . "\n";
     echo "\n";

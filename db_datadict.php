@@ -1,5 +1,5 @@
 <?php
-/* $Id: db_datadict.php,v 2.16 2005/03/05 23:19:35 lem9 Exp $ */
+/* $Id: db_datadict.php,v 2.17 2005/05/22 17:09:27 lem9 Exp $ */
 
 
 /**
@@ -310,7 +310,7 @@ function printPage()
 //-->
 </script>
 <?php
-echo '<br /><br />&nbsp;<input type="button" style="width: 100px; height: 25px;" id="print" value="' . $strPrint . '" onclick="printPage()">' . "\n";
+echo '<br /><br />&nbsp;<input type="button" style="width: 100px; height: 25px;" id="print" value="' . $strPrint . '" onclick="printPage()" />' . "\n";
 
 require_once('./footer.inc.php');
 ?>

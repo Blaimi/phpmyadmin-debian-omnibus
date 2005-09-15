@@ -1,4 +1,4 @@
-/* $Id: functions.js,v 2.12 2005/01/18 15:30:30 lem9 Exp $ */
+/* $Id: functions.js,v 2.17 2005/08/14 19:31:55 lem9 Exp $ */
 
 
 /**
@@ -45,7 +45,11 @@ function confirmLink(theLink, theSqlQuery)
 
     var is_confirmed = confirm(confirmMsg + ' :\n' + theSqlQuery);
     if (is_confirmed) {
-        theLink.href += '&is_js_confirmed=1';
+    	if ( typeof(theLink.href) != 'undefined' ) {
+            theLink.href += '&is_js_confirmed=1';
+        } else if ( typeof(theLink.form) != 'undefined' ) {
+            theLink.form.action += '?is_js_confirmed=1';
+        }
     }
 
     return is_confirmed;
@@ -218,7 +222,7 @@ function checkSqlQuery(theForm)
 
 
 /**
- * Displays an error message if an element of a form hasn't been completed and
+ * Check if a form's element is empty 
  * should be
  *
  * @param   object   the form
@@ -226,7 +230,7 @@ function checkSqlQuery(theForm)
  *
  * @return  boolean  whether the form field is empty or not
  */
-function emptyFormElements(theForm, theFieldName)
+function emptyCheckTheField(theForm, theFieldName)
 {
     var isEmpty  = 1;
     var theField = theForm.elements[theFieldName];
@@ -239,6 +243,25 @@ function emptyFormElements(theForm, theFieldName)
         var space_re = new RegExp('\\s+');
         isEmpty      = (theField.value.replace(space_re, '') == '') ? 1 : 0;
     }
+
+    return isEmpty;
+} // end of the 'emptyCheckTheField()' function
+
+
+/**
+ * Displays an error message if an element of a form hasn't been completed and
+ * should be
+ *
+ * @param   object   the form
+ * @param   string   the name of the form field to put the focus on
+ *
+ * @return  boolean  whether the form field is empty or not
+ */
+function emptyFormElements(theForm, theFieldName)
+{
+    var theField = theForm.elements[theFieldName];
+    isEmpty = emptyCheckTheField(theForm, theFieldName);
+
     if (isEmpty) {
         theForm.reset();
         theField.select();
@@ -261,7 +284,7 @@ function emptyFormElements(theForm, theFieldName)
  *
  * @return  boolean  whether a valid number has been submitted or not
  */
-function checkFormElementInRange(theForm, theFieldName, min, max)
+function checkFormElementInRange(theForm, theFieldName, message, min, max)
 {
     var theField         = theForm.elements[theFieldName];
     var val              = parseInt(theField.value);
@@ -283,7 +306,7 @@ function checkFormElementInRange(theForm, theFieldName, min, max)
     // It's a number but it is not between min and max
     else if (val < min || val > max) {
         theField.select();
-        alert(val + errorMsg2);
+        alert(message.replace('%d', val));
         theField.focus();
         return false;
     }
@@ -291,12 +314,18 @@ function checkFormElementInRange(theForm, theFieldName, min, max)
     else {
         theField.value = val;
     }
-
     return true;
+
 } // end of the 'checkFormElementInRange()' function
+
 
 function checkTableEditForm(theForm, fieldsCnt)
 {
+    // TODO: avoid sending a message if user just wants to add a line
+    // on the form but has not completed at least one field name
+
+    var atLeastOneField = 0;
+
     for (i=0; i<fieldsCnt; i++)
     {
         var id = "field_" + i + "_2";
@@ -312,7 +341,21 @@ function checkTableEditForm(theForm, fieldsCnt)
                 return false;
             }
         }
+
+        if (atLeastOneField == 0) {
+            var id = "field_" + i + "_1";
+            if (!emptyCheckTheField(theForm, id)) {
+                atLeastOneField = 1;
+            }
+        } 
     }
+    if (atLeastOneField == 0) {
+        var theField = theForm.elements["field_0_1"];
+        alert(errorMsg0);
+        theField.focus();
+        return false;
+    }
+
     return true;
 } // enf of the 'checkTableEditForm()' function
 
@@ -410,6 +453,13 @@ function setPointer(theRow, theRowNum, theAction, theDefaultColor, thePointerCol
     if ((thePointerColor == '' && theMarkColor == '')
         || typeof(theRow.style) == 'undefined') {
         return false;
+    }
+
+    // 1.1 Sets the mouse pointer to pointer on mouseover and back to normal otherwise.
+    if (theAction == "over" || theAction == "click") {
+        theRow.style.cursor='pointer';
+    } else {
+        theRow.style.cursor='default';
     }
 
     // 2. Gets the current row and exits if the browser can't get it

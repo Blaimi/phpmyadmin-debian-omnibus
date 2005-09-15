@@ -4,14 +4,14 @@
    Transformations  -  FAQ  -  Developers  -  Credits  -  Translators
    ______________________________________________________________________
 
-                        phpMyAdmin 2.6.2 Documentation
+                      phpMyAdmin 2.6.4-pl1 Documentation
 
      * SourceForge phpMyAdmin project page   [ http://www.phpmyadmin.net/ ] 
      * Local documents:
           + Version history: ChangeLog
           + General notes: README
           + License: LICENSE
-     * Documentation version: $Id: Documentation.html,v 2.123.2.2 2005/04/16        15:43:25 lem9 Exp $
+     * Documentation version: $Id: Documentation.html,v 2.147.2.3 2005/09/15        16:42:00 lem9 Exp $
 
 Requirements
 
@@ -49,7 +49,7 @@ Introduction
      * transform stored data into any format using a set of predefined funct       ions, like displaying BLOB-data as image or download-link or ...
      * support InnoDB tables and foreign keys (see FAQ 3.6)
      * support mysqli, the improved MySQL extension (see FAQ 1.17)
-     * communicate in 48 different languages
+     * communicate in 50 different languages
 
    (*)  phpMyAdmin can compress (Zip, GZip -RFC 1952- or Bzip2 formats) dump   s and CSV exports if you use PHP4 >= 4.0.4 with Zlib support (--with-zli   b) and/or Bzip2 support (--with-bz2).
 
@@ -69,10 +69,9 @@ Installation
     2. Ensure that all the scripts have the appropriate owner (if PHP is run       ning in safe mode, having some scripts with an owner different from the
        owner of other scripts will be a problem). See FAQ 4.2 for suggestions.
     3. Open the file config.inc.php in your favorite editor and change the v       alues for host, user, password and authentication mode to fit your
-       environment.  Here, "host" means the MySQL server. Also insert the
-       correct value for $cfg['PmaAbsoluteUri']. Have a look at Configuration
-       section  for  an  explanation  of all values. Please also read the
-       remaining  of  this  Installation  section  for  information about
+       environment.  Here,  "host" means the MySQL server. Have a look at
+       Configuration section for an explanation of all values. Please also read
+       the  remaining  of this Installation section for information about
        authentication modes and the linked-tables infrastructure.
     4. It is recommended that you protect the directory in which you install       ed phpMyAdmin (unless it's on a closed intranet, or you wish to use
        HTTP  or  cookie authentication), for example with HTTP-AUTH (in a
@@ -115,7 +114,7 @@ Installation
        In cookie mode, the password is stored, encrypted with the blowfish
        algorithm, in a temporary cookie.
      * Note: starting with phpMyAdmin 2.6.1, configuring the controluser to       enable HTTP and cookie authentication applies only to MySQL servers
-       older than 4.1.2.
+       older than 4.1.2. See the controluser directive.
        For 'HTTP' and 'cookie' modes, phpMyAdmin needs a controluser that has
        only  the  SELECT  privilege on the mysql.user (all columns except
        "Password"),  mysql.db (all columns), mysql.host (all columns) and
@@ -155,8 +154,8 @@ GRANT SELECT (
 
 GRANT SELECT, INSERT, UPDATE, DELETE ON <pma_db>.* TO 'pma'@'localhost';
 
-       (this of course requires you to have a special DB for phpMyAdmin, the
-       contents will be explained later)
+       (this of course requires that your linked-tables infrastructure be set
+       up).
        Of course, the above queries only work if your MySQL version supports
        the GRANT command. This is the case since 3.22.11.
      * Then each of the true users should be granted a set of privileges on       a set of particular databases. Normally you shouldn't give global
@@ -207,20 +206,13 @@ Configuration
           http://www.your_web.net/path_to_your_phpMyAdmin_directory/.
           Starting with version 2.3.0, it is advisable to try leaving this
           blank. In most cases phpMyAdmin automatically detects the proper
-          setting. Additional details are in the configuration file. If you
-          leave it blank, see the notes for
-          $cfg['PmaAbsoluteUri_DisableWarning']; you probably want to change
-          that to TRUE.
+          setting. Additional details are in the configuration file.
           Don't forget the slash at the end of your URL. The URL must contain
           characters that are valid for a URL, and on some servers, the path is
           case-sensitive.
-
-   $cfg['PmaAbsoluteUri_DisableWarning'] boolean
-          By default, when you leave $cfg['PmaAbsoluteUri'] empty, and the
-          system detects your absolute URI automatically, we display a warning
-          to remind you. If you have tested the automatic detection, and it
-          works perfectly for your setup, then you can set this variable to
-          squelch the warning.
+          If you get an error that this must be set or if the autodetect code
+          fails  to detect your path, please post a bug report on our bug
+          tracker so we can improve the code.
 
    $cfg['PmaNoRelation_DisableWarning'] boolean
           Starting with version 2.3.0 phpMyAdmin offers a lot of features to
@@ -615,6 +607,14 @@ Configuration
           can   use   the   feature   to  display  nested  folders  using
           $cfg['LeftFrameTableSeparator']
 
+   $cfg['LeftFrameDBTree'] boolean
+          In light mode, defines whether to display the names of databases (in
+          the selector) using a tree, see also $cfg['LeftFrameDBSeparator'].
+
+   $cfg['LeftFrameDBSeparator'] string
+          The string used to separate the parts of the database name when
+          showing them in a tree.
+
    $cfg['LeftFrameTableSeparator'] string
           Defines a string to be used to nest table spaces. Defaults to '__'.
           This means if you have tables like 'first__second__third' this will
@@ -688,8 +688,10 @@ Configuration
           Defines whether BLOB fields are shown when browsing a table's content
           or not.
 
-   $cfg['NavigationBarIconic'] boolean
-          Defines whether navigation bar buttons contain text or symbols only.
+   $cfg['NavigationBarIconic'] string
+          Defines whether navigation bar buttons and the right panel top menu
+          contain text or symbols only. A value of TRUE displays icons, FALSE
+          displays text and 'both' displays both icons and text.
 
    $cfg['ShowAll'] boolean
           Defines whether an user should be displayed a "show all (records)"
@@ -726,6 +728,20 @@ Configuration
             limitations
 
           Default is old behavior so input.
+
+   $cfg['InsertRows'] integer
+          Defines the maximum number of concurrent entries for the Insert page.
+
+   $cfg['ForeignKeyMaxLimit'] integer
+          If there are fewer items than this in the set of foreign keys, then a
+          drop-down box of foreign keys is presented, in the style described by
+          the $cfg['ForeignKeyDropdownOrder'] setting.
+
+   $cfg['ForeignKeyDropdownOrder'] array
+          For the foreign key drop-down fields, there are several methods of
+          display, offering both the key and value data. The contents of the
+          array should be one or both of the following strings: 'content-id',
+          'id-content'.
 
    $cfg['ZipDump'] boolean
           $cfg['GZipDump'] boolean
@@ -811,6 +827,8 @@ Configuration
           iconv support (compiled in or module) in PHP to allow MySQL queries
           recoding and used language file must have it enabled (by default only
           these which are in Unicode, just to avoid losing some characters).
+          Setting this to TRUE also activates a pull-down menu in the Export
+          page, to choose the character set when exporting a file.
 
    $cfg['RecodingEngine'] string
           You can select here which functions will be used for character set
@@ -968,6 +986,7 @@ Configuration
           HTTP, or when file uploads are disabled in PHP.
           Please note that if PHP is running in safe mode, this directory must
           be owned by the same user as the owner of the phpMyAdmin scripts.
+          See also FAQ 1.16 for alternatives.
 
    $cfg['docSQLDir'] string
           The name of the directory, where docSQL files can be uploaded for
@@ -1089,8 +1108,7 @@ Configuration
           Uses icons for warnings, errors and informations.
 
    $cfg['MainPageIconic'] boolean
-          Uses icons on main page in lists, on right panel top menu and menu
-          tabs.
+          Uses icons on main page in lists and menu tabs.
 
    $cfg['ReplaceHelpImg'] boolean
           Shows a help button instead of the "Documentation" message.
@@ -1104,6 +1122,9 @@ Configuration
 
    $cfg['ThemeDefault'] string
           The default theme (a subdirectory under cfg['ThemePath']).
+
+   $cfg['ThemePerServer'] boolean
+          Whether to allow different theme for each server.
 
    $cfg['DefaultQueryTable'] string
    $cfg['DefaultQueryDatabase'] string
@@ -1405,8 +1426,7 @@ FAQ - Frequently Asked Questions
     [1.5] Using phpMyAdmin on IIS, I'm facing crashes and/or many error
     messages with the HTTP or advanced authentication mode.
 
-   This is a known problem with the PHP ISAPI filter: it's not so stable. Fo   r some more information and complete testings see the messages posted by    André B. aka "djdeluxe76" in this thread from the phpWizard forum.
-   Please use instead the cookie authentication mode.
+   This is a known problem with the PHP ISAPI filter: it's not so stable. Pl   ease use instead the cookie authentication mode.
 
     [1.6] I can't use phpMyAdmin on PWS: nothing is displayed!
 
@@ -1470,9 +1490,16 @@ FAQ - Frequently Asked Questions
 
     [1.16] I cannot upload big dump files (memory, http or timeout problems).
 
-   The first things to check (or ask your host provider to check) are the va   lues of upload_max_filesize, memory_limit and post_max_size in the php.i   ni configuration file.
-   All of these three settings limit the maximum size of data that can be su   bmitted and handled by PHP. One user also said that post_max_size and me   mory_limit need to be larger than upload_max_filesize.
-   If you get a timeout problem, look at the $cfg['UploadDir'] feature.
+   The first things to check (or ask your host provider to check) are the va   lues of upload_max_filesize, memory_limit and post_max_size in the php.i   ni configuration file. All of these three settings limit the maximum siz   e of data that can be submitted and handled by PHP. One user also said t   hat post_max_size and memory_limit need to be larger than upload_max_fil   esize.
+   There exist several workarounds if your upload is too big or your hosting    provider is unwilling to change the settings:
+     * Look at the $cfg['UploadDir'] feature. This allows one to upload a fi       le to the server via scp, ftp, or your favorite file transfer method.
+       PhpMyAdmin  is  then  able  to import the files from the temporary
+       directory. More information is available in the Configuration section of
+       this document.
+     * Using a utility (such as BigDump) to split the files before uploading       . We cannot support this or any third party applications, but are aware
+       of users having success with it.
+     * If you have shell (command line) access, use MySQL to import the file       s directly. You can do this by issuing the "source" command from within
+       MySQL: source filename.sql.
 
     [1.17] Which MySQL versions does phpMyAdmin support?
 
@@ -1486,10 +1513,8 @@ FAQ - Frequently Asked Questions
     message, "Client does not support authentication protocol requested by
     server; consider upgrading MySQL client"
 
-   You tried to access MySQL with an old MySQL client library. The version o   f your MySQL client library can be checked in your phpinfo() output.
-   In general, it should have at least the same minor version as your server    - as mentioned in FAQ 1.17.
-   The only way to fix this problem is manually compiling php and its MySQL   extension against a current MySQL client library.
-   If you still face this problem, please compile your MySQL client library   against the same or a newer MySQL release.
+   You tried to access MySQL with an old MySQL client library. The version o   f your MySQL client library can be checked in your phpinfo() output. In   general, it should have at least the same minor version as your server -    as mentioned in FAQ 1.17.
+   This problem is generally caused by using MySQL version 4.1 or newer. MyS   QL changed the authentication hash and your PHP is trying to use the old    method. The proper solution is to use the mysqli extension with the pro   per client library to match your MySQL installation. Your chosen extensi   on is specified in $cfg['Servers'][$i]['extension']. More information (a   nd several workarounds) are located in the MySQL Documentation.
 
     [1.18] I'm running MySQL <= 4.0.1 having lower_case_table_names set to 1.
     If I create a new table with a capital letter in its name it is changed to
@@ -1588,6 +1613,11 @@ FAQ - Frequently Asked Questions
        authentication, and Digest if it's enabled.) Click OK.
     3. In Custom Errors, select the range of 401;1 through 401;5 and click t       he Set to Default button.
 
+    [1.33] Is there a problem with the mysqli extension when running PHP 5.0.4
+    on 64-bit systems?
+
+   Yes. This problem affects phpMyAdmin ("Call to undefined function pma_rel   oadnavigation"), so upgrade your PHP to the next version.
+
   [2. Configuration]
 
     [2.1] The error message "Warning: Cannot add header information - headers
@@ -1609,7 +1639,7 @@ FAQ - Frequently Asked Questions
    change it to
        mysql.default_socket = /var/lib/mysql/mysql.sock
    Then restart apache and it will work.
-   Here is a fix suggested by Brad Ummer in the phpwizard forum:
+   Here is a fix suggested by Brad Ummer:
      * First, you need to determine what socket is being used by MySQL.
        To do this, telnet to your server and go to the MySQL bin directory. In
        this  directory  there  should  be  a  file named mysqladmin. Type
@@ -1668,6 +1698,10 @@ FAQ - Frequently Asked Questions
    Here are a few points to check:
      * In config.inc.php, try to leave the $cfg['PmaAbsoluteUri']directive e       mpty. See also FAQ 4.7.
      * Maybe you have a broken PHP installation or you need to upgrade your       Zend Optimizer. See http://bugs.php.net/bug.php?id=31134.
+     * If you are using Hardened PHP with the ini directive varfilter.max_re       quest_variables set to the default (200) or another low value, you
+       could get this error if your table has a high number of columns. Adjust
+       this setting accordingly. (Thanks to Klaus Dorninger for the hint).
+     * In the php.ini directive arg_separator.input, a value of ";" will cau       se this error. Replace it with "&;".
 
   [3. Known limitations]
 
@@ -1742,6 +1776,11 @@ FAQ - Frequently Asked Questions
     [3.12] What are the phpMyAdmin limitations for MySQL 3?
 
    The number of records in queries containing COUNT and GROUP BY is not cor   rectly calculated. Also, sorting results of a query like "SELECT * from   table GROUP BY" ... is problematic.
+
+    [3.13] I get an error when entering USE followed by a db name containing an
+    hyphen.
+
+   The tests I have made with current MySQL 4.1.11 API shows that the API do   es not accept this syntax for the USE command. Enclosing the db name wit   h backquotes works. For further confusion, no backquotes are needed with    command-line mysql.
 
   [4. ISPs, multi-user installations ]
 
@@ -1980,13 +2019,13 @@ FAQ - Frequently Asked Questions
      * Choose "Edit PDF Pages" near the bottom of the page.
      * Enter a name for the first PDF page and click Go. If you like, you ca       n use the "automatic layout," which will put all your linked tables
        onto the new page.
-     * Select the name of the new page (the action choice being set to Edit)        and click Go.
-     * Select a table from the list, enter its coordinates and click Go.
+     * Select the name of the new page (making sure the Edit radio button is        selected) and click Go.
+     * Select a table from the list, enter its coordinates and click Save.
        Coordinates are relative; your diagram will be automatically scaled to
        fit the page. When initially placing tables on the page, just pick any
-       coordinates -- say, 50x50. After clicking Go, you can then use the
+       coordinates -- say, 50x50. After clicking Save, you can then use the
        graphical editor to position the element correctly.
-     * When you'd like to look at your PDF, first be sure to click the Go bu       tton beneath the list of tables and coordinates, to save any changes
+     * When you'd like to look at your PDF, first be sure to click the Save       button beneath the list of tables and coordinates, to save any changes
        you made there. Then scroll all the way down, select the PDF options you
        want, and click Go.
      * Internet Explorer for Windows may suggest an incorrect filename when       you try to save a generated PDF. When saving a generated PDF, be sure
@@ -2272,7 +2311,7 @@ CREDITS, in chronological order
 
 - Geert Lund <glund_at_silversoft.dk>
     * various fixes
-    * moderator of the phpMyAdmin users forum at phpwizard.net
+    * moderator of the phpMyAdmin former users forum at phpwizard.net
 
 - Korakot Chaovavanich <korakot_at_iname.com>
     * "insert as new row" feature

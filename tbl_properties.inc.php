@@ -1,8 +1,8 @@
 <?php
-/* $Id: tbl_properties.inc.php,v 2.27.2.1 2005/04/07 17:22:25 lem9 Exp $ */
+/* $Id: tbl_properties.inc.php,v 2.38 2005/07/23 12:14:39 lem9 Exp $ */
 // vim: expandtab sw=4 ts=4 sts=4:
 // Check parameters
-error_reporting(E_ALL);
+
 require_once('./libraries/common.lib.php');
 PMA_checkParameters(array('db','table','action','num_fields'));
 
@@ -23,7 +23,8 @@ document.onkeydown = onKeyDownArrowsHandler;
 </script>
 <?php } 
     // here, the div_x_7 represents a div id which contains
-    // the default current timestamp checkbox and label 
+    // the default CURRENT TIMESTAMP checkbox and label 
+    // and, field_x_7a represents the checkbox itself
     
     if (PMA_MYSQL_INT_VERSION >= 40102) { ?>
 <script type="text/javascript" language="javascript">
@@ -33,6 +34,7 @@ function display_field_options(field_type, i) {
         getElement('div_' + i + '_7').style.display = 'block';
     } else {
         getElement('div_' + i + '_7').style.display = 'none';
+        getElement('field_' + i + '_7a').checked = false;
     }
     return true;
 }
@@ -233,7 +235,11 @@ for ($i = 0 ; $i < $num_fields; $i++) {
 
     $content_cells[$i][$ci] .= "\n" . '<input id="field_' . $i . '_' . ($ci - $ci_offset) . '" type="text" name="field_name[]" size="10" maxlength="64" value="' . (isset($row) && isset($row['Field']) ? str_replace('"', '&quot;', $row['Field']) : '') . '" class="textfield" title="' . $strField . '" />';
     $ci++;
-    $content_cells[$i][$ci] = '<select name="field_type[]" id="field_' . $i . '_' . ($ci - $ci_offset) . '" onchange="display_field_options(this.value,' . $i .')" >' . "\n";
+    $content_cells[$i][$ci] = '<select name="field_type[]" id="field_' . $i . '_' . ($ci - $ci_offset) . '" ';
+    if (PMA_MYSQL_INT_VERSION >= 40102) {
+        $content_cells[$i][$ci] .= 'onchange="display_field_options(this.options[this.selectedIndex].value,' . $i .')" ';
+    }
+    $content_cells[$i][$ci] .= '>' . "\n";
 
     if (empty($row['Type'])) {
         $row['Type'] = '';
@@ -297,14 +303,13 @@ for ($i = 0 ; $i < $num_fields; $i++) {
         $content_cells[$i][$ci] = '';
     }
 
-    $content_cells[$i][$ci] .= "\n" . '<input id="field_' . $i . '_' . ($ci - $ci_offset) . '" type="text" name="field_length[]" size="8" value="' . str_replace('"', '&quot;', $length) . '" class="textfield" />' . "\n";
-    $ci++;
-
     if (preg_match('@^(set|enum)$@i', $type)) {
         $binary           = 0;
         $unsigned         = 0;
         $zerofill         = 0;
+        $length_to_display = htmlspecialchars($length);
     } else {
+        $length_to_display = $length;
         if (!preg_match('@BINARY[\(]@i', $row['Type']) && PMA_MYSQL_INT_VERSION < 40100) {
             $binary           = stristr($row['Type'], 'binary');
         } else {
@@ -313,6 +318,9 @@ for ($i = 0 ; $i < $num_fields; $i++) {
         $unsigned         = stristr($row['Type'], 'unsigned');
         $zerofill         = stristr($row['Type'], 'zerofill');
     }
+
+    $content_cells[$i][$ci] .= "\n" . '<input id="field_' . $i . '_' . ($ci - $ci_offset) . '" type="text" name="field_length[]" size="8" value="' . str_replace('"', '&quot;', $length_to_display) . '" class="textfield" />' . "\n";
+    $ci++;
 
     if (PMA_MYSQL_INT_VERSION >= 40100) {
         $tmp_collation          = empty($row['Collation']) ? NULL : $row['Collation'];
@@ -337,6 +345,14 @@ for ($i = 0 ; $i < $num_fields; $i++) {
     if (isset($submit_attribute) && $submit_attribute != FALSE) {
         $attribute = $submit_attribute;
     }
+
+    // here, we have a TIMESTAMP that SHOW FULL FIELDS reports as having the
+    // NULL attribute, but SHOW CREATE TABLE says the contrary. Believe
+    // the latter.
+    if (isset($row['Field']) && isset($analyzed_sql[0]) && $analyzed_sql[0]['create_table_fields'][$row['Field']]['type'] == 'TIMESTAMP' && $analyzed_sql[0]['create_table_fields'][$row['Field']]['timestamp_not_null'] == TRUE) {
+        $row['Null'] = '';
+    }
+
 
     // MySQL 4.1.2+ TIMESTAMP options
     // (if on_update_current_timestamp is set, then it's TRUE)
@@ -373,13 +389,13 @@ for ($i = 0 ; $i < $num_fields; $i++) {
 
     $content_cells[$i][$ci] = '<select name="field_null[]" id="field_' . $i . '_' . ($ci - $ci_offset) . '">';
 
-    if ((!isset($row) || empty($row['Null']) || $row['Null'] == 'NOT NULL') && $submit_null == FALSE) {
+    if ((!isset($row) || empty($row['Null']) || $row['Null'] == 'NO' || $row['Null'] == 'NOT NULL') && $submit_null == FALSE) {
         $content_cells[$i][$ci] .= "\n";
-        $content_cells[$i][$ci] .= '    <option value="NOT NULL">not null</option>' . "\n";
+        $content_cells[$i][$ci] .= '    <option value="NOT NULL" selected="selected" >not null</option>' . "\n";
         $content_cells[$i][$ci] .= '    <option value="">null</option>' . "\n";
     } else {
         $content_cells[$i][$ci] .= "\n";
-        $content_cells[$i][$ci] .= '    <option value="">null</option>' . "\n";
+        $content_cells[$i][$ci] .= '    <option value="" selected="selected" >null</option>' . "\n";
         $content_cells[$i][$ci] .= '    <option value="NOT NULL">not null</option>' . "\n";
     }
 
@@ -387,7 +403,7 @@ for ($i = 0 ; $i < $num_fields; $i++) {
     $ci++;
 
     if (isset($row)
-        && !isset($row['Default']) && !empty($row['Null'])) {
+        && !isset($row['Default']) && isset($row['Null']) && $row['Null'] == 'YES') {
         $row['Default'] = 'NULL';
     }
 
@@ -412,6 +428,7 @@ for ($i = 0 ; $i < $num_fields; $i++) {
             $tmp_display_type = 'block';
         } else {
             $tmp_display_type = 'none';
+            $default_current_timestamp = FALSE;
         }
         $content_cells[$i][$ci] .= '<br /><div id="div_' . $i . '_' . ($ci - $ci_offset) . '" style="white-space: nowrap; display: ' . $tmp_display_type . '"><input id="field_' . $i . '_' . ($ci - $ci_offset) . 'a" type="checkbox" name="field_default_current_timestamp[' . $i . ']"';
         if ($default_current_timestamp) {
@@ -665,7 +682,7 @@ if ($action == 'tbl_create.php') {
         if (PMA_MYSQL_INT_VERSION >= 40100) {
             echo '        <td width="25">&nbsp;</td>' . "\n"
                . '        <td>' . "\n"
-               . PMA_generateCharsetDropdownBox(PMA_CSDROPDOWN_COLLATION, 'tbl_collation', NULL, NULL, FALSE, 3)
+               . PMA_generateCharsetDropdownBox(PMA_CSDROPDOWN_COLLATION, 'tbl_collation', NULL, (isset($tbl_collation) ? $tbl_collation : NULL), FALSE, 3)
                . '        </td>' . "\n";
         }
     }
@@ -682,8 +699,11 @@ echo "\n";
 
 <?php
 if ($action == 'tbl_create.php' || $action == 'tbl_addfield.php') {
+    echo '<div class="tblHeaders" style="width: 30%; text-align: left; padding: 3px;">' . "\n";
     echo '    ' . sprintf($strAddFields,  '<input type="text" name="added_fields" size="2" value="1" onfocus="this.select()" style="vertical-align: middle;" />') . "\n";
-    echo '    &nbsp;<input type="submit" name="submit_num_fields" value="' . $strGo . '" onclick="return checkFormElementInRange(this.form, \'added_fields\', 1)" style="vertical-align: middle;" />' . "\n<br />\n<br />\n";
+    echo '    &nbsp;<input type="submit" name="submit_num_fields" value="' . $strGo . '" onclick="return checkFormElementInRange(this.form, \'added_fields\', \'' . str_replace('\'', '\\\'', $GLOBALS['strInvalidFieldAddCount']) . '\', 1)" style="vertical-align: middle;" />' . "\n";
+    echo '</div>' . "\n";
+    echo "<br />\n";
 }
 ?>
 

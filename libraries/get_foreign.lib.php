@@ -1,5 +1,5 @@
 <?php
-/* $Id: get_foreign.lib.php,v 2.5 2004/08/09 17:15:33 lem9 Exp $ */
+/* $Id: get_foreign.lib.php,v 2.6 2005/06/23 14:16:33 robbat2 Exp $ */
 // vim: expandtab sw=4 ts=4 sts=4:
 
 
@@ -27,7 +27,7 @@ if ($foreigners && isset($foreigners[$field])) {
 
     $the_total   = PMA_countRecords($foreign_db, $foreign_table, TRUE);
 
-    if ((isset($override_total) && $override_total == true) || $the_total < 200) {
+    if ((isset($override_total) && $override_total == true) || $the_total < $cfg['ForeignKeyMaxLimit']) {
         // foreign_display can be FALSE if no display field defined:
 
         $foreign_display = PMA_getDisplayField($foreign_db, $foreign_table);

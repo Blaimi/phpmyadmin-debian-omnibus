@@ -1,5 +1,5 @@
 <?php
-/* $Id: romanian-iso-8859-1.inc.php,v 2.67 2005/03/30 19:23:54 lem9 Exp $ */
+/* $Id: romanian-iso-8859-1.inc.php,v 2.76 2005/07/29 17:03:21 lem9 Exp $ */
 
 $charset = 'iso-8859-1';
 $text_dir = 'ltr';
@@ -443,7 +443,6 @@ $strNone = 'Nici unul(a)';
 $strNotNumber = 'Acesta nu este un numar!';
 $strNotOK = 'Nu este bine';
 $strNotSet = '<b>%s</b> tabela nu a fost gasita sau nu este setat in %s';
-$strNotValidNumber = 'Nu este un numar valid de linie!';
 $strNull = 'Nul';
 $strNumSearchResultsInTable = '%s rezultat(e) in interiorul tabelei <i>%s</i>';
 $strNumSearchResultsTotal = '<b>Total:</b> <i>%s</i> rezultat(e)';
@@ -584,7 +583,7 @@ $strSQLExportType = 'Modul de export';
 $strSQLOptions = 'Optiuni SQL';
 $strSQLParserBugMessage = 'Exista o posibilitate de a fi gasit un BUG in parserul SQL. Verifica atent inca o data comanda si verifica daca semnele specifice sunt corecte. O alta posibilitate ar putea fi punerea unui fisier binar in afara zonei de text. Poti incerca aceasta comanda si printr-o linie de comanda MySQL. Eroarea MySQL de mai jos, daca e vreuna, poate sa te ajute la diagnosticarea problemei. Daca in continuare ai probleme cu executarea comenzii, redu o parte din comanda la aceea parte care cauzeaza problema si raporteaza acesta ca un BUG in sectiunea DE TAIAT';
 $strSQLParserUserError = 'Pare sa fie o eroare in comanda SQL. Eroarea MySQL de mai jos, daca e vreuna, poate sa te ajute la diagnosticarea problemei';
-$strSQLQuery = 'Comansa SQL';
+$strSQLQuery = 'Comanda SQL';
 $strSQLResult = 'Rezultat SQL';
 $strSQPBugInvalidIdentifer = 'Identificator invalid';
 $strSQPBugUnclosedQuote = 'Citare neinchisa';
@@ -800,4 +799,22 @@ $strInnoDBBufferPoolSizeDesc = 'The size of the memory buffer InnoDB uses to cac
 $strInnoDBBufferPoolSize = 'Buffer pool size';  //to translate
 $strInnoDBPages = 'pages';  //to translate
 $strSocketProblem = '(or the local MySQL server\'s socket is not correctly configured)';  //to translate
+$strPrivDescCreateView = 'Allows creating new views.';  //to translate
+$strPrivDescAlterDb = 'Allows altering the structure of existing tables as well as changing the default charset and collation of databases.';  //to translate
+$strPrivDescCreateUser = 'Allows creating, dropping and renaming unser accounts.';  //to translate
+$strPrivDescCreateRoutine = 'Allows creating stored routines.';  //to translate
+$strPrivDescAlterRoutine = 'Allows altering and dropping stored routines.';  //to translate
+$strRoutines = 'Routines';  //to translate
+$strPrivDescShowView = 'Allows performing SHOW CREATE VIEW queries.';  //to translate
+$strPrivDescExecute5 = 'Allows executing stored routines.';  //to translate
+$strCreateDatabaseBeforeCopying = 'CREATE DATABASE before copying';  //to translate
+$strGeneratePassword = 'Generate Password';  //to translate
+$strGenerate = 'Generate';  //to translate
+$strCopy = 'Copy';  //to translate
+$strTransformation_application_octetstream__hex = 'Displays hexadecimal representation of data.';  //to translate
+$strInvalidFieldCount = 'Table must have at least one field.';  //to translate
+$strInvalidRowNumber = '%d is not valid row number.';  //to translate
+$strInvalidColumnCount = 'Column count has to be larger than zero.';  //to translate
+$strInvalidFieldAddCount = 'You have to add at least one field.';  //to translate
+$strAndThen = 'and then';  //to translate
 ?>

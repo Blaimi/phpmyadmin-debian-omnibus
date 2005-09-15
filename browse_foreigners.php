@@ -1,5 +1,5 @@
 <?php
-/* $Id: browse_foreigners.php,v 2.19 2004/11/09 15:40:03 nijel Exp $ */
+/* $Id: browse_foreigners.php,v 2.20 2005/07/22 17:21:10 lem9 Exp $ */
 // vim: expandtab sw=4 ts=4 sts=4:
 
 /**
@@ -87,7 +87,7 @@ require('./libraries/get_foreign.lib.php');
 <form action="browse_foreigners.php" method="post">
 <?php echo PMA_generate_common_hidden_inputs($db, $table); ?>
 <input type="hidden" name="field" value="<?php echo urlencode($field); ?>" />
-<input type="hidden" name="field" value="<?php echo isset($fieldkey) ? $fieldkey : ''; ?>" />
+<input type="hidden" name="fieldkey" value="<?php echo isset($fieldkey) ? $fieldkey : ''; ?>" />
 <?php
 if (isset($pk)) {
     $pk_uri = '&amp;pk=' . urlencode($pk);

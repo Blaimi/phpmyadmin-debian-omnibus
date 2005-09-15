@@ -1,5 +1,5 @@
 <?php
-/* $Id: db_details.php,v 2.17 2005/03/07 21:30:57 lem9 Exp $ */
+/* $Id: db_details.php,v 2.19 2005/08/11 15:31:27 lem9 Exp $ */
 // vim: expandtab sw=4 ts=4 sts=4:
 
 
@@ -68,7 +68,7 @@ echo $strHiddenFields;
 <tr><td class="tblHeaders" colspan="2">
     <?php
            // if you want navigation:
-           $strDBLink = '<a href="' . $GLOBALS['cfg']['DefaultTabDatabase'] . $header_url_qry . '&amp;db=' . urlencode($db) . '">'
+           $strDBLink = '<a href="' . $GLOBALS['cfg']['DefaultTabDatabase'] . '?' . PMA_generate_common_url() . '&amp;db=' . urlencode($db) . '">'
                       . htmlspecialchars($db) . '</a>';
            // else use
            // $strDBLink = htmlspecialchars($db);
@@ -86,7 +86,7 @@ if (!empty($query_to_display)) {
 }
 ?></textarea>
 </td></tr>
-<tr bgcolor="<?php echo $cfg['BgcolorOne']; ?>">
+<tr class="tblFooters">
     <td>
         <input type="checkbox" name="show_query" value="1" id="checkbox_show_query" checked="checked" /><label for="checkbox_show_query"><?php echo $strShowThisQuery; ?></label>
     </td>
@@ -99,12 +99,10 @@ if ($is_upload) {
 <tr><td colspan="2"><img src="<?php echo $GLOBALS['pmaThemeImage'] . 'spacer.png'; ?>" width="1" height="1" border="0" alt="" /></td></tr>
 <tr>
     <td colspan="2" class="tblHeaders">
-    <?php
-        echo '    <i>&nbsp;' . $strOr . '</i>' . "\n";
-    ?>
+        <i><?php echo $strOr; ?></i>
+        <b><?php echo $strLocationTextfile; ?>:</b>
     </td>
 </tr>
-<tr><td colspan="2" bgcolor="<?php echo $cfg['BgcolorTwo']; ?>"><b>&nbsp;<?php echo $strLocationTextfile . ':'; ?></b></td></tr>
 <tr bgcolor="<?php echo $cfg['BgcolorOne']; ?>">
   <td colspan="2" align="center">
     <input type="file" name="sql_file" class="textfield" />&nbsp;
@@ -182,8 +180,8 @@ if (!empty($cfg['UploadDir'])) {
 } // end if (web-server upload directory)
 // Charset conversion options
 if ($is_upload || $is_upload_dir) {
+    echo '    <tr class="tblFooters"><td>' . "\n";
     if (PMA_MYSQL_INT_VERSION < 40100 && $cfg['AllowAnywhereRecoding'] && $allow_recoding) {
-        echo '    <tr bgcolor="' .$cfg['BgcolorTwo'] . '"><td>' . "\n";
         $temp_charset = reset($cfg['AvailableCharsets']);
         echo '&nbsp;' . $strCharsetOfFile . "\n"
              . '    <select name="charset_of_file" size="1">' . "\n"
@@ -200,19 +198,13 @@ if ($is_upload || $is_upload_dir) {
             echo '>' . $temp_charset . '</option>' . "\n";
         }
         echo '        </select><br />' . "\n" . '    ';
-        echo '    </td>' . "\n";
-        echo '    <td align="right"><input type="submit" name="SQL" value="' . $strGo . '" /></td>' . "\n";
-        echo '    </tr>' . "\n";
     } elseif (PMA_MYSQL_INT_VERSION >= 40100) {
-        echo '    <tr bgcolor="' .$cfg['BgcolorTwo'] . '"><td>' . "\n"
-           . $strCharsetOfFile . "\n";
+        echo $strCharsetOfFile . "\n";
         echo PMA_generateCharsetDropdownBox(PMA_CSDROPDOWN_CHARSET, 'charset_of_file', NULL, 'utf8', FALSE);
-        echo '    </td>' . "\n";
-        echo '    <td align="right"><input type="submit" name="SQL" value="' . $strGo . '" /></td>' . "\n";
-        echo '    </tr>' . "\n";
-    }else{
-        echo '   <tr bgcolor="' . $cfg['BgcolorTwo'] . '"><td align="right" colspan="2"><input type="submit" name="SQL" value="' . $strGo . '" /></td></tr>' . "\n\n";
     } // end if (recoding)
+    echo '    </td>' . "\n";
+    echo '    <td align="right"><input type="submit" name="SQL" value="' . $strGo . '" /></td>' . "\n";
+    echo '    </tr>' . "\n";
 }
 // Bookmark Support
 if ($cfg['Bookmark']['db'] && $cfg['Bookmark']['table']) {

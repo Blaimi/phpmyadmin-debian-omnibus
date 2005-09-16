@@ -1,5 +1,5 @@
 <?php
-/* $Id: tbl_properties_export.php,v 2.9.4.1 2005/04/16 14:57:21 lem9 Exp $ */
+/* $Id: tbl_properties_export.php,v 2.11 2005/06/11 09:22:20 lem9 Exp $ */
 // vim: expandtab sw=4 ts=4 sts=4:
 
 
@@ -70,7 +70,7 @@ if (isset($sql_query)) {
                 $inside_bracket = FALSE;
                 continue;
             }
-            if (!$inside_bracket && $parsed_sql[$i]['type'] == 'alpha_reservedWord' && $parsed_sql[$i]['data'] == 'LIMIT') {
+            if (!$inside_bracket && $parsed_sql[$i]['type'] == 'alpha_reservedWord' && strtoupper($parsed_sql[$i]['data']) == 'LIMIT') {
                 // We found LIMIT to remove
                 
                 $sql_query = '';

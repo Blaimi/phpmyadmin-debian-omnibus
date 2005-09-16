@@ -1,5 +1,5 @@
 <?php
-/* $Id: common.lib.php,v 2.128.2.1 2005/04/07 17:47:36 lem9 Exp $ */
+/* $Id: common.lib.php,v 2.151 2005/08/23 23:08:21 lem9 Exp $ */
 // vim: expandtab sw=4 ts=4 sts=4:
 
 /**
@@ -75,9 +75,9 @@ unset($cfg);
  * Detects the config file we want to load
  */
 if (file_exists('./config.inc.developer.php')) {
-    $cfgfile_to_load = './config.inc.developer.php';
+    $cfgfile_to_load = 'config.inc.developer.php';
 } else {
-    $cfgfile_to_load = './config.inc.php';
+    $cfgfile_to_load = 'config.inc.php';
 }
 
 /**
@@ -85,45 +85,26 @@ if (file_exists('./config.inc.developer.php')) {
  * versions of phpMyAdmin/php/mysql...
  */
 $old_error_reporting = error_reporting(0);
-include_once($cfgfile_to_load);
-// Include failed
-if (!isset($cfgServers) && !isset($cfg['Servers'])) {
+// We can not use include as it fails on parse error
+$config_fd = fopen($cfgfile_to_load, 'r');
+$result = eval('?>' . fread($config_fd, filesize($cfgfile_to_load)));
+fclose($config_fd);
+// Eval failed
+if ($result === FALSE || (!isset($cfgServers) && !isset($cfg['Servers']))) {
     // Creates fake settings
     $cfg = array('DefaultLang'           => 'en-iso-8859-1',
                     'AllowAnywhereRecoding' => FALSE);
     // Loads the language file
     require_once('./libraries/select_lang.lib.php');
-    // Sends the Content-Type header
-    header('Content-Type: text/html; charset=' . $charset);
     // Displays the error message
-    ?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="<?php echo $available_languages[$lang][2]; ?>" lang="<?php echo $available_languages[$lang][2]; ?>" dir="<?php echo $text_dir; ?>">
-
-<head>
-<title>phpMyAdmin</title>
-<meta http-equiv="Content-Type" content="text/html; charset=<?php echo $charset; ?>" />
-
-<style type="text/css">
-<!--
-body  {font-family: sans-serif; font-size: small; color: #000000; background-color: #F5F5F5}
-h1    {font-family: sans-serif; font-size: large; font-weight: bold}
-//-->
-</style>
-</head>
-
-
-<body bgcolor="#ffffff">
-<h1>phpMyAdmin - <?php echo $strError; ?></h1>
-<p>
-<?php echo $strConfigFileError; ?><br /><br />
-<a href="config.inc.php" target="_blank">config.inc.php</a>
-</p>
-</body>
-
-</html>
-    <?php
+    // (do not use &amp; for parameters sent by header)
+    header( 'Location: error.php'
+            . '?lang='  . urlencode( $available_languages[$lang][2] )
+            . '&char='  . urlencode( $charset )
+            . '&dir='   . urlencode( $text_dir )
+            . '&type='  . urlencode( $strError )
+            . '&error=' . urlencode( strtr($strConfigFileError, array('<br />' => '[br]')) . '[br][br]' . '[a@' . $cfgfile_to_load . '@_blank]' . $cfgfile_to_load . '[/a]' )
+             );
     exit();
 }
 error_reporting($old_error_reporting);
@@ -142,7 +123,7 @@ if (isset($cfg['FileRevision'])) {
 } else {
     $cfg['FileRevision'] = array(1, 1);
 }
-if ($cfg['FileRevision'][0] < 2 || ($cfg['FileRevision'][0] == 2 && $cfg['FileRevision'][1] < 48)) {
+if ($cfg['FileRevision'][0] < 2 || ($cfg['FileRevision'][0] == 2 && $cfg['FileRevision'][1] < 64)) {
     require_once('./libraries/config_import.lib.php');
 }
 
@@ -157,30 +138,8 @@ require_once('./libraries/select_lang.lib.php');
  */
 require_once('./libraries/defines.lib.php');
 
-
-/**
- * Sanitizes $message, taking into account our special codes
- * for formatting
- *
- * @param   string   the message
- *
- * @return  string   the sanitized message
- *
- * @access  public
- */
-function PMA_sanitize($message)
-{
-    $replace_pairs = array(
-        '<'     => '&lt;',
-        '>'     => '&gt;',
-        '[i]'   => '<i>',
-        '[/i]'  => '</i>',
-        '[b]'   => '<b>',
-        '[br]'  => '<br />',
-        '[/b]'  => '</b>',
-    );
-    return strtr($message, $replace_pairs);
-}
+/* Input sanitizing */
+require_once('./libraries/sanitizing.lib.php');
 
 // XSS
 if (isset($convcharset)) {
@@ -328,8 +287,14 @@ if (strtolower($cfg['OBGzip']) == 'auto') {
  *            and if the directory $ThemePath/$theme/img/ exists
  *            If not, it will use default images
 */
+// Allow different theme per server
+$theme_cookie_name = 'pma_theme';
+if ($GLOBALS['cfg']['ThemePerServer'] && isset($server)) {
+    $theme_cookie_name .= '-' . $server;
+}
+//echo $theme_cookie_name;
 // Theme Manager
-if (!$cfg['ThemeManager'] || !isset($_COOKIE['pma_theme']) || empty($_COOKIE['pma_theme'])){
+if (!$cfg['ThemeManager'] || !isset($_COOKIE[$theme_cookie_name]) || empty($_COOKIE[$theme_cookie_name])){
     $GLOBALS['theme'] = $cfg['ThemeDefault'];
     $ThemeDefaultOk = FALSE;
     if ($cfg['ThemePath']!='' && $cfg['ThemePath'] != FALSE) {
@@ -352,7 +317,7 @@ if (!$cfg['ThemeManager'] || !isset($_COOKIE['pma_theme']) || empty($_COOKIE['pm
     if (isset($_POST['set_theme'])) {
         $GLOBALS['theme'] = PMA_securePath($_POST['set_theme']);
     } else {
-        $GLOBALS['theme'] = PMA_securePath($_COOKIE['pma_theme']);
+        $GLOBALS['theme'] = PMA_securePath($_COOKIE[$theme_cookie_name]);
     }
 }
 
@@ -361,14 +326,13 @@ unset($theme_name, $theme_generation, $theme_version);
 @include($cfg['ThemePath'] . '/' . $GLOBALS['theme'] . '/info.inc.php');
 
 // did it set correctly?
-if (!isset($theme_name, $theme_generation, $theme_version))
+if (!isset($theme_name, $theme_generation, $theme_version)) {
     $GLOBALS['theme'] = 'original'; // invalid theme
-
-if ($theme_generation != PMA_THEME_GENERATION)
+} elseif ($theme_generation != PMA_THEME_GENERATION) {
     $GLOBALS['theme'] = 'original'; // different generation
-
-if ($theme_version < PMA_THEME_VERSION)
+} elseif ($theme_version < PMA_THEME_VERSION) {
     $GLOBALS['theme'] = 'original'; // too old version
+}
 
 $pmaThemeImage  = $cfg['ThemePath'] . '/' . $GLOBALS['theme'] . '/img/';
 $tmp_layout_file = $cfg['ThemePath'] . '/' . $GLOBALS['theme'] . '/layout.inc.php';
@@ -406,11 +370,14 @@ if ($is_minimum_common == FALSE) {
      * @param   boolean  whether to treat cr/lfs as escape-worthy entities
      *                   (converts \n to \\n, \r to \\r)
      *
+     * @param   boolean  whether this function is used as part of the
+     *                   "Create PHP code" dialog 
+     *
      * @return  string   the slashed string
      *
      * @access  public
      */
-    function PMA_sqlAddslashes($a_string = '', $is_like = FALSE, $crlf = FALSE)
+    function PMA_sqlAddslashes($a_string = '', $is_like = FALSE, $crlf = FALSE, $php_code = FALSE)
     {
         if ($is_like) {
             $a_string = str_replace('\\', '\\\\\\\\', $a_string);
@@ -424,7 +391,11 @@ if ($is_minimum_common == FALSE) {
             $a_string = str_replace("\t", '\t', $a_string);
         }
 
-        $a_string = str_replace('\'', '\'\'', $a_string);
+        if ($php_code) {
+            $a_string = str_replace('\'', '\\\'', $a_string); 
+        } else {
+            $a_string = str_replace('\'', '\'\'', $a_string);
+        } 
 
         return $a_string;
     } // end of the 'PMA_sqlAddslashes()' function
@@ -620,11 +591,11 @@ if ($is_minimum_common == FALSE) {
 
         // --- Added to solve bug #641765
         // Robbat2 - 12 January 2003, 9:46PM
-        // Revised, Robbat2 - 13 Janurary 2003, 2:59PM
+        // Revised, Robbat2 - 13 January 2003, 2:59PM
         if (!function_exists('PMA_SQP_isError') || PMA_SQP_isError()) {
             $formatted_sql = htmlspecialchars($the_query);
         } else {
-            $formatted_sql = PMA_formatSql(PMA_SQP_parse($the_query), $the_query);
+            $formatted_sql = PMA_formatSql(PMA_SQP_parse(PMA_sanitize($the_query)), $the_query);
         }
         // ---
         echo "\n" . '<!-- PMA-SQL-ERROR -->' . "\n";
@@ -640,7 +611,7 @@ if ($is_minimum_common == FALSE) {
         if (!empty($the_query) && !strstr($the_query, 'connect')) {
             // --- Added to solve bug #641765
             // Robbat2 - 12 January 2003, 9:46PM
-            // Revised, Robbat2 - 13 Janurary 2003, 2:59PM
+            // Revised, Robbat2 - 13 January 2003, 2:59PM
             if (function_exists('PMA_SQP_isError') && PMA_SQP_isError()) {
                 echo PMA_SQP_getErrorString();
             }
@@ -717,14 +688,16 @@ if ($is_minimum_common == FALSE) {
             $duplicate_sql_query = '';
             if (isset($mysql_error_values[0])) {
                 $tmp_fields = PMA_DBI_get_fields($db, $table, NULL);
-                foreach ($tmp_fields as $tmp_field) {
-                    $duplicate_sql_query .= (($duplicate_sql_query!='') ? ' OR ' : '') . $tmp_field['Field'] . " LIKE '" . $mysql_error_values[0] . "'";
+                if ($tmp_fields) {
+                    foreach ($tmp_fields as $tmp_field) {
+                        $duplicate_sql_query .= (($duplicate_sql_query!='') ? ' OR ' : '') . PMA_backquote($tmp_field['Field']) . " LIKE '" . $mysql_error_values[0] . "'";
+                    }
                 }
             }
             if ($duplicate_sql_query!='') {
-                $duplicate_sql_query = "SELECT * FROM " . $table . " WHERE (" . $duplicate_sql_query . ")";
+                $duplicate_sql_query = "SELECT * FROM " . PMA_backquote($table) . " WHERE (" . $duplicate_sql_query . ")";
             } else {
-                $duplicate_sql_query = "SELECT * FROM " . $table . "";
+                $duplicate_sql_query = "SELECT * FROM " . PMA_backquote($table) . "";
             }
             echo '        <form method="post" action="read_dump.php" style="padding: 0px; margin: 0px">' ."\n"
                     . '            <input type="hidden" name="sql_query" value="' . $duplicate_sql_query . '" />' . "\n"
@@ -1025,10 +998,9 @@ if ($is_minimum_common == FALSE) {
      * set properly and, depending on browsers, inserting or updating a
      * record might fail
      */
-    $display_pmaAbsoluteUri_warning = 0;
 
     // Setup a default value to let the people and lazy syadmins work anyway,
-    // but display a big warning on the main.php page.
+    // they'll get an error if the autodetect code doesn't work
     if (empty($cfg['PmaAbsoluteUri'])) {
 
         $url = array();
@@ -1057,35 +1029,14 @@ if ($is_minimum_common == FALSE) {
             } else if (!empty($_SERVER['SERVER_NAME'])) {
                 $url['host'] = $_SERVER['SERVER_NAME'];
             } else {
-                header('Content-Type: text/html; charset=' . $charset);
                 // Displays the error message
-                ?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="<?php echo $available_languages[$lang][2]; ?>" lang="<?php echo $available_languages[$lang][2]; ?>" dir="<?php echo $text_dir; ?>">
-
-<head>
-<title>phpMyAdmin</title>
-<meta http-equiv="Content-Type" content="text/html; charset=<?php echo $charset; ?>" />
-
-<style type="text/css">
-<!--
-body  {font-family: sans-serif; font-size: small; color: #000000; background-color: #F5F5F5}
-h1    {font-family: sans-serif; font-size: large; font-weight: bold}
-//-->
-</style>
-</head>
-
-
-<body bgcolor="#ffffff">
-<h1>phpMyAdmin - <?php echo $strError; ?></h1>
-<p>
-<?php echo $strPmaUriError; ?><br /><br />
-</p>
-</body>
-
-</html>
-                <?php
+                header( 'Location: error.php'
+                        . '?lang='  . urlencode( $available_languages[$lang][2] )
+                        . '&char='  . urlencode( $charset )
+                        . '&dir='   . urlencode( $text_dir )
+                        . '&type='  . urlencode( $strError )
+                        . '&error=' . urlencode( strtr($strPmaUriError, array('<tt>' => '[tt]', '</tt>' => '[/tt]')))
+                         );
                 exit();
             }
 
@@ -1128,15 +1079,11 @@ h1    {font-family: sans-serif; font-size: large; font-weight: bold}
 
         unset($url);
 
-        // We display the warning by default, but not if it is disabled thru
-        // via the $cfg['PmaAbsoluteUri_DisableWarning'] variable.
-        // This is intended for sysadmins that actually want the default
-        // behaviour of auto-detection due to their setup.
-        // See the mailing list message:
-        // http://sourceforge.net/mailarchive/forum.php?thread_id=859093&forum_id=2141
-        if ($cfg['PmaAbsoluteUri_DisableWarning'] == FALSE) {
-            $display_pmaAbsoluteUri_warning = 1;
-        }
+        // We used to display a warning if PmaAbsoluteUri wasn't set, but now
+        // the autodetect code works well enough that we don't display the
+        // warning at all. The user can still set PmaAbsoluteUri manually.
+        // See https://sourceforge.net/tracker/index.php?func=detail&aid=1257134&group_id=23067&atid=377411
+        
     } else {
         // The URI is specified, however users do often specify this
         // wrongly, so we try to fix this.
@@ -1696,6 +1643,9 @@ if (typeof(document.getElementById) != 'undefined'
 <br />
 <div align="<?php echo $GLOBALS['cell_align_left']; ?>">
     <table border="<?php echo $cfg['Border']; ?>" cellpadding="5" cellspacing="1">
+    <?php if (isset($GLOBALS['show_error_header']) && $GLOBALS['show_error_header']) { ?>
+    <tr><th class="tblHeadError"><div class="errorhead"><?php echo $GLOBALS['strError']; ?></div></th></tr>
+    <?php } ?>
     <tr>
         <th<?php echo ($GLOBALS['theme'] != 'original') ? ' class="tblHeaders"' : ' bgcolor="' . $cfg['ThBgcolor'] . '"'; ?>>
             <b><?php echo $message; ?></b>
@@ -1717,13 +1667,13 @@ if (typeof(document.getElementById) != 'undefined'
             // xhtml1.0 statement before php4.0.5 ("<br>" and not "<br />")
             // If we want to show some sql code it is easiest to create it here
              /* SQL-Parser-Analyzer */
-            $sqlnr = 1;
+            
             if (!empty($GLOBALS['show_as_php'])) {
                 $new_line = '\'<br />' . "\n" . '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;. \' ';
             }
             if (isset($new_line)) {
                  /* SQL-Parser-Analyzer */
-                $query_base = PMA_sqlAddslashes(htmlspecialchars($local_query));
+                $query_base = PMA_sqlAddslashes(htmlspecialchars($local_query), FALSE, FALSE, TRUE);
                  /* SQL-Parser-Analyzer */
                 $query_base = preg_replace("@((\015\012)|(\015)|(\012))+@", $new_line, $query_base);
             } else {
@@ -1781,13 +1731,14 @@ if (typeof(document.getElementById) != 'undefined'
 
                 $onclick = '';
                 if ($cfg['QueryFrameJS'] && $cfg['QueryFrame']) {
-                    $onclick = 'onclick="focus_querywindow(\'' . urlencode($local_query) . '\'); return false;"';
+                    $onclick = 'focus_querywindow(\'' . urlencode($local_query) . '\'); return false;';
                 }
 
-                $edit_link = '&nbsp;[<a href="'
-                           . $edit_target
+                $edit_link = $edit_target
                            . $url_qpart
-                           . '&amp;sql_query=' . urlencode($local_query) . '&amp;show_query=1#querybox" ' . $onclick . '>' . $GLOBALS['strEdit'] . '</a>]';
+                           . '&amp;sql_query=' . urlencode($local_query)
+                           . '&amp;show_query=1#querybox"';
+                $edit_link = ' [' . PMA_linkOrButton( $edit_link, $GLOBALS['strEdit'], array( 'onclick' => $onclick ) ) . ']';
             } else {
                 $edit_link = '';
             }
@@ -1806,20 +1757,22 @@ if (typeof(document.getElementById) != 'undefined'
                     $explain_link_validate = '';
                 }
 
-                $explain_link = '&nbsp;[<a href="read_dump.php'
+                $explain_link = 'read_dump.php'
                               . $url_qpart
                               . $explain_link_validate
                               . '&amp;sql_query=';
 
                 if (preg_match('@^SELECT[[:space:]]+@i', $local_query)) {
-                    $explain_link .= urlencode('EXPLAIN ' . $local_query) . '">' . $GLOBALS['strExplain'];
+                    $explain_link .= urlencode('EXPLAIN ' . $local_query);
+                    $message = $GLOBALS['strExplain'];
                 } else if (preg_match('@^EXPLAIN[[:space:]]+SELECT[[:space:]]+@i', $local_query)) {
-                    $explain_link .= urlencode(substr($local_query, 8)) . '">' . $GLOBALS['strNoExplain'];
+                    $explain_link .= urlencode(substr($local_query, 8));
+                    $message = $GLOBALS['strNoExplain'];
                 } else {
                     $explain_link = '';
                 }
                 if (!empty($explain_link)) {
-                    $explain_link .= '</a>]';
+                    $explain_link = ' [' . PMA_linkOrButton( $explain_link, $message ) . ']';
                 }
             } else {
                 $explain_link = '';
@@ -1829,25 +1782,28 @@ if (typeof(document.getElementById) != 'undefined'
             // php-code (Mike Beck 2002-05-22)
             if (isset($cfg['SQLQuery']['ShowAsPHP'])
                 && $cfg['SQLQuery']['ShowAsPHP'] == TRUE) {
-                $php_link = '&nbsp;[<a href="read_dump.php'
+                $php_link = 'read_dump.php'
                           . $url_qpart
                           . '&amp;show_query=1'
                           . '&amp;sql_query=' . urlencode($local_query)
                           . '&amp;show_as_php=';
 
                 if (!empty($GLOBALS['show_as_php'])) {
-                    $php_link .= '0">' . $GLOBALS['strNoPhp'];
+                    $php_link .= '0';
+                    $message = $GLOBALS['strNoPhp'];
                 } else {
-                    $php_link .= '1">' . $GLOBALS['strPhp'];
+                    $php_link .= '1';
+                    $message = $GLOBALS['strPhp'];
                 }
-                $php_link .= '</a>]';
+                $php_link = ' [' . PMA_linkOrButton( $php_link, $message ) . ']';
 
                 if (isset($GLOBALS['show_as_php']) && $GLOBALS['show_as_php'] == '1') {
-                    $php_link .= '&nbsp;[<a href="read_dump.php'
-                              . $url_qpart
-                              . '&amp;show_query=1'
-                              . '&amp;sql_query=' . urlencode($local_query)
-                              . '">' . $GLOBALS['strRunQuery'] . '</a>]';
+                    $runquery_link
+                         = 'read_dump.php'
+                         . $url_qpart
+                         . '&amp;show_query=1'
+                         . '&amp;sql_query=' . urlencode($local_query);
+                    $php_link .= ' [' . PMA_linkOrButton( $runquery_link, $GLOBALS['strRunQuery'] ) . ']';
                 }
 
             } else {
@@ -1859,13 +1815,11 @@ if (typeof(document.getElementById) != 'undefined'
                 && $cfg['SQLQuery']['Refresh']
                 && preg_match('@^(SELECT|SHOW)[[:space:]]+@i', $local_query)) {
 
-                $refresh_link = '&nbsp;[<a href="read_dump.php'
+                $refresh_link = 'read_dump.php'
                           . $url_qpart
                           . '&amp;show_query=1'
-                          . '&amp;sql_query=' . urlencode($local_query)
-                          . '">';
-                $refresh_link .= $GLOBALS['strRefresh'];
-                $refresh_link .= '</a>]';
+                          . '&amp;sql_query=' . urlencode($local_query);
+                $refresh_link = ' [' . PMA_linkOrButton( $refresh_link, $GLOBALS['strRefresh'] ) . ']';
             } else {
                 $refresh_link = '';
             } //show as php
@@ -1874,17 +1828,19 @@ if (typeof(document.getElementById) != 'undefined'
                 && $cfg['SQLValidator']['use'] == TRUE
                 && isset($cfg['SQLQuery']['Validate'])
                 && $cfg['SQLQuery']['Validate'] == TRUE) {
-                $validate_link = '&nbsp;[<a href="read_dump.php'
+                $validate_link = 'read_dump.php'
                                . $url_qpart
                                . '&amp;show_query=1'
                                . '&amp;sql_query=' . urlencode($local_query)
                                . '&amp;validatequery=';
                 if (!empty($GLOBALS['validatequery'])) {
-                    $validate_link .= '0">' .  $GLOBALS['strNoValidateSQL'] ;
+                    $validate_link .= '0';
+                    $message = $GLOBALS['strNoValidateSQL'] ;
                 } else {
-                    $validate_link .= '1">'. $GLOBALS['strValidateSQL'] ;
+                    $validate_link .= '1';
+                    $message = $GLOBALS['strValidateSQL'] ;
                 }
-                $validate_link .= '</a>]';
+                $validate_link = ' [' . PMA_linkOrButton( $validate_link, $GLOBALS['strRefresh'] ) . ']';
             } else {
                 $validate_link = '';
             } //validator
@@ -1905,7 +1861,7 @@ if (typeof(document.getElementById) != 'undefined'
     </tr>
     <?php
             if (!empty($edit_target)) {
-                echo '<tr><td bgcolor="' . $cfg['BgcolorOne'] . '" align="center">';
+                echo '<tr><td class="tblFooters">';
                 echo $edit_link . $explain_link . $php_link . $refresh_link . $validate_link;
                 echo '</td></tr>' . "\n";
             }
@@ -2007,117 +1963,98 @@ if (typeof(document.getElementById) != 'undefined'
 
 
     /**
-     * Prints out a tab for tabbed navigation.
+     * returns a tab for tabbed navigation.
      * If the variables $link and $args ar left empty, an inactive tab is created
      *
-     * @param   string  the text to be displayed as link
-     * @param   string  main link file, e.g. "test.php"
-     * @param   string  link arguments
-     * @param   string  link attributes
-     * @param   string  include '?' even though no attributes are set. Can be set empty, should be '?'.
-     * @param   boolean force display TAB as active
+     * @param   array   $tab array with all options
      *
-     * @return  string  two table cells, the first beeing a separator, the second the tab itself
+     * @return  string  html code for one tab, a link if valid otherwise a span
      *
      * @access  public
      */
-/* replaced with a newer function
-   2004-05-20 by Michael Keck <mail_at_michaelkeck_dot_de>
-*/
-/*
-    function PMA_printTab($text, $link, $args = '', $attr = '', $class = '', $sep = '?', $active = false) {
-        global $PHP_SELF, $cfg;
-        global $db_details_links_count_tabs;
-
-        if (!empty($class)) {
-            $class = ' class="' . $class . '"';
-            $addclass = ' ' . $class;
-        } else {
-            $addclass = '';
+    function PMA_getTab( $tab )
+    {
+        // default values
+        $defaults = array(
+            'text'   => '',
+            'class'  => '',
+            'active' => false,
+            'link'   => '',
+            'sep'    => '?',
+            'attr'   => '',
+            'args'   => '',
+        );
+        
+        $tab = array_merge( $defaults, $tab );
+        
+        // determine aditional style-class
+        if ( empty( $tab['class'] ) ) {
+            if ($tab['text'] == $GLOBALS['strEmpty'] || $tab['text'] == $GLOBALS['strDrop']) {
+                $tab['class'] = 'caution';
+            }
+            elseif ( isset( $tab['active'] ) && $tab['active']
+                  || isset($GLOBALS['active_page']) && $GLOBALS['active_page'] == $tab['link'] 
+                  || basename($_SERVER['PHP_SELF']) == $tab['link'] )
+            {
+                $tab['class'] = 'active';
+            }
+        }
+        
+        // build the link
+        if ( ! empty( $tab['link'] ) ) {
+            $tab['link'] = htmlentities( $tab['link'] );
+            $tab['link'] = $tab['link'] . $tab['sep'] . ( empty( $GLOBALS['url_query'] ) ? PMA_generate_common_url() : $GLOBALS['url_query'] );
+            if ( ! empty( $tab['args'] ) ) {
+                foreach( $tab['args'] as $param => $value ) {
+                    $tab['link'] .= '&amp;' . urlencode( $param ) . '=' . urlencode( $value );
+                }
+            }
+        }
+        
+        // display icon, even if iconic is disabled but the link-text is missing
+        if ( ( $GLOBALS['cfg']['MainPageIconic'] || empty( $tab['text'] ) )
+            && isset( $tab['icon'] ) ) {
+            $image = '<img src="' . htmlentities( $GLOBALS['pmaThemeImage'] ) . '%1$s" width="16" height="16" border="0" alt="%2$s" />%2$s';
+            $tab['text'] = sprintf( $image, htmlentities( $tab['icon'] ), $tab['text'] );
+        }
+        // check to not display an empty link-text
+        elseif ( empty( $tab['text'] ) ) {
+            $tab['text'] = '?';
+            trigger_error( __FILE__ . '(' . __LINE__ . '): ' . 'empty linktext in function ' . __FUNCTION__ . '()', E_USER_NOTICE );
         }
 
-        if (((!isset($GLOBALS['active_page']) && basename($PHP_SELF) == $link) ||
-                $active ||
-                (isset($GLOBALS['active_page']) && $GLOBALS['active_page'] == $link)
-            ) && ($text != $GLOBALS['strEmpty'] && $text != $GLOBALS['strDrop'])) {
-            $addclass .= ' activetab';
-        }
-
-        $db_details_links_count_tabs++;
-
-        if ($cfg['LightTabs']) {
-            $out = '';
-            if (strlen($link) > 0) {
-                $out .= '<a class="tab" href="' . $link . $sep . $args . '"' . $attr . $class . '>'
-                     .  '' . $text . '</a>';
-            } else {
-                $out .= '<span class="tab">' . $text . '</span>';
-            }
-            $out = '[ ' . $out . ' ]&nbsp;&nbsp;&nbsp;';
+        if ( ! empty( $tab['link'] ) ) {
+            $out = '<a class="tab' . htmlentities( $tab['class'] ) . '" href="' . $tab['link'] . '" ' . $tab['attr'] . '>'
+                 . $tab['text'] . '</a>';
         } else {
-            $out     = "\n" . '        '
-                     . '<td class="tab nowrap' . $addclass . '">'
-                     . "\n" . '            ';
-            if (strlen($link) > 0) {
-                $out .= '<a href="' . $link . $sep . $args . '"' . $attr .  $class . '>'
-                     .  $text . '</a>';
-            } else {
-                $out .= $text;
-            }
-            $out     .= "\n" . '        '
-                     .  '</td>'
-                     .  "\n" . '        '
-                     .  '<td width="8">&nbsp;</td>';
+            $out = '<span class="tab' . htmlentities( $tab['class'] ) . '">' . $tab['text'] . '</span>';
         }
 
         return $out;
     } // end of the 'PMA_printTab()' function
-*/
-// the new one:
-    function PMA_printTab($text, $link, $args = '', $attr = '', $class = '', $sep = '?', $active = false) {
-        global $PHP_SELF, $cfg;
-        global $db_details_links_count_tabs;
-        $addclass = '';
-        if (((!isset($GLOBALS['active_page']) && basename($PHP_SELF) == $link) ||
-                $active ||
-                (isset($GLOBALS['active_page']) && $GLOBALS['active_page'] == $link)
-            ) && ($text != $GLOBALS['strEmpty'] && $text != $GLOBALS['strDrop'])) {
-            $addclass = 'Active';
+    
+    /**
+     * returns html-code for a tab navigation
+     *
+     * @param   array   $tabs one element per tab
+     * @param   string  $tag_id id used for the html-tag
+     * @return  string  html-code for tab-navigation
+     */ 
+    function PMA_getTabs( $tabs, $tag_id = 'topmenu' )
+    {
+        $tab_navigation = '<!-- top menu -->' . "\n";
+        $tab_navigation .= '<div id="' . htmlentities( $tag_id ) . '">' . "\n";
+        
+        foreach ( $tabs as $tab )
+        {
+            $tab_navigation .= PMA_getTab( $tab ) . "\n";
         }
-        if ($text == $GLOBALS['strEmpty'] && $text == $GLOBALS['strDrop']) $addclass = 'Drop';
-        if (empty($class)){
-            if (empty($addclass)) { $addclass = 'Normal'; }
-        } else { $addclass = $class; }
-
-        $db_details_links_count_tabs++;
-
-        if ($cfg['LightTabs']) {
-            $out = '';
-            if (!empty($link)) {
-                $out .= '<a class="tab" href="' . $link . $sep . $args . '"' . $attr . $class . '>'
-                     .  '' . $text . '</a>';
-            } else {
-                $out .= '<span class="tab">' . $text . '</span>';
-            }
-            $out = '[ ' . $out . ' ]&nbsp;&nbsp;&nbsp;';
-        } else {
-            $out     = "\n" . '        '
-                     . '<td class="nav' . $addclass . '" nowrap="nowrap">'
-                     . "\n" . '            ';
-            if (!empty($link)) {
-                $out .= '<a href="' . $link . $sep . $args . '"' . $attr . '>'
-                     .  $text . '</a>';
-            } else {
-                $out .= $text;
-            }
-            $out     .= "\n" . '        '
-                     .  '</td>'
-                     .  "\n" . '        '
-                     .  '<td class="navSpacer"><img src="' . $GLOBALS['pmaThemeImage'] . 'spacer.png' . '" width="1" height="1" border="0" alt="" /></td>';
-        }
-
-        return $out;
-    } // end of the 'PMA_printTab()' function
+        
+        $tab_navigation .= '</div>' . "\n";
+        $tab_navigation .= '<!-- end top menu -->' . "\n\n";
+        
+        return $tab_navigation;
+    }
 
 
     /**
@@ -2126,43 +2063,96 @@ if (typeof(document.getElementById) != 'undefined'
      *
      * @param  string  the URL
      * @param  string  the link message
-     * @param  string  js confirmation
-     * @param  boolean we set this to FALSE when we are already in a form,
-     *                 to avoid generating nested forms
+     * @param  mixed   $tag_params  string: js confirmation
+     *                              array: additional tag params (f.e. style="")
+     * @param  boolean $new_form    we set this to FALSE when we are already in
+     *                              a  form, to avoid generating nested forms
      *
      * @return string  the results to be echoed or saved in an array
      */
-    function PMA_linkOrButton($url, $message, $js_conf, $allow_button = TRUE)
+    function PMA_linkOrButton($url, $message, $tag_params = array(), $new_form = TRUE, $strip_img = FALSE, $target = '')
     {
+        if ( ! is_array( $tag_params ) )
+        {
+            $tmp = $tag_params;
+            $tag_params = array();
+            if ( ! empty( $tmp ) )
+            {
+                $tag_params['onclick'] = 'return confirmLink(this, \'' . $tmp . '\')';
+            }
+            unset( $tmp );
+        }
+        if ( ! empty( $target ) ) {
+            $tag_params['target'] = htmlentities( $target );
+        }
+        
+        $tag_params_strings = array();
+        foreach( $tag_params as $par_name => $par_value ) {
+            // htmlentities() only on non javascript
+            $par_value = substr( $par_name,0 ,2 ) == 'on' ? $par_value : htmlentities( $par_value );
+            $tag_params_strings[] = $par_name . '="' . $par_value . '"';
+        }
+        
         // previously the limit was set to 2047, it seems 1000 is better
         if (strlen($url) <= 1000) {
-            $onclick_url        = (empty($js_conf) ? '' : ' onclick="return confirmLink(this, \'' . $js_conf . '\')"');
-            $link_or_button     = '        <a href="' . $url . '"' . $onclick_url . '>' . "\n"
-                                . '           ' . $message . '</a>' . "\n";
+            $ret            = '<a href="' . $url . '" ' . implode( ' ', $tag_params_strings ) . '>' . "\n"
+                            . '    ' . $message . '</a>' . "\n";
         }
-        elseif ($allow_button) {
-            $edit_url_parts     = parse_url($url);
-            $query_parts        = explode('&', $edit_url_parts['query']);
-            $link_or_button     = '        <form action="'
-                                . $edit_url_parts['path']
-                                . '" method="post">' . "\n";
+        else {
+            // no spaces (linebreaks) at all
+            // or after the hidden fields
+            // IE will display them all
+            
+            // add class=link to submit button
+            if ( empty( $tag_params['class'] ) ) {
+                $tag_params['class'] = 'link';
+            }
+            $url         = str_replace('&amp;', '&', $url);
+            $url_parts   = parse_url($url);
+            $query_parts = explode('&', $url_parts['query']);
+            if ($new_form) {
+                $ret = '<form action="' . $url_parts['path'] . '" class="link"'
+                     . ' method="post"' . $target . ' style="display: inline;">';
+                $subname_open   = '';
+                $subname_close  = '';
+                $submit_name    = '';
+            } else {
+                $query_parts[] = 'redirect=' . $url_parts['path'];
+                if ( empty( $GLOBALS['subform_counter'] ) ) {
+                    $GLOBALS['subform_counter'] = 0;
+                }
+                $GLOBALS['subform_counter']++;
+                $ret            = '';
+                $subname_open   = 'subform[' . $GLOBALS['subform_counter'] . '][';
+                $subname_close  = ']';
+                $submit_name    = ' name="usesubform[' . $GLOBALS['subform_counter'] . ']"';
+            }
             foreach ($query_parts AS $query_pair) {
                 list($eachvar, $eachval) = explode('=', $query_pair);
-                $link_or_button .= '            <input type="hidden" name="' . str_replace('amp;', '', $eachvar) . '" value="' . htmlspecialchars(urldecode($eachval)) . '" />' . "\n";
+                $ret .= '<input type="hidden" name="' . $subname_open . $eachvar . $subname_close . '" value="' . htmlspecialchars(urldecode($eachval)) . '" />';
             } // end while
 
             if (stristr($message, '<img')) {
-                $link_or_button     .= '            <input type="image" src="' . preg_replace('@^.*src="(.*)".*$@si', '\1', $message) . '" value="'
-                                    . htmlspecialchars(preg_replace('@^.*alt="(.*)".*$@si', '\1', $message)) . '" />' . "\n" . '</form>' . "\n";
+                if ($strip_img) {
+                    $message = trim( strip_tags( $message ) );
+                    $ret .= '<input type="submit"' . $submit_name . ' ' . implode( ' ', $tag_params_strings )
+                          . ' value="' . htmlspecialchars($message) . '" />';
+                } else {
+                    $ret .= '<input type="image"' . $submit_name . ' ' . implode( ' ', $tag_params_strings )
+                          . ' src="' . preg_replace('°^.*\ssrc="([^"]*)".*$°si', '\1', $message) . '"'
+                          . ' value="' . htmlspecialchars(preg_replace('°^.*\salt="([^"]*)".*$°si', '\1', $message)) . '" />';
+                }
             } else {
-                $link_or_button     .= '            <input type="submit" value="'
-                                    . htmlspecialchars($message) . '" />' . "\n" . '</form>' . "\n";
+                $message = trim( strip_tags( $message ) );
+                $ret .= '<input type="submit"' . $submit_name . ' ' . implode( ' ', $tag_params_strings )
+                      . ' value="' . htmlspecialchars($message) . '" />';
             }
-        } else {
-            $link_or_button = ' <dfn title="' . $GLOBALS['strNeedPrimaryKey'] . '">?</dfn> ';
+            if ($new_form) {
+                $ret .= '</form>';
+            }
         } // end if... else...
 
-            return $link_or_button;
+            return $ret;
     } // end of the 'PMA_linkOrButton()' function
 
 
@@ -2529,7 +2519,7 @@ if (typeof(document.getElementById) != 'undefined'
 
         $query = PMA_backquote($oldcol) . ' ' . PMA_backquote($newcol) . ' '
             . $full_field_type;
-        if (PMA_MYSQL_INT_VERSION >= 40100 && !empty($collation) && $collation != 'NULL' && preg_match('@^(TINYTEXT|TEXT|MEDIUMTEXT|LONGTEXT|VARCHAR|CHAR)$@i', $full_field_type)) {
+        if (PMA_MYSQL_INT_VERSION >= 40100 && !empty($collation) && $collation != 'NULL' && preg_match('@^(TINYTEXT|TEXT|MEDIUMTEXT|LONGTEXT|VARCHAR\(\d+\)|CHAR\(\d+\))$@i', $full_field_type)) {
             $query .= PMA_generateCharsetQueryPart($collation);
         }
 

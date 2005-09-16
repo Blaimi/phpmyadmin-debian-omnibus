@@ -1,5 +1,5 @@
 <?php
-/* $Id: db_details_structure.php,v 2.48.2.1 2005/04/14 14:42:51 lem9 Exp $ */
+/* $Id: db_details_structure.php,v 2.55 2005/07/22 15:25:53 lem9 Exp $ */
 // vim: expandtab sw=4 ts=4 sts=4:
 
 require_once('./libraries/grab_globals.lib.php');
@@ -263,6 +263,10 @@ else {
         ?>
                 </td>
                 <td align="center" bgcolor="<?php echo $bgcolor; ?>">
+                    <a href="tbl_properties_structure.php?<?php echo $tbl_url_query; ?>">
+                        <?php echo $titles['Structure']; ?></a>
+                            </td>
+                <td align="center" bgcolor="<?php echo $bgcolor; ?>">
         <?php
         if (!empty($sts_data['Rows']) || $is_view || (PMA_MYSQL_INT_VERSION >= 50000 && $db == 'information_schema')) {
             echo '<a href="tbl_select.php?' . $tbl_url_query . '">'
@@ -285,10 +289,6 @@ else {
         }
         ?>
                 </td>
-                <td align="center" bgcolor="<?php echo $bgcolor; ?>">
-                    <a href="tbl_properties_structure.php?<?php echo $tbl_url_query; ?>">
-                        <?php echo $titles['Structure']; ?></a>
-                            </td>
                 <td align="center" bgcolor="<?php echo $bgcolor; ?>">
         <?php
         if (!empty($sts_data['Rows'])) {
@@ -323,7 +323,7 @@ else {
             echo $titles['NoDrop'];
         } else {
             ?>
-                    <a href="sql.php?<?php echo $tbl_url_query; ?>&amp;reload=1&amp;purge=1&amp;sql_query=<?php echo urlencode($drop_query); ?>&amp;zero_rows=<?php echo $drop_message; ?>"
+                    <a href="sql.php?<?php echo $tbl_url_query; ?>&amp;reload=1&amp;purge=1&amp;sql_query=<?php echo urlencode($drop_query); ?>&amp;zero_rows=<?php echo urlencode($drop_message); ?>"
                         onclick="return confirmLink(this, '<?php echo PMA_jsFormat($drop_query, FALSE); ?>')">
                         <?php echo $titles['Drop']; ?></a>
             <?php
@@ -630,10 +630,12 @@ if ($num_tables > 0) {
 <tr><td colspan="3"><img src="<?php echo $GLOBALS['pmaThemeImage'] . 'spacer.png'; ?>" width="1" height="1" border="0" alt="" /></td></tr></table>
     <?php
 } // end if
+
+if (PMA_MYSQL_INT_VERSION < 50002 || (PMA_MYSQL_INT_VERSION >= 50002 && $db != 'information_schema')) {
 ?>
-<table border="0" cellpadding="2" cellspacing="0">
     <!-- Create a new table -->
-        <form method="post" action="tbl_create.php" onsubmit="return (emptyFormElements(this, 'table') && checkFormElementInRange(this, 'num_fields', 1))">
+<form method="post" action="tbl_create.php" onsubmit="return (emptyFormElements(this, 'table') && checkFormElementInRange(this, 'num_fields', '<?php echo str_replace('\'', '\\\'', $GLOBALS['strInvalidFieldCount']); ?>', 1))">
+     <table border="0" cellpadding="2" cellspacing="0">
      <tr>
      <td class="tblHeaders" colspan="3" nowrap="nowrap"><?php
         echo PMA_generate_common_hidden_inputs($db);
@@ -643,24 +645,29 @@ if ($num_tables > 0) {
                    . htmlspecialchars($GLOBALS['db']) . '</a>';
         // else use
         // $strDBLink = htmlspecialchars($db);
-echo '             ' . sprintf($strCreateNewTable, $strDBLink) . ':&nbsp;' . "\n";
-echo '     </td></tr>';
-echo '     <tr bgcolor="'.$cfg['BgcolorOne'].'"><td nowrap="nowrap">';
-echo '             ' . $strName . ':&nbsp;' . "\n";
-echo '     </td>';
-echo '     <td nowrap="nowrap">';
-echo '             ' . '<input type="text" name="table" maxlength="64" size="30" class="textfield" />';
-echo '     </td><td>&nbsp;</td></tr>';
-echo '     <tr bgcolor="'.$cfg['BgcolorOne'].'"><td nowrap="nowrap">';
-echo '             ' . $strFields . ':&nbsp;' . "\n";
-echo '     </td>';
-echo '     <td nowrap="nowrap">';
-echo '             ' . '<input type="text" name="num_fields" size="2" class="textfield" />' . "\n";
-echo '     </td>';
-echo '     <td align="right">';
-echo '             ' . '&nbsp;<input type="submit" value="' . $strGo . '" />' . "\n";
-echo '     </td> </tr>';
-echo '        </form>';
+    echo '             ' . sprintf($strCreateNewTable, $strDBLink) . ':&nbsp;' . "\n";
+    echo '     </td></tr>';
+    echo '     <tr bgcolor="'.$cfg['BgcolorOne'].'"><td nowrap="nowrap">';
+    echo '             ' . $strName . ':&nbsp;' . "\n";
+    echo '     </td>';
+    echo '     <td nowrap="nowrap">';
+    echo '             ' . '<input type="text" name="table" maxlength="64" size="30" class="textfield" />';
+    echo '     </td><td>&nbsp;</td></tr>';
+    echo '     <tr bgcolor="'.$cfg['BgcolorOne'].'"><td nowrap="nowrap">';
+    if (!isset($strNumberOfFields)) {
+        $strNumberOfFields = $strFields;
+    }
+    echo '             ' . $strNumberOfFields . ':&nbsp;' . "\n";
+    echo '     </td>';
+    echo '     <td nowrap="nowrap">';
+    echo '             ' . '<input type="text" name="num_fields" size="2" class="textfield" />' . "\n";
+    echo '     </td>';
+    echo '     <td align="right">';
+    echo '             ' . '&nbsp;<input type="submit" value="' . $strGo . '" />' . "\n";
+    echo '     </td> </tr>';
+    echo '     </table>';
+    echo '</form>';
+} // end if (Create Table dialog)
 
 /**
  * Displays the footer

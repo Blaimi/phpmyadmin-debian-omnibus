@@ -1,5 +1,5 @@
 <?php
-/* $Id: russian-koi8-r.inc.php,v 2.69 2005/03/30 19:24:09 lem9 Exp $ */
+/* $Id: russian-koi8-r.inc.php,v 2.78 2005/07/29 17:03:21 lem9 Exp $ */
 
 /**
  * Translated by Gosha Sakovich <gt2 at users.sourceforge.net>
@@ -361,7 +361,7 @@ $strMIME_transformation_note = 'Для списка доступных опций трансформации и транс
 $strMIME_transformation_options = 'Опции трансформации';
 $strMIME_transformation_options_note = 'Пожалуйсиа, введите значения для трансформации, используя этот формат: \'a\',\'b\',\'c\'...<br />Если вам нужно поставить бэкслэш("\") или кавычку("\'"), экранируйте их (например \'\\\\xyz\' or \'a\\\'b\').';
 $strMIME_without = 'MIME-типы, выделенные курсивом, не имеют отдельной функции трансформации';
-$strMaximumSize = 'Минимальный размер: %s%s';
+$strMaximumSize = 'Максимальный размер: %s%s';
 $strModifications = 'Модификации были сохранены';
 $strModify = 'Изменить';
 $strModifyIndexTopic = 'Изменить индекс';
@@ -409,7 +409,6 @@ $strNone = 'Нет';
 $strNotNumber = 'Это не число!';
 $strNotOK = 'Не готово';
 $strNotSet = 'Таблица <b>%s</b> не найдена';
-$strNotValidNumber = ' недопустимое количество рядов!';
 $strNull = 'Ноль';
 $strNumSearchResultsInTable = '%s записи(ей) в таблице <i>%s</i>';
 $strNumSearchResultsTotal = '<b>Итого:</b> <i>%s</i> записи(ей)';
@@ -803,4 +802,23 @@ $strInnoDBBufferPoolSizeDesc = 'The size of the memory buffer InnoDB uses to cac
 $strInnoDBBufferPoolSize = 'Buffer pool size';  //to translate
 $strInnoDBPages = 'pages';  //to translate
 $strSocketProblem = '(or the local MySQL server\'s socket is not correctly configured)';  //to translate
+
+$strPrivDescCreateView = 'Allows creating new views.';  //to translate
+$strPrivDescAlterDb = 'Allows altering the structure of existing tables as well as changing the default charset and collation of databases.';  //to translate
+$strPrivDescCreateUser = 'Allows creating, dropping and renaming unser accounts.';  //to translate
+$strPrivDescCreateRoutine = 'Allows creating stored routines.';  //to translate
+$strPrivDescAlterRoutine = 'Allows altering and dropping stored routines.';  //to translate
+$strRoutines = 'Routines';  //to translate
+$strPrivDescShowView = 'Allows performing SHOW CREATE VIEW queries.';  //to translate
+$strPrivDescExecute5 = 'Allows executing stored routines.';  //to translate
+$strCreateDatabaseBeforeCopying = 'CREATE DATABASE before copying';  //to translate
+$strGeneratePassword = 'Generate Password';  //to translate
+$strGenerate = 'Generate';  //to translate
+$strCopy = 'Copy';  //to translate
+$strTransformation_application_octetstream__hex = 'Displays hexadecimal representation of data.';  //to translate
+$strInvalidFieldCount = 'Table must have at least one field.';  //to translate
+$strInvalidRowNumber = '%d is not valid row number.';  //to translate
+$strInvalidColumnCount = 'Column count has to be larger than zero.';  //to translate
+$strInvalidFieldAddCount = 'You have to add at least one field.';  //to translate
+$strAndThen = 'and then';  //to translate
 ?>

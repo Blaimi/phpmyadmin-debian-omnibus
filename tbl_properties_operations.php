@@ -1,7 +1,6 @@
 <?php
-/* $Id: tbl_properties_operations.php,v 2.27 2005/01/18 17:24:54 rabus Exp $ */
+/* $Id: tbl_properties_operations.php,v 2.29 2005/06/28 10:59:39 lem9 Exp $ */
 // vim: expandtab sw=4 ts=4 sts=4:
-
 
 /**
  * Runs common work
@@ -38,11 +37,15 @@ if (isset($submitcomment)) {
     }
 }
 if (isset($submittype)) {
-    $sql_query     = 'ALTER TABLE ' . PMA_backquote($table) . ' TYPE = ' . $tbl_type;
+    $sql_query     = 'ALTER TABLE ' . PMA_backquote($table) . ' TYPE = ' . $new_tbl_type;
     $result        = PMA_DBI_query($sql_query);
     $message       = $strSuccess;
 }
 if (isset($submitcollation)) {
+    // since something modifies $tbl_collation between the moment it is
+    // set from $_POST and this point, need to restore it
+    // (bug seen in MySQL 5.0.4)
+    $tbl_collation = $_POST['tbl_collation'];
     $sql_query     = 'ALTER TABLE ' . PMA_backquote($table) . ' DEFAULT' . PMA_generateCharsetQueryPart($tbl_collation);
     $result        = PMA_DBI_query($sql_query);
     $message       = $strSuccess;
@@ -325,7 +328,7 @@ for ($i = 0; $i < $num_dbs; $i++) {
         </tr>
         <tr>
             <td bgcolor="<?php echo $cfg['BgcolorOne']; ?>">
-	        <?php echo PMA_generateEnginesDropdown('tbl_type', NULL, FALSE, $tbl_type, 4); ?>
+	        <?php echo PMA_generateEnginesDropdown('new_tbl_type', NULL, FALSE, $tbl_type, 4); ?>
             </td>
             <td bgcolor="<?php echo $cfg['BgcolorOne']; ?>" align="right">
                 <input type="submit" name="submittype" value="<?php echo $strGo; ?>" />

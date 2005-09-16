@@ -1,5 +1,5 @@
 <?php
-/* $Id: database_interface.lib.php,v 2.18 2005/03/24 20:57:00 rabus Exp $ */
+/* $Id: database_interface.lib.php,v 2.20 2005/08/23 11:56:52 nijel Exp $ */
 // vim: expandtab sw=4 ts=4 sts=4:
 
 /**
@@ -66,6 +66,16 @@ function PMA_DBI_get_tables($database, $link = NULL) {
     }
     PMA_DBI_free_result($result);
 
+    return $tables;
+}
+
+function PMA_DBI_get_tables_full($database, $link = NULL) {
+    $result = PMA_DBI_query('SHOW TABLE STATUS FROM ' . PMA_backquote($database) . ';', NULL, PMA_DBI_QUERY_STORE);
+    $tables = array();
+    while ($row = PMA_DBI_fetch_assoc($result)) {
+        $tables[$row['Name']] = $row;
+    }
+    PMA_DBI_free_result($result);
     return $tables;
 }
 
@@ -146,8 +156,8 @@ function PMA_DBI_postConnect($link, $is_controluser = FALSE) {
     if (PMA_MYSQL_INT_VERSION >= 40100) {
 
         // If $lang is defined and we are on MySQL >= 4.1.x,
-        // we auto-switch the lang to its UTF-8 version (if it exists)
-        if (!empty($GLOBALS['lang']) && (substr($GLOBALS['lang'], -5) != 'utf-8')) {
+        // we auto-switch the lang to its UTF-8 version (if it exists and user didn't force language)
+        if (!empty($GLOBALS['lang']) && (substr($GLOBALS['lang'], -5) != 'utf-8') && !isset($GLOBALS['cfg']['Lang'])) {
             $lang_utf_8_version = substr($GLOBALS['lang'], 0, strpos($GLOBALS['lang'], '-')) . '-utf-8';
             if (!empty($GLOBALS['available_languages'][$lang_utf_8_version])) {
                 $GLOBALS['lang'] = $lang_utf_8_version;

@@ -1,5 +1,5 @@
 <?php
-/* $Id: mult_submits.inc.php,v 2.13 2005/01/12 00:31:42 rabus Exp $ */
+/* $Id: mult_submits.inc.php,v 2.14 2005/07/10 19:31:24 nijel Exp $ */
 // vim: expandtab sw=4 ts=4 sts=4:
 
 
@@ -258,6 +258,11 @@ if (!empty($submit_mult) && !empty($what)) {
         echo '<input type="hidden" name="original_sql_query" value="' . htmlspecialchars($original_sql_query) . '" />' . "\n";
         echo '<input type="hidden" name="original_pos" value="' . $original_pos . '" />' . "\n";
         echo '<input type="hidden" name="original_url_query" value="' . htmlspecialchars($original_url_query) . '" />' . "\n";
+        echo '<input type="hidden" name="disp_direction"   value="' . $disp_direction . '" />' . "\n";
+        echo '<input type="hidden" name="repeat_cells"     value="' . $repeat_cells   . '" />' . "\n";
+        echo '<input type="hidden" name="dontlimitchars"   value="' . $dontlimitchars . '" />' . "\n";
+        echo '<input type="hidden" name="pos"              value="' . $pos . '" />' . "\n";
+        echo '<input type="hidden" name="session_max_rows" value="' . $session_max_rows . '" />' . "\n";
     }
     ?>
     <input type="submit" name="mult_btn" value="<?php echo $strYes; ?>" id="buttonYes" />

@@ -1,5 +1,5 @@
 <?php
-/* $Id: htmlword.php,v 1.2 2005/03/06 14:54:15 nijel Exp $ */
+/* $Id: htmlword.php,v 1.4 2005/08/14 21:34:01 lem9 Exp $ */
 // vim: expandtab sw=4 ts=4 sts=4:
 
 /**
@@ -226,7 +226,7 @@ function PMA_exportStructure($db, $table, $crlf, $error_url, $do_relation = fals
         $type             = $row['Type'];
         // reformat mysql query output - staybyte - 9. June 2001
         // loic1: set or enum types: slashes single quotes inside options
-        if (eregi('^(set|enum)\((.+)\)$', $type, $tmp)) {
+        if (eregi('^(set|enum)\((.+)\)$', $type, $tmp = array())) {
             $tmp[2]       = substr(ereg_replace('([^,])\'\'', '\\1\\\'', ',' . $tmp[2]), 1);
             $type         = $tmp[1] . '(' . str_replace(',', ', ', $tmp[2]) . ')';
             $type_nowrap  = '';
@@ -243,9 +243,9 @@ function PMA_exportStructure($db, $table, $crlf, $error_url, $do_relation = fals
                 $type     = '&nbsp;';
             }
 
-            $binary       = eregi('BINARY', $row['Type'], $test);
-            $unsigned     = eregi('UNSIGNED', $row['Type'], $test);
-            $zerofill     = eregi('ZEROFILL', $row['Type'], $test);
+            $binary       = eregi('BINARY', $row['Type'], $test = array());
+            $unsigned     = eregi('UNSIGNED', $row['Type'], $test = array());
+            $zerofill     = eregi('ZEROFILL', $row['Type'], $test = array());
         }
         $strAttribute     = '&nbsp;';
         if ($binary) {
@@ -279,6 +279,8 @@ function PMA_exportStructure($db, $table, $crlf, $error_url, $do_relation = fals
         $schema_insert .= '<td class="print">' . htmlspecialchars($type) . '</td>';
         $schema_insert .= '<td class="print">' . htmlspecialchars($row['Null'] == '' ? $GLOBALS['strNo'] : $GLOBALS['strYes']) . '</td>';
         $schema_insert .= '<td class="print">' . htmlspecialchars(isset($row['Default']) ? $row['Default'] : '') . '</td>';
+
+        $field_name = $row['Field'];
 
         if ($do_relation && $have_rel) {
             $schema_insert .= '<td class="print">' . (isset($res_rel[$field_name]) ? htmlspecialchars($res_rel[$field_name]['foreign_table'] . ' (' . $res_rel[$field_name]['foreign_field'] . ')') : '') . '</td>';

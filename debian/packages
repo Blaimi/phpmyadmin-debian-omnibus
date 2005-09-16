@@ -1,78 +1,80 @@
-# $Id: /trunk/debian/dists/phpmyadmin/debian/packages 95 2005-05-07T13:41:52.467689Z dexter  $
+# $Id: /trunk/debian/dists/phpmyadmin/debian/packages 256 2005-09-16T14:28:00.091592Z dexter  $
 
 # If the debian/rules or debian/control file is missing, rebuild the file:
 #
 #   $ yada rebuild control
 #   $ yada rebuild rules
 
+
 Source: phpmyadmin
 Section: web
 Priority: extra
 Maintainer: Piotr Roszatycki <dexter@debian.org>
-Standards-Version: 3.6.1
-Upstream-Source: <URL:http://ftp.sourceforge.net/p/ph/phpmyadmin/>
-Home-Page: <URL:http://phpmyadmin.sourceforge.net/>
+Standards-Version: 3.6.2
+Upstream-Source: <USCAN:http://sf.net/phpmyadmin/phpMyAdmin-([0-9.]*)\.tar\.gz>
+Home-Page: <URL:http://www.phpmyadmin.net/>
 Description: set of PHP-scripts to administrate MySQL over the WWW
 Copyright: GPL
-     Copyright (C) 1998-2000 Tobias Ratschiller <tobias.ratschiller_at_maguma.com>
-     Copyright (C) 2001-     Marc Delisle <DelislMa_at_CollegeSherbrooke.qc.ca>
-                             Olivier Mller <om_at_omnis.ch>
-                             Loc Chapeaux <lolo_at_phpHeaven.net>
+     Copyright (C) 1998-2000 Tobias Ratschiller <tobias_at_ratschiller.com>
+     Copyright (C) 2001-2005 Marc Delisle <DelislMa_at_CollegeSherbrooke.qc.ca>
+                             Olivier Müller <om_at_omnis.ch>
                              Robin Johnson <robbat2_at_users.sourceforge.net>
-                             Armel Fauveau <armel.fauveau_at_globalis-ms.com>
-                             Geert Lund <glund_at_silversoft.dk>
-                             Korakot Chaovavanich <korakot_at_iname.com>
-                             Pete Kelly <webmaster_at_trafficg.com>
-                             Steve Alberty <alberty_at_neptunlabs.de>
-                             Benjamin Gandon <gandon_at_isia.cma.fr>
-                             Alexander M. Turek <rabus_at_users.sourceforge.net>
-                             Mike Beck <mikebeck_at_users.sourceforge.net>
-                             + many other people (check the CREDITS file)
-Major-Changes:
-%`cd debian/patches; ls *.patch | sed -e 's/^/ /'`
-Patches: patches/*.patch
+                             Alexander M. Turek <me_at_derrabus.de>
+                             Michal Cihar <michal_at_cihar.com>
+                             Garvin Hicking <me_at_supergarv.de>
+                             Michael Keck <mkkeck_at_users.sourceforge.net>
+                             [check Documentation.txt/.html file for more details]
 
 Package: phpmyadmin
 Architecture: all
-Depends: php4 (>= 4.1.0) | php4-cgi (>= 4.1.0) | php5 | php5-cgi | php5-fcgi
+Depends: php4 | php4-cgi | php5 | php5-cgi
 Depends: php4-mysql | php5-mysql | php5-mysqli
-Depends: apache | apache-perl | apache-ssl | apache2 | httpd
+Depends: apache2 | httpd
 Depends: []
-Suggests: mysql-server (>= 3.23.36), php4-gd | php5-gd, []
+Recommends: php4-mcrypt | php5-mcrypt
+Suggests: mysql-server (>= 3.23.36)
+Suggests: php4-gd | php5-gd
+Suggests: []
 Description: set of PHP-scripts to administrate MySQL over the WWW
  phpMyAdmin is intended to handle the administration of MySQL over the WWW.
  Currently it can:
-   - create and drop databases
-   - create, copy, drop and alter tables
-   - delete, edit and add fields
-   - execute any SQL-statement, even batch-queries
-   - manage keys on fields
-   - load text files into tables
-   - create and read dumps of tables
-   - export and import data to CSV values
-   - administer multiple servers and single databases
-   - check referential integrity
-   - communicate in more than 38 different languages
+  - create and drop databases
+  - create, copy, drop and alter tables
+  - delete, edit and add fields
+  - execute any SQL-statement, even batch-queries
+  - manage keys on fields
+  - load text files into tables
+  - create and read dumps of tables
+  - export and import CSV data
+  - administer one single database as well as a whole database server
+  - communicate in 50 different languages
 Install: sh
  yada install -data -into /usr/share/phpmyadmin *.php *.css
  yada copy -data -into /usr/share/phpmyadmin css lang libraries themes
- yada remove -data -into /usr/share/phpmyadmin/libraries/lang *.sh
- yada remove -data -into /usr/share/phpmyadmin/libraries/transformations *.sh
+ yada remove -data -into /usr/share/phpmyadmin/lang *.sh
+ yada remove -data -into /usr/share/phpmyadmin/libraries/fpdf README
+ yada remove -data -into /usr/share/phpmyadmin/libraries/transformations *.sh README TEMPLATE*
  yada install -data -into /usr/share/phpmyadmin Documentation.html translators.html
  yada install -data -into /usr/share/phpmyadmin ChangeLog INSTALL README
  yada install -dir /etc/phpmyadmin
  yada install -conf -ucf -subdir phpmyadmin debian/conf/config.inc.php
+ yada install -conf -ucf -subdir phpmyadmin debian/conf/config.header.inc.php
+ yada install -conf -ucf -subdir phpmyadmin debian/conf/config.footer.inc.php
  yada install -conf -ucf -subdir phpmyadmin debian/conf/htaccess
- yada install -conf -ucf -subdir phpmyadmin config.header.inc.php
- yada install -conf -ucf -subdir phpmyadmin config.footer.inc.php
- for webserver in apache apache-perl apache-ssl apache2; do
-     yada install -conf -ucf -into /etc/$webserver/conf.d -as phpmyadmin.conf debian/conf/apache.conf
- done
+ yada install -conf -ucf -subdir phpmyadmin debian/conf/apache.conf
  yada symlink -into /usr/share/phpmyadmin -as .htaccess /etc/phpmyadmin/htaccess
  yada symlink -into /var/www /usr/share/phpmyadmin
- yada symlink -into /usr/share/phpmyadmin /etc/phpmyadmin/config.header.inc.php
- yada symlink -into /usr/share/phpmyadmin /etc/phpmyadmin/config.footer.inc.php
  yada remove -into /usr/share/phpmyadmin config.default.php
+ yada install -into /usr/share/phpmyadmin debian/src/config.inc.php
+ yada install -into /usr/share/phpmyadmin debian/src/config.header.inc.php
+ yada install -into /usr/share/phpmyadmin debian/src/config.footer.inc.php
+ .
+ version=$(grep "define.'PMA_VERSION" libraries/defines.lib.php | sed "s/.*, '//; s/'.*//")-Debian-${VERSION##*-}
+ sed -e 's/@VERSION@/'"$version"'/' \
+     $ROOT/usr/share/phpmyadmin/config.inc.php > $ROOT/usr/share/phpmyadmin/config.inc.php.tmp
+ mv -f $ROOT/usr/share/phpmyadmin/config.inc.php.tmp $ROOT/usr/share/phpmyadmin/config.inc.php
+ .
+ yada install -doc -subdir examples -gzip config.default.php
  yada install -doc README TODO CREDITS
  yada install -doc Documentation.html translators.html
  yada install -doc -as changelog ChangeLog
@@ -170,12 +172,19 @@ Preinst: bash
          mv -f /etc/apache2/apache2.conf.new.phpmyadmin /etc/apache2/apache2.conf
      fi
  fi
+ if [ "$1" = "upgrade" -a -n "$2" ] && \
+   dpkg --compare-versions "$2" lt-nl "4:2.6.4-pl1-1"; then
+     for webserver in apache apache-perl apache-ssl apache2; do
+         if echo "869f29f7cae89228518a87b0758e6bd4  /etc/$webserver/conf.d/phpmyadmin.conf" | md5sum -c >/dev/null 2>&1; then
+             rm -f /etc/$webserver/conf.d/phpmyadmin.conf
+         fi
+     done
+     ucf --purge /etc/$webserver/conf.d/phpmyadmin.conf
+ fi
  .
- for webserver in apache apache-perl apache-ssl apache2; do
-     if [ -f /etc/$webserver/conf.d/phpmyadmin.conf ]; then
-         md5sum /etc/$webserver/conf.d/phpmyadmin.conf 2>/dev/null >/etc/phpmyadmin/${webserver}_conf.d_phpmyadmin.conf.dpkg-md5sum || true
-     fi
- done
+ if [ -f /etc/phpmyadmin/apache.conf ]; then
+     md5sum /etc/phpmyadmin/apache.conf 2>/dev/null >/etc/phpmyadmin/apache.conf.dpkg-md5sum || true
+ fi
 Postinst: bash
  if [ "$1" = "configure" -a -f /etc/phpmyadmin/blowfish_secret.inc.php ] \
    && dpkg --compare-versions "$2" lt-nl "1:2.5.7-pl1-2"; then
@@ -265,7 +274,12 @@ Postinst: bash
  .
          case "$webserver" in
              apache|apache-perl|apache-ssl|apache2)
-                 if ! md5sum -c /etc/phpmyadmin/${webserver}_conf.d_phpmyadmin.conf.dpkg-md5sum 2>/dev/null; then
+                 newfile=false
+                 if [ -d /etc/$webserver/conf.d ] && [ ! -f /etc/$webserver/conf.d/phpmyadmin.conf ] && [ ! -h /etc/$webserver/conf.d/phpmyadmin.conf ]; then
+                     ln -s /etc/phpmyadmin/apache.conf /etc/$webserver/conf.d/phpmyadmin.conf
+                     newfile=true
+                 fi
+                 if $newfile = true || ! md5sum -c /etc/phpmyadmin/apache.conf.dpkg-md5sum >/dev/null 2>&1; then
                      db_reset phpmyadmin/restart-webserver || true
                      db_subst phpmyadmin/restart-webserver webserver "$webserver"
                      db_input high phpmyadmin/restart-webserver || true
@@ -288,23 +302,10 @@ Postinst: bash
          fi
      done
  .
-     for webserver in apache apache-perl apache-ssl apache2; do
-         rm -f /etc/$webserver/conf.d/phpmyadmin.conf.dpkg-md5sum
-         rm -f /etc/phpmyadmin/${webserver}_conf.d_phpmyadmin.conf.dpkg-md5sum
-     done
+     rm -f /etc/phpmyadmin/apache.conf.dpkg-md5sum
  fi
-Postrm: bash
- if [ "$1" = "purge" ]; then
-     for webserver in apache apache-perl apache-ssl apache2; do
-         rm -f /etc/$webserver/conf.d/phpmyadmin.conf.dpkg-md5sum
-         rm -f /etc/phpmyadmin/${webserver}_conf.d_phpmyadmin.conf.dpkg-md5sum
-         if [ -h /etc/$webserver/conf.d/phpmyadmin ]; then
-             rm -f /etc/$webserver/conf.d/phpmyadmin
-         fi
-         rm -f /etc/$webserver/*.old.phpmyadmin
-     done
-     rm -f /etc/phpmyadmin/blowfish_secret.inc.php
- .
+Prerm: sh
+ if [ "$1" = "remove" ] || [ "$1" = "purge" ]; then
      db_get phpmyadmin/reconfigure-webserver
      webservers="$RET"
      restart=""
@@ -336,11 +337,26 @@ Postrm: bash
              /etc/init.d/$webserver restart
          fi
      done
+ fi
+Postrm: bash
+ if [ "$1" = "purge" ]; then
+     rm -f /etc/phpmyadmin/apache.conf.dpkg-md5sum
+     for webserver in apache apache-perl apache-ssl apache2; do
+         if [ -h /etc/$webserver/conf.d/phpmyadmin ]; then
+             rm -f /etc/$webserver/conf.d/phpmyadmin
+         fi
+         rm -f /etc/$webserver/*.old.phpmyadmin
+     done
+     rm -f /etc/phpmyadmin/blowfish_secret.inc.php
  .
      for ext in '~' '%' .bak .dpkg-tmp .dpkg-new .dpkg-old .dpkg-dist; do
          rm -f "/etc/phpmyadmin/footer.inc.php$ext"
          rm -f "/etc/phpmyadmin/header.inc.php$ext"
          rm -f "/etc/phpmyadmin/apache.conf$ext"
+         rm -f "/etc/apache/conf.d/phpmyadmin.conf$ext"
+         rm -f "/etc/apache-perl/conf.d/phpmyadmin.conf$ext"
+         rm -f "/etc/apache-ssl/conf.d/phpmyadmin.conf$ext"
+         rm -f "/etc/apache2/conf.d/phpmyadmin.conf$ext"
      done
  .
      rmdir --ignore-fail-on-non-empty /etc/phpmyadmin || true

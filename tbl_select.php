@@ -1,5 +1,5 @@
 <?php
-/* $Id: tbl_select.php,v 2.25 2004/11/03 13:56:52 garvinhicking Exp $ */
+/* $Id: tbl_select.php,v 2.27 2005/06/23 14:16:32 robbat2 Exp $ */
 // vim: expandtab sw=4 ts=4 sts=4:
 
 
@@ -68,7 +68,16 @@ if (!isset($param) || $param[0] == '') {
             || strncasecmp($type, 'enum', 4) == 0) {
             $type      = str_replace(',', ', ', $type);
         } else {
-            $type      = str_replace(array('binary', 'zerofill', 'unsigned'), '', strtolower($type));
+
+        // strip the "BINARY" attribute, except if we find "BINARY(" because
+        // this would be a BINARY or VARBINARY field type
+            if (!preg_match('@BINARY[\(]@i', $type)) {
+                $type         = preg_replace('@BINARY@i', '', $type);
+            }
+            $type         = preg_replace('@ZEROFILL@i', '', $type);
+            $type         = preg_replace('@UNSIGNED@i', '', $type);
+
+            $type = strtolower($type);
         }
         if (empty($type)) {
             $type      = '&nbsp;';
@@ -277,7 +286,7 @@ function PMA_tbl_select_operator(f, index, multiple) {
             // here, the 4th parameter is empty because there is no current
             // value of data for the dropdown (the search page initial values
             // are displayed empty)
-            echo PMA_foreignDropdown($disp_row, $foreign_field, $foreign_display, '', 100);
+            echo PMA_foreignDropdown($disp_row, $foreign_field, $foreign_display, '', $cfg['ForeignKeyMaxLimit']);
             echo '                    </select>' . "\n";
         } else if (isset($foreign_link) && $foreign_link == true) {
         ?>
@@ -411,7 +420,10 @@ else {
                 }
 
                 // Make query independant from the selected connection charset.
-                if (PMA_MYSQL_INT_VERSION >= 40101 && $charsets[$i] != $charset_connection && preg_match('@char|binary|blob|text|set@i', $types[$i])) {
+                // But if the field's type is VARBINARY, it has no charset
+                // and $charsets[$i] is empty, so we cannot generate a CONVERT
+
+                if (PMA_MYSQL_INT_VERSION >= 40101 && !empty($charsets[$i]) && $charsets[$i] != $charset_connection && preg_match('@char|binary|blob|text|set@i', $types[$i])) {
                     $prefix = 'CONVERT(_utf8 ';
                     $suffix = ' USING ' . $charsets[$i] . ') COLLATE ' . $collations[$i];
                 } else {

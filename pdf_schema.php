@@ -1,5 +1,5 @@
 <?php
-/* $Id: pdf_schema.php,v 2.13 2005/03/05 23:19:59 lem9 Exp $ */
+/* $Id: pdf_schema.php,v 2.14 2005/08/14 21:34:00 lem9 Exp $ */
 // vim: expandtab sw=4 ts=4 sts=4:
 
 /**
@@ -1439,7 +1439,7 @@ function PMA_RT_DOC($alltables ){
             $type             = $row['Type'];
             // reformat mysql query output - staybyte - 9. June 2001
             // loic1: set or enum types: slashes single quotes inside options
-            if (preg_match('@^(set|enum)\((.+)\)$@i', $type, $tmp)) {
+            if (preg_match('@^(set|enum)\((.+)\)$@i', $type, $tmp = array())) {
                 $tmp[2]       = substr(preg_replace("@([^,])''@", "\\1\\'", ',' . $tmp[2]), 1);
                 $type         = $tmp[1] . '(' . str_replace(',', ', ', $tmp[2]) . ')';
                 $type_nowrap  = '';

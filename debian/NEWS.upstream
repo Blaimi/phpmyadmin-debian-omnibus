@@ -1,3 +1,102 @@
+Information about 2.6.4-pl1
+
+   Note:
+
+   phpMyAdmin 2.6.4-pl1 requires a minimum version of 2.1 for custom themes
+
+   Improvements:
+
+     * Foreign-key dropdowns can be more customized
+     * Export: configurable filename templates
+     * Display column comments while editing data
+     * Transformations: new hexadecimal mode
+     * HTTP auth: support FastCGI
+     * Themes: can now have different theme per server
+     * OLD_PASSWORD in the list of functions
+     * Better messages when checking numerical input
+     * Allow adding DROP TABLE when copying databases
+     * Better support of information_schema
+     * Various interface CSS improvements
+     * Tree subgroups in left panel database selector
+     * Documentation: links and anchors to every FAQ item
+     * Table comments move to page header
+     * Export: configurable default charset
+     * Removed warning about PmaAbsoluteUri not set
+
+   Fixes:
+
+     * Database search in MySQL 5.0.x on fields without a charset
+     * Invalid "normal" cursor style
+     * Browsing state when deleting multiple rows
+     * Support bigger queries in print view, insert row, export results
+     * Unsaved changes to relations were lost when changing display field
+     * Exporting under IE 6 (Windows XP SP2)
+     * Better catching of parse errors in config file
+     * XSS on the cookie-based login panel
+     * Show all while browsing foreign values
+     * Escaping of special characters in ENUM or SET
+     * XSS on table creation page
+     * Using mysqli extension with MySQL 4.0.x
+     * "empty result set" message was sometimes not returned
+     * Incorrect message "You should define a primary key"
+     * Abide cfg['Lang'] settings even if using MySQL > 4.1.x
+     * XSS on username (cookie-based login)
+     * (pl1)  Exporting in https under Internet Explorer
+     * (pl1)  Missing Save button in Relation View
+
+ ----------------------------------------------------------------------
+
+Information about 2.6.3-pl1
+
+   Improvements:
+
+     * Privileges: Always display the "Add a new user" link
+     * New script to upgrade a phpMyAdmin installation
+     * Database view: add a Privileges tab
+     * Privileges: add a back link to the db on which we are checking
+       privileges
+     * "Hand" pointer on mouseover and mousedown
+     * Password generator when creating/editing user account
+     * Optional database creation before database copy
+     * New languages: mongolian, tatarish
+
+   Fixes:
+
+     * Respect the db order given in only_db
+     * Escaping of apostrophe in generated PHP code
+     * Better handling of reserved words in queries
+     * Detection of NULL fields under MySQL 5.0.x
+     * Ordering by count(*)
+     * Bookmark copying during table/db copy
+     * Avoid double compression of exports when zlib.output_compression is On
+     * Setting collation for a field
+     * Js error when two queries submitted at once
+     * Adding fields: table collation forgotten
+     * Print view: missing header for multi tables
+     * Comment at the end of query was applied as well to appended LIMIT
+     * Searching on a VARBINARY field
+     * Themes: spelling error on a font name
+     * NULL detection on TIMESTAMPs
+     * Diacritics wrongly converted
+     * Changing table type under MySQL 5.0.4
+     * Left panel update after manual table rename
+     * Queryframe update after database copy
+     * Left panel number of rows not updated after emptying table
+     * Invalid SQL when creating a table with zero fields
+     * Missing backquotes on the Browse feature in case of duplicate entry
+     * Exporting the results of a query containing "limit" clause
+     * Copying a database did not preserve its default charset and collation
+     * Copying a database containing a MERGE table
+     * Javascript error when getting the value of a select field in some
+       browsers
+     * Problem renaming a database
+     * Changing a table's collation under MySQL 5.0.x
+     * Wrong type when creating a table under MySQL 5.0.x
+     * When renaming a database, the old pmadb information would stay
+     * (pl1) Commands out of sync (for users of the mysqli extension)
+
+ ----------------------------------------------------------------------
+
 Information about 2.6.2
 
    Note:

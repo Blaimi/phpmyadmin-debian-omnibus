@@ -2,9 +2,8 @@
 /**
  * Debian local configuration file
  *
- * This file overrides global configuration file
+ * For example configuration see /usr/share/doc/phpmyadmin/examples/config.default.php.gz
  */
-
 
 /**
  * Server(s) configuration

@@ -1,3 +1,27 @@
+phpmyadmin (4:2.6.4-pl1-1) unstable; urgency=medium
+
+  * New upstream release.
+  * Security fix: Two Cross-Site Scripting vulnerabilities.
+    See http://cve.mitre.org/cgi-bin/cvename.cgi?name=CAN-2005-2869
+    Closes: #327345.
+  * Append the Debian package revision number to the upstream version number.
+    Marks that this phpMyAdmin package has additional Debian modifications so
+    the bugreports won't confuse phpMyAdmin's coders.
+  * Create minimal /usr/share/phpmyadmin/config.inc.php file with proper
+    comment. Closes: #321270.
+  * Reintroduced /etc/phpmyadmin/apache.conf. Closes: #307181, #308460,
+    #312611, #312668.
+  * Removed all Debian patches as are obsoleted now.
+  * Depends: apache2 | httpd
+  * Recommends: php4-mcrypt | php5-mcrypt. Closes: #321259.
+  * Arabic debconf templates translation. Closes: #320773.
+  * Vietnamese debconf templates translation. Closes: #316841.
+  * Updated Brazilian Portuguese debconf templates translation. Closes: #310875.
+  * Updated German debconf templates translation. Closes: #326141.
+  * New yada fixes postrm script fail when ucf is missing. Closes: #322139.
+
+ -- Piotr Roszatycki <dexter@debian.org>  Fri, 16 Sep 2005 16:21:21 +0200
+
 phpmyadmin (4:2.6.2-3) unstable; urgency=high
 
   * Fix apache2.conf only for 4:2.6.2-1 release. Closes: #307901 (critical),

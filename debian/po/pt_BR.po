@@ -1,31 +1,33 @@
-# Translators, if you are not familiar with the PO format, gettext
-# documentation is worth reading, especially sections dedicated to
-# this format, e.g. by running:
-# info -n '(gettext)PO Files'
-# info -n '(gettext)Header Entry'
-# Some information specific to po-debconf are available at
-# /usr/share/doc/po-debconf/README-trans
-# or http://www.debian.org/intl/l10n/po-debconf/README-trans
-# Developers do not need to manually edit POT or PO files.
-# 
-# 
+#
+#    Translators, if you are not familiar with the PO format, gettext
+#    documentation is worth reading, especially sections dedicated to
+#    this format, e.g. by running:
+#         info -n '(gettext)PO Files'
+#         info -n '(gettext)Header Entry'
+#
+#    Some information specific to po-debconf are available at
+#            /usr/share/doc/po-debconf/README-trans
+#         or http://www.debian.org/intl/l10n/po-debconf/README-trans
+#
+#    Developers do not need to manually edit POT or PO files.
+#
 msgid ""
 msgstr ""
-"Project-Id-Version: phpmyadmin 3:2.6.2-rc1-1\n"
-"Report-Msgid-Bugs-To: \n"
+"Project-Id-Version: phpmyadmin\n"
+"Report-Msgid-Bugs-To: debian-l10n-portuguese@lists.debian.org\n"
 "POT-Creation-Date: 2004-06-25 11:28+0200\n"
-"PO-Revision-Date: 2005-04-13 23:45-0300\n"
-"Last-Translator: Rodrigo Tadeu Claro <rlinux@cipsga.org.br>\n"
-"Language-Team: Debian l10n portuguese <debian-l10n-portuguese@lists.debian.org>\n"
+"PO-Revision-Date: 2005-05-26 14:03-0300\n"
+"Last-Translator: André Luís Lopes <andrelop@debian.org>\n"
+"Language-Team: Debian-BR Project <debian-l10n-portuguese@lists.debian.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=ISO-8859-1\n"
-"Content-Transfer-Encoding: 8bit"
+"Content-Transfer-Encoding: 8bit\n"
 
 #. Type: multiselect
 #. Description
 #: ../templates:5
 msgid "Which web server would you like to reconfigure automatically?"
-msgstr "Que web server você gosta de reconfigurar automaticamente?"
+msgstr "Qual servidor Web você gostaria de reconfigurar automaticamente ?"
 
 #. Type: multiselect
 #. Description
@@ -33,14 +35,15 @@ msgstr "Que web server você gosta de reconfigurar automaticamente?"
 msgid ""
 "phpMyAdmin supports any web server that PHP does, but this automatic "
 "configuration process only supports Apache."
-msgstr "phpMyAdmin suporta alguns servidores web que usam PHP, mas a configuração"
-"automática deste processo somente tem suporte no Apache."
+msgstr ""
+"O phpMyAdmin suporta qualquer servidor Web suportado pelo PHP, mas este "
+"processo de configuração automático suporta somente o servidor Web Apache."
 
 #. Type: boolean
 #. Description
 #: ../templates:12
 msgid "Do you want me to restart ${webserver} now?"
-msgstr "Você gostaria de reiniciar o servidor web agora?"
+msgstr "Você deseja que o ${webserver} seja reiniciado agora ?"
 
 #. Type: boolean
 #. Description
@@ -49,7 +52,7 @@ msgid ""
 "Remember that in order to activate the new configuration ${webserver} has to "
 "be restarted. You can also restart ${webserver} manually executing /etc/init."
 "d/${webserver} restart"
-msgstr "Lembre-se que a ordem de ativação da nova configuração do servidor web"
-"${webserver} está para ser reiniciado. Você poderá reiniciar o servidor web"
-"${webserver} manualmente executando /etc/init.d/${webserver} restart"
-
+msgstr ""
+"Lembre-se que, para que a nova configuração seja ativada, o ${webserver} "
+"precisa ser reiniciado. Você também pode reiniciar o ${webserver} "
+"manualmente executando o '/etc/init.d/${webserver} restart'"

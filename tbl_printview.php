@@ -1,5 +1,5 @@
 <?php
-/* $Id: tbl_printview.php,v 2.10 2005/03/06 23:23:46 nijel Exp $ */
+/* $Id: tbl_printview.php,v 2.12 2005/05/22 17:09:27 lem9 Exp $ */
 
 
 /**
@@ -55,6 +55,9 @@ if (isset($selected_tbl) && is_array($selected_tbl)) {
 $multi_tables     = (count($the_tables) > 1);
 
 if ($multi_tables) {
+    if (empty($GLOBALS['is_header_sent'])) {
+        require_once('./header.inc.php');
+    }
     $tbl_list     = '';
     foreach ($the_tables AS $key => $table) {
         $tbl_list .= (empty($tbl_list) ? '' : ', ')
@@ -547,7 +550,7 @@ function printPage()
 //-->
 </script>
 <?php
-echo '<br /><br />&nbsp;<input type="button" class="print_ignore" style="width: 100px; height: 25px" id="print" value="' . $strPrint . '" onclick="printPage()">' . "\n";
+echo '<br /><br />&nbsp;<input type="button" class="print_ignore" style="width: 100px; height: 25px" id="print" value="' . $strPrint . '" onclick="printPage()" />' . "\n";
 
 require_once('./footer.inc.php');
 ?>

@@ -1,5 +1,5 @@
 <?php
-/* $Id: storage_engines.lib.php,v 2.4 2005/03/05 13:30:00 rabus Exp $ */
+/* $Id: storage_engines.lib.php,v 2.5 2005/05/11 09:00:33 lem9 Exp $ */
 // vim: expandtab sw=4 ts=4 sts=4:
 
 /**
@@ -141,7 +141,7 @@ class PMA_StorageEngine {
         if (!empty($mysql_storage_engines[$engine])) {
             $this->engine  = $engine;
             $this->title   = $mysql_storage_engines[$engine]['Engine'];
-            $this->comment = $mysql_storage_engines[$engine]['Comment'];
+            $this->comment = (isset($mysql_storage_engines[$engine]['Comment']) ? $mysql_storage_engines[$engine]['Comment'] : '');
             switch ($mysql_storage_engines[$engine]['Support']) {
                 case 'DEFAULT':
                     $this->support = PMA_ENGINE_SUPPORT_DEFAULT;

@@ -1,5 +1,5 @@
 <?php
-/* $Id: tbl_properties_structure.php,v 2.35 2005/03/16 17:22:04 lem9 Exp $ */
+/* $Id: tbl_properties_structure.php,v 2.40 2005/07/23 12:02:37 lem9 Exp $ */
 // vim: expandtab sw=4 ts=4 sts=4:
 
 require_once('./libraries/grab_globals.lib.php');
@@ -170,6 +170,10 @@ while ($row = PMA_DBI_fetch_assoc($fields_rs)) {
     if (preg_match('@^(set|enum)\((.+)\)$@i', $type, $tmp)) {
         $tmp[2]       = substr(preg_replace('@([^,])\'\'@', '\\1\\\'', ',' . $tmp[2]), 1);
         $type         = $tmp[1] . '(' . str_replace(',', ', ', $tmp[2]) . ')';
+
+        // for the case ENUM('&#8211;','&ldquo;')
+        $type         = htmlspecialchars($type);
+        
         $type_nowrap  = '';
 
         $binary       = 0;
@@ -198,7 +202,7 @@ while ($row = PMA_DBI_fetch_assoc($fields_rs)) {
         $zerofill     = stristr($row['Type'], 'zerofill');
     }
 
-    // rabus: Devide charset from the rest of the type definition (MySQL >= 4.1)
+    // rabus: Divide charset from the rest of the type definition (MySQL >= 4.1)
     unset($field_charset);
     if (PMA_MYSQL_INT_VERSION >= 40100) {
         if ((substr($type, 0, 4) == 'char'
@@ -247,8 +251,16 @@ while ($row = PMA_DBI_fetch_assoc($fields_rs)) {
         $attribute = 'ON UPDATE CURRENT_TIMESTAMP';
     }
 
+    // here, we have a TIMESTAMP that SHOW FULL FIELDS reports as having the 
+    // NULL attribute, but SHOW CREATE TABLE says the contrary. Believe
+    // the latter.
+    if (!empty($analyzed_sql[0]['create_table_fields'][$row['Field']]['type']) && $analyzed_sql[0]['create_table_fields'][$row['Field']]['type'] == 'TIMESTAMP' && $analyzed_sql[0]['create_table_fields'][$row['Field']]['timestamp_not_null']) {
+        $row['Null'] = '';
+    }
+
+
     if (!isset($row['Default'])) {
-        if ($row['Null'] != '') {
+        if ($row['Null'] == 'YES') {
             $row['Default'] = '<i>NULL</i>';
         }
     } else {
@@ -336,7 +348,7 @@ while ($row = PMA_DBI_fetch_assoc($fields_rs)) {
     <td <?php echo $click_mouse; ?> bgcolor="<?php echo $bgcolor; ?>"<?php echo $type_nowrap; ?>><?php echo $type; echo $type_mime; ?><bdo dir="ltr"></bdo></td>
 <?php echo PMA_MYSQL_INT_VERSION >= 40100 ? '    <td bgcolor="' . $bgcolor . '" ' . $click_mouse . '>' . (empty($field_charset) ? '&nbsp;' : '<dfn title="' . PMA_getCollationDescr($field_charset) . '">' . $field_charset . '</dfn>') . '</td>' . "\n" : '' ?>
     <td <?php echo $click_mouse; ?> bgcolor="<?php echo $bgcolor; ?>" nowrap="nowrap" style="font-size: <?php echo $font_smallest; ?>"><?php echo $attribute; ?></td>
-    <td <?php echo $click_mouse; ?> bgcolor="<?php echo $bgcolor; ?>"><?php echo (($row['Null'] == '') ? $strNo : $strYes); ?>&nbsp;</td>
+    <td <?php echo $click_mouse; ?> bgcolor="<?php echo $bgcolor; ?>"><?php echo (($row['Null'] == 'YES') ? $strYes : $strNo); ?>&nbsp;</td>
     <td <?php echo $click_mouse; ?> bgcolor="<?php echo $bgcolor; ?>" nowrap="nowrap"><?php if (isset($row['Default'])) echo $row['Default']; ?>&nbsp;</td>
     <td <?php echo $click_mouse; ?> bgcolor="<?php echo $bgcolor; ?>" nowrap="nowrap"><?php echo $row['Extra']; ?>&nbsp;</td>
     <?php
@@ -543,7 +555,7 @@ if (!$tbl_is_view) {
 ?><br />
 <!-- Add some new fields -->
 <form method="post" action="tbl_addfield.php"
-    onsubmit="return checkFormElementInRange(this, 'num_fields', 1)">
+    onsubmit="return checkFormElementInRange(this, 'num_fields', '<?php echo str_replace('\'', '\\\'', $GLOBALS['strInvalidFieldAddCount']); ?>', 1)">
     <?php
         echo PMA_generate_common_hidden_inputs($db, $table);
         if ($cfg['PropertiesIconic']) {

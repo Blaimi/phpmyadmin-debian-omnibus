@@ -1,5 +1,5 @@
 <?php
-/* $Id: tbl_indexes.php,v 2.23 2004/11/19 13:58:39 lem9 Exp $ */
+/* $Id: tbl_indexes.php,v 2.24 2005/07/10 20:35:26 nijel Exp $ */
 // vim: expandtab sw=4 ts=4 sts=4:
 
 /**
@@ -341,7 +341,7 @@ else if (!defined('PMA_IDX_INCLUDED')
     }
     echo '    ' . "\n";
     echo '    ' . sprintf($strAddToIndex,  '<input type="text" name="added_fields" size="2" value="1" onfocus="this.select()" style="vertical-align: middle;" />') . "\n";
-    echo '    &nbsp;<input type="submit" name="add_fields" value="' . $strGo . '" onclick="return checkFormElementInRange(this.form, \'added_fields\', 1)" style="vertical-align: middle;" />' . "\n";
+    echo '    &nbsp;<input type="submit" name="add_fields" value="' . $strGo . '" onclick="return checkFormElementInRange(this.form, \'added_fields\', \'' . str_replace('\'', '\\\'', $GLOBALS['strInvalidColumnCount']) . '\', 1)" style="vertical-align: middle;" />' . "\n";
 ?></td>
 </tr>
     </table></td></tr>
@@ -356,7 +356,7 @@ else if (!defined('PMA_IDX_INCLUDED')
      */
     ?>
     <!-- Indexes form -->
-    <form action="./tbl_indexes.php" method="post">
+    <form action="./tbl_indexes.php" method="post" onsubmit="return checkFormElementInRange(this, 'idx_num_fields', '<?php echo str_replace('\'', '\\\'', $GLOBALS['strInvalidColumnCount']); ?>', 1)">
     <table border="0" cellpadding="2" cellspacing="1">
     <tr><td class="tblHeaders" colspan="7">
         <?php echo PMA_generate_common_hidden_inputs($db, $table); ?>
@@ -409,7 +409,7 @@ else if (!defined('PMA_IDX_INCLUDED')
 
     echo '<tr><td colspan="7" class="tblFooters" nowrap="nowrap" align="center">        '
        . sprintf($strCreateIndex, '<input type="text" size="2" name="idx_num_fields" value="1" style="vertical-align: middle;" />') . "\n";
-    echo '        &nbsp;<input type="submit" name="create_index" value="' . $strGo . '" onclick="return checkFormElementInRange(this.form, \'idx_num_fields\', 1)" style="vertical-align: middle;" />' . "\n";
+    echo '        &nbsp;<input type="submit" name="create_index" value="' . $strGo . '" onclick="return checkFormElementInRange(this.form, \'idx_num_fields\', \'' . str_replace('\'', '\\\'', $GLOBALS['strInvalidColumnCount']) . '\', 1)" style="vertical-align: middle;" />' . "\n";
     echo '</td></tr>    ';
 ?>
 </table></form>

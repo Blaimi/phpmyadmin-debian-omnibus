@@ -1,7 +1,6 @@
 <?php
-/* $Id: tbl_change.php,v 2.46 2005/02/04 13:56:13 nijel Exp $ */
+/* $Id: tbl_change.php,v 2.56 2005/08/14 19:20:17 lem9 Exp $ */
 // vim: expandtab sw=4 ts=4 sts=4:
-error_reporting(E_ALL);
 
 /**
  * Get the variables sent or posted to this script and displays the header
@@ -72,6 +71,21 @@ $url_query = PMA_generate_common_url($db, $table)
            . '&amp;goto=tbl_properties.php';
 
 require('./tbl_properties_table_info.php');
+
+/* Get comments */
+
+$comments_map = array();
+
+if ($GLOBALS['cfg']['ShowPropertyComments']) {
+    require_once('./libraries/relation.lib.php');
+    require_once('./libraries/transformations.lib.php');
+
+    $cfgRelation = PMA_getRelationsParam();
+
+    if ($cfgRelation['commwork']) {
+        $comments_map = PMA_getComments($db, $table);
+    }
+}
 
 /**
  * Displays top menu links
@@ -160,7 +174,7 @@ document.onkeydown = onKeyDownArrowsHandler;
 <!-- Change table properties form -->
 <form method="post" action="tbl_replace.php" name="insertForm" <?php if ($is_upload) echo ' enctype="multipart/form-data"'; ?>>
     <?php echo PMA_generate_common_hidden_inputs($db, $table); ?>
-    <input type="hidden" name="goto" value="<?php echo $goto; ?>" />
+    <input type="hidden" name="goto" value="<?php echo urlencode($goto); ?>" />
     <input type="hidden" name="pos" value="<?php echo isset($pos) ? $pos : 0; ?>" />
     <input type="hidden" name="session_max_rows" value="<?php echo isset($session_max_rows) ? $session_max_rows : ''; ?>" />
     <input type="hidden" name="disp_direction" value="<?php echo isset($disp_direction) ? $disp_direction : ''; ?>" />
@@ -168,6 +182,7 @@ document.onkeydown = onKeyDownArrowsHandler;
     <input type="hidden" name="dontlimitchars" value="<?php echo (isset($dontlimitchars) ? $dontlimitchars : 0); ?>" />
     <input type="hidden" name="err_url" value="<?php echo urlencode($err_url); ?>" />
     <input type="hidden" name="sql_query" value="<?php echo isset($sql_query) ? urlencode($sql_query) : ''; ?>" />
+    <input type="hidden" name="reload" value="1" />
 <?php
 if (isset($primary_key_array)) {
     foreach ($primary_key_array AS $primary_key) {
@@ -236,7 +251,7 @@ foreach ($loop_array AS $vrowcount => $vrow) {
 
     $vresult = (isset($result) && is_array($result) && isset($result[$vrowcount]) ? $result[$vrowcount] : $result);
     if ($insert_mode && $vrowcount > 0) {
-        echo '<input type="checkbox" checked="checked" name="insert_ignore_' . $vrowcount . '" id="insert_ignore_check_' . $vrowcount . '">';
+        echo '<input type="checkbox" checked="checked" name="insert_ignore_' . $vrowcount . '" id="insert_ignore_check_' . $vrowcount . '" />';
         echo '<label for="insert_ignore_check_' . $vrowcount . '">' . $strIgnore . '</label><br />' . "\n";
     }
 ?>
@@ -330,10 +345,15 @@ foreach ($loop_array AS $vrowcount => $vrow) {
                          : PMA_DBI_field_len($vresult, $i);
         $first_timestamp = 0;
 
+        $field_name = htmlspecialchars($field);
+        if (isset($comments_map[$field])) {
+            $field_name = '<span style="border-bottom: 1px dashed black;" title="' . htmlspecialchars($comments_map[$field]) . '">' . $field_name . '</span>';
+        }
+
         $bgcolor = ($i % 2) ? $cfg['BgcolorOne'] : $cfg['BgcolorTwo'];
         ?>
         <tr>
-            <td <?php echo ($cfg['LongtextDoubleTextarea'] && strstr($row_table_def['True_Type'], 'longtext') ? 'rowspan="2"' : ''); ?> align="center" bgcolor="<?php echo $bgcolor; ?>"><?php echo htmlspecialchars($field); ?></td>
+            <td <?php echo ($cfg['LongtextDoubleTextarea'] && strstr($row_table_def['True_Type'], 'longtext') ? 'rowspan="2"' : ''); ?> align="center" bgcolor="<?php echo $bgcolor; ?>"><?php echo $field_name; ?></td>
         <?php
         echo "\n";
 
@@ -550,7 +570,7 @@ foreach ($loop_array AS $vrowcount => $vrow) {
             <input type="hidden" name="fields_type<?php echo $vkey; ?>[<?php echo urlencode($field); ?>]" value="foreign" />
             <input type="hidden" name="fields<?php echo $vkey; ?>[<?php echo urlencode($field); ?>]" value="" id="field_<?php echo $idindex; ?>_1" />
             <select name="field_<?php echo md5($field); ?><?php echo $vkey; ?>[]" <?php echo $chg_evt_handler; ?>="return unNullify('<?php echo urlencode($field); ?>', '<?php echo $jsvkey; ?>')" tabindex="<?php echo ($tabindex + $tabindex_for_value); ?>" id="field_<?php echo ($idindex); ?>_3">
-                <?php echo PMA_foreignDropdown($disp_row, $foreign_field, $foreign_display, $data, 100); ?>
+                <?php echo PMA_foreignDropdown($disp_row, $foreign_field, $foreign_display, $data, $cfg['ForeignKeyMaxLimit']); ?>
             </select>
             </td>
             <?php
@@ -631,7 +651,7 @@ foreach ($loop_array AS $vrowcount => $vrow) {
                         echo ' checked="checked"';
                     }
                     echo 'tabindex="' . ($tabindex + $tabindex_for_value) . '" />';
-                    echo '<label for="field_' . ($tabindex + $tabindex_for_value) . '_3_' . $j . '">' . htmlspecialchars($enum_atom) . '</label>' . "\n";
+                    echo '<label for="field_' . $idindex . '_3_' . $j . '">' . htmlspecialchars($enum_atom) . '</label>' . "\n";
                 } // end for
 
             } // end else
@@ -832,58 +852,51 @@ foreach ($loop_array AS $vrowcount => $vrow) {
     <table border="0" cellpadding="5" cellspacing="0">
     <tr>
         <td valign="middle" nowrap="nowrap">
+            <select name="submit_type">
 <?php
 if (isset($primary_key)) {
     ?>
-            <input type="radio" name="submit_type" value="<?php echo $strSave; ?>" id="radio_submit_type_save" checked="checked" tabindex="<?php echo ($tabindex + $tabindex_for_value + 1); ?>" style="vertical-align: middle" /><label for="radio_submit_type_save"><?php echo $strSave; ?></label><br />
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b><?php echo $strOr; ?></b><br />
-            <input type="radio" name="submit_type" value="<?php echo $strInsertAsNewRow; ?>" id="radio_submit_type_insert_as_new_row" tabindex="<?php echo ($tabindex + $tabindex_for_value + 2); ?>" style="vertical-align: middle" /><label for="radio_submit_type_insert_as_new_row"><?php echo $strInsertAsNewRow; ?></label>
+                <option value="<?php echo $strSave; ?>" tabindex="<?php echo ($tabindex + $tabindex_for_value + 1); ?>"><?php echo $strSave; ?></option>
     <?php
-} else {
-    echo "\n";
-    ?>
-            <input type="hidden" name="submit_type" value="<?php echo $strInsertAsNewRow; ?>" />
-    <?php
-    echo '            ' . $strInsertAsNewRow . "\n";
 }
+    ?>
+                <option value="<?php echo $strInsertAsNewRow; ?>" tabindex="<?php echo ($tabindex + $tabindex_for_value + 2); ?>"><?php echo $strInsertAsNewRow; ?></option>
+            </select>
+    <?php
 echo "\n";
 
-// Defines whether "insert a new row after the current insert" should be
-// checked or not (keep this choice sticky)
-// but do not check both radios, because Netscape 4.8 would display both checked
+// Defines whether "insert another new row" should be
+// selected or not (keep this choice sticky)
 if (!empty($disp_message)) {
-    $checked_after_insert_new_insert = ' checked="checked"';
-    $checked_after_insert_back = '';
+    $selected_after_insert_new_insert = ' selected="selected"';
+    $selected_after_insert_back = '';
 } else {
-    $checked_after_insert_back = ' checked="checked"';
-    $checked_after_insert_new_insert = '';
+    $selected_after_insert_back = ' selected="selected"';
+    $selected_after_insert_new_insert = '';
 }
 ?>
         </td>
         <td valign="middle">
-            &nbsp;&nbsp;&nbsp;<b>-- <?php echo $strAnd; ?> --</b>&nbsp;&nbsp;&nbsp;
+            &nbsp;&nbsp;&nbsp;<b><?php echo $strAndThen; ?></b>&nbsp;&nbsp;&nbsp;
         </td>
         <td valign="middle" nowrap="nowrap">
-            <input type="radio" name="after_insert" value="back" id="radio_after_insert_back" <?php echo $checked_after_insert_back; ?> tabindex="<?php echo ($tabindex + $tabindex_for_value + 3); ?>" style="vertical-align: middle" /><label for="radio_after_insert_back"><?php echo $strAfterInsertBack; ?></label><br />
-
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b><?php echo $strOr; ?></b><br />
-            <input type="radio" name="after_insert" value="new_insert" id="radio_after_insert_new_insert"<?php echo $checked_after_insert_new_insert; ?> tabindex="<?php echo ($tabindex + $tabindex_for_value + 4); ?>" style="vertical-align: middle" /><label for="radio_after_insert_new_insert"><?php echo $strAfterInsertNewInsert; ?></label><br />
-
+            <select name="after_insert">
+                <option value="back" <?php echo $selected_after_insert_back; ?>><?php echo $strAfterInsertBack; ?></option>
+                <option value="new_insert" <?php echo $selected_after_insert_new_insert; ?>><?php echo $strAfterInsertNewInsert; ?></option>
 <?php
 if (isset($primary_key))
 {?>
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b><?php echo $strOr; ?></b><br />
-            <input type="radio" name="after_insert" value="same_insert" id="radio_after_insert_same_insert"<?php echo $checked_after_insert_new_insert; ?> tabindex="<?php echo ($tabindex + $tabindex_for_value + 5); ?>" style="vertical-align: middle" /><label for="radio_after_insert_same_insert"><?php echo $strAfterInsertSame; ?></label><br />
+                <option value="same_insert"><?php echo $strAfterInsertSame; ?></option>
 <?php
     // If we have just numeric primary key, we can also edit next
     if (preg_match('@^[\s]*`[^`]*` = [0-9]+@', $primary_key)) {
 ?>
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b><?php echo $strOr; ?></b><br />
-            <input type="radio" name="after_insert" value="edit_next" id="radio_after_insert_edit_next"<?php echo $checked_after_insert_new_insert; ?> tabindex="<?php echo ($tabindex + $tabindex_for_value + 5); ?>" style="vertical-align: middle" /><label for="radio_after_insert_edit_next"><?php echo $strAfterInsertNext; ?></label><br />
+                <option value="edit_next"><?php echo $strAfterInsertNext; ?></option>
 <?php
     }
 }
 ?>
+            </select>
         </td>
     </tr>
 

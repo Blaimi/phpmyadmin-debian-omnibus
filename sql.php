@@ -1,5 +1,5 @@
 <?php
-/* $Id: sql.php,v 2.46 2005/03/07 13:04:46 nijel Exp $ */
+/* $Id: sql.php,v 2.53 2005/08/12 01:06:18 lem9 Exp $ */
 // vim: expandtab sw=4 ts=4 sts=4:
 
 /**
@@ -269,9 +269,13 @@ else {
         $sql_query = '';
     }
     // Defines some variables
-    // loic1: A table has to be created -> left frame should be reloaded
+    // A table has to be created or renamed -> left frame should be reloaded
+    // TODO: use the parser/analyzer
+
     if ((!isset($reload) || $reload == 0)
-        && preg_match('@^CREATE TABLE[[:space:]]+(.*)@i', $sql_query)) {
+        && (preg_match('@^CREATE TABLE[[:space:]]+(.*)@i', $sql_query)
+         || preg_match('@^ALTER TABLE[[:space:]]+(.*)RENAME@i', $sql_query)
+         || preg_match('@^TRUNCATE@i', $sql_query))) {
         $reload           = 1;
     }
     // Gets the number of rows per page
@@ -327,20 +331,34 @@ else {
         && isset($analyzed_sql[0]['queryflags']['select_from'])
         && !isset($analyzed_sql[0]['queryflags']['offset'])
         && !preg_match('@[[:space:]]LIMIT[[:space:]0-9,-]+$@i', $sql_query)) {
-        $sql_limit_to_append = " LIMIT $pos, ".$cfg['MaxRows'];
-        if (preg_match('@(.*)([[:space:]](PROCEDURE[[:space:]](.*)|FOR[[:space:]]+UPDATE|LOCK[[:space:]]+IN[[:space:]]+SHARE[[:space:]]+MODE))$@i', $sql_query, $regs)) {
-            $full_sql_query  = $regs[1] . $sql_limit_to_append . $regs[2];
-        } else {
-            $full_sql_query  = $sql_query . $sql_limit_to_append;
-        }
+        $sql_limit_to_append = " LIMIT $pos, ".$cfg['MaxRows'] . " ";
+
+//        if (preg_match('@(.*)([[:space:]](PROCEDURE[[:space:]](.*)|FOR[[:space:]]+UPDATE|LOCK[[:space:]]+IN[[:space:]]+SHARE[[:space:]]+MODE))$@i', $sql_query, $regs)) {
+//            $full_sql_query  = $regs[1] . $sql_limit_to_append . $regs[2];
+//        } else {
+//            $full_sql_query  = $sql_query . $sql_limit_to_append;
+//        }
+
+        $full_sql_query  = $analyzed_sql[0]['section_before_limit'] . $sql_limit_to_append . $analyzed_sql[0]['section_after_limit']; 
+        // FIXME: pretty printing of this modified query
 
         if (isset($display_query)) {
-            if (preg_match('@((.|\n)*)(([[:space:]](PROCEDURE[[:space:]](.*)|FOR[[:space:]]+UPDATE|LOCK[[:space:]]+IN[[:space:]]+SHARE[[:space:]]+MODE))|;)[[:space:]]*$@i', $display_query, $regs)) {
-                $display_query  = $regs[1] . $sql_limit_to_append . $regs[3];
-            } else {
-                $display_query  = $display_query . $sql_limit_to_append;
+//            if (preg_match('@((.|\n)*)(([[:space:]](PROCEDURE[[:space:]](.*)|FOR[[:space:]]+UPDATE|LOCK[[:space:]]+IN[[:space:]]+SHARE[[:space:]]+MODE))|;)[[:space:]]*$@i', $display_query, $regs)) {
+//                $display_query  = $regs[1] . $sql_limit_to_append . $regs[3];
+//            } else {
+//                $display_query  = $display_query . $sql_limit_to_append;
+//            }
+
+            // if the analysis of the original query revealed that we found 
+            // a section_after_limit, we now have to analyze $display_query
+            // to display it correctly
+
+            if (!empty($analyzed_sql[0]['section_after_limit'])) {
+                $analyzed_display_query = PMA_SQP_analyze(PMA_SQP_parse($display_query));
+                $display_query  = $analyzed_display_query[0]['section_before_limit'] . $sql_limit_to_append . $analyzed_display_query[0]['section_after_limit']; 
             }
         }
+
     } else {
         $full_sql_query      = $sql_query;
     } // end if...else
@@ -592,7 +610,6 @@ else {
         } // end if column PMA_* purge
     } // end else "didn't ask to see php code"
 
-
     // No rows returned -> move back to the calling page
     if ($num_rows < 1 || $is_affected) {
         if ($is_delete) {
@@ -606,7 +623,16 @@ else {
             }
         } else if ($is_affected) {
             $message = $strAffectedRows . '&nbsp;' . $num_rows;
-        } else if (!empty($zero_rows)) {
+
+            // Ok, here is an explanation for the !$is_select.
+            // The form generated
+            // by tbl_query_box.php and db_details.php has many submit buttons
+            // on the same form, and some confusion arises from the
+            // fact that $zero_rows is sent for every case. 
+            // The $zero_rows containing $strSuccess and sent with
+            // the form should not have priority over 
+            // errors like $strEmptyResultSet
+        } else if (!empty($zero_rows) && !$is_select) {
             $message = $zero_rows;
         } else if (!empty($GLOBALS['show_as_php'])) {
             $message = $strPhp;
@@ -772,8 +798,12 @@ else {
                            . '&amp;sql_query=' . urlencode($sql_query)
                            . '&amp;goto=' . urlencode($lnk_goto);
 
-                echo '    <!-- Insert a new row -->' . "\n"
-                   . '    <a href="tbl_change.php' . $url_query . '">' . ($cfg['PropertiesIconic'] ? '<img src="' . $pmaThemeImage . 'b_insrow.png" border="0" height="16" width="16" align="middle" hspace="2" alt="' . $strInsertNewRow . '"/>' : '') . $strInsertNewRow . '</a>';
+                echo '    <!-- Insert a new row -->' . "\n";
+                echo PMA_linkOrButton(
+                    'tbl_change.php' . $url_query,
+                    ($cfg['PropertiesIconic'] ? '<img src="' . $pmaThemeImage . 'b_insrow.png" border="0" height="16" width="16" align="middle" hspace="2" alt="' . $strInsertNewRow . '"/>' : '') . $strInsertNewRow,
+                    '', TRUE, TRUE, '') . "\n";
+
                 if ($disp_mode[9] == '1') {
                     echo '&nbsp;&nbsp;';
                 }
@@ -790,19 +820,18 @@ else {
                            . '&amp;repeat_cells=' . $repeat_cells
                            . '&amp;printview=1'
                            . '&amp;sql_query=' . urlencode($sql_query);
-                echo '    <!-- Print view -->' . "\n"
-                   . '    <a href="sql.php' . $url_query
-                   . ((isset($dontlimitchars) && $dontlimitchars == '1') ? '&amp;dontlimitchars=1' : '')
-                   . '" target="print_view">'
-                   . ($cfg['PropertiesIconic'] ? '<img src="' . $pmaThemeImage . 'b_print.png" border="0" height="16" width="16" align="middle" hspace="2" alt="' . $strPrintView . '"/>' : '')
-                   . $strPrintView . '</a>' . "\n";
+                echo '    <!-- Print view -->' . "\n";
+                echo PMA_linkOrButton(
+                    'sql.php' . $url_query . ((isset($dontlimitchars) && $dontlimitchars == '1') ? '&amp;dontlimitchars=1' : ''),
+                    ($cfg['PropertiesIconic'] ? '<img src="' . $pmaThemeImage . 'b_print.png" border="0" height="16" width="16" align="middle" hspace="2" alt="' . $strPrintView . '"/>' : '') . $strPrintView,
+                    '', TRUE, TRUE, 'print_view') . "\n";
+
                 if (!$dontlimitchars) {
-                   echo   '    &nbsp;&nbsp;' . "\n"
-                        . '    <a href="sql.php' . $url_query
-                        . '&amp;dontlimitchars=1'
-                        . '" target="print_view">'
-                        . ($cfg['PropertiesIconic'] ? '<img src="' . $pmaThemeImage . 'b_print.png" border="0" height="16" width="16" align="middle" hspace="2" alt="' . $strPrintViewFull . '" />' : '')
-                        . $strPrintViewFull . '</a>&nbsp;&nbsp;' . "\n";
+                    echo   '    &nbsp;&nbsp;' . "\n";
+                    echo PMA_linkOrButton(
+                        'sql.php' . $url_query . '&amp;dontlimitchars=1',
+                        ($cfg['PropertiesIconic'] ? '<img src="' . $pmaThemeImage . 'b_print.png" border="0" height="16" width="16" align="middle" hspace="2" alt="' . $strPrintViewFull . '"/>' : '') . $strPrintViewFull,
+                        '', TRUE, TRUE, 'print_view') . "\n";
                 }
             } // end displays "printable view"
 
@@ -819,13 +848,12 @@ else {
             } else {
                 $single_table   = '';
             }
-            echo '    <!-- Export -->' . "\n"
-                   . '    &nbsp;&nbsp;<a href="tbl_properties_export.php' . $url_query
-                   . '&amp;unlim_num_rows=' . $unlim_num_rows
-                   . $single_table
-                   . '">'
-                   . ($cfg['PropertiesIconic'] ? '<img src="' . $pmaThemeImage . 'b_tblexport.png" border="0" height="16" width="16" align="middle" hspace="2" alt="' . $strExport . '" />' : '')
-                   . $strExport . '</a>' . "\n";
+            echo '    <!-- Export -->' . "\n";
+            echo   '    &nbsp;&nbsp;' . "\n";
+            echo PMA_linkOrButton(
+                'tbl_properties_export.php' . $url_query . '&amp;unlim_num_rows=' . $unlim_num_rows . $single_table,
+                ($cfg['PropertiesIconic'] ? '<img src="' . $pmaThemeImage . 'b_tblexport.png" border="0" height="16" width="16" align="middle" hspace="2" alt="' . $strExport . '" />' : '') . $strExport,
+                '', TRUE, TRUE, '') . "\n";
         }
 
         // Bookmark Support if required
@@ -871,7 +899,8 @@ else {
     <input type="checkbox" name="bkm_all_users" id="bkm_all_users" value="true" /></td>
     <td><label for="bkm_all_users"><?php echo $strBookmarkAllUsers; ?></label></td>
 </tr>
-<tr bgcolor="<?php echo $cfg['BgcolorOne']; ?>"><td colspan="2" align="right">
+<tr>
+    <td class="tblFooters" colspan="2" align="right">
     <input type="submit" name="store_bkm" value="<?php echo $strBookmarkThis; ?>" />
     </td></tr>
 </table></form>

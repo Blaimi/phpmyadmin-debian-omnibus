@@ -1,5 +1,5 @@
 <?php
-/* $Id: config_import.lib.php,v 2.42 2005/03/06 14:54:15 nijel Exp $ */
+/* $Id: config_import.lib.php,v 2.50 2005/08/22 21:41:20 nijel Exp $ */
 // vim: expandtab sw=4 ts=4 sts=4:
 
 
@@ -308,6 +308,14 @@ if (!isset($cfg['LeftFrameLight'])) {
     }
 }
 
+if (!isset($cfg['LeftFrameDBTree'])) {
+    $cfg['LeftFrameDBTree'] = TRUE;
+}
+
+if (!isset($cfg['LeftFrameDBSeparator'])) {
+    $cfg['LeftFrameDBSeparator'] = '_';
+}
+
 if (!isset($cfg['LeftFrameTableSeparator'])) {
     $cfg['LeftFrameTableSeparator'] = '__';
 }
@@ -415,7 +423,7 @@ if (!isset($cfg['NavigationBarIconic'])) {
         $cfg['NavigationBarIconic'] = $cfgNavigationBarIconic;
         unset($cfgNavigationBarIconic);
     } else {
-        $cfg['NavigationBarIconic'] = TRUE;
+        $cfg['NavigationBarIconic'] = 'both';
     }
 }
 
@@ -476,6 +484,14 @@ if (!isset($cfg['CharEditing'])) {
 
 if (!isset($cfg['InsertRows'])) {
     $cfg['InsertRows'] = 2;
+}
+
+if (!isset($cfg['ForeignKeyDropdownOrder'])) {
+    $cfg['ForeignKeyDropdownOrder'] = array( 'content-id', 'id-content');
+}
+
+if (!isset($cfg['ForeignKeyMaxLimit'])) {
+    $cfg['ForeignKeyMaxLimit'] = 100;
 }
 
 if (!isset($cfg['ZipDump'])) {
@@ -746,15 +762,16 @@ if (!isset($cfg['ReplaceHelpImg'])) {
 
 if (!isset($cfg['ThemePath'])) {
     $cfg['ThemePath'] = './themes';
+}
+if (!isset($cfg['ThemeDefault'])){
     $cfg['ThemeDefault'] = 'original';
+}
+if (!isset($cfg['ThemeManager'])){
     $cfg['ThemeManager'] = TRUE;
-} else {
-    if (!isset($cfg['ThemeDefault'])){
-        $cfg['ThemeDefault'] = 'original';
-    }
-    if (!isset($cfg['ThemeManager'])){
-        $cfg['ThemeManager'] = TRUE;
-    }
+}
+
+if (!isset($cfg['ThemePerServer'])){
+    $cfg['ThemePerServer'] = FALSE;
 }
 
 if (!isset($cfg['DefaultQueryTable'])) {
@@ -915,6 +932,8 @@ if (!isset($cfg['ColumnTypes'])) {
             'SET'
         );
     }
+} elseif (!isset($cfg['ColumnTypes']['BOOL'])) {
+    $cfg['ColumnTypes'][] = 'BOOL';
 }
 
 if (!isset($cfg['AttributeTypes'])) {
@@ -1126,6 +1145,9 @@ if (!isset($cfg['Export']['compression'])) {
 if (!isset($cfg['Export']['asfile'])) {
     $cfg['Export']['asfile'] = FALSE;
 }
+if (!isset($cfg['Export']['charset'])) {
+    $cfg['Export']['charset'] = '';
+}
 if (!isset($cfg['Export']['onserver'])) {
     $cfg['Export']['onserver'] = FALSE;
 }
@@ -1134,6 +1156,15 @@ if (!isset($cfg['Export']['onserver_overwrite'])) {
 }
 if (!isset($cfg['Export']['remember_file_template'])) {
     $cfg['Export']['remember_file_template'] = TRUE;
+}
+if (!isset($cfg['Export']['file_template_table'])) {
+    $cfg['Export']['file_template_table']       = '__TABLE__';
+}
+if (!isset($cfg['Export']['file_template_database'])) {
+    $cfg['Export']['file_template_database']    = '__DB__';
+}
+if (!isset($cfg['Export']['file_template_server'])) {
+    $cfg['Export']['file_template_server']      = '__SERVER__';
 }
 if (!isset($cfg['Export']['csv_null'])) {
     $cfg['Export']['csv_null']                  = 'NULL';

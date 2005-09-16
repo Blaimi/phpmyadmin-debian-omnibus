@@ -1,5 +1,5 @@
 <?php
-/* $Id: german-iso-8859-15.inc.php,v 2.2 2005/03/30 22:26:15 rabus Exp $ */
+/* $Id: german-iso-8859-15.inc.php,v 2.13 2005/08/20 20:10:39 lem9 Exp $ */
 
 /**
  * For suggestions concerning this file please contact
@@ -149,7 +149,7 @@ $strComments = 'Kommentare';
 $strCompatibleHashing = 'MySQL&nbsp;4.0 kompatibel';
 $strCompleteInserts = 'Vollständige \'INSERT\'s';
 $strCompression = 'Kompression';
-$strConfigFileError = 'phpMyAdmin konnte Ihre Konfigurationsdatei nicht verarbeiten!<br />Dies kann passieren, wenn der PHP-Parser Syntaxfehler in ihr findet oder sie nicht existiert.<br />Bitte rufen Sie die Konfigurationsdatei üben den unteren Link direkt auf und lesen Sie die PHP-Fehlermeldungen, die Sie erhalten. Meistens fehlt bloß irgendwo ein Anführungszeichen oder Semikolon.<br />Wenn Sie eine leere Seite erhalten, ist Ihre Konfigurationsdatei in Ordnung.';
+$strConfigFileError = 'phpMyAdmin konnte Ihre Konfigurationsdatei nicht verarbeiten!<br />Dies kann passieren, wenn der PHP-Parser Syntaxfehler in ihr findet oder sie nicht existiert.<br />Bitte rufen Sie die Konfigurationsdatei über den unteren Link direkt auf und lesen Sie die PHP-Fehlermeldungen, die Sie erhalten. Meistens fehlt bloß irgendwo ein Anführungszeichen oder Semikolon.<br />Wenn Sie eine leere Seite erhalten, ist Ihre Konfigurationsdatei in Ordnung.';
 $strConfigureTableCoord = 'Bitte konfigurieren Sie die Koordinaten für die Tabelle %s';
 $strConnectionError = 'Die Verbindung konnte aufgrund von ungültigen Einstellungen nicht hergestellt werden.';
 $strConnections = 'Verbindungen';
@@ -157,11 +157,13 @@ $strConstraintsForDumped = 'Constraints der exportierten Tabellen';
 $strConstraintsForTable = 'Constraints der Tabelle';
 $strCookiesRequired = 'Ab diesem Punkt müssen Cookies aktiviert sein.';
 $strCopyDatabaseOK = 'Datenbank %s wurde nach %s kopiert';
+$strCopy = 'Kopieren';
 $strCopyTable = 'Kopiere Tabelle nach (Datenbank<b>.</b>Tabellenname):';
 $strCopyTableOK = 'Tabelle %s wurde nach %s kopiert.';
 $strCopyTableSameNames = 'Tabelle kann nicht mit gleichem Namen kopiert werden!';
 $strCouldNotKill = 'phpMyAdmin konnte den Prozess %s nicht abbrechen. Er wurde wahrscheinlich bereits geschlossen.';
 $strCreate = 'Anlegen';
+$strCreateDatabaseBeforeCopying = 'Vor dem Kopieren CREATE DATABASE ausführen.';
 $strCreateIndex = 'Index über&nbsp;%s&nbsp;Spalten anlegen';
 $strCreateIndexTopic = 'Neuen Index anlegen';
 $strCreateNewDatabase = 'Neue Datenbank anlegen';
@@ -291,6 +293,8 @@ $strFunction = 'Funktion';
 
 $strGenBy = 'Erstellt von';
 $strGeneralRelationFeat = 'Allgemeine Verknüpfungsfunktionen';
+$strGenerate = 'Generieren';
+$strGeneratePassword = 'Passwort generieren';
 $strGenTime = 'Erstellungszeit';
 $strGeorgian = 'Georgisch';
 $strGerman = 'Deutsch';
@@ -473,7 +477,6 @@ $strNoThemeSupport = 'Die Unterstützung für Oberflächendesigns ist deaktiviert. 
 $strNotNumber = 'Das ist keine Zahl!';
 $strNotOK = 'fehlerhaft';
 $strNotSet = 'Die Tabelle <b>%s</b> wurde entweder nicht gefunden oder in der Kofigurationsdatei %s nicht gesetzt.';
-$strNotValidNumber = ' ist keine gültige Zeilennummer!';
 $strNoUsersFound = 'Es wurden keine Benutzer gefunden.';
 $strNoValidateSQL = 'SQL-Validierung umgehen';
 $strNull = 'Null';
@@ -803,4 +806,22 @@ $strYes = 'Ja';
 $strZeroRemovesTheLimit = 'Anmerkung: Der Wert 0 (null) entfernt die Beschränkung.';
 $strZip = 'Zip-komprimiert';
 
+// To translate:
+
+$strPrivDescAlterDb = 'Allows altering the structure of existing tables as well as changing the default charset and collation of databases.';  //to translate
+$strPrivDescAlterRoutine = 'Allows altering and dropping stored routines.';  //to translate
+$strPrivDescCreateRoutine = 'Allows creating stored routines.';  //to translate
+$strPrivDescCreateUser = 'Allows creating, dropping and renaming unser accounts.';  //to translate
+$strPrivDescCreateView = 'Allows creating new views.';  //to translate
+$strPrivDescExecute5 = 'Allows executing stored routines.';  //to translate
+$strPrivDescShowView = 'Allows performing SHOW CREATE VIEW queries.';  //to translate
+
+$strRoutines = 'Routines';  //to translate
+
+$strTransformation_application_octetstream__hex = 'Displays hexadecimal representation of data.';  //to translate
+$strInvalidFieldCount = 'Table must have at least one field.';  //to translate
+$strInvalidRowNumber = '%d is not valid row number.';  //to translate
+$strInvalidColumnCount = 'Column count has to be larger than zero.';  //to translate
+$strInvalidFieldAddCount = 'You have to add at least one field.';  //to translate
+$strAndThen = 'and then';  //to translate
 ?>

@@ -1,5 +1,5 @@
 <?php
-/* $Id: db_printview.php,v 2.9 2005/03/06 23:23:45 nijel Exp $ */
+/* $Id: db_printview.php,v 2.10 2005/05/22 17:09:27 lem9 Exp $ */
 // vim: expandtab sw=4 ts=4 sts=4:
 
 
@@ -301,7 +301,7 @@ function printPage()
 //-->
 </script>
 <?php
-echo '<br /><br />&nbsp;<input type="button" class="print_ignore" style="width: 100px; height: 25px" id="print" value="' . $strPrint . '" onclick="printPage()">' . "\n";
+echo '<br /><br />&nbsp;<input type="button" class="print_ignore" style="width: 100px; height: 25px" id="print" value="' . $strPrint . '" onclick="printPage()" />' . "\n";
 
 require_once('./footer.inc.php');
 ?>

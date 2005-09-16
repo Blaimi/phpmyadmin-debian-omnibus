@@ -1,5 +1,5 @@
 <?php
-/* $Id: read_dump.php,v 2.33 2005/01/27 14:49:29 nijel Exp $ */
+/* $Id: read_dump.php,v 2.35 2005/08/09 12:09:46 lem9 Exp $ */
 // vim: expandtab sw=4 ts=4 sts=4:
 
 /**
@@ -99,21 +99,21 @@ if ($sql_file != 'none') {
             if (!is_writeable($tmp_subdir)) {
                 $sql_query = PMA_readFile($sql_file, $sql_file_compression);
                 if ($sql_query == FALSE) {
-                    $message = $strFileCouldNotBeRead;
+                    $message = $strFileCouldNotBeRead . ' (1)';
                 }
             } else {
                 $sql_file_new = $tmp_subdir . basename($sql_file);
                 if (move_uploaded_file($sql_file, $sql_file_new)) {
                     $sql_query = PMA_readFile($sql_file_new, $sql_file_compression);
                     if ($sql_query == FALSE) {
-                        $message = $strFileCouldNotBeRead;
+                        $message = $strFileCouldNotBeRead . ' (2)';
                     }
                     unlink($sql_file_new);
                 } else {
                     // Moving uploaded file failed. Falling back to try reading it immediately.
                     $sql_query = PMA_readFile($sql_file, $sql_file_compression);
                     if ($sql_query == FALSE) {
-                        $message = $strFileCouldNotBeRead;
+                        $message = $strFileCouldNotBeRead . ' (3)';
                     }
                 }
             }
@@ -121,7 +121,7 @@ if ($sql_file != 'none') {
             // read from the normal upload dir
             $sql_query = PMA_readFile($sql_file, $sql_file_compression);
             if ($sql_query == FALSE) {
-                $message = $strFileCouldNotBeRead;
+                $message = $strFileCouldNotBeRead . ' (4)';
             }
         }
 
@@ -417,7 +417,12 @@ if (!empty($id_bookmark) && $action_bookmark == 2) {
     $message   = $strSuccess;
 }
 // Loads to target script
-if ($goto == 'db_details.php' || $goto == 'tbl_properties.php') {
+if ($goto == 'db_details.php' || $goto == 'tbl_properties.php' || $goto == 'tbl_properties_structure.php') {
+
+// maybe we should do this instead:
+//if (strpos(' ' . $goto, 'db_details') == 1 || strpos(' ' . $goto, 'tbl_properties') == 1) {
+// but I'm not sure
+
     $js_to_run = 'functions.js';
 }
 if ($goto != 'main.php') {

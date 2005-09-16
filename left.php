@@ -1,5 +1,5 @@
 <?php
-/* $Id: left.php,v 2.43 2005/03/31 22:28:04 rabus Exp $ */
+/* $Id: left.php,v 2.45 2005/07/10 18:42:00 nijel Exp $ */
 // vim: expandtab sw=4 ts=4 sts=4:
 
 
@@ -289,11 +289,11 @@ if (($num_dbs > 1 || !empty($cfg['LeftFrameTableSeparator'])) && !$cfg['LeftFram
 
     var isServer    = <?php echo ($server > 0) ? 'true' : 'false'; ?>;
 
-    document.writeln('<link rel="stylesheet" type="text/css" href="./css/phpmyadmin.css.php?lang=<?php echo $lang; ?>&amp;js_frame=left&amp;js_capable=' + capable + '&amp;js_isDOM=' + isDOM + '&amp;js_isIE4=' + isIE4 + '" />');
+    document.writeln('<link rel="stylesheet" type="text/css" href="./css/phpmyadmin.css.php?<?php echo PMA_generate_common_url(); ?>&amp;js_frame=left&amp;js_capable=' + capable + '&amp;js_isDOM=' + isDOM + '&amp;js_isIE4=' + isIE4 + '" />');
     //-->
     </script>
 <noscript>
-        <link rel="stylesheet" type="text/css" href="./css/phpmyadmin.css.php?lang=<?php echo $lang; ?>&amp;js_frame=left&amp;js_capable=0&amp;js_isDOM=0&amp;js_isIE4=0" />
+        <link rel="stylesheet" type="text/css" href="./css/phpmyadmin.css.php?<?php echo PMA_generate_common_url(); ?>&amp;js_frame=left&amp;js_capable=0&amp;js_isDOM=0&amp;js_isIE4=0" />
 </noscript>
 
     <script src="libraries/left.js" type="text/javascript" language="javascript1.2"></script>
@@ -433,8 +433,10 @@ if ($num_dbs > 1) {
 
     $selected_db = 0;
 
-    // natural order for db list
-    if ($cfg['NaturalOrder'] && $num_dbs > 0) {
+    // natural order for db list; but do not sort if user asked
+    // for a specific order with the 'only_db' mechanism
+
+    if (!is_array($cfg['Server']['only_db']) && $cfg['NaturalOrder'] && $num_dbs > 0) {
         $dblist_temp = $dblist;
         natsort($dblist_temp);
         $i = 0;

@@ -1,5 +1,5 @@
 <?php
-/* $Id: ip_allow_deny.lib.php,v 2.3 2004/05/20 16:14:11 nijel Exp $ */
+/* $Id: ip_allow_deny.lib.php,v 2.4 2005/08/14 21:34:01 lem9 Exp $ */
 // vim: expandtab sw=4 ts=4 sts=4:
 
 /**
@@ -139,7 +139,7 @@ function PMA_getIp()
         // True IP without proxy
         return $direct_ip;
     } else {
-        $is_ip = preg_match('|^([0-9]{1,3}\.){3,3}[0-9]{1,3}|', $proxy_ip, $regs);
+        $is_ip = preg_match('|^([0-9]{1,3}\.){3,3}[0-9]{1,3}|', $proxy_ip, $regs = array());
         if ($is_ip && (count($regs) > 0)) {
             // True IP behind a proxy
             return $regs[0];
@@ -177,7 +177,7 @@ function PMA_ipMaskTest($testRange, $ipToTest)
 {
    $result = TRUE;
 
-   if (preg_match('|([0-9]+)\.([0-9]+)\.([0-9]+)\.([0-9]+)/([0-9]+)|', $testRange, $regs)) {
+   if (preg_match('|([0-9]+)\.([0-9]+)\.([0-9]+)\.([0-9]+)/([0-9]+)|', $testRange, $regs = array())) {
        // performs a mask match
        $ipl    = ip2long($ipToTest);
        $rangel = ip2long($regs[1] . '.' . $regs[2] . '.' . $regs[3] . '.' . $regs[4]);

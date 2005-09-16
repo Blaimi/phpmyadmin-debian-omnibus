@@ -2,24 +2,25 @@ Source: phpmyadmin
 Maintainer: Piotr Roszatycki <dexter@debian.org>
 Section: web
 Priority: extra
-Standards-Version: 3.6.1
-Build-Depends-Indep: yada (>= 0.34), po-debconf
+Standards-Version: 3.6.2
+Build-Depends: yada (>= 0.44), po-debconf
+Build-Depends-Indep: yada (>= 0.44), po-debconf
 
 Package: phpmyadmin
 Architecture: all
-Depends: php4 (>= 4.1.0) | php4-cgi (>= 4.1.0) | php5 | php5-cgi | php5-fcgi, php4-mysql | php5-mysql | php5-mysqli, apache | apache-perl | apache-ssl | apache2 | httpd, ${phpmyadmin:Depends}
+Depends: php4 | php4-cgi | php5 | php5-cgi, php4-mysql | php5-mysql | php5-mysqli, apache2 | httpd, ${phpmyadmin:Depends}
+Recommends: php4-mcrypt | php5-mcrypt
 Suggests: mysql-server (>= 3.23.36), php4-gd | php5-gd, ${phpmyadmin:Suggests}
 Description: set of PHP-scripts to administrate MySQL over the WWW
  phpMyAdmin is intended to handle the administration of MySQL over the WWW.
  Currently it can:
-   - create and drop databases
-   - create, copy, drop and alter tables
-   - delete, edit and add fields
-   - execute any SQL-statement, even batch-queries
-   - manage keys on fields
-   - load text files into tables
-   - create and read dumps of tables
-   - export and import data to CSV values
-   - administer multiple servers and single databases
-   - check referential integrity
-   - communicate in more than 38 different languages
+  - create and drop databases
+  - create, copy, drop and alter tables
+  - delete, edit and add fields
+  - execute any SQL-statement, even batch-queries
+  - manage keys on fields
+  - load text files into tables
+  - create and read dumps of tables
+  - export and import CSV data
+  - administer one single database as well as a whole database server
+  - communicate in 50 different languages

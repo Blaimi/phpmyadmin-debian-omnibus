@@ -1,5 +1,5 @@
 <?php
-/* $Id: mysql_charsets.lib.php,v 2.28 2005/03/30 22:01:50 rabus Exp $ */
+/* $Id: mysql_charsets.lib.php,v 2.30 2005/08/08 19:54:57 lem9 Exp $ */
 // vim: expandtab sw=4 ts=4 sts=4:
 
 if (PMA_MYSQL_INT_VERSION >= 40100){
@@ -32,7 +32,8 @@ if (PMA_MYSQL_INT_VERSION >= 40100){
         if ((isset($row['D']) && $row['D'] == 'Y') || (isset($row['Default']) && $row['Default'] == 'Yes')) {
             $mysql_default_collations[$row['Charset']] = $row['Collation'];
         }
-        $mysql_collations_available[$row['Collation']] = !isset($row['Compiled']) || $row['Compiled'] == 'Yes';
+        //$mysql_collations_available[$row['Collation']] = !isset($row['Compiled']) || $row['Compiled'] == 'Yes';
+        $mysql_collations_available[$row['Collation']] = TRUE;
         $mysql_charsets_available[$row['Charset']] = !empty($mysql_charsets_available[$row['Charset']]) || !empty($mysql_collations_available[$row['Collation']]);
     }
 
@@ -285,7 +286,7 @@ if (PMA_MYSQL_INT_VERSION >= 40100){
             $row = PMA_DBI_fetch_row($res);
             PMA_DBI_free_result($res);
             $tokenized = explode(' ', $row[1]);
-            unset($row, $res, $sql_query);
+            unset($row, $res);
 
             for ($i = 1; $i + 3 < count($tokenized); $i++) {
                 if ($tokenized[$i] == 'DEFAULT' && $tokenized[$i + 1] == 'CHARACTER' && $tokenized[$i + 2] == 'SET') {

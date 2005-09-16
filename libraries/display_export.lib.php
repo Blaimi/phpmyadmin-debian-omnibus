@@ -1,5 +1,5 @@
 <?php
-/* $Id: display_export.lib.php,v 2.30 2005/03/06 21:18:29 nijel Exp $ */
+/* $Id: display_export.lib.php,v 2.32 2005/08/22 21:41:20 nijel Exp $ */
 // vim: expandtab sw=4 ts=4 sts=4:
 
 // Get relations & co. status
@@ -659,19 +659,19 @@ if (isset($table) && !empty($table) && !isset($num_tables)) {
                         if (isset($_COOKIE) && !empty($_COOKIE['pma_db_filename_template'])) {
                             echo $_COOKIE['pma_db_filename_template'];
                         } else {
-                            echo '__DB__';
+                            echo $GLOBALS['cfg']['Export']['file_template_database'];
                         }
                     } elseif ($export_type == 'table') {
                         if (isset($_COOKIE) && !empty($_COOKIE['pma_table_filename_template'])) {
                             echo $_COOKIE['pma_table_filename_template'];
                         } else {
-                            echo '__TABLE__';
+                            echo $GLOBALS['cfg']['Export']['file_template_table'];
                         }
                     } else {
                         if (isset($_COOKIE) && !empty($_COOKIE['pma_server_filename_template'])) {
                             echo $_COOKIE['pma_server_filename_template'];
                         } else {
-                            echo '__SERVER__';
+                            echo $GLOBALS['cfg']['Export']['file_template_server'];
                         }
                     }
                     echo '" ';
@@ -687,19 +687,14 @@ if (isset($table) && !empty($table) && !isset($num_tables)) {
                     echo "\n";
 
                     $temp_charset = reset($cfg['AvailableCharsets']);
-                    echo '<select id="select_charset_of_file" name="charset_of_file" size="1">' . "\n"
-                            . '                <option value="' . $temp_charset . '"';
-                    if ($temp_charset == $charset) {
-                        echo ' selected="selected"';
-                    }
-                    echo '>' . $temp_charset . '</option>' . "\n";
-                    while ($temp_charset = next($cfg['AvailableCharsets'])) {
+                    echo '<select id="select_charset_of_file" name="charset_of_file" size="1">' . "\n";
+                    foreach($cfg['AvailableCharsets'] as $key => $temp_charset) {
                         echo '                <option value="' . $temp_charset . '"';
-                        if ($temp_charset == $charset) {
+                        if ((empty($cfg['Export']['charset']) && $temp_charset == $charset) || $temp_charset == $cfg['Export']['charset']) {
                             echo ' selected="selected"';
                         }
                         echo '>' . $temp_charset . '</option>' . "\n";
-                    } // end while
+                    } // end foreach
                     echo '            </select>';
                 } // end if
                 echo "\n";

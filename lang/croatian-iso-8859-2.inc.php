@@ -1,5 +1,5 @@
 <?php
-/* $Id: croatian-iso-8859-2.inc.php,v 2.66 2005/03/30 19:21:00 lem9 Exp $ */
+/* $Id: croatian-iso-8859-2.inc.php,v 2.74 2005/07/29 17:03:08 lem9 Exp $ */
 
 /**
  * Translation made by: Sime Essert <sime@nofrx.org>
@@ -191,7 +191,6 @@ $strNoQuery = 'Nema SQL upita!';
 $strNoRights = 'Nemate dovoljno prava za ovo podruèje!';
 $strNoTablesFound = 'Tablica nije pronaðena u bazi.';
 $strNotNumber = 'To nije broj!';
-$strNotValidNumber = ' nije odgovarajuæi broj redaka!';
 $strNoUsersFound = 'Korisnik(ci) nije pronaðen.';
 $strNull = 'Null';
 
@@ -823,4 +822,22 @@ $strInnoDBBufferPoolSizeDesc = 'The size of the memory buffer InnoDB uses to cac
 $strInnoDBBufferPoolSize = 'Buffer pool size';  //to translate
 $strInnoDBPages = 'pages';  //to translate
 $strSocketProblem = '(or the local MySQL server\'s socket is not correctly configured)';  //to translate
+$strPrivDescCreateView = 'Allows creating new views.';  //to translate
+$strPrivDescAlterDb = 'Allows altering the structure of existing tables as well as changing the default charset and collation of databases.';  //to translate
+$strPrivDescCreateUser = 'Allows creating, dropping and renaming unser accounts.';  //to translate
+$strPrivDescCreateRoutine = 'Allows creating stored routines.';  //to translate
+$strPrivDescAlterRoutine = 'Allows altering and dropping stored routines.';  //to translate
+$strRoutines = 'Routines';  //to translate
+$strPrivDescShowView = 'Allows performing SHOW CREATE VIEW queries.';  //to translate
+$strPrivDescExecute5 = 'Allows executing stored routines.';  //to translate
+$strCreateDatabaseBeforeCopying = 'CREATE DATABASE before copying';  //to translate
+$strGeneratePassword = 'Generate Password';  //to translate
+$strGenerate = 'Generate';  //to translate
+$strCopy = 'Copy';  //to translate
+$strTransformation_application_octetstream__hex = 'Displays hexadecimal representation of data.';  //to translate
+$strInvalidFieldCount = 'Table must have at least one field.';  //to translate
+$strInvalidRowNumber = '%d is not valid row number.';  //to translate
+$strInvalidColumnCount = 'Column count has to be larger than zero.';  //to translate
+$strInvalidFieldAddCount = 'You have to add at least one field.';  //to translate
+$strAndThen = 'and then';  //to translate
 ?>

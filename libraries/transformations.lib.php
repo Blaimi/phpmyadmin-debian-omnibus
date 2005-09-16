@@ -1,5 +1,5 @@
 <?php
-/* $Id: transformations.lib.php,v 2.9 2004/10/12 12:08:18 nijel Exp $ */
+/* $Id: transformations.lib.php,v 2.10 2005/08/14 21:34:01 lem9 Exp $ */
 // vim: expandtab sw=4 ts=4 sts=4:
 
 /**
@@ -50,7 +50,7 @@ function PMA_getAvailableMIMEtypes() {
         @ksort($filestack);
         foreach ($filestack AS $key => $file) {
 
-            if (preg_match('|^.*__.*\.inc\.php(3?)$|', trim($file), $match)) {
+            if (preg_match('|^.*__.*\.inc\.php(3?)$|', trim($file), $match = array())) {
                 // File contains transformation functions.
                 $base = explode('__', str_replace('.inc.php' . $match[1], '', $file));
 

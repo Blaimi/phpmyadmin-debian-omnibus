@@ -1,5 +1,5 @@
 <?php
-/* $Id: string.lib.php,v 2.9 2004/12/28 15:12:16 nijel Exp $ */
+/* $Id: string.lib.php,v 2.10 2005/07/16 12:20:59 lem9 Exp $ */
 // vim: expandtab sw=4 ts=4 sts=4:
 
 /** Specialized String Functions for phpMyAdmin
@@ -362,7 +362,7 @@ function PMA_STR_isSqlIdentifier($c, $dot_is_valid = FALSE)
  */
 function PMA_STR_binarySearchInArr($str, $arr, $arrsize)
 {
-    // $arr NUST be sorted, due to binary search
+    // $arr MUST be sorted, due to binary search
     $top    = $arrsize - 1;
     $bottom = 0;
     $found  = FALSE;

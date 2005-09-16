@@ -1,5 +1,5 @@
 <?php
-/* $Id: server_databases.php,v 2.15 2005/03/30 18:17:40 rabus Exp $ */
+/* $Id: server_databases.php,v 2.19 2005/08/02 13:02:17 lem9 Exp $ */
 // vim: expandtab sw=4 ts=4 sts=4:
 
 
@@ -80,7 +80,11 @@ if ((!empty($drop_selected_dbs) || isset($query_type)) && ($is_superuser || $cfg
         $submit_mult = 'drop_db' ;
         $err_url = 'server_databases.php?' . PMA_generate_common_url();
         require('./mult_submits.inc.php');
-        $message = sprintf($strDatabasesDropped, count($selected));
+        if ($mult_btn == $strYes) {
+            $message = sprintf($strDatabasesDropped, count($selected));
+        } else {
+            $message = sprintf($strDatabasesDropped, 0);
+        }
         // we need to reload the database list now.
         PMA_availableDatabases();
         $reload = 1;
@@ -330,9 +334,9 @@ if (count($statistics) > 0) {
            . '        </tr>' . "\n";
     }
     if ($is_superuser || $cfg['AllowUserDropDatabase']) {
-        $common_url_query = PMA_generate_common_url() . '&amp;sort_by=' . $sort_by . '&amp;sort_order=' . $sort_order . '&amp;dbstats=' . (empty($dbstats) ? '10' : '3');
+        $common_url_query = PMA_generate_common_url() . '&amp;sort_by=' . $sort_by . '&amp;sort_order=' . $sort_order . '&amp;dbstats=' . (empty($dbstats) ? '0' : '1');
         echo '    <tr>' . "\n"
-           . '        <td colspan="' . (empty($dbstats) ? '10' : '3') . '">' . "\n"
+           . '        <td colspan="' . (!empty($dbstats) ? '10' : '3') . '">' . "\n"
            . '            <img src="' . $pmaThemeImage . 'arrow_' . $text_dir . '.png" border="0" width="38" height="22" alt="' . $strWithChecked . '" />' . "\n"
            . '            <a href="./server_databases.php?' . $common_url_query . '&amp;checkall=1" onclick="setCheckboxes(\'dbStatsForm\', true); return false;">' . "\n"
            . '                ' . $strCheckAll
@@ -351,40 +355,86 @@ if (count($statistics) > 0) {
     unset($idx_unit);
     unset($tot_size);
     unset($tot_unit);
-    if ($is_superuser || $cfg['AllowUserDropDatabase']) {
-        echo '       ' . ($GLOBALS['cfg']['PropertiesIconic'] ? '<br /><table border="0" cellpadding="2" cellspacing="0">' : '<ul>') . "\n";
+    if ( $GLOBALS['cfg']['PropertiesIconic'] )
+    {
+        // iconic view
+        if ($is_superuser || $cfg['AllowUserDropDatabase']) {
+            echo '       <br /><table border="0" cellpadding="2" cellspacing="0">' . "\n";
+            if ($is_superuser && empty($dbstats)) {
+                echo '        <tr><td>' . "\n"
+                   . '                <a href="./server_databases.php?' . $url_query . '&amp;dbstats=1" title="' . $strDatabasesStatsEnable . '">' . "\n"
+                   . '                    <img src="' .$pmaThemeImage . 'b_dbstatistics.png" width="16" height="16" border="0" hspace="2" align="middle" />' . "\n"
+                   . '                </a>' . "\n"
+                   . '            </td><td>' . "\n"
+                   . '            <b>' . "\n"
+                   . '                <a href="./server_databases.php?' . $url_query . '&amp;dbstats=1" title="' . $strDatabasesStatsEnable . '">' . "\n"
+                   . '                    ' . $strDatabasesStatsEnable . "\n"
+                   . '                </a>' . "\n"
+                   . '            </b>' . "\n"
+                   . '            </td></tr><tr><td>&nbsp;</td><td>' . "\n"
+                   . '            ' . $strDatabasesStatsHeavyTraffic . "\n"
+                   . '            <br />&nbsp;</td></tr>' . "\n";
+            } else if ($is_superuser && !empty($dbstats)) {
+                echo '        <tr><td>' . "\n"
+                   . '                <a href="./server_databases.php?' . $url_query . '" title="' . $strDatabasesStatsDisable . '">' . "\n"
+                   . '                    <img src="' .$pmaThemeImage . 'b_dbstatistics.png" width="16" height="16" border="0" hspace="2" align="middle" />' . "\n"
+                   . '                </a>' . "\n"
+                   . '            </td><td>' . "\n"
+                   . '            <b>' . "\n"
+                   . '                <a href="./server_databases.php?' . $url_query . '" title="' . $strDatabasesStatsDisable . '">' . "\n"
+                   . '                    ' . $strDatabasesStatsDisable . "\n"
+                   . '                </a>' . "\n"
+                   . '            </b>' . "\n"
+                   . '            </td></tr><tr><td colspan="2">&nbsp;</td></tr>' . "\n";
+            }
+            echo '        <tr><td>' . "\n"
+               . '                <img src="' .$pmaThemeImage . 'b_deltbl.png" width="16" height="16" border="0" hspace="2" align="middle" />' . "\n"
+               . '            </td><td>' . "\n"
+               . '            <b>' . "\n"
+               . '                ' . $strDropSelectedDatabases . "\n"
+               . '            </b>' . "\n"
+               . '            </td></tr><tr><td >&nbsp;</td><td>' . "\n"
+               . '            <input type="submit" name="drop_selected_dbs" value="' . $strDrop . '" id="buttonNo" />' . "\n"
+               . '            <br />&nbsp;</td></tr>' . "\n"
+               . '        </table>' . "\n";
+        }
     }
-    if ($is_superuser && empty($dbstats)) {
-        echo '        ' . ($GLOBALS['cfg']['PropertiesIconic'] ? '<tr><td colspan="2">' : '<li>') . "\n"
-           . '            <b>' . "\n"
-           . '                <a href="./server_databases.php?' . $url_query . '&amp;dbstats=1" title="' . $strDatabasesStatsEnable . '">' . "\n"
-           . '                    ' . ($GLOBALS['cfg']['PropertiesIconic'] ? '<img src="' .$pmaThemeImage . 'b_dbstatistics.png" width="16" height="16" border="0" hspace="2" align="middle" />' : '') . "\n"
-           . '                    ' . $strDatabasesStatsEnable . "\n"
-           . '                </a>' . "\n"
-           . '            </b>' . "\n"
-           . '           ' . ($GLOBALS['cfg']['PropertiesIconic'] ? '</td></tr><tr><td width="20" nowrap="nowrap">&nbsp;</td><td>' : '<br />') . "\n"
-           . '            ' . $strDatabasesStatsHeavyTraffic . "\n"
-           . '        ' . ($GLOBALS['cfg']['PropertiesIconic'] ? '<br />&nbsp;</td></tr>' : '</li>') . "\n";
-    } else if ($is_superuser && !empty($dbstats)) {
-        echo '        ' . ($GLOBALS['cfg']['PropertiesIconic'] ? '<tr><td colspan="2">' : '<li>') . "\n"
-           . '            <b>' . "\n"
-           . '                <a href="./server_databases.php?' . $url_query . '" title="' . $strDatabasesStatsDisable . '">' . "\n"
-           . '                    ' . ($GLOBALS['cfg']['PropertiesIconic'] ? '<img src="' .$pmaThemeImage . 'b_dbstatistics.png" width="16" height="16" border="0" hspace="2" align="middle" />' : '') . "\n"
-           . '                    ' . $strDatabasesStatsDisable . "\n"
-           . '                </a>' . "\n"
-           . '            </b>' . "\n"
-           . '           ' . ($GLOBALS['cfg']['PropertiesIconic'] ? '<br />&nbsp;</td></tr>' : '<br /></li>') . "\n";
-    }
-    if ($is_superuser || $cfg['AllowUserDropDatabase']) {
-        echo '        ' . ($GLOBALS['cfg']['PropertiesIconic'] ? '<tr><td colspan="2">' : '<li>') . "\n"
-           . '            <b>' . "\n"
-           . '                ' . ($GLOBALS['cfg']['PropertiesIconic'] ? '<img src="' .$pmaThemeImage . 'b_deltbl.png" width="16" height="16" border="0" hspace="2" align="middle" />' : '') . "\n"
-           . '                ' . $strDropSelectedDatabases . "\n"
-           . '            </b>' . "\n"
-           . '           ' . ($GLOBALS['cfg']['PropertiesIconic'] ? '</td></tr><tr><td width="20" nowrap="nowrap">&nbsp;</td><td nowrap="nowrap" align="left" width="400">' : '<br />') . "\n"
-           . '            <input type="submit" name="drop_selected_dbs" value="' . $strDrop . '" id="buttonNo" />' . "\n"
-           . '           ' . ($GLOBALS['cfg']['PropertiesIconic'] ? '<br />&nbsp;</td></tr>' : '</li>') . "\n"
-           . '    ' . ($GLOBALS['cfg']['PropertiesIconic'] ? '</table>' : '</ul>') . "\n";
+    else
+    {
+        // classic view
+        if ($is_superuser || $cfg['AllowUserDropDatabase']) {
+            echo '       <br /><ul>' . "\n";
+            if ($is_superuser && empty($dbstats)) {
+                echo '        <li>' . "\n"
+                   . '            <b>' . "\n"
+                   . '                <a href="./server_databases.php?' . $url_query . '&amp;dbstats=1" title="' . $strDatabasesStatsEnable . '">' . "\n"
+                   . '                    ' . "\n"
+                   . '                    ' . $strDatabasesStatsEnable . "\n"
+                   . '                </a>' . "\n"
+                   . '            </b>' . "\n"
+                   . '            <br />' . "\n"
+                   . '            ' . $strDatabasesStatsHeavyTraffic . "\n"
+                   . '        </li>' . "\n";
+            } else if ($is_superuser && !empty($dbstats)) {
+                echo '        <li>' . "\n"
+                   . '            <b>' . "\n"
+                   . '                <a href="./server_databases.php?' . $url_query . '" title="' . $strDatabasesStatsDisable . '">' . "\n"
+                   . '                    ' . "\n"
+                   . '                    ' . $strDatabasesStatsDisable . "\n"
+                   . '                </a>' . "\n"
+                   . '            </b>' . "\n"
+                   . '            <br /></li>' . "\n";
+            }
+            echo '        <li>' . "\n"
+               . '            <b>' . "\n"
+               . '                ' . "\n"
+               . '                ' . $strDropSelectedDatabases . "\n"
+               . '            </b>' . "\n"
+               . '            <br />' . "\n"
+               . '            <input type="submit" name="drop_selected_dbs" value="' . $strDrop . '" id="buttonNo" />' . "\n"
+               . '        </li>' . "\n"
+               . '    </ul>' . "\n";
+        }
     }
     echo '</form>' . "\n";
 } else {
@@ -394,23 +444,32 @@ if (count($statistics) > 0) {
 /**
  * Create new database.
  */
-?>
-
-<form method="post" action="db_create.php"><b>
-    <?php echo $strCreateNewDatabase . '&nbsp;' . PMA_showMySQLDocu('Reference', 'CREATE_DATABASE'); ?></b><br />
-    <?php echo PMA_generate_common_hidden_inputs('', '', 5); ?>
-    <input type="hidden" name="reload" value="1" />
-    <input type="text" name="db" value="" maxlength="64" class="textfield" />
-    <?php
-if (PMA_MYSQL_INT_VERSION >= 40101) {
-    require_once('./libraries/mysql_charsets.lib.php');
-    echo PMA_generateCharsetDropdownBox(PMA_CSDROPDOWN_COLLATION, 'db_collation', NULL, NULL, TRUE, 5);
+if ( $GLOBALS['cfg']['PropertiesIconic'] )
+{
+    echo '<table border="0" cellpadding="2" cellspacing="0">' . "\n";
+    echo '<tr>' . "\n"
+       . '    <td valign="top">' . "\n"
+       . '        <img src="' .$pmaThemeImage . 'b_newdb.png" width="16" height="16" border="0" hspace="2" style="vertical-align: top;" />' . "\n"
+       . '    </td>' . "\n"
+       . '    <td>' . "\n";
 }
-    ?>
-    <input type="submit" value="<?php echo $strCreate; ?>" id="buttonGo" />
-</form>
+else
+{
+    echo '<ul>' . "\n";
+    echo '    <li>' . "\n";
+}
 
-<?php
+require('./libraries/display_create_database.lib.php');
+
+if ( $GLOBALS['cfg']['PropertiesIconic'] )
+{
+    echo '    </td></tr></table>' . "\n";
+}
+else
+{
+    echo '    </li>' . "\n";
+    echo '</ul>' . "\n";
+}
 
 /**
  * Sends the footer

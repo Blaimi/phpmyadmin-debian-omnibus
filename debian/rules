@@ -1,6 +1,6 @@
 #!/usr/bin/make -f
 # Generated automatically from debian/packages
-# by yada v0.44, of Tue, 13 Sep 2005
+# by yada v0.48, of Wed, 28 Sep 2005
 
 DEB_HOST_ARCH        := $(shell dpkg-architecture -qDEB_HOST_ARCH 2>/dev/null)
 DEB_HOST_ARCH_OS     := $(shell dpkg-architecture -qDEB_HOST_ARCH_OS 2>/dev/null)

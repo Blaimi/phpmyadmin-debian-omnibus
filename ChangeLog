@@ -2,8 +2,12 @@
 phpMyAdmin - Changelog
 ----------------------
 
-$Id: ChangeLog,v 2.1238.2.12 2005/09/15 16:44:29 lem9 Exp $
+$Id: ChangeLog,v 2.1238.2.14 2005/10/11 16:32:58 lem9 Exp $
 $Source: /cvsroot/phpmyadmin/phpMyAdmin/ChangeLog,v $
+
+2005-10-11 Marc Delisle  <lem9@users.sourceforge.net>
+    * libraries/grab_globals.lib.php: bug #1322871, local file inclusion
+    ### 2.6.4-pl2 released
 
 2005-09-15 Marc Delisle  <lem9@users.sourceforge.net>
     ### 2.6.4-pl1 released

@@ -1,4 +1,4 @@
-# $Id: /trunk/debian/dists/phpmyadmin/debian/packages 256 2005-09-16T14:28:00.091592Z dexter  $
+# $Id: /trunk/debian/dists/phpmyadmin/debian/packages 358 2005-10-12T13:21:14.395871Z dexter  $
 
 # If the debian/rules or debian/control file is missing, rebuild the file:
 #
@@ -11,7 +11,7 @@ Section: web
 Priority: extra
 Maintainer: Piotr Roszatycki <dexter@debian.org>
 Standards-Version: 3.6.2
-Upstream-Source: <USCAN:http://sf.net/phpmyadmin/phpMyAdmin-([0-9.]*)\.tar\.gz>
+Upstream-Source: <USCAN:http://sf.net/phpmyadmin/phpMyAdmin-([0-9.]*(?:-pl[0-9]*))\.tar\.gz>
 Home-Page: <URL:http://www.phpmyadmin.net/>
 Description: set of PHP-scripts to administrate MySQL over the WWW
 Copyright: GPL
@@ -64,7 +64,6 @@ Install: sh
  yada install -conf -ucf -subdir phpmyadmin debian/conf/apache.conf
  yada symlink -into /usr/share/phpmyadmin -as .htaccess /etc/phpmyadmin/htaccess
  yada symlink -into /var/www /usr/share/phpmyadmin
- yada remove -into /usr/share/phpmyadmin config.default.php
  yada install -into /usr/share/phpmyadmin debian/src/config.inc.php
  yada install -into /usr/share/phpmyadmin debian/src/config.header.inc.php
  yada install -into /usr/share/phpmyadmin debian/src/config.footer.inc.php
@@ -74,7 +73,7 @@ Install: sh
      $ROOT/usr/share/phpmyadmin/config.inc.php > $ROOT/usr/share/phpmyadmin/config.inc.php.tmp
  mv -f $ROOT/usr/share/phpmyadmin/config.inc.php.tmp $ROOT/usr/share/phpmyadmin/config.inc.php
  .
- yada install -doc -subdir examples -gzip config.default.php
+ yada install -doc -subdir examples -gzip config.inc.php
  yada install -doc README TODO CREDITS
  yada install -doc Documentation.html translators.html
  yada install -doc -as changelog ChangeLog

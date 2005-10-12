@@ -155,7 +155,6 @@ debian/tmp-phpmyadmin/DEBIAN/control: debian/build-indep-stamp debian/control
 	echo -E 'yada install -conf -ucf -subdir phpmyadmin debian/conf/apache.conf';\
 	echo -E 'yada symlink -into /usr/share/phpmyadmin -as .htaccess /etc/phpmyadmin/htaccess';\
 	echo -E 'yada symlink -into /var/www /usr/share/phpmyadmin';\
-	echo -E 'yada remove -into /usr/share/phpmyadmin config.default.php';\
 	echo -E 'yada install -into /usr/share/phpmyadmin debian/src/config.inc.php';\
 	echo -E 'yada install -into /usr/share/phpmyadmin debian/src/config.header.inc.php';\
 	echo -E 'yada install -into /usr/share/phpmyadmin debian/src/config.footer.inc.php';\
@@ -165,7 +164,7 @@ debian/tmp-phpmyadmin/DEBIAN/control: debian/build-indep-stamp debian/control
 	echo -E '    $$ROOT/usr/share/phpmyadmin/config.inc.php > $$ROOT/usr/share/phpmyadmin/config.inc.php.tmp';\
 	echo -E 'mv -f $$ROOT/usr/share/phpmyadmin/config.inc.php.tmp $$ROOT/usr/share/phpmyadmin/config.inc.php';\
 	echo -E '';\
-	echo -E 'yada install -doc -subdir examples -gzip config.default.php';\
+	echo -E 'yada install -doc -subdir examples -gzip config.inc.php';\
 	echo -E 'yada install -doc README TODO CREDITS';\
 	echo -E 'yada install -doc Documentation.html translators.html';\
 	echo -E 'yada install -doc -as changelog ChangeLog';\

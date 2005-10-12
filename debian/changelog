@@ -1,3 +1,12 @@
+phpmyadmin (4:2.6.4-pl2-1) unstable; urgency=high
+
+  * New upstream release.
+  * Security fix: local file inclusion vulnerability.
+    See http://www.phpmyadmin.net/home_page/security.php?issue=PMASA-2005-4
+    Closes: #333433.
+
+ -- Piotr Roszatycki <dexter@debian.org>  Wed, 12 Oct 2005 15:07:42 +0200
+
 phpmyadmin (4:2.6.4-pl1-2) unstable; urgency=low
 
   * Rebuilt with new YADA. Depends: debconf (>= 0.2.26) | debconf-2.0

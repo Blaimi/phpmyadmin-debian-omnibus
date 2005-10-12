@@ -1,5 +1,5 @@
 <?php
-/* $Id: grab_globals.lib.php,v 2.12 2005/08/14 19:31:55 lem9 Exp $ */
+/* $Id: grab_globals.lib.php,v 2.12.2.1 2005/10/11 13:28:43 lem9 Exp $ */
 // vim: expandtab sw=4 ts=4 sts=4:
 
 
@@ -99,7 +99,9 @@ if (isset($goto) && strpos(' ' . $goto, '/') > 0 && substr($goto, 0, 2) != './')
 } // end if
 
 if ( ! empty( $__redirect ) ) {
-    require('./' . $__redirect);
+    // TODO: ensure that PMA_securePath() is defined and available
+    // for this script. Meanwhile we duplicate what this function does:
+    require('./' . preg_replace('@\.\.*@','.',$__redirect));
     exit();
 } // end if ( ! empty( $__redirect ) )
 ?>

@@ -43,6 +43,7 @@ Information about 2.6.4-pl1
      * XSS on username (cookie-based login)
      * (pl1)  Exporting in https under Internet Explorer
      * (pl1)  Missing Save button in Relation View
+     * (pl2)  Security fix: local file inclusion
 
  ----------------------------------------------------------------------
 

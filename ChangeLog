@@ -2,8 +2,16 @@
 phpMyAdmin - Changelog
 ----------------------
 
-$Id: ChangeLog,v 2.1238.2.14 2005/10/11 16:32:58 lem9 Exp $
+$Id: ChangeLog,v 2.1238.2.18 2005/10/22 12:46:32 lem9 Exp $
 $Source: /cvsroot/phpmyadmin/phpMyAdmin/ChangeLog,v $
+
+2005-10-22 Marc Delisle  <lem9@users.sourceforge.net>
+    ### 2.6.4-pl3 released
+
+2005-10-20 Marc Delisle  <lem9@users.sourceforge.net>
+    * left.php, queryframe.php, server_databases.php: security fix
+    * libraries/bookmark.lib.php: PHP 5.1.0-dev compatibility
+    * libraries/common.lib.php, /grab_globals.lib.php: security fix
 
 2005-10-11 Marc Delisle  <lem9@users.sourceforge.net>
     * libraries/grab_globals.lib.php: bug #1322871, local file inclusion

@@ -1,5 +1,5 @@
 <?php
-/* $Id: server_databases.php,v 2.19 2005/08/02 13:02:17 lem9 Exp $ */
+/* $Id: server_databases.php,v 2.19.2.1 2005/10/21 01:33:58 lem9 Exp $ */
 // vim: expandtab sw=4 ts=4 sts=4:
 
 
@@ -145,13 +145,18 @@ foreach ($dblist AS $current_db) {
 // avoids 'undefined index' errors
 if (empty($sort_by)) {
     $sort_by = 'db_name';
+} else {
+    $sort_by = PMA_sanitize($sort_by);
 }
+
 if (empty($sort_order)) {
     if ($sort_by == 'db_name') {
         $sort_order = 'asc';
     } else {
         $sort_order = 'desc';
     }
+} else {
+    $sort_order = PMA_sanitize($sort_order);
 }
 
 // sorts the array

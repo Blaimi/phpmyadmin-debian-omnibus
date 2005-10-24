@@ -1,5 +1,5 @@
 <?php
-/* $Id: left.php,v 2.45 2005/07/10 18:42:00 nijel Exp $ */
+/* $Id: left.php,v 2.45.2.1 2005/10/21 01:24:00 lem9 Exp $ */
 // vim: expandtab sw=4 ts=4 sts=4:
 
 
@@ -39,6 +39,8 @@ if ($cfg['OBGzip']) {
 //PMA_checkParameters(array('hash'));
 if (!isset($hash)) {
     $hash='';
+} else {
+    $hash = PMA_sanitize($hash);
 }
 
 require_once('./libraries/bookmark.lib.php');

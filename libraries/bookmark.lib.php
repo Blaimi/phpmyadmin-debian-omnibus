@@ -1,5 +1,5 @@
 <?php
-/* $Id: bookmark.lib.php,v 2.12 2005/03/07 21:30:59 lem9 Exp $ */
+/* $Id: bookmark.lib.php,v 2.12.6.1 2005/10/21 02:23:50 lem9 Exp $ */
 // vim: expandtab sw=4 ts=4 sts=4:
 
 /**
@@ -60,7 +60,7 @@ function PMA_listBookmarks($db, $cfgBookmark)
 
     // There are some bookmarks -> store them
     // use the unique id as the key
-    if ($result > 0 && PMA_DBI_num_rows($result) > 0) {
+    if ($result && PMA_DBI_num_rows($result) > 0) {
         while ($row = PMA_DBI_fetch_row($result)) {
             $bookmark_list[$row[1]] = $row[0];
         } // end while

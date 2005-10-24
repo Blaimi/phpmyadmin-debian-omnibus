@@ -44,6 +44,8 @@ Information about 2.6.4-pl1
      * (pl1)  Exporting in https under Internet Explorer
      * (pl1)  Missing Save button in Relation View
      * (pl2)  Security fix: local file inclusion
+     * (pl3)  Security fixes: local file inclusion and XSS
+     * (pl3)  PHP 5.1.0-dev compatibility
 
  ----------------------------------------------------------------------
 

@@ -1,5 +1,5 @@
 <?php
-/* $Id: common.lib.php,v 2.151 2005/08/23 23:08:21 lem9 Exp $ */
+/* $Id: common.lib.php,v 2.151.2.1 2005/10/21 02:40:23 lem9 Exp $ */
 // vim: expandtab sw=4 ts=4 sts=4:
 
 /**
@@ -46,6 +46,10 @@
  *   release number
  * - other functions, respecting dependencies
  */
+
+// grab_globals.lib.php should really go before common.lib.php
+// TODO: remove direct calling from elsewhere
+require_once('./libraries/grab_globals.lib.php');
 
 /**
  * Minimum inclusion? (i.e. for the stylesheet builder)

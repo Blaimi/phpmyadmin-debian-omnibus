@@ -1,5 +1,5 @@
 <?php
-/* $Id: queryframe.php,v 2.30 2005/08/11 15:07:57 lem9 Exp $ */
+/* $Id: queryframe.php,v 2.30.2.1 2005/10/21 01:27:32 lem9 Exp $ */
 // vim: expandtab sw=4 ts=4 sts=4:
 
 /**
@@ -23,6 +23,10 @@ if ($cfg['OBGzip']) {
     if ($ob_mode) {
         PMA_outBufferPre($ob_mode);
     }
+}
+// security fix:
+if (isset($hash)) {
+   $hash = PMA_sanitize($hash);
 }
 
 // garvin: For re-usability, moved http-headers

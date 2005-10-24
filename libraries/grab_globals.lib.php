@@ -1,7 +1,6 @@
 <?php
-/* $Id: grab_globals.lib.php,v 2.12.2.1 2005/10/11 13:28:43 lem9 Exp $ */
+/* $Id: grab_globals.lib.php,v 2.12.2.2 2005/10/21 02:40:39 lem9 Exp $ */
 // vim: expandtab sw=4 ts=4 sts=4:
-
 
 /**
  * This library grabs the names and values of the variables sent or posted to a
@@ -11,6 +10,12 @@
  *
  * loic1 - 2001/25/11: use the new globals arrays defined with php 4.1+
  */
+
+// protect against older PHP versions' bug about GLOBALS overwrite
+// (no need to translate this one :) )
+if (isset($_REQUEST['GLOBALS']) || isset($_FILES['GLOBALS'])) {
+    die("GLOBALS overwrite attempt");
+}
 
 function PMA_gpc_extract($array, &$target, $sanitize = TRUE) {
     if (!is_array($array)) {

@@ -1,8 +1,20 @@
+phpmyadmin (4:2.6.4-pl3-1) unstable; urgency=high
+
+  * New upstream release.
+  * Security fix: (1) Local file inclusion vulnerability and (2) Cross-Site
+    Scripting vulnerability.
+    See http://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2005-3300
+    See http://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2005-3301
+    Closes: #335306, #335513.
+  * Assigned CVE number for 4:2.6.4-pl2-1 bug fix.
+
+ -- Piotr Roszatycki <dexter@debian.org>  Mon, 24 Oct 2005 20:14:08 +0200
+
 phpmyadmin (4:2.6.4-pl2-1) unstable; urgency=high
 
   * New upstream release.
   * Security fix: local file inclusion vulnerability.
-    See http://www.phpmyadmin.net/home_page/security.php?issue=PMASA-2005-4
+    See http://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2005-3299
     Closes: #333433.
 
  -- Piotr Roszatycki <dexter@debian.org>  Wed, 12 Oct 2005 15:07:42 +0200

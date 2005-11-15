@@ -1,8 +1,8 @@
 <?php
-/* $Id: transformation_wrapper.php,v 2.7 2004/08/21 13:41:41 lem9 Exp $ */
+/* $Id: transformation_wrapper.php,v 2.7.10.1 2005/11/15 15:21:47 lem9 Exp $ */
 // vim: expandtab sw=4 ts=4 sts=4:
 
-$is_transformation_wrapper = true;
+define('IS_TRANSFORMATION_WRAPPER', true);
 
 /**
  * Get the variables sent or posted to this script and displays the header

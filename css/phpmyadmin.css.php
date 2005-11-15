@@ -1,5 +1,5 @@
 <?php
-/* $Id: phpmyadmin.css.php,v 2.35 2005/08/16 17:49:57 lem9 Exp $ */
+/* $Id: phpmyadmin.css.php,v 2.35.2.1 2005/11/15 15:21:47 lem9 Exp $ */
 // vim: expandtab sw=4 ts=4 sts=4:
 
 chdir('..');
@@ -13,9 +13,8 @@ require_once('./libraries/sqlparser.lib.php');
 // but only functions used to determine browser heritage.
 PMA_setFontSizes();
 
-$ctype = 'css';
-require_once('./libraries/header_http.inc.php');
-unset( $ctype );
+// Send correct type:
+header('Content-Type: text/css; charset=ISO-8859-1');
 ?>
 
 /* Calendar */

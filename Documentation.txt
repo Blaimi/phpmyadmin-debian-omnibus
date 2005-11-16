@@ -4,14 +4,14 @@
    Transformations  -  FAQ  -  Developers  -  Credits  -  Translators
    ______________________________________________________________________
 
-                      phpMyAdmin 2.6.4-pl3 Documentation
+                      phpMyAdmin 2.6.4-pl4 Documentation
 
      * SourceForge phpMyAdmin project page   [ http://www.phpmyadmin.net/ ] 
      * Local documents:
           + Version history: ChangeLog
           + General notes: README
           + License: LICENSE
-     * Documentation version: $Id: Documentation.html,v 2.147.2.5 2005/10/21        02:49:14 lem9 Exp $
+     * Documentation version: $Id: Documentation.html,v 2.147.2.6 2005/11/15        15:23:44 lem9 Exp $
 
 Requirements
 

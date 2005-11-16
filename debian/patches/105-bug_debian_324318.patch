@@ -1,0 +1,25 @@
+diff -Nru phpMyAdmin-2.6.4-pl4.orig/libraries/common.lib.php phpMyAdmin-2.6.4-pl4/libraries/common.lib.php
+--- phpMyAdmin-2.6.4-pl4.orig/libraries/common.lib.php	2005-10-21 04:40:23.000000000 +0200
++++ phpMyAdmin-2.6.4-pl4/libraries/common.lib.php	2005-11-16 22:31:04.000000000 +0100
+@@ -116,20 +116,8 @@
+ 
+ /**
+  * Includes compatibility code for older config.inc.php revisions
+- * if necessary
+  */
+-if (isset($cfg['FileRevision'])) {
+-    // converting revision string into an array
+-    //     e.g. "Revision: 2.0" becomes array(2, 0).
+-    $cfg['FileRevision'] = str_replace('$' . 'Revision: ', '', $cfg['FileRevision']);
+-    $cfg['FileRevision'] = str_replace(' $', '', $cfg['FileRevision']);
+-    $cfg['FileRevision'] = explode('.', $cfg['FileRevision']);
+-} else {
+-    $cfg['FileRevision'] = array(1, 1);
+-}
+-if ($cfg['FileRevision'][0] < 2 || ($cfg['FileRevision'][0] == 2 && $cfg['FileRevision'][1] < 64)) {
+-    require_once('./libraries/config_import.lib.php');
+-}
++require_once('./libraries/config_import.lib.php');
+ 
+ /**
+  * Includes the language file if it hasn't been included yet

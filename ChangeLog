@@ -2,8 +2,20 @@
 phpMyAdmin - Changelog
 ----------------------
 
-$Id: ChangeLog,v 2.1238.2.18 2005/10/22 12:46:32 lem9 Exp $
+$Id: ChangeLog,v 2.1238.2.20 2005/11/15 15:32:50 lem9 Exp $
 $Source: /cvsroot/phpmyadmin/phpMyAdmin/ChangeLog,v $
+
+
+2005-11-15 Marc Delisle  <lem9@users.sourceforge.net>
+    ### 2.6.4-pl4 released
+
+2005-11-15 Michal Čihař  <michal@cihar.com>
+    * css/phpmyadmin.css.php: Do not use common header file, as there is
+      nothing common at all.
+    * libraries/header_http.inc.php: Allways send text/html content type.
+    * libraries/db_table_exists.lib.php, libraries/header_http.inc.php,
+      transformation_wrapper.php: Use define rather than variable for
+      conditional paths.
 
 2005-10-22 Marc Delisle  <lem9@users.sourceforge.net>
     ### 2.6.4-pl3 released

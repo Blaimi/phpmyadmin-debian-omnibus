@@ -46,6 +46,7 @@ Information about 2.6.4-pl1
      * (pl2)  Security fix: local file inclusion
      * (pl3)  Security fixes: local file inclusion and XSS
      * (pl3)  PHP 5.1.0-dev compatibility
+     * (pl4)  Security fixes: HTTP response splitting problem
 
  ----------------------------------------------------------------------
 

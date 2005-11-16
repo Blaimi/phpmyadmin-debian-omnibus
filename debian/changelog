@@ -1,3 +1,17 @@
+phpmyadmin (4:2.6.4-pl4-1) unstable; urgency=high
+
+  * New upstream release.
+  * Security fix: HTTP Response Splitting vulnerability.
+    See: http://www.phpmyadmin.net/home_page/security.php?issue=PMASA-2005-6
+    See: http://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2005-3621
+    Closes: #339437.
+  * New 105-bug_debian_324318.patch:
+    - Always set the default configuration values, even if the config.inc.php
+      file seems to be up to date. This fix allows to utilise more than three
+      databases. Closes: #324318.
+
+ -- Piotr Roszatycki <dexter@debian.org>  Wed, 16 Nov 2005 13:10:14 +0100
+
 phpmyadmin (4:2.6.4-pl3-1) unstable; urgency=high
 
   * New upstream release.

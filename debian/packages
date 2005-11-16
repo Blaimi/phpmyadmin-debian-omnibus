@@ -1,4 +1,4 @@
-# $Id: /trunk/debian/dists/phpmyadmin/debian/packages 358 2005-10-12T13:21:14.395871Z dexter  $
+# $Id: /trunk/debian/dists/phpmyadmin/debian/packages 381 2005-11-16T21:35:16.580821Z dexter  $
 
 # If the debian/rules or debian/control file is missing, rebuild the file:
 #
@@ -24,6 +24,9 @@ Copyright: GPL
                              Garvin Hicking <me_at_supergarv.de>
                              Michael Keck <mkkeck_at_users.sourceforge.net>
                              [check Documentation.txt/.html file for more details]
+Major-Changes:
+%`cd debian/patches; ls *.patch | sed -e 's/^/ /'`
+Patches: patches/*.patch
 
 Package: phpmyadmin
 Architecture: all

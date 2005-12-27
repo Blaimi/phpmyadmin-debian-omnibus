@@ -1,5 +1,5 @@
 <?php
-/* $Id: select_lang.lib.php,v 2.23 2005/06/11 10:23:21 lem9 Exp $ */
+/* $Id: select_lang.lib.php,v 2.27 2005/11/18 13:02:36 cybot_tm Exp $ */
 // vim: expandtab sw=4 ts=4 sts=4:
 
 
@@ -7,18 +7,11 @@
  * phpMyAdmin Language Loading File
  */
 
-
-/**
- * We need some elements of the superglobal $_SERVER array.
- */
-require_once('./libraries/grab_globals.lib.php');
-
-
 /**
  * Define the path to the translations directory and get some variables
  * from system arrays if 'register_globals' is set to 'off'
  */
-$lang_path = 'lang/';
+$lang_path = './lang/';
 
 
 /**
@@ -32,7 +25,7 @@ $lang_path = 'lang/';
  *    These values contains:
  *    - the "official" ISO language code and, if required, the dialect code
  *      also ('bu' for Bulgarian, 'fr([-_][[:alpha:]]{2})?' for all French
- *      dialects, 'zh[-_]tw' for Chinese traditional...), the dialect has to 
+ *      dialects, 'zh[-_]tw' for Chinese traditional...), the dialect has to
  *      be specified as first;
  *    - the '|' character (it means 'OR');
  *    - the full language name.
@@ -174,6 +167,19 @@ $available_languages = array(
     'zh-utf-8'          => array('zh|chinese simplified', 'chinese_simplified-utf-8', 'zh')
 );
 
+// Language filtering support
+if (!empty($GLOBALS['cfg']['FilterLanguages'])) {
+    $new_lang = array();
+    foreach($available_languages as $key => $val) {
+        if (preg_match('@' . $GLOBALS['cfg']['FilterLanguages'] . '@', $key)) {
+            $new_lang[$key] = $val;
+        }
+    }
+    if (count($new_lang) > 0) {
+        $available_languages = $new_lang;
+    }
+    unset( $key, $val, $new_lang );
+}
 
 /**
  * Analyzes some PHP environment variables to find the most probable language
@@ -304,5 +310,6 @@ if (!isset($convcharset) || empty($convcharset)) {
 
 // 5. Defines the associated filename and load the translation
 $lang_file = $lang_path . $available_languages[$lang][1] . '.inc.php';
-require_once('./' . $lang_file);
+require_once( $lang_file );
+unset( $lang_file, $lang_path );
 ?>

@@ -1,11 +1,10 @@
 <?php
-/* $Id: tbl_indexes.php,v 2.24 2005/07/10 20:35:26 nijel Exp $ */
+/* $Id: tbl_indexes.php,v 2.27 2005/11/18 12:50:49 cybot_tm Exp $ */
 // vim: expandtab sw=4 ts=4 sts=4:
 
 /**
  * Gets some core libraries
  */
-require_once('./libraries/grab_globals.lib.php');
 require_once('./libraries/common.lib.php');
 require_once('./libraries/tbl_indexes.lib.php');
 
@@ -283,7 +282,7 @@ else if (!defined('PMA_IDX_INCLUDED')
     } // end for
     ?>
             </select>
-            <?php echo PMA_showMySQLDocu('Reference', 'ALTER_TABLE') . "\n"; ?>
+            <?php echo PMA_showMySQLDocu('SQL-Syntax', 'ALTER_TABLE') . "\n"; ?>
         </td>
     </tr>
 
@@ -363,7 +362,7 @@ else if (!defined('PMA_IDX_INCLUDED')
     <?php
     echo "\n";
     echo '        ' . $strIndexes . ':' . "\n";
-    echo '        ' . PMA_showMySQLDocu('MySQL_Optimisation', 'Optimising_Database_Structure') . "\n";
+    echo '        ' . PMA_showMySQLDocu('optimization', 'optimizing-database-structure') . "\n";
 ?></td></tr><?php
     $edit_link_text = '';
     $drop_link_text = '';

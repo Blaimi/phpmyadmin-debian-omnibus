@@ -1,5 +1,5 @@
 <?php
-/* $Id: get_foreign.lib.php,v 2.6 2005/06/23 14:16:33 robbat2 Exp $ */
+/* $Id: get_foreign.lib.php,v 2.9 2005/10/13 15:42:52 nijel Exp $ */
 // vim: expandtab sw=4 ts=4 sts=4:
 
 
@@ -29,14 +29,30 @@ if ($foreigners && isset($foreigners[$field])) {
 
     if ((isset($override_total) && $override_total == true) || $the_total < $cfg['ForeignKeyMaxLimit']) {
         // foreign_display can be FALSE if no display field defined:
-
         $foreign_display = PMA_getDisplayField($foreign_db, $foreign_table);
-        $dispsql         = 'SELECT ' . PMA_backquote($foreign_field)
-                         . (($foreign_display == FALSE) ? '' : ', ' . PMA_backquote($foreign_display))
-                         . ' FROM ' . PMA_backquote($foreign_db) . '.' . PMA_backquote($foreign_table)
-                         . (($foreign_display == FALSE) ? '' :' ORDER BY ' . PMA_backquote($foreign_table) . '.' . PMA_backquote($foreign_display))
-                         . (isset($foreign_limit) ? $foreign_limit : '');
-        $disp            = PMA_DBI_query($dispsql);
+
+        $f_query_main = 'SELECT ' . PMA_backquote($foreign_field)
+                        . (($foreign_display == FALSE) ? '' : ', ' . PMA_backquote($foreign_display));
+        $f_query_from = ' FROM ' . PMA_backquote($foreign_db) . '.' . PMA_backquote($foreign_table);
+        $f_query_filter = empty($foreign_filter) ? '' : ' WHERE ' . PMA_backquote($foreign_field)
+                            . ' LIKE "%' . PMA_sqlAddslashes($foreign_filter, TRUE) . '%"'
+                            . (($foreign_display == FALSE) ? '' : ' OR ' . PMA_backquote($foreign_display)
+                                . ' LIKE "%' . PMA_sqlAddslashes($foreign_filter, TRUE) . '%"'
+                                );
+        $f_query_order = ($foreign_display == FALSE) ? '' :' ORDER BY ' . PMA_backquote($foreign_table) . '.' . PMA_backquote($foreign_display);
+        $f_query_limit = isset($foreign_limit) ? $foreign_limit : '';
+
+        if (!empty($foreign_filter)) {
+            $res = PMA_DBI_query('SELECT COUNT(*)' . $f_query_from . $f_query_filter);
+            if ($res) {
+                $the_total = PMA_DBI_fetch_value($res);
+                @PMA_DBI_free_result($res);
+            } else {
+                $the_total = 0;
+            }
+        }
+
+        $disp            = PMA_DBI_query($f_query_main . $f_query_from . $f_query_filter . $f_query_order . $f_query_limit);
         if ($disp) {
             // garvin: If a resultset has been created, pre-cache it in the $disp_row array
             // This helps us from not needing to use mysql_data_seek by accessing a pre-cached

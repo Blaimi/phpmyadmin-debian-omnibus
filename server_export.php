@@ -1,20 +1,13 @@
 <?php
-/* $Id: server_export.php,v 2.4 2004/06/13 21:32:16 lem9 Exp $ */
+/* $Id: server_export.php,v 2.6 2005/11/18 12:50:49 cybot_tm Exp $ */
 // vim: expandtab sw=4 ts=4 sts=4:
-
-
-/**
- * Checks if the left frame has to be reloaded
- */
-require_once('./libraries/grab_globals.lib.php');
-
 
 /**
  * Does the common work
  */
-$js_to_run = 'functions.js';
-require('./server_common.inc.php');
+require_once('./libraries/common.lib.php');
 
+$js_to_run = 'functions.js';
 
 /**
  * Displays the links
@@ -54,7 +47,7 @@ $checkall_url = 'server_export.php?'
 
 $multi_values .= '<br />
         <a href="' . $checkall_url . '&amp;selectall=1" onclick="setSelectOptions(\'dump\', \'db_select[]\', true); return false;">' . $strSelectAll . '</a>
-        &nbsp;/&nbsp;
+        /
         <a href="' . $checkall_url . '" onclick="setSelectOptions(\'dump\', \'db_select[]\', false); return false;">' . $strUnselectAll . '</a>
         <br /><br />';
 

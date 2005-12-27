@@ -1,5 +1,37 @@
-/* $Id: functions.js,v 2.17 2005/08/14 19:31:55 lem9 Exp $ */
+/* $Id: functions.js,v 2.25 2005/11/18 13:34:08 cybot_tm Exp $ */
 
+/**
+ * @var sql_box_locked lock for the sqlbox textarea in the querybox/querywindow
+ */
+var sql_box_locked = false;
+
+/**
+ * @var array holds elements which content should only selected once
+ */
+var only_once_elements = new Array();
+
+/**
+ * selects the content of a given object, f.e. a textarea
+ *
+ * @param   object  element     element of which the content will be selected
+ * @param   var     lock        variable which holds the lock for this element
+ *                              or true, if no lock exists
+ * @param   boolean only_once   if true this is only done once
+ *                              f.e. only on first focus
+ */
+function selectContent( element, lock, only_once ) {
+	if ( only_once && only_once_elements[element.name] ) {
+		return;
+	}
+
+	only_once_elements[element.name] = true;
+
+	if ( lock  ) {
+		return;
+	}
+
+    element.select();
+}
 
 /**
  * Displays an confirmation box before to submit a "DROP DATABASE" query.
@@ -57,9 +89,9 @@ function confirmLink(theLink, theSqlQuery)
 
 
 /**
- * Displays an confirmation box before doing some action 
+ * Displays an confirmation box before doing some action
  *
- * @param   object   the message to display 
+ * @param   object   the message to display
  *
  * @return  boolean  whether to run the query or not
  */
@@ -222,7 +254,7 @@ function checkSqlQuery(theForm)
 
 
 /**
- * Check if a form's element is empty 
+ * Check if a form's element is empty
  * should be
  *
  * @param   object   the form
@@ -325,11 +357,12 @@ function checkTableEditForm(theForm, fieldsCnt)
     // on the form but has not completed at least one field name
 
     var atLeastOneField = 0;
+    var i, elm, elm2, elm3, val, id;
 
     for (i=0; i<fieldsCnt; i++)
     {
-        var id = "field_" + i + "_2";
-        var elm = getElement(id);
+        id = "field_" + i + "_2";
+        elm = getElement(id);
         if (elm.value == 'VARCHAR' || elm.value == 'CHAR') {
             elm2 = getElement("field_" + i + "_3");
             val = parseInt(elm2.value);
@@ -343,11 +376,11 @@ function checkTableEditForm(theForm, fieldsCnt)
         }
 
         if (atLeastOneField == 0) {
-            var id = "field_" + i + "_1";
+            id = "field_" + i + "_1";
             if (!emptyCheckTheField(theForm, id)) {
                 atLeastOneField = 1;
             }
-        } 
+        }
     }
     if (atLeastOneField == 0) {
         var theField = theForm.elements["field_0_1"];
@@ -431,6 +464,134 @@ function checkTransmitDump(theForm, theAction)
  */
 var marked_row = new Array;
 
+/**
+ * enables highlight and marking of rows in data tables
+ *
+ */
+function PMA_markRowsInit() {
+    // for every table row ...
+	var rows = document.getElementsByTagName('tr');
+	for ( var i = 0; i < rows.length; i++ ) {
+	    // ... with the class 'odd' or 'even' ...
+		if ( 'odd' != rows[i].className && 'even' != rows[i].className ) {
+		    continue;
+		}
+	    // ... add event listeners ...
+        // ... to highlight the row on mouseover ...
+	    if ( navigator.appName == 'Microsoft Internet Explorer' ) {
+	        // but only for IE, other browsers are handled by :hover in css
+			rows[i].onmouseover = function() {
+			    this.className += ' hover';
+			}
+			rows[i].onmouseout = function() {
+			    this.className = this.className.replace( ' hover', '' );
+			}
+	    }
+        // ... and to mark the row on click ...
+		rows[i].onmousedown = function() {
+		    var unique_id;
+            var checkbox;
+
+            checkbox = this.getElementsByTagName( 'input' )[0];
+            if ( checkbox && checkbox.type == 'checkbox' ) {
+                unique_id = checkbox.name + checkbox.value;
+            } else if ( this.id.length > 0 ) {
+                unique_id = this.id;
+            } else {
+		        return;
+		    }
+
+            if ( typeof(marked_row[unique_id]) == 'undefined' || !marked_row[unique_id] ) {
+                marked_row[unique_id] = true;
+            } else {
+                marked_row[unique_id] = false;
+            }
+
+            if ( marked_row[unique_id] ) {
+			    this.className += ' marked';
+            } else {
+			    this.className = this.className.replace(' marked', '');
+            }
+
+            if ( checkbox && checkbox.disabled == false ) {
+                checkbox.checked = marked_row[unique_id];
+            }
+		}
+
+		// ... and disable label ...
+		var labeltag = rows[i].getElementsByTagName('label')[0];
+		if ( labeltag ) {
+		    labeltag.onclick = function() {
+		        return false;
+		    }
+	    }
+	    // .. and checkbox clicks
+		var checkbox = rows[i].getElementsByTagName('input')[0];
+		if ( checkbox ) {
+		    checkbox.onclick = function() {
+		        // opera does not recognize return false;
+		        this.checked = ! this.checked;
+		    }
+	    }
+	}
+}
+window.onload=PMA_markRowsInit;
+
+/**
+ * marks all rows and selects its first checkbox inside the given element
+ * the given element is usaly a table or a div containing the table or tables
+ *
+ * @param    container    DOM element
+ */
+function markAllRows( container_id ) {
+	var rows = document.getElementById(container_id).getElementsByTagName('tr');
+    var unique_id;
+    var checkbox;
+
+	for ( var i = 0; i < rows.length; i++ ) {
+
+        checkbox = rows[i].getElementsByTagName( 'input' )[0];
+
+        if ( checkbox && checkbox.type == 'checkbox' ) {
+            unique_id = checkbox.name + checkbox.value;
+            if ( checkbox.disabled == false ) {
+                checkbox.checked = true;
+                if ( typeof(marked_row[unique_id]) == 'undefined' || !marked_row[unique_id] ) {
+                    rows[i].className += ' marked';
+                    marked_row[unique_id] = true;
+                }
+            }
+	    }
+	}
+
+	return true;
+}
+
+/**
+ * marks all rows and selects its first checkbox inside the given element
+ * the given element is usaly a table or a div containing the table or tables
+ *
+ * @param    container    DOM element
+ */
+function unMarkAllRows( container_id ) {
+	var rows = document.getElementById(container_id).getElementsByTagName('tr');
+    var unique_id;
+    var checkbox;
+
+	for ( var i = 0; i < rows.length; i++ ) {
+
+        checkbox = rows[i].getElementsByTagName( 'input' )[0];
+
+        if ( checkbox && checkbox.type == 'checkbox' ) {
+            unique_id = checkbox.name + checkbox.value;
+            checkbox.checked = false;
+            rows[i].className = rows[i].className.replace(' marked', '');
+            marked_row[unique_id] = false;
+        }
+	}
+
+	return true;
+}
 
 /**
  * Sets/unsets the pointer and marker in browse mode
@@ -693,61 +854,24 @@ function setVerticalPointer(theRow, theColNum, theAction, theDefaultColor1, theD
  } // end of the 'setVerticalPointer()' function
 
 /**
- * Checks/unchecks all tables
+ * Checks/unchecks all checkbox in given conainer (f.e. a form, fieldset or div)
  *
- * @param   string   the form name
- * @param   boolean  whether to check or to uncheck the element
- *
+ * @param   string   container_id  the container id
+ * @param   boolean  state         new value for checkbox (true or false)
  * @return  boolean  always true
  */
-function setCheckboxes(the_form, do_check)
-{
-    var elts      = (typeof(document.forms[the_form].elements['selected_db[]']) != 'undefined')
-                  ? document.forms[the_form].elements['selected_db[]']
-                  : (typeof(document.forms[the_form].elements['selected_tbl[]']) != 'undefined')
-          ? document.forms[the_form].elements['selected_tbl[]']
-          : document.forms[the_form].elements['selected_fld[]'];
-    var elts_cnt  = (typeof(elts.length) != 'undefined')
-                  ? elts.length
-                  : 0;
+function setCheckboxes( container_id, state ) {
+	var checkboxes = document.getElementById(container_id).getElementsByTagName('input');
 
-    if (elts_cnt) {
-        for (var i = 0; i < elts_cnt; i++) {
-            elts[i].checked = do_check;
-        } // end for
-    } else {
-        elts.checked        = do_check;
-    } // end if... else
+	for ( var i = 0; i < checkboxes.length; i++ ) {
+        if ( checkboxes[i].type == 'checkbox' ) {
+            checkboxes[i].checked = state;
+	    }
+	}
 
-    return true;
+	return true;
 } // end of the 'setCheckboxes()' function
 
-/**
- * Checks/unchecks all rows
- *
- * @param   string   the form name
- * @param   boolean  whether to check or to uncheck the element
- * @param   string   basename of the element
- * @param   integer  min element count
- * @param   integer  max element count
- *
- * @return  boolean  always true
- */
-// modified 2004-05-08 by Michael Keck <mail_at_michaelkeck_dot_de>
-// - set the other checkboxes (if available) too
-function setCheckboxesRange(the_form, do_check, basename, min, max)
-{
-    for (var i = min; i < max; i++) {
-        if (typeof(document.forms[the_form].elements[basename + i]) != 'undefined') {
-            document.forms[the_form].elements[basename + i].checked = do_check;
-        }
-        if (typeof(document.forms[the_form].elements[basename + i + 'r']) != 'undefined') {
-            document.forms[the_form].elements[basename + i + 'r'].checked = do_check;
-        }
-    }
-
-    return true;
-} // end of the 'setCheckboxesRange()' function
 
 // added 2004-05-08 by Michael Keck <mail_at_michaelkeck_dot_de>
 //   copy the checked from left to right or from right to left
@@ -822,6 +946,7 @@ function insertValueQuery() {
     var myListBox = document.sqlform.dummy;
 
     if(myListBox.options.length > 0) {
+    	sql_box_locked = true;
         var chaineAj = "";
         var NbSelect = 0;
         for(var i=0; i<myListBox.options.length; i++) {
@@ -850,6 +975,7 @@ function insertValueQuery() {
         } else {
             myQuery.value += chaineAj;
         }
+    	sql_box_locked = false;
     }
 }
 
@@ -938,8 +1064,8 @@ function dragPlace(no, axis, value) {
 }
 
 /**
-  * Returns paper sizes for a given format
-  */
+ * Returns paper sizes for a given format
+ */
 function pdfPaperSize(format, axis) {
     switch (format.toUpperCase()) {
         case '4A0':
@@ -1090,4 +1216,6 @@ function pdfPaperSize(format, axis) {
             if (axis == 'x') return 612.00; else return 936.00;
             break;
     } // end switch
+
+    return 0;
 }

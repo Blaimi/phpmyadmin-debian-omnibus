@@ -1,6 +1,8 @@
 <?php
-/* $Id: header.inc.php,v 2.31.2.1 2005/09/05 22:09:08 lem9 Exp $ */
+/* $Id: header.inc.php,v 2.44 2005/11/18 13:24:43 cybot_tm Exp $ */
 // vim: expandtab sw=4 ts=4 sts=4:
+
+require_once('./libraries/common.lib.php');
 
 if (empty($GLOBALS['is_header_sent'])) {
 
@@ -18,7 +20,7 @@ if (empty($GLOBALS['is_header_sent'])) {
 
     // garvin: For re-usability, moved http-headers and stylesheets
     // to a seperate file. It can now be included by header.inc.php,
-    // queryframe.php, querywindow.php.
+    // querywindow.php.
 
     require_once('./libraries/header_http.inc.php');
     require_once('./libraries/header_meta_style.inc.php');
@@ -61,11 +63,6 @@ if (empty($GLOBALS['is_header_sent'])) {
         && typeof(parent.document.title) == 'string') {
         parent.document.title = '<?php echo PMA_sanitize($title); ?>';
     }
-
-    document.write('<style type="text/css">');
-    document.write('img.lightbulb { cursor: pointer; }');
-    document.write('<\/style>');
-    
     <?php
     // Add some javascript instructions if required
     if (isset($js_to_run) && $js_to_run == 'functions.js') {
@@ -104,6 +101,7 @@ if (empty($GLOBALS['is_header_sent'])) {
     //-->
     </script>
     <script src="libraries/server_privileges.js" type="text/javascript" language="javascript"></script>
+    <script src="libraries/functions.js" type="text/javascript" language="javascript"></script>
         <?php
     } else if (isset($js_to_run) && $js_to_run == 'indexes.js') {
         echo "\n";
@@ -134,6 +132,8 @@ if (empty($GLOBALS['is_header_sent'])) {
     // Reloads the navigation frame via JavaScript if required
     PMA_reloadNavigation();
     ?>
+        <script src="libraries/tooltip.js" type="text/javascript"
+            language="javascript"></script>
         <meta name="OBGZip" content="<?php echo ($cfg['OBGzip'] ? 'true' : 'false'); ?>" />
     </head>
 
@@ -146,7 +146,7 @@ if (empty($GLOBALS['is_header_sent'])) {
     }
     ?>
     <body bgcolor="<?php echo $GLOBALS['cfg']['RightBgColor'] . '"' . $bkg_img; ?>>
-    <div id="TooltipContainer" name="TooltipContainer" onmouseover="holdTooltip();" onmouseout="swapTooltip('default');"></div>
+    <div id="TooltipContainer" onmouseover="holdTooltip();" onmouseout="swapTooltip('default');"></div>
     <?php
     include('./config.header.inc.php');
 
@@ -168,8 +168,8 @@ if (empty($GLOBALS['is_header_sent'])) {
                        );
         $item = '<a href="%1$s?%2$s" class="item">';
         if ( $GLOBALS['cfg']['NavigationBarIconic'] ) {
-            $separator = '        <span class="separator"><img src="' . $GLOBALS['pmaThemeImage'] . 'item_ltr.png" width="5" height="9" alt="-" /></span>' . "\n";
-            $item .= '        <img src="' . $GLOBALS['pmaThemeImage'] . '%5$s" width="16" height="16" alt="" border="0" /> ' . "\n";
+            $separator = '        <span class="separator"><img class="icon" src="' . $GLOBALS['pmaThemeImage'] . 'item_ltr.png" width="5" height="9" alt="-" /></span>' . "\n";
+            $item .= '        <img class="icon" src="' . $GLOBALS['pmaThemeImage'] . '%5$s" width="16" height="16" alt="" /> ' . "\n";
         } else {
             $separator = '        <span class="separator"> - </span>' . "\n";
         }
@@ -178,7 +178,7 @@ if (empty($GLOBALS['is_header_sent'])) {
             $item .= '%4$s: ';
         }
         $item .= '%3$s</a>' . "\n";
-        
+
         echo '<div id="serverinfo">' . "\n";
         printf( $item,
                 $GLOBALS['cfg']['DefaultTabServer'],
@@ -186,9 +186,9 @@ if (empty($GLOBALS['is_header_sent'])) {
                 htmlspecialchars($server_info),
                 $GLOBALS['strServer'],
                 's_host.png' );
-        
+
         if (!empty($GLOBALS['db'])) {
-            
+
             echo $separator;
             printf( $item,
                     $GLOBALS['cfg']['DefaultTabDatabase'],
@@ -196,7 +196,7 @@ if (empty($GLOBALS['is_header_sent'])) {
                     htmlspecialchars($GLOBALS['db']),
                     $GLOBALS['strDatabase'],
                     's_db.png' );
-            
+
             if (!empty($GLOBALS['table'])) {
                 require_once('./tbl_properties_table_info.php');
 
@@ -207,7 +207,7 @@ if (empty($GLOBALS['is_header_sent'])) {
                         htmlspecialchars($GLOBALS['table']),
                         (isset($GLOBALS['tbl_is_view']) && $GLOBALS['tbl_is_view'] ? $GLOBALS['strView'] : $GLOBALS['strTable']),
                         (isset($GLOBALS['tbl_is_view']) && $GLOBALS['tbl_is_view'] ? 'b_views' : 's_tbl') . '.png' );
-                                
+
                 /**
                  * Displays table comment
                  * @uses $show_comment from tbl_properties_table_info.php
@@ -217,18 +217,41 @@ if (empty($GLOBALS['is_header_sent'])) {
                     if (strstr($show_comment, '; InnoDB free')) {
                         $show_comment = preg_replace('@; InnoDB free:.*?$@' , '', $show_comment);
                     }
-                    echo '<!-- Table comment -->' . "\n"
-                       . '<span class="table_comment" id="span_table_comment">&quot;' .  htmlspecialchars($show_comment) . '&quot</span>' . "\n";
+                    echo '<span class="table_comment" id="span_table_comment">'
+                        .'&quot;' . htmlspecialchars($show_comment)
+                        .'&quot</span>' . "\n";
                 } // end if
+            } else {
+                // no table selected, display database comment if present
+                /**
+                 * Settings for relations stuff
+                 */
+                require_once('./libraries/relation.lib.php');
+                $cfgRelation = PMA_getRelationsParam();
+
+                // Get additional information about tables for tooltip is done
+                // in db_details_db_info.php only once
+                if ($cfgRelation['commwork']) {
+                    $comment = PMA_getComments( $GLOBALS['db'] );
+
+                    /**
+                     * Displays table comment
+                     */
+                    if ( is_array( $comment ) ) {
+                        echo '<span class="table_comment"'
+                            .' id="span_table_comment">&quot;'
+                            .htmlspecialchars(implode(' ', $comment))
+                            .'&quot;</span>' . "\n";
+                    } // end if
+                }
             }
         }
         echo '</div>';
-        
+
     }
     /**
      * Sets a variable to remember headers have been sent
      */
     $GLOBALS['is_header_sent'] = TRUE;
 }
-
 ?>

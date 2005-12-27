@@ -1,10 +1,11 @@
 <?php
-/* $Id: db_search.php,v 2.12 2005/07/07 01:20:29 lem9 Exp $ */
+/* $Id: db_search.php,v 2.13 2005/11/18 12:50:49 cybot_tm Exp $ */
 // vim: expandtab sw=4 ts=4 sts=4:
 /**
  * Credits for this script goes to Thomas Chaumeny <chaume92 at aol.com>
  */
 
+require_once('./libraries/common.lib.php');
 
 /**
  * Gets some core libraries and send headers

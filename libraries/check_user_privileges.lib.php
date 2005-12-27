@@ -1,22 +1,34 @@
 <?php
-/* $Id: check_user_privileges.lib.php,v 1.2 2005/07/24 12:00:48 nijel Exp $ */
+/* $Id: check_user_privileges.lib.php,v 1.7 2005/11/04 12:31:37 cybot_tm Exp $ */
 // vim: expandtab sw=4 ts=4 sts=4:
 
-// Get user's global privileges ($dbh and $userlink are links to MySQL
-// defined in the "common.lib.php" library)
+// Get user's global privileges and some db-specific privileges
+// ($dbh and $userlink are links to MySQL defined in the "common.lib.php" library)
 // Note: if no controluser is defined, $dbh contains $userlink
 
-$is_create_priv  = FALSE;
+/**
+ * returns true (int > 0) if current user is superuser
+ * otherwise 0
+ * 
+ * @return integer  $is_superuser
+ */
+function PMA_isSuperuser() {
+    return PMA_DBI_try_query( 'SELECT COUNT(*) FROM mysql.user',
+        $GLOBALS['userlink'], PMA_DBI_QUERY_STORE );
+}
+
+$is_create_db_priv  = FALSE;
 $is_process_priv = TRUE;
 $is_reload_priv  = FALSE;
 $db_to_create    = '';
+$dbs_where_create_table_allowed = array();
 
 // We were trying to find if user if superuser with 'USE mysql'
 // but users with the global priv CREATE TEMPORARY TABLES or LOCK TABLES
 // can do a 'USE mysql' (even if they cannot see the tables)
-$is_superuser    = PMA_DBI_try_query('SELECT COUNT(*) FROM mysql.user', $userlink, PMA_DBI_QUERY_STORE);
+$is_superuser    = PMA_isSuperuser();
 
-function PMA_analyseShowGrant($rs_usr, &$is_create_priv, &$db_to_create, &$is_reload_priv) {
+function PMA_analyseShowGrant($rs_usr, &$is_create_db_priv, &$db_to_create, &$is_reload_priv, &$dbs_where_create_table_allowed) {
 
     $re0 = '(^|(\\\\\\\\)+|[^\])'; // non-escaped wildcards
     $re1 = '(^|[^\])(\\\)+'; // escaped wildcards
@@ -26,19 +38,44 @@ function PMA_analyseShowGrant($rs_usr, &$is_create_priv, &$db_to_create, &$is_re
         $show_grants_str    = substr($row[0],6,(strpos($row[0],' ON ')-6));
         if (($show_grants_str == 'ALL') || ($show_grants_str == 'ALL PRIVILEGES') || ($show_grants_str == 'CREATE') || strpos($show_grants_str, 'CREATE')) {
             if ($show_grants_dbname == '*') {
-                $is_create_priv = TRUE;
+                // a global CREATE privilege
+                $is_create_db_priv = TRUE;
                 $is_reload_priv = TRUE;
                 $db_to_create   = '';
+                $dbs_where_create_table_allowed[] = '*';
                 break;
             } // end if
-            else if ( (ereg($re0 . '%|_', $show_grants_dbname)
+            else {
+                // this array may contain wildcards
+                $dbs_where_create_table_allowed[] = $show_grants_dbname;
+                
+                // before MySQL 4.1.0, we cannot use backquotes around a dbname
+                // for the USE command, so the USE will fail if the dbname contains 
+                // a "-" and we cannot detect if such a db already exists;
+                // since 4.1.0, we need to use backquotes if the dbname contains a "-"
+                // in a USE command
+
+                if (PMA_MYSQL_INT_VERSION > 40100) {
+                    $dbname_to_test = PMA_backquote($show_grants_dbname);
+                } else {
+                    $dbname_to_test = $show_grants_dbname;
+                }
+
+                if ( (ereg($re0 . '%|_', $show_grants_dbname)
                     && !ereg('\\\\%|\\\\_', $show_grants_dbname))
-                    || (!PMA_DBI_try_query('USE ' . ereg_replace($re1 .'(%|_)', '\\1\\3', $show_grants_dbname)) && substr(PMA_DBI_getError(), 1, 4) != 1044)
+                    // does this db exist?
+                    || (!PMA_DBI_try_query('USE ' .  ereg_replace($re1 .'(%|_)', '\\1\\3',$dbname_to_test),  NULL, PMA_DBI_QUERY_STORE) && substr(PMA_DBI_getError(), 1, 4) != 1044)
                     ) {
                      $db_to_create = ereg_replace($re0 . '%', '\\1...', ereg_replace($re0 . '_', '\\1?', $show_grants_dbname));
                      $db_to_create = ereg_replace($re1 . '(%|_)', '\\1\\3', $db_to_create);
-                     $is_create_priv     = TRUE;
-                     break;
+                     $is_create_db_priv     = TRUE;
+
+                     // TODO: collect $db_to_create into an array, to display a drop-down
+                     // in the "Create new database" dialog
+                     //
+                     // we don't break, we want all possible databases
+                     //break;
+                } // end if             
             } // end elseif
         } // end if
     } // end while
@@ -53,7 +90,7 @@ function PMA_analyseShowGrant($rs_usr, &$is_create_priv, &$db_to_create, &$is_re
 if (PMA_MYSQL_INT_VERSION >= 40102) {
     $rs_usr = PMA_DBI_try_query('SHOW GRANTS', $userlink, PMA_DBI_QUERY_STORE);
     if ($rs_usr) {
-        PMA_analyseShowGrant($rs_usr,$is_create_priv, $db_to_create, $is_reload_priv);
+        PMA_analyseShowGrant($rs_usr,$is_create_db_priv, $db_to_create, $is_reload_priv, $dbs_where_create_table_allowed);
         PMA_DBI_free_result($rs_usr);
         unset($rs_usr);
     }
@@ -63,17 +100,17 @@ if (PMA_MYSQL_INT_VERSION >= 40102) {
 // the controluser is correctly defined; but here, $dbh could contain
 // $userlink so maybe the SELECT will fail
 
-    if (!$is_create_priv) {
-        $res                           = PMA_DBI_query('SELECT USER();');
+    if (!$is_create_db_priv) {
+        $res                           = PMA_DBI_query('SELECT USER();', NULL, PMA_DBI_QUERY_STORE);
         list($mysql_cur_user_and_host) = PMA_DBI_fetch_row($res);
         $mysql_cur_user                = substr($mysql_cur_user_and_host, 0, strrpos($mysql_cur_user_and_host, '@'));
 
         $local_query = 'SELECT Create_priv, Reload_priv FROM mysql.user WHERE ' . PMA_convert_using('User') . ' = ' . PMA_convert_using(PMA_sqlAddslashes($mysql_cur_user), 'quoted') . ' OR ' . PMA_convert_using('User') . ' = ' . PMA_convert_using('', 'quoted') . ';';
-        $rs_usr      = PMA_DBI_try_query($local_query, $dbh); // Debug: or PMA_mysqlDie('', $local_query, FALSE);
+        $rs_usr      = PMA_DBI_try_query($local_query, $dbh, PMA_DBI_QUERY_STORE); // Debug: or PMA_mysqlDie('', $local_query, FALSE);
         if ($rs_usr) {
             while ($result_usr = PMA_DBI_fetch_assoc($rs_usr)) {
-                if (!$is_create_priv) {
-                    $is_create_priv  = ($result_usr['Create_priv'] == 'Y');
+                if (!$is_create_db_priv) {
+                    $is_create_db_priv  = ($result_usr['Create_priv'] == 'Y');
                 }
                 if (!$is_reload_priv) {
                     $is_reload_priv  = ($result_usr['Reload_priv'] == 'Y');
@@ -81,24 +118,29 @@ if (PMA_MYSQL_INT_VERSION >= 40102) {
             } // end while
             PMA_DBI_free_result($rs_usr);
             unset($rs_usr, $result_usr);
+            if ($is_create_db_priv) {
+                $dbs_where_create_table_allowed[] = '*';
+            }
         } // end if
     } // end if
 
     // If the user has Create priv on a inexistant db, show him in the dialog
     // the first inexistant db name that we find, in most cases it's probably
     // the one he just dropped :)
-    if (!$is_create_priv) {
+    if (!$is_create_db_priv) {
         $local_query = 'SELECT DISTINCT Db FROM mysql.db WHERE ' . PMA_convert_using('Create_priv') . ' = ' . PMA_convert_using('Y', 'quoted') . ' AND (' . PMA_convert_using('User') . ' = ' .PMA_convert_using(PMA_sqlAddslashes($mysql_cur_user), 'quoted') . ' OR ' . PMA_convert_using('User') . ' = ' . PMA_convert_using('', 'quoted') . ');';
+
         $rs_usr      = PMA_DBI_try_query($local_query, $dbh, PMA_DBI_QUERY_STORE);
         if ($rs_usr) {
             $re0     = '(^|(\\\\\\\\)+|[^\])'; // non-escaped wildcards
             $re1     = '(^|[^\])(\\\)+';       // escaped wildcards
             while ($row = PMA_DBI_fetch_assoc($rs_usr)) {
+                $dbs_where_create_table_allowed[] = $row['Db'];
                 if (ereg($re0 . '(%|_)', $row['Db'])
                     || (!PMA_DBI_try_query('USE ' . ereg_replace($re1 . '(%|_)', '\\1\\3', $row['Db'])) && substr(PMA_DBI_getError(), 1, 4) != 1044)) {
                     $db_to_create   = ereg_replace($re0 . '%', '\\1...', ereg_replace($re0 . '_', '\\1?', $row['Db']));
                     $db_to_create   = ereg_replace($re1 . '(%|_)', '\\1\\3', $db_to_create);
-                    $is_create_priv = TRUE;
+                    $is_create_db_priv = TRUE;
                     break;
                 } // end if
             } // end while
@@ -117,7 +159,7 @@ if (PMA_MYSQL_INT_VERSION >= 40102) {
             }
             unset($local_query);
             if ($rs_usr) {
-                PMA_analyseShowGrant($rs_usr,$is_create_priv, $db_to_create, $is_reload_priv);
+                PMA_analyseShowGrant($rs_usr,$is_create_db_priv, $db_to_create, $is_reload_priv, $dbs_where_create_table_allowed);
                 PMA_DBI_free_result($rs_usr);
                 unset($rs_usr);
             } // end if
@@ -129,6 +171,4 @@ if (PMA_MYSQL_INT_VERSION >= 40102) {
 if (!$cfg['SuggestDBName']) {
     $db_to_create = '';
 }
-
 ?>
-

@@ -1,4 +1,4 @@
-/* $Id: server_privileges.js,v 2.3 2005/05/17 16:58:01 lem9 Exp $ */
+/* $Id: server_privileges.js,v 2.5 2005/11/13 08:07:39 cybot_tm Exp $ */
 
 
 /**
@@ -59,39 +59,6 @@ function checkAddUser(the_form)
 
 
 /**
- * Checks/unchecks all checkboxes
- *
- * @param   string   the form name
- * @param   atring   the name of the array with the checlboxes
- * @param   boolean  whether to check or to uncheck the element
- *
- * @return  boolean  always true
- */
-function setCheckboxes(the_form, the_checkboxes, do_check)
-{
-    var elts      = (the_checkboxes != '')
-                  ? document.forms[the_form].elements[the_checkboxes + '[]']
-                  : document.forms[the_form].elements;
-    var elts_cnt  = (typeof(elts.length) != 'undefined')
-                  ? elts.length
-                  : 0;
-
-    if (elts_cnt) {
-        for (var i = 0; i < elts_cnt; i++) {
-            elts[i].checked = do_check;
-        } // end for
-    } else {
-        elts.checked        = do_check;
-    } // end if... else
-
-    return true;
-} // end of the 'setCheckboxes()' function
-
-
-
-
-
-/**
  * Generate a new password, which may then be copied to the form
  * with suggestPasswordCopy().
  *
@@ -99,19 +66,16 @@ function setCheckboxes(the_form, the_checkboxes, do_check)
  *
  * @return  boolean  always true
  */
-function suggestPassword(the_form)
-{
-  var pwchars = "abcdefhjmnpqrstuvwxyz23456789ABCDEFGHJKLMNPQRSTUVWYXZ.,:";
-  var passwordlength = 16;    // do we want that to be dynamic?  no, keep it simple :)
-  var passwd = '';
+function suggestPassword() {
+    var pwchars = "abcdefhjmnpqrstuvwxyz23456789ABCDEFGHJKLMNPQRSTUVWYXZ.,:";
+    var passwordlength = 16;    // do we want that to be dynamic?  no, keep it simple :)
+    var passwd = document.getElementById('generated_pw');
+    passwd.value = '';
 
-  for (i=0;i<passwordlength;i++)
-  {
-    passwd+=pwchars.charAt(Math.floor(Math.random()*pwchars.length))
-  }
-
-  the_form.generated_pw.value = passwd;
-  return true;
+    for ( i = 0; i < passwordlength; i++ ) {
+        passwd.value += pwchars.charAt( Math.floor( Math.random() * pwchars.length ) )
+    }
+    return passwd.value;
 }
 
 
@@ -122,10 +86,8 @@ function suggestPassword(the_form)
  *
  * @return  boolean  always true
  */
-function suggestPasswordCopy(the_form) 
-{
-  the_form.pma_pw.value = the_form.generated_pw.value;
-  the_form.pma_pw2.value = the_form.generated_pw.value;
-  return true;
+function suggestPasswordCopy() {
+    document.getElementById('text_pma_pw').value = document.getElementById('generated_pw').value;
+    document.getElementById('text_pma_pw2').value = document.getElementById('generated_pw').value;
+    return true;
 }
-

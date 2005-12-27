@@ -1,5 +1,5 @@
 <?php
-/* $Id: common.lib.php,v 2.151.2.1 2005/10/21 02:40:23 lem9 Exp $ */
+/* $Id: common.lib.php,v 2.211 2005/11/20 11:52:17 cybot_tm Exp $ */
 // vim: expandtab sw=4 ts=4 sts=4:
 
 /**
@@ -48,16 +48,12 @@
  */
 
 // grab_globals.lib.php should really go before common.lib.php
-// TODO: remove direct calling from elsewhere
 require_once('./libraries/grab_globals.lib.php');
 
 /**
- * Minimum inclusion? (i.e. for the stylesheet builder)
+ * @var array   $GLOBALS['PMA_errors']  holds errors
  */
-
-if (!isset($is_minimum_common)) {
-    $is_minimum_common = FALSE;
-}
+$GLOBALS['PMA_errors'] = array();
 
 /**
  * Avoids undefined variables
@@ -76,13 +72,22 @@ if (!isset($pos)) {
 unset($cfg);
 
 /**
- * Detects the config file we want to load
+ * Added messages while developing:
  */
-if (file_exists('./config.inc.developer.php')) {
-    $cfgfile_to_load = 'config.inc.developer.php';
-} else {
-    $cfgfile_to_load = 'config.inc.php';
+if (file_exists('./lang/added_messages.php')) {
+    include('./lang/added_messages.php');
 }
+
+/**
+ * Set default configuration values.
+ */
+include './config.default.php';
+
+// Remember default server config
+$default_server = $cfg['Servers'][1];
+
+// Drop all server, as they have to be configured by user
+unset($cfg['Servers']);
 
 /**
  * Parses the configuration file and gets some constants used to define
@@ -90,51 +95,92 @@ if (file_exists('./config.inc.developer.php')) {
  */
 $old_error_reporting = error_reporting(0);
 // We can not use include as it fails on parse error
-$config_fd = fopen($cfgfile_to_load, 'r');
-$result = eval('?>' . fread($config_fd, filesize($cfgfile_to_load)));
-fclose($config_fd);
-// Eval failed
-if ($result === FALSE || (!isset($cfgServers) && !isset($cfg['Servers']))) {
-    // Creates fake settings
-    $cfg = array('DefaultLang'           => 'en-iso-8859-1',
-                    'AllowAnywhereRecoding' => FALSE);
-    // Loads the language file
-    require_once('./libraries/select_lang.lib.php');
-    // Displays the error message
-    // (do not use &amp; for parameters sent by header)
-    header( 'Location: error.php'
-            . '?lang='  . urlencode( $available_languages[$lang][2] )
-            . '&char='  . urlencode( $charset )
-            . '&dir='   . urlencode( $text_dir )
-            . '&type='  . urlencode( $strError )
-            . '&error=' . urlencode( strtr($strConfigFileError, array('<br />' => '[br]')) . '[br][br]' . '[a@' . $cfgfile_to_load . '@_blank]' . $cfgfile_to_load . '[/a]' )
-             );
-    exit();
-}
-error_reporting($old_error_reporting);
-unset($old_error_reporting, $cfgfile_to_load);
+if (file_exists('./config.inc.php')) {
+    $config_fd = fopen('./config.inc.php', 'r');
+    $result = eval('?>' . fread($config_fd, filesize('./config.inc.php')));
+    fclose( $config_fd );
+    unset( $config_fd );
 
-/**
- * Includes compatibility code for older config.inc.php revisions
- * if necessary
- */
-if (isset($cfg['FileRevision'])) {
-    // converting revision string into an array
-    //     e.g. "Revision: 2.0" becomes array(2, 0).
-    $cfg['FileRevision'] = str_replace('$' . 'Revision: ', '', $cfg['FileRevision']);
-    $cfg['FileRevision'] = str_replace(' $', '', $cfg['FileRevision']);
-    $cfg['FileRevision'] = explode('.', $cfg['FileRevision']);
-} else {
-    $cfg['FileRevision'] = array(1, 1);
-}
-if ($cfg['FileRevision'][0] < 2 || ($cfg['FileRevision'][0] == 2 && $cfg['FileRevision'][1] < 64)) {
-    require_once('./libraries/config_import.lib.php');
+    // Eval failed
+    if ($result === FALSE || !isset($cfg['Servers'])) {
+        // Creates fake settings
+        $cfg = array('DefaultLang'           => 'en-iso-8859-1',
+                        'AllowAnywhereRecoding' => FALSE);
+        // Loads the language file
+        require_once('./libraries/select_lang.lib.php');
+        // Displays the error message
+        // (do not use &amp; for parameters sent by header)
+        header( 'Location: error.php'
+                . '?lang='  . urlencode( $available_languages[$lang][2] )
+                . '&char='  . urlencode( $charset )
+                . '&dir='   . urlencode( $text_dir )
+                . '&type='  . urlencode( $strError )
+                . '&error=' . urlencode(
+                    strtr( $strConfigFileError, array( '<br />' => '[br]' ) )
+                    . '[br][br]' . '[a@./config.inc.php@_blank]config.inc.php[/a]' )
+                . '&' . SID
+                 );
+        exit();
+    }
+    error_reporting($old_error_reporting);
+    unset( $old_error_reporting, $result );
 }
 
 /**
  * Includes the language file if it hasn't been included yet
  */
 require_once('./libraries/select_lang.lib.php');
+
+/**
+ * Servers array fixups.
+ */
+// Do we have some server?
+if (!isset($cfg['Servers']) || count($cfg['Servers']) == 0) {
+    // No server => create one with defaults
+    $cfg['Servers'] = array(1 => $default_server);
+} else {
+    // We have server(s) => apply default config
+    $new_servers = array();
+    foreach($cfg['Servers'] as $key => $val) {
+        if (!is_int($key) || $key < 1) {
+            // Show error
+            header( 'Location: error.php'
+                    . '?lang='  . urlencode( $available_languages[$lang][2] )
+                    . '&char='  . urlencode( $charset )
+                    . '&dir='   . urlencode( $text_dir )
+                    . '&type='  . urlencode( $strError )
+                    . '&error=' . urlencode(
+// FIXME: We could translate this message, however it's translations freeze right now:
+                        sprintf( 'Invalid server index: "%s"', $key))
+                    . '&' . SID
+                     );
+        }
+        $new_servers[$key] = array_merge($default_server, $val);
+    }
+    $cfg['Servers'] = $new_servers;
+    unset( $new_servers, $key, $val );
+}
+
+// Cleanup
+unset($default_server);
+
+/**
+ * We really need this one!
+ */
+if (!function_exists('preg_replace')) {
+    header( 'Location: error.php'
+        . '?lang='  . urlencode( $available_languages[$lang][2] )
+        . '&char='  . urlencode( $charset )
+        . '&dir='   . urlencode( $text_dir )
+        . '&type='  . urlencode( $strError )
+        . '&error=' . urlencode(
+            strtr( sprintf( $strCantLoad, 'pcre' ),
+                array('<br />' => '[br]') ) )
+        . '&' . SID
+         );
+    exit();
+}
+
 /**
  * Gets constants that defines the PHP version number.
  * This include must be located physically before any code that needs to
@@ -150,7 +196,7 @@ if (isset($convcharset)) {
     $convcharset = PMA_sanitize($convcharset);
 }
 
-if ($is_minimum_common == FALSE) {
+if ( ! defined( 'PMA_MINIMUM_COMMON' ) ) {
     /**
      * Define $is_upload
      */
@@ -343,6 +389,7 @@ $tmp_layout_file = $cfg['ThemePath'] . '/' . $GLOBALS['theme'] . '/layout.inc.ph
 if (@file_exists($tmp_layout_file)) {
     include($tmp_layout_file);
 }
+unset( $tmp_layout_file );
 if (!is_dir($pmaThemeImage)) {
     $pmaThemeImage = $cfg['ThemePath'] . '/original/img/';
 }
@@ -358,7 +405,7 @@ if (isset($_COOKIE) && !empty($_COOKIE['pma_collation_connection']) && empty($_P
 }
 
 
-if ($is_minimum_common == FALSE) {
+if ( ! defined( 'PMA_MINIMUM_COMMON' ) ) {
     /**
      * Include URL/hidden inputs generating.
      */
@@ -375,7 +422,7 @@ if ($is_minimum_common == FALSE) {
      *                   (converts \n to \\n, \r to \\r)
      *
      * @param   boolean  whether this function is used as part of the
-     *                   "Create PHP code" dialog 
+     *                   "Create PHP code" dialog
      *
      * @return  string   the slashed string
      *
@@ -396,10 +443,10 @@ if ($is_minimum_common == FALSE) {
         }
 
         if ($php_code) {
-            $a_string = str_replace('\'', '\\\'', $a_string); 
+            $a_string = str_replace('\'', '\\\'', $a_string);
         } else {
             $a_string = str_replace('\'', '\'\'', $a_string);
-        } 
+        }
 
         return $a_string;
     } // end of the 'PMA_sqlAddslashes()' function
@@ -424,6 +471,21 @@ if ($is_minimum_common == FALSE) {
         return $name;
     } // end of the 'PMA_escape_mysql_wildcards()' function
 
+    /**
+     * removes slashes before "_" and "%" characters
+     * Note: This function does not unescape backslashes!
+     *
+     * @param   string   $name  the string to escape
+     * @return  string   the escaped string
+     * @access  public
+     */
+    function PMA_unescape_mysql_wildcards( $name )
+    {
+        $name = str_replace('\\_', '_', $name);
+        $name = str_replace('\\%', '%', $name);
+
+        return $name;
+    } // end of the 'PMA_unescape_mysql_wildcards()' function
 
     /**
      * format sql strings
@@ -487,70 +549,60 @@ if ($is_minimum_common == FALSE) {
     /**
      * Displays a link to the official MySQL documentation
      *
-     * @param   chapter of "HTML, one page per chapter" documentation
-     * @param   contains name of page/anchor that is being linked
+     * @param string  chapter of "HTML, one page per chapter" documentation
+     * @param string  contains name of page/anchor that is being linked
+     * @param bool    whether to use big icon (like in left frame)
      *
      * @return  string  the html link
      *
      * @access  public
      */
-// 2004-05-04: replaced with a modified function from Michael Keck (mkkeck)
-        function PMA_showMySQLDocu($chapter, $link)
-        {
+    function PMA_showMySQLDocu($chapter, $link, $big_icon = FALSE)
+    {
+        global $cfg;
 
-            if (!empty($GLOBALS['cfg']['MySQLManualBase'])) {
-                if (!empty($GLOBALS['cfg']['MySQLManualType'])) {
-                    switch ($GLOBALS['cfg']['MySQLManualType']) {
-                        case 'old':
-                            if ($GLOBALS['cfg']['ReplaceHelpImg']) {
-                                return '<a href="' . $GLOBALS['cfg']['MySQLManualBase'] . '/' . $link[0] . '/' . $link[1] . '/' . $link . '.html" target="mysql_doc"><img src="' . $GLOBALS['pmaThemeImage'] . 'b_help.png" width="11" height="11" border="0" alt="' . $GLOBALS['strDocu'] . '" title="' . $GLOBALS['strDocu'] . '" hspace="2" align="middle" /></a>';
-                            }else{
-                                return '[<a href="' . $GLOBALS['cfg']['MySQLManualBase'] . '/' . $link[0] . '/' . $link[1] . '/' . $link . '.html" target="mysql_doc">' . $GLOBALS['strDocu'] . '</a>]';
-                           }
-                        case 'chapters':
-                            if ($GLOBALS['cfg']['ReplaceHelpImg']) {
-                                return '<a href="' . $GLOBALS['cfg']['MySQLManualBase'] . '/manual_' . $chapter . '.html#' . $link . '" target="mysql_doc"><img src="' . $GLOBALS['pmaThemeImage'] . 'b_help.png" width="11" height="11" border="0" alt="' . $GLOBALS['strDocu'] . '" title="' . $GLOBALS['strDocu'] . '" hspace="2" align="middle" /></a>';
-                           } else {
-                               return '[<a href="' . $GLOBALS['cfg']['MySQLManualBase'] . '/manual_' . $chapter . '.html#' . $link . '" target="mysql_doc">' . $GLOBALS['strDocu'] . '</a>]'; }
-                        case 'big':
-                            if ($GLOBALS['cfg']['ReplaceHelpImg']) {
-                                return '<a href="' . $GLOBALS['cfg']['MySQLManualBase'] . '#' . $link . '" target="mysql_doc"><img src="' . $GLOBALS['pmaThemeImage'] . 'b_help.png" width="11" height="11" border="0" alt="' . $GLOBALS['strDocu'] . '" title="' . $GLOBALS['strDocu'] . '" hspace="2" align="middle" /></a>';
-                            } else {
-                                return '[<a href="' . $GLOBALS['cfg']['MySQLManualBase'] . '#' . $link . '" target="mysql_doc">' . $GLOBALS['strDocu'] . '</a>]';
-                            }
-                        case 'none':
-                            return '';
-                        case 'searchable':
-                        default:
-                            if ($GLOBALS['cfg']['ReplaceHelpImg']) {
-                                return '<a href="' . $GLOBALS['cfg']['MySQLManualBase'] . '/' . $link . '.html" target="mysql_doc"><img src="' . $GLOBALS['pmaThemeImage'] . 'b_help.png" width="11" height="11" border="0" alt="' . $GLOBALS['strDocu'] . '" title="' . $GLOBALS['strDocu'] . '" hspace="2" align="middle" /></a>';
-                            } else {
-                                return '[<a href="' . $GLOBALS['cfg']['MySQLManualBase'] . '/' . $link . '.html" target="mysql_doc">' . $GLOBALS['strDocu'] . '</a>]';
-                            }
-                    }
-                } else {
-                    // no Type defined, show the old one
-                    if ($GLOBALS['cfg']['ReplaceHelpImg']) {
-                        return '<a href="' . $GLOBALS['cfg']['MySQLManualBase'] . '/' . $link[0] . '/' . $link[1] . '/' . $link . '.html" target="mysql_doc"><img src="' . $GLOBALS['pmaThemeImage'] . 'b_help.png" width="11" height="11" border="0" alt="' . $GLOBALS['strDocu'] . '" title="' . $GLOBALS['strDocu'] . '" hspace="2" align="middle" /></a>';
-                    } else {
-                        return '[<a href="' . $GLOBALS['cfg']['MySQLManualBase'] . '/' . $link[0] . '/' . $link[1] . '/' . $link . '.html" target="mysql_doc">' . $GLOBALS['strDocu'] . '</a>]';
-                    }
+        if ($cfg['MySQLManualType'] == 'none' || empty($cfg['MySQLManualBase'])) return '';
+
+        // Fixup for newly used names:
+        $chapter = str_replace('_', '-', strtolower($chapter));
+        $link = str_replace('_', '-', strtolower($link));
+
+        switch ($cfg['MySQLManualType']) {
+            case 'chapters':
+                if (empty($chapter)) $chapter = 'index';
+                $url = $cfg['MySQLManualBase'] . '/' . $chapter . '.html#' . $link;
+                break;
+            case 'big':
+                $url = $cfg['MySQLManualBase'] . '#' . $link;
+                break;
+            case 'searchable':
+                if (empty($link)) $link = 'index';
+                $url = $cfg['MySQLManualBase'] . '/' . $link . '.html';
+                break;
+            case 'viewable':
+            default:
+                if (empty($link)) $link = 'index';
+                $mysql = '4.1';
+                if ( ! defined( 'PMA_MYSQL_INT_VERSION' )
+                  || PMA_MYSQL_INT_VERSION < 50000 ) {
+                    $mysql = '4.1';
+                } elseif (PMA_MYSQL_INT_VERSION >= 50100) {
+                    $mysql = '5.1';
+                } elseif (PMA_MYSQL_INT_VERSION >= 50000) {
+                    $mysql = '5.0';
                 }
-            } else {
-                // no URL defined
-                if (!empty($GLOBALS['cfg']['ManualBaseShort'])) {
-                    // the old configuration
-                    if ($GLOBALS['cfg']['ReplaceHelpImg']) {
-                        return '<a href="' . $GLOBALS['cfg']['MySQLManualBase'] . '/' . $link[0] . '/' . $link[1] . '/' . $link . '.html" target="mysql_doc"><img src="' . $GLOBALS['pmaThemeImage'] . 'b_help.png" width="11" height="11" border="0" alt="' . $GLOBALS['strDocu'] . '" title="' . $GLOBALS['strDocu'] . '" hspace="2" align="middle" /></a>';
-                    } else {
-                        return '[<a href="' . $GLOBALS['cfg']['MySQLManualBase'] . '/' . $link[0] . '/' . $link[1] . '/' . $link . '.html" target="mysql_doc">' . $GLOBALS['strDocu'] . '</a>]';
-                   }
-                } else {
-                    return '';
-                }
-            }
+                $url = $cfg['MySQLManualBase'] . '/' . $mysql . '/en/' . $link . '.html';
+                break;
         }
-                 // end of the 'PMA_showDocu()' function
+
+        if ($big_icon) {
+            return '<a href="' . $url . '" target="mysql_doc"><img class="icon" src="' . $GLOBALS['pmaThemeImage'] . 'b_sqlhelp.png" width="16" height="16" alt="' . $GLOBALS['strDocu'] . '" title="' . $GLOBALS['strDocu'] . '" /></a>';
+        } elseif ($GLOBALS['cfg']['ReplaceHelpImg']) {
+            return '<a href="' . $url . '" target="mysql_doc"><img class="icon" src="' . $GLOBALS['pmaThemeImage'] . 'b_help.png" width="11" height="11" alt="' . $GLOBALS['strDocu'] . '" title="' . $GLOBALS['strDocu'] . '" /></a>';
+        }else{
+            return '[<a href="' . $url . '" target="mysql_doc">' . $GLOBALS['strDocu'] . '</a>]';
+        }
+    } // end of the 'PMA_showMySQLDocu()' function
 
     /**
      * Displays a hint icon, on mouse over show the hint
@@ -562,7 +614,7 @@ if ($is_minimum_common == FALSE) {
      function PMA_showHint($hint_message)
      {
          //return '<img class="lightbulb" src="' . $GLOBALS['pmaThemeImage'] . 'b_tipp.png" width="16" height="16" border="0" alt="' . $hint_message . '" title="' . $hint_message . '" align="middle" onclick="alert(\'' . PMA_jsFormat($hint_message, FALSE) . '\');" />';
-         return '<img class="lightbulb" src="' . $GLOBALS['pmaThemeImage'] . 'b_tipp.png" width="16" height="16" border="0" alt="Tip" title="Tip" align="middle" onmouseover="pmaTooltip(\'' .  PMA_jsFormat($hint_message, FALSE) . '\'); return false;" onmouseout="swapTooltip(\'default\'); return false;" />';
+         return '<img class="lightbulb" src="' . $GLOBALS['pmaThemeImage'] . 'b_tipp.png" width="16" height="16" alt="Tip" title="Tip" onmouseover="pmaTooltip(\'' .  PMA_jsFormat($hint_message, FALSE) . '\'); return false;" onmouseout="swapTooltip(\'default\'); return false;" />';
      }
 
     /**
@@ -598,17 +650,14 @@ if ($is_minimum_common == FALSE) {
         // Revised, Robbat2 - 13 January 2003, 2:59PM
         if (!function_exists('PMA_SQP_isError') || PMA_SQP_isError()) {
             $formatted_sql = htmlspecialchars($the_query);
+        } elseif (empty($the_query) || trim($the_query) == '') {
+            $formatted_sql = '';
         } else {
-            $formatted_sql = PMA_formatSql(PMA_SQP_parse(PMA_sanitize($the_query)), $the_query);
+            $formatted_sql = PMA_formatSql(PMA_SQP_parse($the_query), $the_query);
         }
         // ---
         echo "\n" . '<!-- PMA-SQL-ERROR -->' . "\n";
-        echo '    <table border="0" cellpadding="2" cellspacing="1">'
-           . '        <tr>' . "\n"
-           . '            <th class="tblHeadError"><div class="errorhead">' . $GLOBALS['strError'] . '</div></th>' . "\n"
-           . '        </tr>' . "\n"
-           . '        <tr>' . "\n"
-           . '            <td>';
+        echo '    <div class="error"><h1>' . $GLOBALS['strError'] . '</h1>' . "\n";
         // if the config password is wrong, or the MySQL server does not
         // respond, do not show the query that would reveal the
         // username/password
@@ -617,14 +666,14 @@ if ($is_minimum_common == FALSE) {
             // Robbat2 - 12 January 2003, 9:46PM
             // Revised, Robbat2 - 13 January 2003, 2:59PM
             if (function_exists('PMA_SQP_isError') && PMA_SQP_isError()) {
-                echo PMA_SQP_getErrorString();
+                echo PMA_SQP_getErrorString() . "\n";
+                echo '<br />' . "\n";
             }
             // ---
             // modified to show me the help on sql errors (Michael Keck)
-            echo '<div class="tblWarn"><p>' . "\n";
-            echo '    <b>' . $GLOBALS['strSQLQuery'] . ':</b>' . "\n";
+            echo '    <p><strong>' . $GLOBALS['strSQLQuery'] . ':</strong>' . "\n";
             if (strstr(strtolower($formatted_sql),'select')) { // please show me help to the error on select
-                echo PMA_showMySQLDocu('Reference', 'SELECT');
+                echo PMA_showMySQLDocu('SQL-Syntax', 'SELECT');
             }
             if ($is_modify_link && isset($db)) {
                 if (isset($table)) {
@@ -634,7 +683,7 @@ if ($is_minimum_common == FALSE) {
                 }
                 if ($GLOBALS['cfg']['PropertiesIconic']) {
                     echo $doedit_goto
-                       . '<img src=" '. $GLOBALS['pmaThemeImage'] . 'b_edit.png" width="16" height="16" border="0" hspace="2" align="middle" alt="' . $GLOBALS['strEdit'] .'" />'
+                       . '<img class="icon" src=" '. $GLOBALS['pmaThemeImage'] . 'b_edit.png" width="16" height="16" alt="' . $GLOBALS['strEdit'] .'" />'
                        . '</a>';
                 } else {
                     echo '    ['
@@ -642,10 +691,10 @@ if ($is_minimum_common == FALSE) {
                        . ']' . "\n";
                 }
             } // end if
-            echo '</p>' . "\n"
-                    . '<p>' . "\n"
-                    . '    ' . $formatted_sql . "\n"
-                    . '</p></div>' . "\n";
+            echo '    </p>' . "\n"
+                .'    <p>' . "\n"
+                .'        ' . $formatted_sql . "\n"
+                .'    </p>' . "\n";
         } // end if
 
         $tmp_mysql_error = ''; // for saving the original $error_message
@@ -655,8 +704,8 @@ if ($is_minimum_common == FALSE) {
             $error_message = preg_replace("@((\015\012)|(\015)|(\012)){3,}@", "\n\n", $error_message);
         }
         // modified to show me the help on error-returns (Michael Keck)
-        echo '<div class="tblWarn"><p>' . "\n"
-                . '    <b>' . $GLOBALS['strMySQLSaid'] . '</b>'
+        echo '<p>' . "\n"
+                . '    <strong>' . $GLOBALS['strMySQLSaid'] . '</strong>'
                 . PMA_showMySQLDocu('Error-returns', 'Error-returns')
                 . "\n"
                 . '</p>' . "\n";
@@ -681,47 +730,43 @@ if ($is_minimum_common == FALSE) {
         // 2005-01-17 modified by mkkeck bugfix
         if (substr($error_message, 1, 4) == '1062') {
             // get the duplicate entry
-            $mysql_error_values = array();
-            $mysql_error_words  = explode(' ',$tmp_mysql_error);
-            foreach ($mysql_error_words as $mysql_error_word) {
-                if (strstr($mysql_error_word, "'")) {
-                   $mysql_error_values = explode('-', preg_replace("/'/", "", $mysql_error_word));
-                   break; // exit 'foreach'
-                }
-            }
-            $duplicate_sql_query = '';
-            if (isset($mysql_error_values[0])) {
-                $tmp_fields = PMA_DBI_get_fields($db, $table, NULL);
-                if ($tmp_fields) {
-                    foreach ($tmp_fields as $tmp_field) {
-                        $duplicate_sql_query .= (($duplicate_sql_query!='') ? ' OR ' : '') . PMA_backquote($tmp_field['Field']) . " LIKE '" . $mysql_error_values[0] . "'";
-                    }
-                }
-            }
-            if ($duplicate_sql_query!='') {
-                $duplicate_sql_query = "SELECT * FROM " . PMA_backquote($table) . " WHERE (" . $duplicate_sql_query . ")";
-            } else {
-                $duplicate_sql_query = "SELECT * FROM " . PMA_backquote($table) . "";
-            }
-            echo '        <form method="post" action="read_dump.php" style="padding: 0px; margin: 0px">' ."\n"
-                    . '            <input type="hidden" name="sql_query" value="' . $duplicate_sql_query . '" />' . "\n"
-                    . '            ' . PMA_generate_common_hidden_inputs($db, $table) . "\n"
-                    . '            <input type="submit" name="submit" value="' . $GLOBALS['strBrowse'] . '" />' . "\n"
-                    . '        </form>' . "\n";
+
+            // get table name
+            preg_match( '°ALTER\sTABLE\s\`([^\`]+)\`°iu', $the_query, $error_table = array() );
+            $error_table = $error_table[1];
+
+            // get fields
+            preg_match( '°\(([^\)]+)\)°i', $the_query, $error_fields = array() );
+            $error_fields = explode( ',', $error_fields[1] );
+
+            // duplicate value
+            preg_match( '°\'([^\']+)\'°i', $tmp_mysql_error, $duplicate_value = array() );
+            $duplicate_value = $duplicate_value[1];
+
+            $sql = '
+                 SELECT *
+                   FROM ' . PMA_backquote( $error_table ) . '
+                  WHERE CONCAT_WS( "-", ' . implode( ', ', $error_fields ) . ' )
+                        = "' . PMA_sqlAddslashes( $duplicate_value ) . '"
+               ORDER BY ' . implode( ', ', $error_fields );
+            unset( $error_table, $error_fields, $duplicate_value );
+
+            echo '        <form method="post" action="import.php" style="padding: 0; margin: 0">' ."\n"
+                .'            <input type="hidden" name="sql_query" value="' . htmlentities( $sql ) . '" />' . "\n"
+                .'            ' . PMA_generate_common_hidden_inputs($db, $table) . "\n"
+                .'            <input type="submit" name="submit" value="' . $GLOBALS['strBrowse'] . '" />' . "\n"
+                .'        </form>' . "\n";
+            unset( $sql );
         } // end of show duplicate entry
 
         echo '</div>';
+        echo '<fieldset class="tblFooters">';
 
         if (!empty($back_url) && $exit) {
-            $goto_back_url='<a href="' . (strstr($back_url, '?') ? $back_url . '&amp;no_history=true' : $back_url . '?no_history=true') . '">&nbsp;';
-            echo '            </td> ' . "\n"
-               . '        </tr>' . "\n"
-               . '        <tr><td class="tblHeaders" align="center">';
-            echo '[' . $goto_back_url . $GLOBALS['strBack'] . '&nbsp;</a>]';
+            $goto_back_url='<a href="' . (strstr($back_url, '?') ? $back_url . '&amp;no_history=true' : $back_url . '?no_history=true') . '">';
+            echo '[ ' . $goto_back_url . $GLOBALS['strBack'] . '</a> ]';
         }
-        echo '            </td>' . "\n"
-           . '        </tr>' . "\n"
-           . '    </table>' . "\n\n";
+        echo '    </fieldset>' . "\n\n";
         if ($exit) {
             require_once('./footer.inc.php');
         }
@@ -779,6 +824,137 @@ if ($is_minimum_common == FALSE) {
     } // end function
 
 }
+
+/**
+ * returns array with dbs grouped with extended infos
+ *
+ * @uses    $GLOBALS['dblist'] from PMA_availableDatabases()
+ * @uses    $GLOBALS['num_dbs'] from PMA_availableDatabases()
+ * @uses    $GLOBALS['cfgRelation']['commwork']
+ * @uses    $GLOBALS['cfg']['ShowTooltip']
+ * @uses    $GLOBALS['cfg']['LeftFrameDBTree']
+ * @uses    $GLOBALS['cfg']['LeftFrameDBSeparator']
+ * @uses    $GLOBALS['cfg']['ShowTooltipAliasDB']
+ * @uses    PMA_availableDatabases()
+ * @uses    PMA_getTableCount()
+ * @uses    PMA_getComments()
+ * @uses    PMA_availableDatabases()
+ * @uses    is_array()
+ * @uses    implode()
+ * @uses    strstr()
+ * @uses    explode()
+ * @return  array   db list
+ */
+function PMA_getDbList() {
+    if ( empty( $GLOBALS['dblist'] ) ) {
+        PMA_availableDatabases();
+    }
+    $dblist     = $GLOBALS['dblist'];
+    $dbgroups   = array();
+    $parts      = array();
+    foreach ( $dblist as $key => $db ) {
+        // garvin: Get comments from PMA comments table
+        $db_tooltip = '';
+        if ( $GLOBALS['cfg']['ShowTooltip']
+          && $GLOBALS['cfgRelation']['commwork'] ) {
+            $_db_tooltip = PMA_getComments( $db );
+            if ( is_array( $_db_tooltip ) ) {
+                $db_tooltip = implode( ' ', $_db_tooltip );
+            }
+        }
+
+        if ( $GLOBALS['cfg']['LeftFrameDBTree']
+            && $GLOBALS['cfg']['LeftFrameDBSeparator']
+            && strstr( $db, $GLOBALS['cfg']['LeftFrameDBSeparator'] ) )
+        {
+            $pos            = strrpos($db, $GLOBALS['cfg']['LeftFrameDBSeparator']);
+            $group          = substr($db, 0, $pos);
+            $disp_name_cut  = substr($db, $pos);
+        } else {
+            $group          = $db;
+            $disp_name_cut  = $db;
+        }
+
+        $disp_name  = $db;
+        if ( $db_tooltip && $GLOBALS['cfg']['ShowTooltipAliasDB'] ) {
+            $disp_name      = $db_tooltip;
+            $disp_name_cut  = $db_tooltip;
+            $db_tooltip     = $db;
+        }
+
+        $dbgroups[$group][$db] = array(
+            'name'          => $db,
+            'disp_name_cut' => $disp_name_cut,
+            'disp_name'     => $disp_name,
+            'comment'       => $db_tooltip,
+            'num_tables'    => PMA_getTableCount( $db ),
+        );
+    } // end foreach ( $dblist as $db )
+    return $dbgroups;
+}
+
+/**
+ * returns html code for select form element with dbs
+ *
+ * @return  string  html code select
+ */
+function PMA_getHtmlSelectDb( $selected = '' ) {
+    $dblist = PMA_getDbList();
+    // TODO: IE can not handle different text directions in select boxes
+    // so, as mostly names will be in english, we set the whole selectbox to LTR
+    // and EN
+    $return = '<select name="db" id="lightm_db" xml:lang="en" dir="ltr"'
+        .' onchange="window.parent.openDb( this.value );">' . "\n"
+        .'<option value="" dir="' . $GLOBALS['text_dir'] . '">(' . $GLOBALS['strDatabases'] . ') ...</option>'
+        ."\n";
+    foreach( $dblist as $group => $dbs ) {
+        if ( count( $dbs ) > 1 ) {
+            $return .= '<optgroup label="' . htmlspecialchars( $group )
+                . '">' . "\n";
+            // wether display db_name cuted by the group part
+            $cut = true;
+        } else {
+            // .. or full
+            $cut = false;
+        }
+        foreach( $dbs as $db ) {
+            $return .= '<option value="' . $db['name'] . '"'
+                .' title="' . $db['comment'] . '"';
+            if ( $db['name'] == $selected ) {
+                $return .= ' selected="selected"';
+            }
+            $return .= '>' . ( $cut ? $db['disp_name_cut'] : $db['disp_name'] )
+                .' (' . $db['num_tables'] . ')</option>' . "\n";
+        }
+        if ( count( $dbs ) > 1 ) {
+            $return .= '</optgroup>' . "\n";
+        }
+    }
+    $return .= '</select>';
+
+    return $return;
+}
+
+/**
+ * returns count of tables in given db
+ *
+ * @param   string  $db database to count tables for
+ * @return  integer count of tables in $db
+ */
+function PMA_getTableCount( $db ) {
+    $tables = PMA_DBI_try_query(
+        'SHOW TABLES FROM ' . PMA_backquote( $db ) . ';',
+        NULL, PMA_DBI_QUERY_STORE);
+    if ( $tables ) {
+        $num_tables = PMA_DBI_num_rows( $tables );
+        PMA_DBI_free_result( $tables );
+    } else {
+        $num_tables = 0;
+    }
+
+    return $num_tables;
+}
+
 
 /**
  * Get the complete list of Databases a user can access
@@ -968,7 +1144,8 @@ function PMA_setFontSizes()
     else if ((PMA_USR_OS == 'Mac'
                 && ((PMA_USR_BROWSER_AGENT != 'IE' && PMA_USR_BROWSER_AGENT != 'MOZILLA')
                     || PMA_USR_BROWSER_VER < 5))
-            || PMA_USR_BROWSER_AGENT == 'KONQUEROR') {
+            || PMA_USR_BROWSER_AGENT == 'KONQUEROR'
+            || PMA_USR_BROWSER_AGENT == 'MOZILLA') {
         $font_size     = 'medium';
         $font_biggest  = 'x-large';
         $font_bigger   = 'large';
@@ -996,7 +1173,7 @@ function PMA_setFontSizes()
 } // end of the 'PMA_setFontSizes()' function
 
 
-if ($is_minimum_common == FALSE) {
+if ( ! defined( 'PMA_MINIMUM_COMMON' ) ) {
     /**
      * $cfg['PmaAbsoluteUri'] is a required directive else cookies won't be
      * set properly and, depending on browsers, inserting or updating a
@@ -1039,7 +1216,10 @@ if ($is_minimum_common == FALSE) {
                         . '&char='  . urlencode( $charset )
                         . '&dir='   . urlencode( $text_dir )
                         . '&type='  . urlencode( $strError )
-                        . '&error=' . urlencode( strtr($strPmaUriError, array('<tt>' => '[tt]', '</tt>' => '[/tt]')))
+                        . '&error=' . urlencode(
+                            strtr( $strPmaUriError,
+                                array( '<tt>' => '[tt]', '</tt>' => '[/tt]' ) ) )
+                        . '&' . SID
                          );
                 exit();
             }
@@ -1078,8 +1258,14 @@ if ($is_minimum_common == FALSE) {
         if (!empty($url['port']) && (($url['scheme'] == 'http' && $url['port'] != 80) || ($url['scheme'] == 'https' && $url['port'] != 443))) {
             $cfg['PmaAbsoluteUri'] .= ':' . $url['port'];
         }
-        // And finally path, without script name
-        $cfg['PmaAbsoluteUri'] .= substr($url['path'], 0, strrpos($url['path'], '/') + 1);
+        // And finally path, without script name, the 'a' is there not to
+        // strip our directory, when path is only /pmadir/ without filename
+        $path = dirname($url['path'] . 'a');
+        // To work correctly within transformations overview:
+        if (defined('PMA_PATH_TO_BASEDIR') && PMA_PATH_TO_BASEDIR == '../../') {
+            $path = dirname(dirname($path));
+        }
+        $cfg['PmaAbsoluteUri'] .= $path . '/';
 
         unset($url);
 
@@ -1087,7 +1273,7 @@ if ($is_minimum_common == FALSE) {
         // the autodetect code works well enough that we don't display the
         // warning at all. The user can still set PmaAbsoluteUri manually.
         // See https://sourceforge.net/tracker/index.php?func=detail&aid=1257134&group_id=23067&atid=377411
-        
+
     } else {
         // The URI is specified, however users do often specify this
         // wrongly, so we try to fix this.
@@ -1112,14 +1298,29 @@ if ($is_minimum_common == FALSE) {
     $cookie_path   = substr($pma_uri_parts['path'], 0, strrpos($pma_uri_parts['path'], '/')) . '/';
     $is_https      = (isset($pma_uri_parts['scheme']) && $pma_uri_parts['scheme'] == 'https') ? 1 : 0;
 
+    //
+    if ($cfg['ForceSLL'] && !$is_https) {
+        header(
+            'Location: ' . preg_replace(
+                '/^http/', 'https', $cfg['PmaAbsoluteUri'] )
+            . ( isset( $_SERVER['REQUEST_URI'] )
+                ? preg_replace( '@' . $pma_uri_parts['path'] . '@',
+                    '', $_SERVER['REQUEST_URI'] )
+                : '' )
+            . '&' . SID );
+        exit;
+    }
+
+
     $dblist       = array();
 
     /**
      * Gets the valid servers list and parameters
      */
+
     foreach ($cfg['Servers'] AS $key => $val) {
         // Don't use servers with no hostname
-        if ( ($val['connect_type'] == 'tcp') && empty($val['host'])) {
+        if ( isset($val['connect_type']) && ($val['connect_type'] == 'tcp') && empty($val['host'])) {
             unset($cfg['Servers'][$key]);
         }
 
@@ -1128,11 +1329,12 @@ if ($is_minimum_common == FALSE) {
         // and there is nothing in the verbose server name
         // or the host field, then generate a name for the server
         // in the form of "Server 2", localized of course!
-        if ( ($val['connect_type'] == 'socket') && empty($val['host']) && empty($val['verbose']) ) {
+        if ( isset($val['connect_type']) && $val['connect_type'] == 'socket' && empty($val['host']) && empty($val['verbose']) ) {
             $cfg['Servers'][$key]['verbose'] = $GLOBALS['strServer'] . $key;
             $val['verbose']                  = $GLOBALS['strServer'] . $key;
         }
     }
+    unset( $key, $val );
 
     if (empty($server) || !isset($cfg['Servers'][$server]) || !is_array($cfg['Servers'][$server])) {
         $server = $cfg['ServerDefault'];
@@ -1168,6 +1370,19 @@ if ($is_minimum_common == FALSE) {
         // (for a quick check of path disclosure in auth/cookies:)
         $coming_from_common = TRUE;
 
+        if (!file_exists('./libraries/auth/' . $cfg['Server']['auth_type'] . '.auth.lib.php')) {
+            header( 'Location: error.php'
+                    . '?lang='  . urlencode( $available_languages[$lang][2] )
+                    . '&char='  . urlencode( $charset )
+                    . '&dir='   . urlencode( $text_dir )
+                    . '&type='  . urlencode( $strError )
+                    . '&error=' . urlencode(
+                        $strInvalidAuthMethod . ' '
+                        . $cfg['Server']['auth_type'] )
+                    . '&' . SID
+                     );
+            exit();
+        }
         require_once('./libraries/auth/' . $cfg['Server']['auth_type'] . '.auth.lib.php');
         if (!PMA_auth_check()) {
             PMA_auth();
@@ -1280,7 +1495,7 @@ if ($is_minimum_common == FALSE) {
                 if ($dblist[$i] == '*' && $dblist_asterisk_bool == FALSE) {
                     $dblist_asterisk_bool = TRUE;
                     $dblist_full = PMA_safe_db_list(FALSE, $dbh, FALSE, $rs, $userlink, $cfg, $dblist);
-                    foreach ($dblist_full AS $dbl_key => $dbl_val) {
+                    foreach ($dblist_full as $dbl_val) {
                         if (!in_array($dbl_val, $dblist)) {
                             $true_dblist[] = $dbl_val;
                         }
@@ -1318,7 +1533,7 @@ if ($is_minimum_common == FALSE) {
                 } // end if... else...
             } // end for
             $dblist       = $true_dblist;
-            unset($true_dblist);
+            unset( $true_dblist, $i, $dbl_val );
             $only_db_check = TRUE;
         } // end if
 
@@ -1364,7 +1579,7 @@ if ($is_minimum_common == FALSE) {
              echo '</script></body></html>' . "\n";
 
          } else {
-             header('Location: ' . $uri);
+             header( 'Location: ' . $uri . '&' . SID );
          }
      }
 
@@ -1386,34 +1601,135 @@ if ($is_minimum_common == FALSE) {
         global $num_dbs;
         global $cfg;
 
-        $num_dbs = count($dblist);
-
         // 1. A list of allowed databases has already been defined by the
         //    authentification process -> gets the available databases list
-        if ($num_dbs) {
-            $true_dblist = array();
-            for ($i = 0; $i < $num_dbs; $i++) {
-                $dblink  = @PMA_DBI_select_db($dblist[$i]);
-                if ($dblink) {
-                    $true_dblist[] = $dblist[$i];
+        if ( count( $dblist ) ) {
+            foreach ( $dblist as $key => $db ) {
+                if ( ! @PMA_DBI_select_db( $db ) ) {
+                    unset( $dblist[$key] );
                 } // end if
             } // end for
-            $dblist      = array();
-            $dblist      = $true_dblist;
-            unset($true_dblist);
-            $num_dbs     = count($dblist);
         } // end if
         // 2. Allowed database list is empty -> gets the list of all databases
         //    on the server
-        else if (!isset($cfg['Server']['only_db']) || $cfg['Server']['only_db'] == '') {
+        elseif ( empty( $cfg['Server']['only_db'] ) ) {
             $dblist = PMA_DBI_get_dblist(); // needed? or PMA_mysqlDie('', 'SHOW DATABASES;', FALSE, $error_url);
-            $num_dbs = count($dblist);
         } // end else
+
+        $num_dbs = count( $dblist );
+
+        // natural order for db list; but do not sort if user asked
+        // for a specific order with the 'only_db' mechanism
+        if ( ! is_array( $GLOBALS['cfg']['Server']['only_db'] )
+            && $GLOBALS['cfg']['NaturalOrder'] ) {
+            natsort( $dblist );
+        }
 
         return TRUE;
     } // end of the 'PMA_availableDatabases()' function
 
+    /**
+     * returns array with tables of given db with extended infomation and grouped
+     *
+     * @uses    $GLOBALS['cfg']['LeftFrameTableSeparator']
+     * @uses    $GLOBALS['cfg']['LeftFrameTableLevel']
+     * @uses    $GLOBALS['cfg']['ShowTooltipAliasTB']
+     * @uses    $GLOBALS['cfg']['NaturalOrder']
+     * @uses    PMA_DBI_fetch_result()
+     * @uses    PMA_backquote()
+     * @uses    count()
+     * @uses    array_merge
+     * @uses    uksort()
+     * @uses    strstr()
+     * @uses    explode()
+     * @param   string  $db     name of db
+     * return   array   (rekursive) grouped table list
+     */
+    function PMA_getTableList( $db ) {
+        $sep = $GLOBALS['cfg']['LeftFrameTableSeparator'];
 
+        $tables = PMA_DBI_get_tables_full($db);
+        if ( count( $tables ) < 1 ) {
+            return $tables;
+        }
+
+        if ( $GLOBALS['cfg']['NaturalOrder'] ) {
+            uksort( $tables, 'strcmp' );
+        }
+
+        $default = array(
+            'Name'      => '',
+            'Rows'      => 0,
+            'Comment'   => '',
+            'disp_name' => '',
+        );
+
+        $table_groups = array();
+
+        foreach ( $tables as $table_name => $table ) {
+
+            // check for correct row count
+            if ( NULL === $table['Rows'] ) {
+                $table['Rows'] = PMA_countRecords( $db, $table['Name'],
+                    $return = true, $force_exact = true );
+            }
+
+            // in $group we save the reference to the place in $table_groups
+            // where to store the table info
+            if ( $GLOBALS['cfg']['LeftFrameDBTree']
+                && $sep && strstr( $table_name, $sep ) )
+            {
+                $parts = explode( $sep, $table_name );
+
+                $group =& $table_groups;
+                $i = 0;
+                $group_name_full = '';
+                while ( $i < count( $parts ) - 1
+                  && $i < $GLOBALS['cfg']['LeftFrameTableLevel'] ) {
+                    $group_name = $parts[$i] . $sep;
+                    $group_name_full .= $group_name;
+
+                    if ( ! isset( $group[$group_name] ) ) {
+                        $group[$group_name] = array();
+                        $group[$group_name]['is' . $sep . 'group'] = true;
+                        $group[$group_name]['tab' . $sep . 'count'] = 1;
+                        $group[$group_name]['tab' . $sep . 'group'] = $group_name_full;
+                    } elseif ( ! isset( $group[$group_name]['is' . $sep . 'group'] ) ) {
+                        $table = $group[$group_name];
+                        $group[$group_name] = array();
+                        $group[$group_name][$group_name] = $table;
+                        unset( $table );
+                        $group[$group_name]['is' . $sep . 'group'] = true;
+                        $group[$group_name]['tab' . $sep . 'count'] = 1;
+                        $group[$group_name]['tab' . $sep . 'group'] = $group_name_full;
+                    } else {
+                        $group[$group_name]['tab_count']++;
+                    }
+                    $group =& $group[$group_name];
+                    $i++;
+                }
+            } else {
+                if ( ! isset( $table_groups[$table_name] ) ) {
+                    $table_groups[$table_name] = array();
+                }
+                $group =& $table_groups;
+            }
+
+
+            if ( $GLOBALS['cfg']['ShowTooltipAliasTB']
+              && $GLOBALS['cfg']['ShowTooltipAliasTB'] !== 'nested' ) {
+                // switch tooltip and name
+                $table['Comment'] = $table['Name'];
+                $table['disp_name'] = $table['Comment'];
+            } else {
+                $table['disp_name'] = $table['Name'];
+            }
+
+            $group[$table_name] = array_merge( $default, $table );
+        }
+
+        return $table_groups;
+    }
 
     /* ----------------------- Set of misc functions ----------------------- */
 
@@ -1568,13 +1884,13 @@ if ($is_minimum_common == FALSE) {
             echo "\n";
             $reload_url = './left.php?' . PMA_generate_common_url((isset($GLOBALS['db']) ? $GLOBALS['db'] : ''), '', '&');
             ?>
-<script type="text/javascript" language="javascript1.2">
-<!--
+<script type="text/javascript">
+//<![CDATA[
 if (typeof(window.parent) != 'undefined'
-    && typeof(window.parent.frames['nav']) != 'undefined') {
-    window.parent.frames['nav'].goTo('<?php echo $reload_url; ?>&hash=' + <?php echo (($cfg['QueryFrame'] && $cfg['QueryFrameJS']) ? 'window.parent.frames[\'queryframe\'].document.hashform.hash.value' : "'" . md5($cfg['PmaAbsoluteUri']) . "'"); ?>);
+    && typeof(window.parent.frames[0]) != 'undefined') {
+    window.parent.goTo('<?php echo $reload_url; ?>');
 }
-//-->
+//]]>
 </script>
             <?php
             unset($GLOBALS['reload']);
@@ -1605,22 +1921,15 @@ if (typeof(window.parent) != 'undefined'
                 $tooltip    = (empty($tbl_status['Comment']))
                             ? ''
                             : $tbl_status['Comment'] . ' ';
-                $tooltip .= '(' . $tbl_status['Rows'] . ' ' . $GLOBALS['strRows'] . ')';
+                $tooltip .= '(' . PMA_formatNumber( $tbl_status['Rows'], 0 ) . ' ' . $GLOBALS['strRows'] . ')';
                 PMA_DBI_free_result($result);
-                $md5_tbl = md5($GLOBALS['table']);
+                $uni_tbl = PMA_jsFormat( $GLOBALS['db'] . '.' . $GLOBALS['table'], false );
                 echo "\n";
                 ?>
-<script type="text/javascript" language="javascript1.2">
-<!--
-if (typeof(document.getElementById) != 'undefined'
-    && typeof(window.parent.frames['nav']) != 'undefined'
-    && typeof(window.parent.frames['nav'].document) != 'undefined' && typeof(window.parent.frames['nav'].document) != 'unknown'
-    && (window.parent.frames['nav'].document.getElementById('<?php echo 'tbl_' . $md5_tbl; ?>'))
-    && typeof(window.parent.frames['nav'].document.getElementById('<?php echo 'tbl_' . $md5_tbl; ?>')) != 'undefined'
-    && typeof(window.parent.frames['nav'].document.getElementById('<?php echo 'tbl_' . $md5_tbl; ?>').title) == 'string') {
-    window.parent.frames['nav'].document.getElementById('<?php echo 'tbl_' . $md5_tbl; ?>').title = '<?php echo PMA_jsFormat($tooltip, FALSE); ?>';
-}
-//-->
+<script type="text/javascript">
+//<![CDATA[
+window.parent.updateTableTitle( '<?php echo $uni_tbl; ?>', '<?php echo PMA_jsFormat($tooltip, false); ?>' );
+//]]>
 </script>
                 <?php
             } // end if
@@ -1641,37 +1950,39 @@ if (typeof(document.getElementById) != 'undefined'
             }
         }
         unset($tbl_status);
-
-        echo "\n";
         ?>
 <br />
 <div align="<?php echo $GLOBALS['cell_align_left']; ?>">
-    <table border="<?php echo $cfg['Border']; ?>" cellpadding="5" cellspacing="1">
-    <?php if (isset($GLOBALS['show_error_header']) && $GLOBALS['show_error_header']) { ?>
-    <tr><th class="tblHeadError"><div class="errorhead"><?php echo $GLOBALS['strError']; ?></div></th></tr>
-    <?php } ?>
-    <tr>
-        <th<?php echo ($GLOBALS['theme'] != 'original') ? ' class="tblHeaders"' : ' bgcolor="' . $cfg['ThBgcolor'] . '"'; ?>>
-            <b><?php echo $message; ?></b>
-        </th>
-    </tr>
         <?php
-        if ($cfg['ShowSQL'] == TRUE && (!empty($GLOBALS['sql_query']) || !empty($GLOBALS['display_query']))) {
+        if ( ! empty( $GLOBALS['show_error_header'] ) ) {
+            ?>
+    <div class="error">
+        <h1><?php echo $GLOBALS['strError']; ?></h1>
+            <?php
+        }
+
+        echo $message;
+        if (isset($GLOBALS['special_message'])) {
+            echo PMA_sanitize($GLOBALS['special_message']);
+            unset($GLOBALS['special_message']);
+        }
+
+        if ( ! empty( $GLOBALS['show_error_header'] ) ) {
+            echo '</div>';
+        }
+
+        if ( $cfg['ShowSQL'] == TRUE
+          && ( !empty($GLOBALS['sql_query']) || !empty($GLOBALS['display_query']) ) ) {
             $local_query = !empty($GLOBALS['display_query']) ? $GLOBALS['display_query'] : (($cfg['SQP']['fmtType'] == 'none' && isset($GLOBALS['unparsed_sql']) && $GLOBALS['unparsed_sql'] != '') ? $GLOBALS['unparsed_sql'] : $GLOBALS['sql_query']);
             // Basic url query part
             $url_qpart = '?' . PMA_generate_common_url(isset($GLOBALS['db']) ? $GLOBALS['db'] : '', isset($GLOBALS['table']) ? $GLOBALS['table'] : '');
-            echo "\n";
-            ?>
-    <tr>
-        <td bgcolor="<?php echo $cfg['BgcolorOne']; ?>">
-            <?php
-            echo "\n";
+
             // Html format the query to be displayed
             // The nl2br function isn't used because its result isn't a valid
             // xhtml1.0 statement before php4.0.5 ("<br>" and not "<br />")
             // If we want to show some sql code it is easiest to create it here
              /* SQL-Parser-Analyzer */
-            
+
             if (!empty($GLOBALS['show_as_php'])) {
                 $new_line = '\'<br />' . "\n" . '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;. \' ';
             }
@@ -1684,6 +1995,16 @@ if (typeof(document.getElementById) != 'undefined'
                 $query_base = $local_query;
             }
 
+            // Parse SQL if needed
+            if (isset($GLOBALS['parsed_sql']) && $query_base == $GLOBALS['parsed_sql']['raw']) {
+                $parsed_sql = $GLOBALS['parsed_sql'];
+            } else {
+                $parsed_sql = PMA_SQP_parse($query_base);
+            }
+
+            // Analyze it
+            $analyzed_display_query = PMA_SQP_analyze($parsed_sql);
+
             // Here we append the LIMIT added for navigation, to
             // enable its display. Adding it higher in the code
             // to $local_query would create a problem when
@@ -1694,11 +2015,11 @@ if (typeof(document.getElementById) != 'undefined'
             // FIXME: what would be the best to do when someone
             // hits Refresh: use the current LIMITs ?
 
-            // TODO: use the parser instead of preg_match()
-
-            if (preg_match('@^SELECT[[:space:]]+@i', $query_base)
+            if (isset($analyzed_display_query[0]['queryflags']['select_from'])
              && isset($GLOBALS['sql_limit_to_append'])) {
-                $query_base .= $GLOBALS['sql_limit_to_append'];
+                $query_base  = $analyzed_display_query[0]['section_before_limit'] . "\n" . $GLOBALS['sql_limit_to_append'] . $analyzed_display_query[0]['section_after_limit'];
+                // Need to reparse query
+                $parsed_sql = PMA_SQP_parse($query_base);
             }
 
             if (!empty($GLOBALS['show_as_php'])) {
@@ -1706,12 +2027,6 @@ if (typeof(document.getElementById) != 'undefined'
             } else if (!empty($GLOBALS['validatequery'])) {
                 $query_base = PMA_validateSQL($query_base);
             } else {
-                // avoid reparsing query:
-                if (isset($GLOBALS['parsed_sql']) && $query_base == $GLOBALS['parsed_sql']['raw']) {
-                    $parsed_sql = $GLOBALS['parsed_sql'];
-                } else {
-                    $parsed_sql = PMA_SQP_parse($query_base);
-                }
                 $query_base = PMA_formatSql($parsed_sql, $query_base);
             }
 
@@ -1722,7 +2037,7 @@ if (typeof(document.getElementById) != 'undefined'
 
             //if (!isset($GLOBALS['goto'])) {
                 //$edit_target = (isset($GLOBALS['table'])) ? $cfg['DefaultTabTable'] : $cfg['DefaultTabDatabase'];
-            $edit_target = isset($GLOBALS['db']) ? (isset($GLOBALS['table']) ? 'tbl_properties.php' : 'db_details.php') : '';
+            $edit_target = isset($GLOBALS['db']) ? (isset($GLOBALS['table']) ? 'tbl_properties.php' : 'db_details.php') : 'server_sql.php';
             //} else if ($GLOBALS['goto'] != 'main.php') {
             //    $edit_target = $GLOBALS['goto'];
             //} else {
@@ -1733,9 +2048,10 @@ if (typeof(document.getElementById) != 'undefined'
                 && ($cfg['SQLQuery']['Edit'] == TRUE )
                 && (!empty($edit_target))) {
 
-                $onclick = '';
-                if ($cfg['QueryFrameJS'] && $cfg['QueryFrame']) {
-                    $onclick = 'focus_querywindow(\'' . urlencode($local_query) . '\'); return false;';
+                if ($cfg['EditInWindow'] == TRUE) {
+                    $onclick = 'window.parent.focus_querywindow(\'' . urlencode($local_query) . '\'); return false;';
+                } else {
+                    $onclick = '';
                 }
 
                 $edit_link = $edit_target
@@ -1761,7 +2077,7 @@ if (typeof(document.getElementById) != 'undefined'
                     $explain_link_validate = '';
                 }
 
-                $explain_link = 'read_dump.php'
+                $explain_link = 'import.php'
                               . $url_qpart
                               . $explain_link_validate
                               . '&amp;sql_query=';
@@ -1786,7 +2102,7 @@ if (typeof(document.getElementById) != 'undefined'
             // php-code (Mike Beck 2002-05-22)
             if (isset($cfg['SQLQuery']['ShowAsPHP'])
                 && $cfg['SQLQuery']['ShowAsPHP'] == TRUE) {
-                $php_link = 'read_dump.php'
+                $php_link = 'import.php'
                           . $url_qpart
                           . '&amp;show_query=1'
                           . '&amp;sql_query=' . urlencode($local_query)
@@ -1803,7 +2119,7 @@ if (typeof(document.getElementById) != 'undefined'
 
                 if (isset($GLOBALS['show_as_php']) && $GLOBALS['show_as_php'] == '1') {
                     $runquery_link
-                         = 'read_dump.php'
+                         = 'import.php'
                          . $url_qpart
                          . '&amp;show_query=1'
                          . '&amp;sql_query=' . urlencode($local_query);
@@ -1819,7 +2135,7 @@ if (typeof(document.getElementById) != 'undefined'
                 && $cfg['SQLQuery']['Refresh']
                 && preg_match('@^(SELECT|SHOW)[[:space:]]+@i', $local_query)) {
 
-                $refresh_link = 'read_dump.php'
+                $refresh_link = 'import.php'
                           . $url_qpart
                           . '&amp;show_query=1'
                           . '&amp;sql_query=' . urlencode($local_query);
@@ -1832,47 +2148,42 @@ if (typeof(document.getElementById) != 'undefined'
                 && $cfg['SQLValidator']['use'] == TRUE
                 && isset($cfg['SQLQuery']['Validate'])
                 && $cfg['SQLQuery']['Validate'] == TRUE) {
-                $validate_link = 'read_dump.php'
+                $validate_link = 'import.php'
                                . $url_qpart
                                . '&amp;show_query=1'
                                . '&amp;sql_query=' . urlencode($local_query)
                                . '&amp;validatequery=';
                 if (!empty($GLOBALS['validatequery'])) {
                     $validate_link .= '0';
-                    $message = $GLOBALS['strNoValidateSQL'] ;
+                    $validate_message = $GLOBALS['strNoValidateSQL'] ;
                 } else {
                     $validate_link .= '1';
-                    $message = $GLOBALS['strValidateSQL'] ;
+                    $validate_message = $GLOBALS['strValidateSQL'] ;
                 }
-                $validate_link = ' [' . PMA_linkOrButton( $validate_link, $GLOBALS['strRefresh'] ) . ']';
+                $validate_link = ' [' . PMA_linkOrButton( $validate_link, $validate_message ) . ']';
             } else {
                 $validate_link = '';
             } //validator
+            unset($local_query);
 
             // Displays the message
-            echo '            <b>' . $GLOBALS['strSQLQuery'] . ':</b>&nbsp;';
-            echo '<br />' . "\n";
-            echo '            ' . $query_base;
+            echo '<fieldset class="">' . "\n";
+            echo '    <legend>' . $GLOBALS['strSQLQuery'] . ':</legend>';
+            echo '    ' . $query_base;
 
-            unset($local_query);
             //Clean up the end of the PHP
             if (!empty($GLOBALS['show_as_php'])) {
                 echo '\';';
             }
-            echo "\n";
-            ?>
-        </td>
-    </tr>
-    <?php
-            if (!empty($edit_target)) {
-                echo '<tr><td class="tblFooters">';
+            echo '</fieldset>' . "\n";
+
+            if ( ! empty( $edit_target ) ) {
+                echo '<fieldset class="tblFooters">';
                 echo $edit_link . $explain_link . $php_link . $refresh_link . $validate_link;
-                echo '</td></tr>' . "\n";
+                echo '</fieldset>';
             }
         }
-        echo "\n";
         ?>
-    </table>
 </div><br />
         <?php
     } // end of the 'PMA_showMessage()' function
@@ -1916,6 +2227,102 @@ if (typeof(document.getElementById) != 'undefined'
         return array($return_value, $unit);
     } // end of the 'PMA_formatByteDown' function
 
+    /**
+     * Formats $value to the given length and appends SI prefixes
+     * $comma is not substracted from the length
+     * with a $length of 0 no truncation occurs, number is only formated
+     * to the current locale
+     * <code>
+     * echo PMA_formatNumber( 123456789, 6 );     // 123,457 k
+     * echo PMA_formatNumber( -123456789, 4, 2 ); //    -123.46 M
+     * echo PMA_formatNumber( -0.003, 6 );        //      -3 m
+     * echo PMA_formatNumber( 0.003, 3, 3 );      //       0.003
+     * echo PMA_formatNumber( 0.00003, 3, 2 );    //       0.03 m
+     * echo PMA_formatNumber( 0, 6 );             //       0
+     * </code>
+     * @param   double   $value     the value to format
+     * @param   integer  $length    the max length
+     * @param   integer  $comma     the number of decimals to retain
+     * @param   boolean  $only_down do not reformat numbers below 1
+     *
+     * @return  string   the formatted value and its unit
+     *
+     * @access  public
+     *
+     * @author  staybyte, sebastian mendel
+     * @version 1.1.0 - 2005-10-27
+     */
+    function PMA_formatNumber( $value, $length = 3, $comma = 0, $only_down = false ) {
+        if ( $length === 0 ) {
+            return number_format( $value,
+                                $comma,
+                                $GLOBALS['number_decimal_separator'],
+                                $GLOBALS['number_thousands_separator'] );
+        }
+
+        // this units needs no translation, ISO
+        $units = array(
+            -8 => 'y',
+            -7 => 'z',
+            -6 => 'a',
+            -5 => 'f',
+            -4 => 'p',
+            -3 => 'n',
+            -2 => '&micro;',
+            -1 => 'm',
+            0 => ' ',
+            1 => 'k',
+            2 => 'M',
+            3 => 'G',
+            4 => 'T',
+            5 => 'P',
+            6 => 'E',
+            7 => 'Z',
+            8 => 'Y'
+        );
+
+        // we need at least 3 digits to be displayed
+        if ( 3 > $length + $comma ) {
+            $length = 3 - $comma;
+        }
+
+        // check for negativ value to retain sign
+        if ( $value < 0 ) {
+            $sign = '-';
+            $value = abs( $value );
+        } else {
+            $sign = '';
+        }
+
+        $dh = pow(10, $comma);
+        $li = pow(10, $length);
+        $unit = $units[0];
+
+        if ( $value >= 1 ) {
+            for ( $d = 8; $d >= 0; $d-- ) {
+                if (isset($units[$d]) && $value >= $li * pow(1000, $d-1)) {
+                    $value = round($value / ( pow(1000, $d) / $dh) ) /$dh;
+                    $unit = $units[$d];
+                    break 1;
+                } // end if
+            } // end for
+        } elseif ( ! $only_down && (float) $value !== 0.0 ) {
+            for ( $d = -8; $d <= 8; $d++ ) {
+                if (isset($units[$d]) && $value <= $li * pow(1000, $d-1)) {
+                    $value = round($value / ( pow(1000, $d) / $dh) ) /$dh;
+                    $unit = $units[$d];
+                    break 1;
+                } // end if
+            } // end for
+        } // end if ( $value >= 1 ) elseif ( ! $only_down && (float) $value !== 0.0 )
+
+        $value = number_format( $value,
+                                $comma,
+                                $GLOBALS['number_decimal_separator'],
+                                $GLOBALS['number_thousands_separator'] );
+
+        return $sign . $value . ' ' . $unit;
+    } // end of the 'PMA_formatNumber' function
 
     /**
      * Extracts ENUM / SET options from a type definition string
@@ -1970,10 +2377,23 @@ if (typeof(document.getElementById) != 'undefined'
      * returns a tab for tabbed navigation.
      * If the variables $link and $args ar left empty, an inactive tab is created
      *
-     * @param   array   $tab array with all options
-     *
+     * @uses    array_merge()
+     * basename()
+     * $GLOBALS['strEmpty']
+     * $GLOBALS['strDrop']
+     * $GLOBALS['active_page']
+     * $GLOBALS['PHP_SELF']
+     * htmlentities()
+     * PMA_generate_common_url()
+     * $GLOBALS['url_query']
+     * urlencode()
+     * $GLOBALS['cfg']['MainPageIconic']
+     * $GLOBALS['pmaThemeImage']
+     * sprintf()
+     * trigger_error()
+     * E_USER_NOTICE
+     * @param   array   $tab    array with all options
      * @return  string  html code for one tab, a link if valid otherwise a span
-     *
      * @access  public
      */
     function PMA_getTab( $tab )
@@ -1988,75 +2408,88 @@ if (typeof(document.getElementById) != 'undefined'
             'attr'   => '',
             'args'   => '',
         );
-        
+
         $tab = array_merge( $defaults, $tab );
-        
+
         // determine aditional style-class
         if ( empty( $tab['class'] ) ) {
-            if ($tab['text'] == $GLOBALS['strEmpty'] || $tab['text'] == $GLOBALS['strDrop']) {
+            if ( $tab['text'] == $GLOBALS['strEmpty']
+                || $tab['text'] == $GLOBALS['strDrop'] ) {
                 $tab['class'] = 'caution';
             }
             elseif ( isset( $tab['active'] ) && $tab['active']
-                  || isset($GLOBALS['active_page']) && $GLOBALS['active_page'] == $tab['link'] 
-                  || basename($_SERVER['PHP_SELF']) == $tab['link'] )
+                  || isset( $GLOBALS['active_page'] )
+                  && $GLOBALS['active_page'] == $tab['link']
+                  || basename( $GLOBALS['PHP_SELF'] ) == $tab['link'] )
             {
                 $tab['class'] = 'active';
             }
         }
-        
+
         // build the link
         if ( ! empty( $tab['link'] ) ) {
             $tab['link'] = htmlentities( $tab['link'] );
-            $tab['link'] = $tab['link'] . $tab['sep'] . ( empty( $GLOBALS['url_query'] ) ? PMA_generate_common_url() : $GLOBALS['url_query'] );
+            $tab['link'] = $tab['link'] . $tab['sep']
+                .( empty( $GLOBALS['url_query'] ) ?
+                    PMA_generate_common_url() : $GLOBALS['url_query'] );
             if ( ! empty( $tab['args'] ) ) {
                 foreach( $tab['args'] as $param => $value ) {
-                    $tab['link'] .= '&amp;' . urlencode( $param ) . '=' . urlencode( $value );
+                    $tab['link'] .= '&amp;' . urlencode( $param ) . '='
+                        . urlencode( $value );
                 }
             }
         }
-        
+
         // display icon, even if iconic is disabled but the link-text is missing
         if ( ( $GLOBALS['cfg']['MainPageIconic'] || empty( $tab['text'] ) )
             && isset( $tab['icon'] ) ) {
-            $image = '<img src="' . htmlentities( $GLOBALS['pmaThemeImage'] ) . '%1$s" width="16" height="16" border="0" alt="%2$s" />%2$s';
+            $image = '<img class="icon" src="' . htmlentities( $GLOBALS['pmaThemeImage'] )
+                .'%1$s" width="16" height="16" alt="%2$s" />%2$s';
             $tab['text'] = sprintf( $image, htmlentities( $tab['icon'] ), $tab['text'] );
         }
         // check to not display an empty link-text
         elseif ( empty( $tab['text'] ) ) {
             $tab['text'] = '?';
-            trigger_error( __FILE__ . '(' . __LINE__ . '): ' . 'empty linktext in function ' . __FUNCTION__ . '()', E_USER_NOTICE );
+            trigger_error( __FILE__ . '(' . __LINE__ . '): '
+                . 'empty linktext in function ' . __FUNCTION__ . '()',
+                E_USER_NOTICE );
         }
 
         if ( ! empty( $tab['link'] ) ) {
-            $out = '<a class="tab' . htmlentities( $tab['class'] ) . '" href="' . $tab['link'] . '" ' . $tab['attr'] . '>'
-                 . $tab['text'] . '</a>';
+            $out = '<a class="tab' . htmlentities( $tab['class'] ) . '"'
+                .' href="' . $tab['link'] . '" ' . $tab['attr'] . '>'
+                . $tab['text'] . '</a>';
         } else {
-            $out = '<span class="tab' . htmlentities( $tab['class'] ) . '">' . $tab['text'] . '</span>';
+            $out = '<span class="tab' . htmlentities( $tab['class'] ) . '">'
+                . $tab['text'] . '</span>';
         }
 
         return $out;
     } // end of the 'PMA_printTab()' function
-    
+
     /**
      * returns html-code for a tab navigation
      *
-     * @param   array   $tabs one element per tab
+     * @uses    PMA_getTab()
+     * @uses    htmlentities()
+     * @param   array   $tabs   one element per tab
      * @param   string  $tag_id id used for the html-tag
      * @return  string  html-code for tab-navigation
-     */ 
-    function PMA_getTabs( $tabs, $tag_id = 'topmenu' )
-    {
-        $tab_navigation = '<!-- top menu -->' . "\n";
-        $tab_navigation .= '<div id="' . htmlentities( $tag_id ) . '">' . "\n";
-        
-        foreach ( $tabs as $tab )
-        {
-            $tab_navigation .= PMA_getTab( $tab ) . "\n";
+     */
+    function PMA_getTabs( $tabs, $tag_id = 'topmenu' ) {
+        $tab_navigation =
+             '<div id="' . htmlentities( $tag_id ) . 'container">' . "\n"
+            .'<ul id="' . htmlentities( $tag_id ) . '">' . "\n";
+
+        foreach ( $tabs as $tab ) {
+            $tab_navigation .= '<li>' . PMA_getTab( $tab ) . '</li>' . "\n";
         }
-        
-        $tab_navigation .= '</div>' . "\n";
-        $tab_navigation .= '<!-- end top menu -->' . "\n\n";
-        
+
+        $tab_navigation .=
+             '</ul>' . "\n"
+            .'<div class="clearfloat"></div>'
+            .'</div>' . "\n";
+
         return $tab_navigation;
     }
 
@@ -2089,14 +2522,14 @@ if (typeof(document.getElementById) != 'undefined'
         if ( ! empty( $target ) ) {
             $tag_params['target'] = htmlentities( $target );
         }
-        
+
         $tag_params_strings = array();
         foreach( $tag_params as $par_name => $par_value ) {
             // htmlentities() only on non javascript
             $par_value = substr( $par_name,0 ,2 ) == 'on' ? $par_value : htmlentities( $par_value );
             $tag_params_strings[] = $par_name . '="' . $par_value . '"';
         }
-        
+
         // previously the limit was set to 2047, it seems 1000 is better
         if (strlen($url) <= 1000) {
             $ret            = '<a href="' . $url . '" ' . implode( ' ', $tag_params_strings ) . '>' . "\n"
@@ -2106,7 +2539,7 @@ if (typeof(document.getElementById) != 'undefined'
             // no spaces (linebreaks) at all
             // or after the hidden fields
             // IE will display them all
-            
+
             // add class=link to submit button
             if ( empty( $tag_params['class'] ) ) {
                 $tag_params['class'] = 'link';
@@ -2277,34 +2710,6 @@ if (typeof(document.getElementById) != 'undefined'
     } // end if
 
     /**
-     * Function to check valid extension of file. It accepts entered
-     * extensions and bz2 and gz if supported.
-     *
-     * @param   string  File name to be tested.
-     * @param   string  Extension that is valid.
-     *
-     * @access  public
-     * @author  Michal Cihar (nijel@users.sourceforge.net)
-     * @return  bool    Whether extension is valid
-     */
-    function PMA_checkFileExtensions($file, $extension) {
-        if (substr($file, -1 * strlen($extension)) == $extension) {
-            return TRUE;
-        }
-        if ($GLOBALS['cfg']['GZipDump'] && @function_exists('gzopen')) {
-            if (substr($file, -3 - strlen($extension)) == $extension . '.gz') {
-                return TRUE;
-            }
-        }
-        if ($GLOBALS['cfg']['BZipDump'] && @function_exists('bzdecompress')) {
-            if (substr($file, -4 - strlen($extension)) == $extension . '.bz2') {
-                return TRUE;
-            }
-        }
-        return FALSE;
-    } // end function
-
-    /**
      * Function to generate unique condition for specified row.
      *
      * @param   resource    handle for current query
@@ -2419,7 +2824,7 @@ if (typeof(document.getElementById) != 'undefined'
         /* IE has trouble with <button> */
         if (PMA_USR_BROWSER_AGENT != 'IE') {
             echo '<button class="' . $button_class . '" type="submit" name="' . $button_name . '" value="' . $text . '" title="' . $text . '">' . "\n"
-               . '<img src="' . $pmaThemeImage . $image . '" title="' . $text . '" alt="' . $text . '" width="16" height="16" />' . (($propicon == 'both') ? '&nbsp;' . $text : '') . "\n"
+               . '<img class="icon" src="' . $pmaThemeImage . $image . '" title="' . $text . '" alt="' . $text . '" width="16" height="16" />' . (($propicon == 'both') ? '&nbsp;' . $text : '') . "\n"
                . '</button>' . "\n";
         } else {
             echo '<input type="image" name="' . $image_name . '" value="' .$text . '" title="' . $text . '" src="' . $pmaThemeImage . $image . '" />'  . (($propicon == 'both') ? '&nbsp;' . $text : '') . "\n";
@@ -2450,8 +2855,8 @@ if (typeof(document.getElementById) != 'undefined'
      * @author  Garvin Hicking (pma@supergarv.de)
      */
     function PMA_pageselector($url, $rows, $pageNow = 1, $nbTotalPage = 1, $showAll = 200, $sliceStart = 5, $sliceEnd = 5, $percent = 20, $range = 10) {
-        $gotopage = '<br />' . $GLOBALS['strPageNumber']
-                  . '<select name="goToPage" onchange="goToUrl(this, \'' . $url . '\');">' . "\n";
+        $gotopage = $GLOBALS['strPageNumber']
+                  . ' <select name="goToPage" onchange="goToUrl(this, \'' . $url . '\');">' . "\n";
         if ($nbTotalPage < $showAll) {
             $pages = range(1, $nbTotalPage);
         } else {
@@ -2515,28 +2920,39 @@ if (typeof(document.getElementById) != 'undefined'
     } // end function
 
 
-    function PMA_generateAlterTable($oldcol, $newcol, $full_field_type, $collation, $null, $default, $default_current_timestamp, $extra, $comment='') {
+    function PMA_generateFieldSpec($name, $type, $length, $attribute, $collation, $null, $default, $default_current_timestamp, $extra, $comment='', &$field_primary, $index, $default_orig = FALSE) {
 
         // $default_current_timestamp has priority over $default
         // TODO: on the interface, some js to clear the default value
         // when the default current_timestamp is checked
 
-        $query = PMA_backquote($oldcol) . ' ' . PMA_backquote($newcol) . ' '
-            . $full_field_type;
-        if (PMA_MYSQL_INT_VERSION >= 40100 && !empty($collation) && $collation != 'NULL' && preg_match('@^(TINYTEXT|TEXT|MEDIUMTEXT|LONGTEXT|VARCHAR\(\d+\)|CHAR\(\d+\))$@i', $full_field_type)) {
+        $query = PMA_backquote($name) . ' ' . $type;
+
+        if ($length != ''
+            && !preg_match('@^(DATE|DATETIME|TIME|TINYBLOB|TINYTEXT|BLOB|TEXT|MEDIUMBLOB|MEDIUMTEXT|LONGBLOB|LONGTEXT)$@i', $type)) {
+            $query .= '(' . $length . ')';
+        }
+
+        if ($attribute != '') {
+            $query .= ' ' . $attribute;
+        }
+
+        if (PMA_MYSQL_INT_VERSION >= 40100 && !empty($collation) && $collation != 'NULL' && preg_match('@^(TINYTEXT|TEXT|MEDIUMTEXT|LONGTEXT|VARCHAR|CHAR|ENUM|SET)$@i', $type)) {
             $query .= PMA_generateCharsetQueryPart($collation);
         }
 
-        if (!empty($null)) {
-            $query .= ' NOT NULL';
-        } else {
-            $query .= ' NULL';
+        if (!($null === FALSE)) {
+            if (!empty($null)) {
+                $query .= ' NOT NULL';
+            } else {
+                $query .= ' NULL';
+            }
         }
 
-        if ($default_current_timestamp && strpos(' ' . strtoupper($full_field_type),'TIMESTAMP') == 1) {
+        if ($default_current_timestamp && strpos(' ' . strtoupper($type),'TIMESTAMP') == 1) {
             $query .= ' DEFAULT CURRENT_TIMESTAMP';
             // 0 is empty in PHP
-        } elseif (!empty($default) || $default == '0') {
+        } elseif (!empty($default) || $default == '0' || $default != $default_orig) {
             if (strtoupper($default) == 'NULL') {
                 $query .= ' DEFAULT NULL';
             } else {
@@ -2546,6 +2962,17 @@ if (typeof(document.getElementById) != 'undefined'
 
         if (!empty($extra)) {
             $query .= ' ' . $extra;
+            // An auto_increment field must be use as a primary key
+            if ($extra == 'AUTO_INCREMENT' && isset($field_primary)) {
+                $primary_cnt = count($field_primary);
+                for ($j = 0; $j < $primary_cnt && $field_primary[$j] != $index; $j++) {
+                    // void
+                } // end for
+                if (isset($field_primary[$j]) && $field_primary[$j] == $index) {
+                    $query .= ' PRIMARY KEY';
+                    unset($field_primary[$j]);
+                } // end if
+            } // end if (auto_increment)
         }
         if (PMA_MYSQL_INT_VERSION >= 40100 && !empty($comment)) {
             $query .= " COMMENT '" . PMA_sqlAddslashes($comment) . "'";
@@ -2553,6 +2980,44 @@ if (typeof(document.getElementById) != 'undefined'
         return $query;
     } // end function
 
-} // end if: minimal common.lib needed?
+    function PMA_generateAlterTable($oldcol, $newcol, $type, $length, $attribute, $collation, $null, $default, $default_current_timestamp, $extra, $comment='', $default_orig) {
+        $empty_a = array();
+        return PMA_backquote($oldcol) . ' ' . PMA_generateFieldSpec($newcol, $type, $length, $attribute, $collation, $null, $default, $default_current_timestamp, $extra, $comment, $empty_a, -1, $default_orig);
+    } // end function
 
+    function PMA_userDir($dir) {
+        global $cfg;
+
+        if (substr($dir, -1) != '/') {
+            $dir .= '/';
+        }
+
+        return str_replace('%u', $cfg['Server']['user'], $dir);
+    }
+
+    /**
+     * returns html code for db link to default db page
+     *
+     * @uses    $GLOBALS['cfg']['DefaultTabDatabase']
+     * @uses    $GLOBALS['db']
+     * @uses    $GLOBALS['strJumpToDB']
+     * @uses    PMA_generate_common_url()
+     * @param   string  $database
+     * @return  string  html link to default db page
+     */
+    function PMA_getDbLink( $database = NULL ) {
+
+        if ( empty( $database ) ) {
+            if ( empty( $GLOBALS['db'] ) ) {
+                return '';
+            }
+            $database = $GLOBALS['db'];
+        }
+
+        return '<a href="' . $GLOBALS['cfg']['DefaultTabDatabase'] . '?' . PMA_generate_common_url( $database ) . '"'
+            .' title="' . sprintf( $GLOBALS['strJumpToDB'], htmlspecialchars( $database ) ) . '">'
+            .htmlspecialchars( $database ) . '</a>';
+    }
+
+} // end if: minimal common.lib needed?
 ?>

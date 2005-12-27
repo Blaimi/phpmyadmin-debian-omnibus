@@ -1,25 +1,10 @@
 <?php
-/* $Id: mysqli.dbi.lib.php,v 2.37 2005/08/08 14:55:07 lem9 Exp $ */
+/* $Id: mysqli.dbi.lib.php,v 2.40 2005/11/17 12:15:59 cybot_tm Exp $ */
 // vim: expandtab sw=4 ts=4 sts=4:
 
 /**
  * Interface to the improved MySQL extension (MySQLi)
  */
-
-/**
- * Loads the MySQLi extension if it is not loaded yet
- */
-if (!@function_exists('mysqli_connect')) {
-    PMA_dl('mysqli');
-}
-
-// check whether mysql is available
-if (!@function_exists('mysqli_connect')) {
-    require_once('./libraries/header_http.inc.php');
-    echo sprintf($strCantLoad, 'mysqli') . '<br />' . "\n"
-         . '<a href="./Documentation.html#faqmysql" target="documentation">' . $GLOBALS['strDocu'] . '</a>' . "\n";
-    exit;
-}
 
 // MySQL client API
 if (!defined('PMA_MYSQL_CLIENT_API')) {
@@ -59,7 +44,7 @@ function PMA_DBI_connect($user, $password, $is_controluser = FALSE) {
 
     // NULL enables connection to the default socket
     $server_socket = (empty($cfg['Server']['socket']))
-                   ? NULL 
+                   ? NULL
                    : $cfg['Server']['socket'];
 
     $link = mysqli_init();
@@ -133,7 +118,7 @@ function PMA_mysqli_fetch_array($result, $type = FALSE) {
 
     /* No data returned => do not touch it */
     if (! $data) return $data;
-    
+
     if (!defined('PMA_MYSQL_INT_VERSION') || PMA_MYSQL_INT_VERSION >= 40100
         || !(isset($cfg['AllowAnywhereRecoding']) && $cfg['AllowAnywhereRecoding'] && $allow_recoding)) {
         /* No recoding -> return data as we got them */
@@ -143,6 +128,11 @@ function PMA_mysqli_fetch_array($result, $type = FALSE) {
         $num    = mysqli_num_fields($result);
         if ($num > 0) {
             $fields = PMA_DBI_get_fields_meta($result);
+        }
+        // sometimes, mysqli_fetch_fields() does not return results
+        // (as seen in PHP 5.1.0-dev), so for now, return $data unchanged
+        if (!$fields) {
+            return $data;
         }
         $i = 0;
         for ($i = 0; $i < $num; $i++) {
@@ -197,40 +187,59 @@ function PMA_DBI_free_result($result) {
     }
 }
 
-function PMA_DBI_getError($link = NULL) {
-    unset($GLOBALS['errno']);
-    if (empty($link)) {
-        if (isset($GLOBALS['userlink'])) {
-            $link = $GLOBALS['userlink'];
-            // Do not stop now. We still can get the error code
-            // with mysqli_connect_errno()
-//        } else {
-//            return FALSE;
-        }
+/**
+ * returns last error message or false if no errors occured
+ *
+ * @uses    PMA_MYSQL_INT_VERSION
+ * @uses    PMA_convert_display_charset()
+ * @uses    PMA_DBI_convert_message()
+ * @uses    $GLOBALS['errno']
+ * @uses    $GLOBALS['userlink']
+ * @uses    $GLOBALS['strServerNotResponding']
+ * @uses    $GLOBALS['strSocketProblem']
+ * @uses    mysqli_errno()
+ * @uses    mysqli_error()
+ * @uses    mysqli_connect_errno()
+ * @uses    mysqli_connect_error()
+ * @uses    defined()
+ * @param   resource        $link   mysql link
+ * @return  string|boolean  $error or false
+ */
+function PMA_DBI_getError( $link = NULL ) {
+    unset( $GLOBALS['errno'] );
+
+    if ( NULL === $link && isset( $GLOBALS['userlink'] ) ) {
+        $link =& $GLOBALS['userlink'];
+        // Do not stop now. We still can get the error code
+        // with mysqli_connect_errno()
+//    } else {
+//        return false;
     }
 
-    if (mysqli_connect_errno()) {
-        $error = mysqli_connect_errno();
+    if ( NULL !== $link ) {
+        $error_number = mysqli_errno( $link );
+        $error_message = mysqli_error( $link );
+    } else {
+        $error_number = mysqli_connect_errno();
         $error_message = mysqli_connect_error();
-    } elseif ( !empty($link) && mysqli_errno($link)) {
-        $error = mysqli_errno($link);
-        $error_message = mysqli_error($link);
-    } 
+    }
+    if ( 0 == $error_number ) {
+        return false;
+    }
 
     // keep the error number for further check after the call to PMA_DBI_getError()
-    if (!empty($error)) {
-        $GLOBALS['errno'] = $error;
-    } else {
-        return FALSE;
+    $GLOBALS['errno'] = $error_number;
+
+    if ( ! empty( $error_message ) ) {
+        $error_message = PMA_DBI_convert_message( $error_message );
     }
 
-
-    if ($error && $error == 2002) {
-        $error = '#' . ((string) $error) . ' - ' . $GLOBALS['strServerNotResponding'] . ' ' . $GLOBALS['strSocketProblem'];
-    } elseif ($error && defined('PMA_MYSQL_INT_VERSION') && PMA_MYSQL_INT_VERSION >= 40100) {
-        $error = '#' . ((string) $error) . ' - ' . $error_message;
-    } elseif ($error) {
-        $error = '#' . ((string) $error) . ' - ' . PMA_convert_display_charset($error_message);
+    if ( $error_number == 2002 ) {
+        $error = '#' . ((string) $error_number) . ' - ' . $GLOBALS['strServerNotResponding'] . ' ' . $GLOBALS['strSocketProblem'];
+    } elseif ( defined( 'PMA_MYSQL_INT_VERSION' ) && PMA_MYSQL_INT_VERSION >= 40100 ) {
+        $error = '#' . ((string) $error_number) . ' - ' . $error_message;
+    } else {
+        $error = '#' . ((string) $error_number) . ' - ' . PMA_convert_display_charset($error_message);
     }
     return $error;
 }
@@ -310,13 +319,13 @@ function PMA_DBI_get_fields_meta($result) {
 
     // this happens sometimes (seen under MySQL 4.0.25)
     if (!is_array($fields)) {
-        return FALSE; 
+        return FALSE;
     }
 
     foreach ($fields as $k => $field) {
         $fields[$k]->type = $typeAr[$fields[$k]->type];
         $fields[$k]->flags = PMA_DBI_field_flags($result, $k);
-        
+
         // Enhance the field objects for mysql-extension compatibilty
         $flags = explode(' ', $fields[$k]->flags);
         array_unshift($flags, 'dummy');
@@ -338,7 +347,7 @@ function PMA_DBI_num_fields($result) {
 
 function PMA_DBI_field_len($result, $i) {
     $info = mysqli_fetch_field_direct($result, $i);
-    // stdClass::$length will be integrated in 
+    // stdClass::$length will be integrated in
     // mysqli-ext when mysql4.1 has been released.
     return @$info->length;
 }

@@ -1,19 +1,19 @@
 <?php
-/* $Id: display_create_database.lib.php,v 1.1 2005/07/13 12:44:51 nijel Exp $ */
+/* $Id: display_create_database.lib.php,v 1.4 2005/11/15 11:18:48 nijel Exp $ */
 // vim: expandtab sw=4 ts=4 sts=4:
 
-// Displays form for creating database (if user has priveleges for that)
+// Displays form for creating database (if user has privileges for that)
 
 require_once('./libraries/check_user_privileges.lib.php');
 
-if ($is_create_priv) {
+if ($is_create_db_priv) {
     // The user is allowed to create a db
     ?>
         <form method="post" action="db_create.php"><b>
-            <?php echo $strCreateNewDatabase . '&nbsp;' . PMA_showMySQLDocu('Reference', 'CREATE_DATABASE'); ?></b><br />
+            <?php echo '<label for="text_create_db">' . $strCreateNewDatabase . '</label>&nbsp;' . PMA_showMySQLDocu('SQL-Syntax', 'CREATE_DATABASE'); ?></b><br />
             <?php echo PMA_generate_common_hidden_inputs('', '', 5); ?>
             <input type="hidden" name="reload" value="1" />
-            <input type="text" name="db" value="<?php echo $db_to_create; ?>" maxlength="64" class="textfield" />
+            <input type="text" name="db" value="<?php echo $db_to_create; ?>" maxlength="64" class="textfield" id="text_create_db"/>
             <?php
     if (PMA_MYSQL_INT_VERSION >= 40101) {
         require_once('./libraries/mysql_charsets.lib.php');
@@ -26,7 +26,7 @@ if ($is_create_priv) {
 } else {
     ?>
     <!-- db creation no privileges message -->
-        <b><?php echo $strCreateNewDatabase . ':&nbsp;' . PMA_showMySQLDocu('Reference', 'CREATE_DATABASE'); ?></b><br />
+        <b><?php echo $strCreateNewDatabase . ':&nbsp;' . PMA_showMySQLDocu('SQL-Syntax', 'CREATE_DATABASE'); ?></b><br />
         <?php
               echo '<span class="noPrivileges">'
                  . ($cfg['ErrorIconic'] ? '<img src="' . $pmaThemeImage . 's_error2.png" width="11" height="11" hspace="2" border="0" align="middle" />' : '')

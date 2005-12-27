@@ -1,12 +1,10 @@
 <?php
-/* $Id: tbl_replace.php,v 2.27 2004/12/28 16:34:44 nijel Exp $ */
+/* $Id: tbl_replace.php,v 2.29 2005/11/18 12:50:49 cybot_tm Exp $ */
 // vim: expandtab sw=4 ts=4 sts=4:
-
 
 /**
  * Gets some core libraries
  */
-require_once('./libraries/grab_globals.lib.php');
 require_once('./libraries/common.lib.php');
 
 // Check parameters
@@ -136,6 +134,7 @@ foreach ($loop_array AS $primary_key_index => $enc_primary_key) {
     $me_funcs       = isset($funcs['multi_edit'])       && isset($funcs['multi_edit'][$enc_primary_key])       ? $funcs['multi_edit'][$enc_primary_key]       : null;
     $me_fields_type = isset($fields_type['multi_edit']) && isset($fields_type['multi_edit'][$enc_primary_key]) ? $fields_type['multi_edit'][$enc_primary_key] : null;
     $me_fields_null = isset($fields_null['multi_edit']) && isset($fields_null['multi_edit'][$enc_primary_key]) ? $fields_null['multi_edit'][$enc_primary_key] : null;
+    $me_auto_increment  = isset($auto_increment['multi_edit']) && isset($auto_increment['multi_edit'][$enc_primary_key])       ? $auto_increment['multi_edit'][$enc_primary_key]       : null;
 
     if ($using_key && isset($me_fields_type) && is_array($me_fields_type) && isset($primary_key)) {
         $prot_result      = PMA_DBI_query('SELECT * FROM ' . PMA_backquote($table) . ' WHERE ' . $primary_key . ';');

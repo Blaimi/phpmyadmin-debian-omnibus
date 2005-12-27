@@ -1,5 +1,5 @@
 <?php
-/* $Id: bookmark.lib.php,v 2.12.6.1 2005/10/21 02:23:50 lem9 Exp $ */
+/* $Id: bookmark.lib.php,v 2.14 2005/11/09 13:28:03 lem9 Exp $ */
 // vim: expandtab sw=4 ts=4 sts=4:
 
 /**
@@ -166,7 +166,7 @@ function PMA_addBookmarks($fields, $cfgBookmark, $all_users = false)
     global $dbh;
 
     $query = 'INSERT INTO ' . PMA_backquote($cfgBookmark['db']) . '.' . PMA_backquote($cfgBookmark['table'])
-           . ' (id, dbase, user, query, label) VALUES (\'\', \'' . PMA_sqlAddslashes($fields['dbase']) . '\', \'' . ($all_users ? '' : PMA_sqlAddslashes($fields['user'])) . '\', \'' . PMA_sqlAddslashes(urldecode($fields['query'])) . '\', \'' . PMA_sqlAddslashes($fields['label']) . '\')';
+           . ' (id, dbase, user, query, label) VALUES (NULL, \'' . PMA_sqlAddslashes($fields['dbase']) . '\', \'' . ($all_users ? '' : PMA_sqlAddslashes($fields['user'])) . '\', \'' . PMA_sqlAddslashes(urldecode($fields['query'])) . '\', \'' . PMA_sqlAddslashes($fields['label']) . '\')';
     $result   = PMA_DBI_query($query, $dbh);
 
     return TRUE;

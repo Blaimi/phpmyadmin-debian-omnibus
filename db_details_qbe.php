@@ -1,13 +1,11 @@
 <?php
-/* $Id: db_details_qbe.php,v 2.14 2005/07/10 17:07:54 lem9 Exp $ */
+/* $Id: db_details_qbe.php,v 2.15 2005/11/18 12:50:49 cybot_tm Exp $ */
 // vim: expandtab sw=4 ts=4 sts=4:
-
 
 /**
  * Get the values of the variables posted or sent to this script and display
  * the headers
  */
-require_once('./libraries/grab_globals.lib.php');
 require_once('./libraries/common.lib.php');
 require_once('./libraries/relation.lib.php');
 

@@ -1,5 +1,5 @@
 <?php
-/* $Id: sql.php,v 2.45 2005/06/24 12:01:43 nijel Exp $ */
+/* $Id: sql.php,v 2.49 2005/10/09 08:16:57 nijel Exp $ */
 // vim: expandtab sw=4 ts=4 sts=4:
 /**
  * Set of functions used to build SQL dumps of tables
@@ -187,7 +187,7 @@ function PMA_getTableDef($db, $table, $crlf, $error_url, $show_dates = false)
     if ($result != FALSE) {
         if (PMA_DBI_num_rows($result) > 0) {
             $tmpres        = PMA_DBI_fetch_assoc($result);
-            if (isset($GLOBALS['auto_increment']) && !empty($tmpres['Auto_increment'])) {
+            if (isset($GLOBALS['sql_auto_increment']) && !empty($tmpres['Auto_increment'])) {
                 $auto_increment .= ' AUTO_INCREMENT=' . $tmpres['Auto_increment'] . ' ';
             }
 
@@ -251,52 +251,56 @@ function PMA_getTableDef($db, $table, $crlf, $error_url, $show_dates = false)
 
             // lets find first line with constraints
             for ($i = 0; $i < $sql_count; $i++) {
-                if (preg_match('@CONSTRAINT|FOREIGN[\s]+KEY@', $sql_lines[$i])) break;
+                if (preg_match('@^[\s]*(CONSTRAINT|FOREIGN[\s]+KEY)@', $sql_lines[$i])) break;
             }
 
-            // remove , from the end of create statement
-            $sql_lines[$i - 1] = preg_replace('@,$@', '', $sql_lines[$i - 1]);
+            // If we really found a constraint
+            if ($i != $sql_count) {
 
-            // prepare variable for constraints
-            if (!isset($sql_constraints)) {
-                if (isset($GLOBALS['no_constraints_comments'])) {
-                    $sql_constraints = '';
-                } else {
-                    $sql_constraints = $crlf . $GLOBALS['comment_marker'] .
-                                       $crlf . $GLOBALS['comment_marker'] . $GLOBALS['strConstraintsForDumped'] .
-                                       $crlf . $GLOBALS['comment_marker'] . $crlf;
-                }
-            }
+                // remove , from the end of create statement
+                $sql_lines[$i - 1] = preg_replace('@,$@', '', $sql_lines[$i - 1]);
 
-            // comments for current table
-            if (!isset($GLOBALS['no_constraints_comments'])) {
-                $sql_constraints .= $crlf . $GLOBALS['comment_marker'] .
-                                    $crlf . $GLOBALS['comment_marker'] . $GLOBALS['strConstraintsForTable'] . ' ' . PMA_backquote($table) .
-                                    $crlf . $GLOBALS['comment_marker'] . $crlf;
-            }
-
-            // let's do the work
-            $sql_constraints .= 'ALTER TABLE ' . PMA_backquote($table) . $crlf;
-
-            $first = TRUE;
-            for($j = $i; $j < $sql_count; $j++) {
-                if (preg_match('@CONSTRAINT|FOREIGN[\s]+KEY@', $sql_lines[$j])) {
-                    if (!$first) {
-                        $sql_constraints .= $crlf;
-                    }
-                    if (strpos($sql_lines[$j], 'CONSTRAINT') === FALSE) {
-                        $sql_constraints .= preg_replace('/(FOREIGN[\s]+KEY)/', 'ADD \1', $sql_lines[$j]);
+                // prepare variable for constraints
+                if (!isset($sql_constraints)) {
+                    if (isset($GLOBALS['no_constraints_comments'])) {
+                        $sql_constraints = '';
                     } else {
-                        $sql_constraints .= preg_replace('/(CONSTRAINT)/', 'ADD \1', $sql_lines[$j]);
+                        $sql_constraints = $crlf . $GLOBALS['comment_marker'] .
+                                           $crlf . $GLOBALS['comment_marker'] . $GLOBALS['strConstraintsForDumped'] .
+                                           $crlf . $GLOBALS['comment_marker'] . $crlf;
                     }
-                    $first = FALSE;
-                } else {
-                    break;
                 }
+
+                // comments for current table
+                if (!isset($GLOBALS['no_constraints_comments'])) {
+                    $sql_constraints .= $crlf . $GLOBALS['comment_marker'] .
+                                        $crlf . $GLOBALS['comment_marker'] . $GLOBALS['strConstraintsForTable'] . ' ' . PMA_backquote($table) .
+                                        $crlf . $GLOBALS['comment_marker'] . $crlf;
+                }
+
+                // let's do the work
+                $sql_constraints .= 'ALTER TABLE ' . PMA_backquote($table) . $crlf;
+
+                $first = TRUE;
+                for($j = $i; $j < $sql_count; $j++) {
+                    if (preg_match('@CONSTRAINT|FOREIGN[\s]+KEY@', $sql_lines[$j])) {
+                        if (!$first) {
+                            $sql_constraints .= $crlf;
+                        }
+                        if (strpos($sql_lines[$j], 'CONSTRAINT') === FALSE) {
+                            $sql_constraints .= preg_replace('/(FOREIGN[\s]+KEY)/', 'ADD \1', $sql_lines[$j]);
+                        } else {
+                            $sql_constraints .= preg_replace('/(CONSTRAINT)/', 'ADD \1', $sql_lines[$j]);
+                        }
+                        $first = FALSE;
+                    } else {
+                        break;
+                    }
+                }
+                $sql_constraints .= ';' . $crlf;
+                $create_query = implode($crlf, array_slice($sql_lines, 0, $i)) . $crlf . implode($crlf, array_slice($sql_lines, $j, $sql_count - 1));
+                unset($sql_lines);
             }
-            $sql_constraints .= ';' . $crlf;
-            $create_query = implode($crlf, array_slice($sql_lines, 0, $i)) . $crlf . implode($crlf, array_slice($sql_lines, $j, $sql_count - 1));
-            unset($sql_lines);
         }
         $schema_create .= $create_query;
     }
@@ -519,16 +523,17 @@ function PMA_exportData($db, $table, $crlf, $error_url, $sql_query)
             if (isset($GLOBALS['showcolumns'])) {
                 $fields        = implode(', ', $field_set);
                 $schema_insert = $sql_command . $insert_delayed .' INTO ' . PMA_backquote($table, $use_backquotes)
-                               . ' (' . $fields . ') VALUES (';
+                               . ' (' . $fields . ') VALUES ';
             } else {
                 $schema_insert = $sql_command . $insert_delayed .' INTO ' . PMA_backquote($table, $use_backquotes)
-                               . ' VALUES (';
+                               . ' VALUES ';
             }
         }
 
         $search       = array("\x00", "\x0a", "\x0d", "\x1a"); //\x08\\x09, not required
         $replace      = array('\0', '\n', '\r', '\Z');
         $current_row  = 0;
+        $query_size   = 0;  
         $separator    = isset($GLOBALS['extended_ins']) ? ',' : ';';
 
         while ($row = PMA_DBI_fetch_row($result)) {
@@ -538,8 +543,9 @@ function PMA_exportData($db, $table, $crlf, $error_url, $sql_query)
                 if (!isset($row[$j]) || is_null($row[$j])) {
                     $values[]     = 'NULL';
                 // a number
-                // timestamp is numeric on some MySQL 4.1
-                } elseif ($fields_meta[$j]->numeric && $fields_meta[$j]->type != 'timestamp') {
+                // timestamp is numeric on some MySQL 4.1, BLOBs are sometimes numeric
+                } elseif ($fields_meta[$j]->numeric && $fields_meta[$j]->type != 'timestamp' 
+                        && ! $fields_meta[$j]->blob) {
                     $values[] = $row[$j];
                 // a binary field
                 // Note: with mysqli, under MySQL 4.1.3, we get the flag
@@ -581,14 +587,21 @@ function PMA_exportData($db, $table, $crlf, $error_url, $sql_query)
                 // Extended inserts case
                 if (isset($GLOBALS['extended_ins'])) {
                     if ($current_row == 1) {
-                        $insert_line  = $schema_insert . implode(', ', $values) . ')';
+                        $insert_line  = $schema_insert . '(' . implode(', ', $values) . ')';
                     } else {
                         $insert_line  = '(' . implode(', ', $values) . ')';
+                        if (isset($GLOBALS['max_query_size']) && $GLOBALS['max_query_size'] > 0 && $query_size + strlen($insert_line) > $GLOBALS['max_query_size']) {
+                            if (!PMA_exportOutputHandler(';' . $crlf)) return FALSE;
+                            $query_size = 0;
+                            $current_row = 1;
+                            $insert_line = $schema_insert . $insert_line;
+                        }
                     }
+                    $query_size += strlen($insert_line);
                 }
                 // Other inserts case
                 else {
-                    $insert_line      = $schema_insert . implode(', ', $values) . ')';
+                    $insert_line      = $schema_insert . '(' . implode(', ', $values) . ')';
                 }
             }
             unset($values);

@@ -1,14 +1,16 @@
 <?php
-/* $Id: tbl_change.php,v 2.56 2005/08/14 19:20:17 lem9 Exp $ */
+/* $Id: tbl_change.php,v 2.66 2005/11/18 12:50:49 cybot_tm Exp $ */
 // vim: expandtab sw=4 ts=4 sts=4:
 
 /**
  * Get the variables sent or posted to this script and displays the header
  */
-require_once('./libraries/grab_globals.lib.php');
+require_once('./libraries/common.lib.php');
+
 $js_to_run = 'tbl_change.js';
 require_once('./header.inc.php');
 require_once('./libraries/relation.lib.php'); // foreign keys
+require_once('./libraries/file_listing.php'); // file listing
 
 
 /**
@@ -49,7 +51,7 @@ if (!empty($disp_message)) {
 if (!isset($goto)) {
     $goto    = 'db_details.php';
 }
-if (!preg_match('@^(db_details|tbl_properties|tbl_select|ldi_table)@', $goto)) {
+if (!preg_match('@^(db_details|tbl_properties|tbl_select)@', $goto)) {
     $err_url = $goto . "?" . PMA_generate_common_url($db) . "&amp;sql_query=" . urlencode($sql_query);
 } else {
     $err_url = $goto . '?'
@@ -61,7 +63,7 @@ if (!preg_match('@^(db_details|tbl_properties|tbl_select|ldi_table)@', $goto)) {
 /**
  * Ensures db and table are valid, else moves to the "parent" script
  */
-require('./libraries/db_table_exists.lib.php');
+require_once('./libraries/db_table_exists.lib.php');
 
 
 /**
@@ -70,7 +72,7 @@ require('./libraries/db_table_exists.lib.php');
 $url_query = PMA_generate_common_url($db, $table)
            . '&amp;goto=tbl_properties.php';
 
-require('./tbl_properties_table_info.php');
+require_once('./tbl_properties_table_info.php');
 
 /* Get comments */
 
@@ -90,7 +92,17 @@ if ($GLOBALS['cfg']['ShowPropertyComments']) {
 /**
  * Displays top menu links
  */
-require('./tbl_properties_links.php');
+require_once('./tbl_properties_links.php');
+
+
+/**
+ * Get the analysis of SHOW CREATE TABLE for this table 
+ */
+$show_create_table = PMA_DBI_fetch_value(
+        'SHOW CREATE TABLE ' . PMA_backquote($db) . '.' . PMA_backquote($table),
+        0, 1 );
+$analyzed_sql = PMA_SQP_analyze( PMA_SQP_parse( $show_create_table ) );
+unset($show_create_table);
 
 /**
  * Get the list of the fields of the current table
@@ -182,7 +194,6 @@ document.onkeydown = onKeyDownArrowsHandler;
     <input type="hidden" name="dontlimitchars" value="<?php echo (isset($dontlimitchars) ? $dontlimitchars : 0); ?>" />
     <input type="hidden" name="err_url" value="<?php echo urlencode($err_url); ?>" />
     <input type="hidden" name="sql_query" value="<?php echo isset($sql_query) ? urlencode($sql_query) : ''; ?>" />
-    <input type="hidden" name="reload" value="1" />
 <?php
 if (isset($primary_key_array)) {
     foreach ($primary_key_array AS $primary_key) {
@@ -235,6 +246,7 @@ $tabindex_for_function = +1000;
 $tabindex_for_null     = +2000;
 $tabindex_for_value    = 0;
 $o_rows   = 0;
+$biggest_max_file_size = 0;
 foreach ($loop_array AS $vrowcount => $vrow) {
     if ($vrow === FALSE) {
         unset($vrow);
@@ -441,7 +453,7 @@ foreach ($loop_array AS $vrowcount => $vrow) {
         //       stored or retrieved" so it does not mean that the contents is
         //       binary
         if ($cfg['ShowFunctionFields']) {
-            if (($cfg['ProtectBinary'] && $is_blob)
+            if (($cfg['ProtectBinary'] && $is_blob && !$is_upload)
                 || ($cfg['ProtectBinary'] == 'all' && $is_binary)) {
                 echo '        <td align="center" bgcolor="'. $bgcolor . '">' . $strBinary . '</td>' . "\n";
             } else if (strstr($row_table_def['True_Type'], 'enum') || strstr($row_table_def['True_Type'], 'set')) {
@@ -469,15 +481,27 @@ foreach ($loop_array AS $vrowcount => $vrow) {
 
                 $dropdown_built = array();
                 $op_spacing_needed = FALSE;
-
                 // garvin: loop on the dropdown array and print all available options for that field.
                 $cnt_dropdown = count($dropdown);
                 for ($j = 0; $j < $cnt_dropdown; $j++) {
                     // Is current function defined as default?
+                    // For MySQL < 4.1.2, for the first timestamp we set as
+                    // default function the one defined in config (which
+                    // should be NOW() ).
+                    // For MySQL >= 4.1.2, we don't set the default function
+                    // if there is a default value for the timestamp 
+                    // (not including CURRENT_TIMESTAMP)
+                    // and the column does not have the 
+                    // ON UPDATE DEFAULT TIMESTAMP attribute.
+                    
+                    if (PMA_MYSQL_INT_VERSION < 40102 
+                    || (PMA_MYSQL_INT_VERSION >= 40102 
+                       && !($row_table_def['True_Type'] == 'timestamp' && !empty($row_table_def['Default']) &&  !isset($analyzed_sql[0]['create_table_fields'][$field]['on_update_current_timestamp'])))) {
                     $selected = ($first_timestamp && $dropdown[$j] == $cfg['DefaultFunctions']['first_timestamp'])
                                 || (!$first_timestamp && $dropdown[$j] == $default_function)
                               ? ' selected="selected"'
                               : '';
+                }
                     echo '                ';
                     echo '<option' . $selected . '>' . $dropdown[$j] . '</option>' . "\n";
                     $dropdown_built[$dropdown[$j]] = 'TRUE';
@@ -485,7 +509,7 @@ foreach ($loop_array AS $vrowcount => $vrow) {
                 }
 
                 // garvin: For compatibility's sake, do not let out all other functions. Instead
-                // print a seperator (blank) and then show ALL functions which weren't shown
+                // print a separator (blank) and then show ALL functions which weren't shown
                 // yet.
                 $cnt_functions = count($cfg['Functions']);
                 for ($j = 0; $j < $cnt_functions; $j++) {
@@ -743,9 +767,11 @@ foreach ($loop_array AS $vrowcount => $vrow) {
             // (displayed whatever value the ProtectBinary has)
 
             if ($is_upload && $is_blob) {
+                echo '<br />';
                 echo '<input type="file" name="fields_upload_' . urlencode($field) . $vkey . '" class="textfield" id="field_' . ($idindex) . '_3" size="10" />&nbsp;';
 
                 // find maximum upload size, based on field type
+                // FIXME: with functions this is not so easy, as you can basically process any data with function like MD5
                 $max_field_sizes = array(
                     'tinyblob'   =>        '256',
                     'blob'       =>      '65536',
@@ -757,34 +783,25 @@ foreach ($loop_array AS $vrowcount => $vrow) {
                    $this_field_max_size = $max_field_sizes[$type];
                 }
                 echo PMA_displayMaximumUploadSize($this_field_max_size) . "\n";
-                echo '                ' . PMA_generateHiddenMaxFileSize($this_field_max_size) . "\n";
+                // do not generate here the MAX_FILE_SIZE, because we should
+                // put only one in the form to accommodate the biggest field
+                if ($this_field_max_size > $biggest_max_file_size) {
+                    $biggest_max_file_size = $this_field_max_size;
+                }
             }
 
             if (!empty($cfg['UploadDir'])) {
-                if (substr($cfg['UploadDir'], -1) != '/') {
-                    $cfg['UploadDir'] .= '/';
-                }
-                if ($handle = @opendir($cfg['UploadDir'])) {
-                    $is_first = 0;
-                    while ($file = @readdir($handle)) {
-                        if (is_file($cfg['UploadDir'] . $file) && !PMA_checkFileExtensions($file, '.sql')) {
-                            if ($is_first == 0) {
-                                echo "<br />\n";
-                                echo '    <i>' . $strOr . '</i>' . ' ' . $strWebServerUploadDirectory . ':<br />' . "\n";
-                                echo '        <select size="1" name="fields_uploadlocal_' . urlencode($field) . $vkey . '">' . "\n";
-                                echo '            <option value="" selected="selected"></option>' . "\n";
-                            } // end if (is_first)
-                            echo '            <option value="' . htmlspecialchars($file) . '">' . htmlspecialchars($file) . '</option>' . "\n";
-                            $is_first++;
-                        } // end if (is_file)
-                    } // end while
-                    if ($is_first > 0) {
-                        echo '        </select>' . "\n";
-                    } // end if (isfirst > 0)
-                    @closedir($handle);
-                } else {
+                $files = PMA_getFileSelectOptions(PMA_userDir($cfg['UploadDir']));
+                if ($files === FALSE) {
                     echo '        <font color="red">' . $strError . '</font><br />' . "\n";
                     echo '        ' . $strWebServerUploadDirectoryError . "\n";
+                } elseif (!empty($files)) {
+                    echo "<br />\n";
+                    echo '    <i>' . $strOr . '</i>' . ' ' . $strWebServerUploadDirectory . ':<br />' . "\n";
+                    echo '        <select size="1" name="fields_uploadlocal_' . urlencode($field) . $vkey . '">' . "\n";
+                    echo '            <option value="" selected="selected"></option>' . "\n";
+                    echo $files;
+                    echo '        </select>' . "\n";
                 }
             } // end if (web-server upload directory)
 
@@ -822,6 +839,11 @@ foreach ($loop_array AS $vrowcount => $vrow) {
                 ?>
                 <input type="text" name="fields<?php echo $vkey; ?>[<?php echo urlencode($field); ?>]" value="<?php echo $special_chars; ?>" size="<?php echo $fieldsize; ?>" maxlength="<?php echo $maxlength; ?>" class="textfield" <?php echo $chg_evt_handler; ?>="return unNullify('<?php echo urlencode($field); ?>', '<?php echo $jsvkey; ?>')" tabindex="<?php echo ($tabindex + $tabindex_for_value); ?>" id="field_<?php echo ($idindex); ?>_3" />
                 <?php
+                if ($row_table_def['Extra'] == 'auto_increment') {
+                ?>
+<input type="hidden" name="auto_increment<?php echo $vkey; ?>[<?php echo urlencode($field); ?>]" value="1" />
+                <?php
+                } // end if
                 if ($type == 'date' || $type == 'datetime' || substr($type, 0, 9) == 'timestamp') {
                     ?>
                     <script type="text/javascript">
@@ -910,6 +932,9 @@ if (isset($primary_key))
         </td>
     </tr>
     </table>
+    <?php if ($biggest_max_file_size > 0) {
+            echo '        ' . PMA_generateHiddenMaxFileSize($biggest_max_file_size) . "\n";
+          } ?>
 
 </form>
 

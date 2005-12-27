@@ -1,7 +1,8 @@
 <?php
-/* $Id: server_binlog.php,v 2.4 2005/02/26 23:16:59 nijel Exp $ */
+/* $Id: server_binlog.php,v 2.5 2005/11/18 12:50:49 cybot_tm Exp $ */
 // vim: expandtab sw=4 ts=4 sts=4:
 
+require_once('./libraries/common.lib.php');
 
 /**
  * Does the common work

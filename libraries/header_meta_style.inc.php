@@ -1,6 +1,10 @@
 <?php
-/* $Id: header_meta_style.inc.php,v 2.5 2005/07/16 12:59:01 lem9 Exp $ */
+/* $Id: header_meta_style.inc.php,v 2.12.2.1 2005/11/24 08:14:45 nijel Exp $ */
 // vim: expandtab sw=4 ts=4 sts=4:
+
+if (isset($_REQUEST['GLOBALS']) || isset($_FILES['GLOBALS'])) {
+    die("GLOBALS overwrite attempt");
+}
 
 /**
  * Sends the beginning of the html page then returns to the calling script
@@ -22,50 +26,20 @@ echo "<?xml version=\"1.0\" encoding=\"" . $GLOBALS['charset'] . "\"?".">";
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="<?php echo $GLOBALS['available_languages'][$GLOBALS['lang']][2]; ?>" lang="<?php echo $GLOBALS['available_languages'][$GLOBALS['lang']][2]; ?>" dir="<?php echo $GLOBALS['text_dir']; ?>">
-
 <head>
-<title>phpMyAdmin</title>
+<link rel="icon" href="./favicon.ico" type="image/x-icon" />
+<link rel="shortcut icon" href="./favicon.ico" type="image/x-icon" />
+<title><?php 
+    if(!empty($page_title)) 
+        echo htmlspecialchars($page_title); 
+    else 
+        echo 'phpMyAdmin';
+?></title>
 <meta http-equiv="Content-Type" content="text/html; charset=<?php echo $GLOBALS['charset']; ?>" />
 <?php
 if (!empty($GLOBALS['cfg']['PmaAbsoluteUri'])) {
     echo '<base href="' . $GLOBALS['cfg']['PmaAbsoluteUri'] . '" />' . "\n";
 }
 ?>
-<script language="JavaScript" type="text/javascript">
-<!--
-<?php    // added 2004-06-10 by Michael Keck ?>
-    /*
-     *       we need this for Backwards-Compatibility and resolving problems
-     *       with non DOM browsers, which may have problems with css 2 (like NC 4)
-     */
-    var isDOM      = (typeof(document.getElementsByTagName) != 'undefined'
-                      && typeof(document.createElement) != 'undefined')
-                   ? 1 : 0;
-    var isIE4      = (typeof(document.all) != 'undefined'
-                      && parseInt(navigator.appVersion) >= 4)
-                   ? 1 : 0;
-    var isNS4      = (typeof(document.layers) != 'undefined')
-                   ? 1 : 0;
-    var capable    = (isDOM || isIE4 || isNS4)
-                   ? 1 : 0;
-    // Ugly fix for Opera and Konqueror 2.2 that are half DOM compliant
-    if (capable) {
-        if (typeof(window.opera) != 'undefined') {
-            var browserName = ' ' + navigator.userAgent.toLowerCase();
-            if ((browserName.indexOf('konqueror 7') == 0)) {
-                capable = 0;
-            }
-        } else if (typeof(navigator.userAgent) != 'undefined') {
-            var browserName = ' ' + navigator.userAgent.toLowerCase();
-            if ((browserName.indexOf('konqueror') > 0) && (browserName.indexOf('konqueror/3') == 0)) {
-                capable = 0;
-            }
-        } // end if... else if...
-    } // end if
-    document.writeln('<link rel="stylesheet" type="text/css" href="<?php echo defined('PMA_PATH_TO_BASEDIR') ? PMA_PATH_TO_BASEDIR : './'; ?>css/phpmyadmin.css.php?<?php echo PMA_generate_common_url(); ?>&amp;js_frame=<?php echo isset($print_view) ? 'print' : 'right'; ?>&amp;js_isDOM=' + isDOM + '" />');
-//-->
-</script>
-<noscript>
     <link rel="stylesheet" type="text/css" href="<?php echo defined('PMA_PATH_TO_BASEDIR') ? PMA_PATH_TO_BASEDIR : './'; ?>css/phpmyadmin.css.php?<?php echo PMA_generate_common_url(); ?>&amp;js_frame=<?php echo isset($print_view) ? 'print' : 'right'; ?>" />
-</noscript>
     <link rel="stylesheet" type="text/css" href="<?php echo defined('PMA_PATH_TO_BASEDIR') ? PMA_PATH_TO_BASEDIR : './'; ?>css/print.css?<?php echo PMA_generate_common_url(); ?>" media="print" />

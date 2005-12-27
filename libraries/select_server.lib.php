@@ -1,33 +1,23 @@
 <?php
 /*
  * Code for displaying server selection written by nijel
- * $Id: select_server.lib.php,v 2.4 2004/12/26 21:46:45 lem9 Exp $
+ * $Id: select_server.lib.php,v 2.5.2.1 2005/11/21 12:03:45 nijel Exp $
  */
 
 if (count($cfg['Servers']) > 1) {
-    if (!$cfg['DisplayServersList']) {
-    ?>
-    <form method="post" action="index.php" target="_parent" style="margin: 0px; padding: 0px;">
-    <?php
-    }
     if ($show_server_left) {
         echo '<div class="heada">' . $strServer . ':</div>';
     } else {
-    ?>
-<!-- MySQL servers choice form -->
-<table border="0" cellpadding="3" cellspacing="0" bgcolor="<?php echo $cfg['BgcolorOne']; ?>">
-    <tr>
-        <th class="tblHeaders"><?php echo $strServerChoice; ?></th>
-    </tr>
-    <tr>
-        <td>
-    <?php
+        ?> 
+<fieldset>
+<legend><?php echo $strServerChoice; ?></legend>
+        <?php
     }
     if (!$cfg['DisplayServersList']) {
-    ?>
-    <form method="post" action="index.php" target="_parent" style="margin: 0px; padding: 0px;">
+        ?> 
+    <form method="post" action="index.php" target="_parent">
         <select name="server" onchange="this.form.submit();">
-    <?php
+        <?php
     }
     foreach ($cfg['Servers'] AS $key => $val) {
         if (!empty($val['host'])) {
@@ -55,35 +45,34 @@ if (count($cfg['Servers']) > 1) {
 
             if ($cfg['DisplayServersList']){
                 if ($selected && !$show_server_left) {
-                    echo '&raquo; <b>' . $label . '</b><br />';
+                    echo '&raquo; <b>' . htmlspecialchars($label) . '</b><br />';
                 }else{
-                    echo '&raquo; <a class="item" href="index.php?server=' . $key . '&amp;lang=' . $lang . '&amp;convcharset=' . $convcharset . '" target="_top">' . $label . '</a><br />';
+                    echo '&raquo; <a class="item" href="index.php?server=' . $key . '&amp;lang=' . $lang . '&amp;convcharset=' . $convcharset . '" target="_top">' . htmlspecialchars($label) . '</a><br />';
                 }
             } else {
-                echo '                <option value="' . $key . '" ' . ($selected ? ' selected="selected"' : '') . '>' . $label . '</option>' . "\n";
+                echo '            <option value="' . $key . '" ' . ($selected ? ' selected="selected"' : '') . '>' . htmlspecialchars($label) . '</option>' . "\n";
             }
 
         } // end if (!empty($val['host']))
     } // end while
 
-    if (!$cfg['DisplayServersList']){
-?>
+    if ( ! $cfg['DisplayServersList'] ) {
+        ?> 
         </select>
         <input type="hidden" name="lang" value="<?php echo $lang; ?>" />
         <input type="hidden" name="convcharset" value="<?php echo $convcharset; ?>" />
+        <noscript>
         <input type="submit" value="<?php echo $strGo; ?>" />
+        </noscript>
     </form>
-<?php
+        <?php
     }
     if (!$show_server_left) {
-    ?>
-        </td>
-    </tr>
-</table>
-<br />
-<?php
+        ?> 
+</fieldset>
+        <?php
     } else {
-        echo '<hr />' . "\n";
+        echo '<hr />';
     }
 }
-?>
+?> 

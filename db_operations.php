@@ -1,8 +1,7 @@
 <?php
-/* $Id: db_operations.php,v 2.17 2005/07/22 16:25:22 lem9 Exp $ */
+/* $Id: db_operations.php,v 2.22 2005/11/18 12:50:49 cybot_tm Exp $ */
 // vim: expandtab sw=4 ts=4 sts=4:
 
-require_once('./libraries/grab_globals.lib.php');
 require_once('./libraries/common.lib.php');
 require_once('./libraries/mysql_charsets.lib.php');
 /**
@@ -13,8 +12,6 @@ if (isset($db) &&
     (isset($db_copy) && $db_copy == 'true'))) {
 
     require_once('./libraries/tbl_move_copy.php');
-
-    $force_queryframe_reload = TRUE;
 
     if (isset($db_rename) && $db_rename == 'true') {
         $move = TRUE;
@@ -141,39 +138,8 @@ if (PMA_MYSQL_INT_VERSION < 50002 || (PMA_MYSQL_INT_VERSION >= 50002 && $db != '
 }
 
 if (!$is_information_schema) {
-?>
 
-<table border="0" cellpadding="2" cellspacing="0">
-    <!-- Create a new table -->
-        <form method="post" action="tbl_create.php" onsubmit="return (emptyFormElements(this, 'table') && checkFormElementInRange(this, 'num_fields', '<?php echo str_replace('\'', '\\\'', $GLOBALS['strInvalidFieldCount']); ?>', 1))">
-     <tr>
-     <td class="tblHeaders" colspan="3" nowrap="nowrap"><?php
-        echo PMA_generate_common_hidden_inputs($db);
-        if($cfg['PropertiesIconic']){ echo '<img src="' . $pmaThemeImage . 'b_newtbl.png" border="0" width="16" height="16" hspace="2" align="middle" />'; }
-        // if you want navigation:
-        $strDBLink = '<a href="' . $GLOBALS['cfg']['DefaultTabDatabase'] . '?' . PMA_generate_common_url() . '&amp;db=' . urlencode($GLOBALS['db']) . '">'
-                   . htmlspecialchars($GLOBALS['db']) . '</a>';
-        // else use
-        // $strDBLink = htmlspecialchars($db);
-    echo '             ' . sprintf($strCreateNewTable, $strDBLink) . ':&nbsp;' . "\n";
-    echo '     </td></tr>';
-    echo '     <tr bgcolor="'.$cfg['BgcolorOne'].'"><td nowrap="nowrap">';
-    echo '             ' . $strName . ':&nbsp;' . "\n";
-    echo '     </td>';
-    echo '     <td nowrap="nowrap">';
-    echo '             ' . '<input type="text" name="table" maxlength="64" size="30" class="textfield" />';
-    echo '     </td><td>&nbsp;</td></tr>';
-    echo '     <tr bgcolor="'.$cfg['BgcolorOne'].'"><td nowrap="nowrap">';
-    echo '             ' . $strFields . ':&nbsp;' . "\n";
-    echo '     </td>';
-    echo '     <td nowrap="nowrap">';
-    echo '             ' . '<input type="text" name="num_fields" size="2" class="textfield" />' . "\n";
-    echo '     </td>';
-    echo '     <td align="right">';
-    echo '             ' . '&nbsp;<input type="submit" value="' . $strGo . '" />' . "\n";
-    echo '     </td> </tr>' . "\n";
-    echo '        </form>' . "\n";
-    echo '</table>' . "\n";
+    require('./libraries/display_create_table.lib.php');
 
     echo '<table border="0" cellpadding="2" cellspacing="0">';
     if ($cfgRelation['commwork']) {
@@ -246,7 +212,7 @@ if (!$is_information_schema) {
 
                 <input type="checkbox" name="create_database_before_copying" value="1" id="checkbox_create_database_before_copying" style="vertical-align: middle" checked="checked" /><label for="checkbox_create_database_before_copying"><?php echo $strCreateDatabaseBeforeCopying; ?></label><br />
                 <input type="checkbox" name="drop_if_exists" value="true" id="checkbox_drop" style="vertical-align: middle" /><label for="checkbox_drop"><?php echo $strStrucDrop; ?></label>&nbsp;&nbsp;<br />
-                <input type="checkbox" name="auto_increment" value="1" id="checkbox_auto_increment" style="vertical-align: middle" /><label for="checkbox_auto_increment"><?php echo $strAddAutoIncrement; ?></label><br />
+                <input type="checkbox" name="sql_auto_increment" value="1" id="checkbox_auto_increment" style="vertical-align: middle" /><label for="checkbox_auto_increment"><?php echo $strAddAutoIncrement; ?></label><br />
                 <input type="checkbox" name="constraints" value="1" id="checkbox_constraints" style="vertical-align: middle" /><label for="checkbox_constraints"><?php echo $strAddConstraints; ?></label><br />
                 <?php
                     if (isset($_COOKIE) && isset($_COOKIE['pma_switch_to_new']) && $_COOKIE['pma_switch_to_new'] == 'true') {
@@ -284,18 +250,15 @@ if (!$is_information_schema) {
            . '        </form>' . "\n"
            . '         ' . "\n\n";
     }
+    
+    echo '</table>';
 
-    if ($num_tables > 0
+    if ( $num_tables > 0
         && !$cfgRelation['allworks'] && $cfg['PmaNoRelation_DisableWarning'] == FALSE) {
-        echo '<tr><td colspan="3"><img src="' . $GLOBALS['pmaThemeImage'] . 'spacer.png' . '" width="1" height="1" border="0" alt="" /></td></tr>'
-            . '<tr><th colspan="3" class="tblHeadError"><div class="errorhead">' . $strError . '</div></th></tr>'
-            . '<tr><td colspan="3" class="tblError">'
-            . sprintf(wordwrap($strRelationNotWorking,65,'<br />'), '<a href="' . $cfg['PmaAbsoluteUri'] . 'chk_rel.php?' . $url_query . '">',  '</a>')
-            . '</td></tr>';
+        echo '<div class="error"><h1>' . $strError . '</h1>'
+            . sprintf( $strRelationNotWorking, '<a href="' . $cfg['PmaAbsoluteUri'] . 'chk_rel.php?' . $url_query . '">',  '</a>')
+            . '</div>';
     } // end if
-?>
-</table>
-<?php
 } // end if (!$is_information_schema)
 // not sure about leaving the PDF dialog for information_schema
 

@@ -1,13 +1,159 @@
-----------------------
+﻿----------------------
 phpMyAdmin - Changelog
 ----------------------
 
-$Id: ChangeLog,v 2.1238.2.20 2005/11/15 15:32:50 lem9 Exp $
+$Id: ChangeLog,v 2.1632.2.24 2005/12/27 13:56:38 lem9 Exp $
 $Source: /cvsroot/phpmyadmin/phpMyAdmin/ChangeLog,v $
 
+2005-12-27 Marc Delisle  <lem9@users.sourceforge.net>
+    * lang/japanese: Update, thanks to Tadashi Jokagi - elf2000.
+    ### 2.7.0-pl1 released
 
-2005-11-15 Marc Delisle  <lem9@users.sourceforge.net>
-    ### 2.6.4-pl4 released
+2005-12-21 Marc Delisle  <lem9@users.sourceforge.net>
+    * lang/danish: Updated, thanks to AlleyKat - dk_alleykat
+    * lang/hungarian update, thanks to Mihály Mészáros <necronix@freemail.hu>
+
+2005-12-20 Marc Delisle  <lem9@users.sourceforge.net>
+     * libraries/display_create_table.lib.php: bug #1376314, detection of
+       privileges to create a table (fix for MySQL 4.0.x case)
+
+2005-12-07 Marc Delisle  <lem9@users.sourceforge.net>
+    ### 2.7.0-pl1 released
+
+2005-12-06 Sebastian Mendel <cybot_tm@users.sourceforge.net>
+    * libraries/grab_globals.lib.php: protect $import_blacklist from overwriting
+
+2005-12-04 Marc Delisle  <lem9@users.sourceforge.net>
+    * lang/catalan update, thanks to Xavier Navarro (xavin).
+    * server_privileges.php: do not use UNION DISTINCT, as it's not allowed
+      before MySQL 4.0.17, and because "it does nothing" (cf manual)
+    ### 2.7.0 released
+
+2005-12-04 Michal Čihař  <michal@cihar.com>
+    * libraries/import/csv.php: Fix use of escaped chars (bug #1371249).
+
+2005-11-29 Michal Čihař  <michal@cihar.com>
+    * lang/sync_lang.sh: Add workaround for multibyte chars that can contain \
+      as last byte.
+    * lang/japanese: Update, thanks to Tadashi Jokagi - elf2000.
+
+2005-11-29 Marc Delisle  <lem9@users.sourceforge.net>
+    * lang/italian: update, thanks to Luca Rebellato
+
+2005-11-28 Michal Čihař  <michal@cihar.com>
+    * libraries/sqlparser.lib.php: Do not use functions not supported by older
+      PHP (bug #1367782).
+
+2005-11-28 Marc Delisle  <lem9@users.sourceforge.net>
+    * lang/italian: update, thanks to Luca Rebellato
+
+2005-11-24 Michal Čihař  <michal@cihar.com>
+    * libraries/header_http.inc.php, libraries/header_meta_style.inc.php: Fix
+      XSS on some libraries (CVE-2005-3665).
+    * tbl_properties.inc.php: Disable clicking events on table creation (bug
+      #1358896).
+    * lang/swedish: Update, thanks to Björn T. Hallberg - bjornth.
+
+2005-11-23 Michal Čihař  <michal@cihar.com>
+    * config.default.php, libraries/import/csv.php, libraries/import/ldi.php:
+      Drop optional escaping as this should not have any real functionality.
+    * libraries/import.lib.php: Do not overwrite error message from import in
+      case of single SQL query is being executed.
+    * libraries/import/csv.php: Make enclosing behaviour same as in MySQL LOAD
+      DATA (bug #1363532).
+    * lang/swedish: Update, thanks to Bjorn T. Hallberg - bjornth.
+
+2005-11-21 Michal Čihař  <michal@cihar.com>
+    * libraries/import/sql.php: Fix query splitting in some cases (reported by
+      Marc).
+    * main.php, libraries/select_server.lib.php,
+      libraries/auth/cookie.auth.lib.php: Escape verbose server name (bug
+      #1362671).
+    * index.php: Avoid XSS on HTTP_HOST.
+
+2005-11-20 Marc Delisle  <lem9@users.sourceforge.net>
+    ### 2.7.0-rc1 released
+
+2005-11-20 Sebastian Mendel <cybot_tm@users.sourceforge.net>
+    * libraries/common.lib.php::PMA_showMySQLDocu()
+      - undefined constant (if server connection fails)
+    * libraries/select_theme.lib.php
+      - undefined variable (if server connection fails)
+
+2005-11-18 Marc Delisle  <lem9@users.sourceforge.net>
+    * libraries/database_interface.lib.php: initialize in case there are
+      no databases (MySQL < 5.0)
+
+2005-11-18 Sebastian Mendel <cybot_tm@users.sourceforge.net>
+    * server_databases.php:
+      - require_once common.lib.php BEFORE ANYTHING else
+      - unified style, removed tables
+      - removed superuser check for dbstats
+    * css/phpmyadmin.css.php:
+      - small improvements
+    * themes/darkblue_orange/css/*
+      - fixed font sizes
+    * lang/english-*: small improvements
+    * tbl_properties_structure.php
+      - do not truncate rowcount and next autoindex
+    * /*
+      - common.lib.php should REALLY REALLY and ALWAYS be the first include
+      - no other calls to grab_gloabls.lib.php
+    * fixed minimum_common for css files
+    * header.inc.php: missing ; after &quot
+    * libraries/function.js::pdfPaperSize()
+      - function does not always return a vlaue
+      - undeclared variables
+    * libraries/display_export.lib.php
+      - use superscript tag for comment
+    * server_links.inc.php
+      - require_once server_common.inc.php
+
+2005-11-17 Marc Delisle  <lem9@users.sourceforge.net>
+    * Documentation.html: patch #1353283, thanks to Isaac Bennetch
+    * lang/finnish: update, thanks to Jouni Kahkonen
+    * lang/belarusian updates, thanks to Jaska Zedlik
+
+2005-11-17 Sebastian Mendel <cybot_tm@users.sourceforge.net>
+    * libraries/grab_globals.lib.php: just to be sure:
+      - clean/empty $GLOBALS with $variables_whitelist
+      - unset some vars after use
+      - check all superglobals that could be imported by register_globals=on
+        for GLOBALS key (not only _REQUEST and _FILES )
+      - added $import_blacklist
+        - added variables starting with pma_, numeric or containing spaces
+        - *REVERT* do not prevent import pma_*
+      - rewrote PMA_gpc_extract()
+        - use $import_blacklist
+        - documentation
+    * libraries/common.lib.php, libraries/mysql_charsets.lib.php,
+      libraries/select_lang.php: keep the global space clean
+      - unset variables after use
+      - commented out some never used variables
+    * main.php, libraries/common.lib.php, libraries/dbi/*:
+      - added $GLOBALS['PMA_errors'] array
+    * libraries/database_interface.lib.php, libraries/dbi/*:
+      fall back to alternative mysql extension if selected fails and switch to
+      error.php if this fails too
+       - moved loading of extension out of libraries/dbi/* into
+         libraries/database_interface.lib.php
+    * libraries/sanitizing.lib.php: dont use deprecated tags
+    * lang/german-*: fixed $strCantLoad
+
+2005-11-16 Marc Delisle  <lem9@users.sourceforge.net>
+    * tbl_properties_links.php: missing menu tabs
+    * Documentation.html, config.default.php, footer.inc.php,
+      querywindow.php, tbl_query_box.php, libraries/common.lib.php,
+      libraries/left_header.inc.php, libraries/sql_query_form.lib.php:
+      new Query Window behavior
+
+2005-11-16 Sebastian Mendel <cybot_tm@users.sourceforge.net>
+    * added missing themes/darkblue_orange/img/error.ico
+    * themes/darkblue_orange/css/theme_right.css.php
+      - wrong error.ico
+    * themes/*/img/tbl_error.png, themes/original/img/tbl_*, themes/*/img/dot_*,
+      themes/*/img/frm_linevrlt.png
+      - removed
 
 2005-11-15 Michal Čihař  <michal@cihar.com>
     * css/phpmyadmin.css.php: Do not use common header file, as there is
@@ -16,45 +162,885 @@ $Source: /cvsroot/phpmyadmin/phpMyAdmin/ChangeLog,v $
     * libraries/db_table_exists.lib.php, libraries/header_http.inc.php,
       transformation_wrapper.php: Use define rather than variable for
       conditional paths.
+    * libraries/display_create_database.lib.php: Add label for create database
+      input.
 
-2005-10-22 Marc Delisle  <lem9@users.sourceforge.net>
-    ### 2.6.4-pl3 released
+2005-11-14 Michal Čihař  <michal@cihar.com>
+    * libraries/sql_query_form.lib.php: Fix %f expansion (bug #1355776).
+
+2005-11-14 Sebastian Mendel <cybot_tm@users.sourceforge.net>
+    * themes/*/css/theme_right.css.php, css/phpmyadmin.css.php:
+      bug #1342683 Wrong URL to error.ico
+    * libraries/tooltip.js::pmaTooltip():
+      - no return value (not always returns a value)
+      - additional check
+      - undefined variable docY
+    * libraries/left_header.inc.php
+      - added class icon
+    * display_tbl.lib.php, libraries/display_tbl_links.lib.php:
+      - added class icon to images
+      - fixed select all rows
+      - removed arrow_ltr/rtl.png for vertical display
+      - cleaned up php code and html output
+    * css/phpmyadmin.css.php:
+      - removed space arround form elements
+
+2005-11-13 Michal Čihař  <michal@cihar.com>
+    * Documentation.html, config.default.php, main.php, server_links.inc.php,
+      server_variables.php, server_status.php: Drop $cfg['ShowMysqlInfo'] and
+      $cfg['ShowMysqlVars'] and show info in all cases. Drop $is_superuser
+      condition from showing php info.
+    * lang/czech: Small improvements.
+
+2005-11-13 Sebastian Mendel <cybot_tm@users.sourceforge.net>
+    * db_details_structure.php: wrong js function call
+    * libraries/functions.js
+      - removed deprecated function setCheckboxesRange()
+      - rewrote setCheckboxes()
+      libraries/server_privilegs.js
+      - removed setCheckboxes()
+      header.inc.php: include functions.js for server_privilegs.php
+      server_privilegs.php
+      - bug #1353437 Table/Column privileges brokeness new in HEAD
+      - fixed proper display fo yes/no for column/table specific rights
+      - fixed row selection
+      - make use of javascript:un/markAllRows()
+      - adapted layout like db, table and row lists
+    * lang/german: fixed translation
+
+2005-11-11 Marc Delisle  <lem9@users.sourceforge.net>
+    * lang/bulgarian: Update, thanks to Stanislav Yordanov - stanprog.
+    * lang/finnish: update, thanks to Jouni Kahkonen
+
+2005-11-10 Marc Delisle  <lem9@users.sourceforge.net>
+    * libraries/session.inc.php, Documentation.html: bug #1352479, warn
+      if PHP does not support session
+    * server_privileges.php: bug #1353435, selecting users to drop is broken
+      and bug #1353437, undefined index while editing a user
+
+2005-11-10 Michal Čihař  <michal@cihar.com>
+    * scripts/create-release.sh: = is correct for comparsion in shell.
+    * server_privileges.php: Revert fix for #1353437, there are wrong data and
+      not displaying of it, fix bad display of table privileges.
+
+2005-11-09 Marc Delisle  <lem9@users.sourceforge.net>
+    * pdf_pages.php: bug #1245891, too large scaling in PDF schema
+    * libraries/bookmark.lib.php: bug #1339184 (for bookmark insertion)
+    * tbl_properties.inc.php: superscript 1 for Length/Values
+
+2005-11-09 Sebastian Mendel <cybot_tm@users.sourceforge.net>
+    * server_databases.php, mysql_charsets-lib.php:
+      bug #1351743 undefined function: pma_getservercollation()
+    * database_interface.lib.php: added PMA_DBI_get_default_engine()
+    * db_details_structure.php:
+      - fixed display issues
+      - display default engine in footer
+    * libraries/common.lib.php: added PMA_getDbLink
+    * libraries/display_create_table.lib.php: use fieldset
+    * server_privilegs.php, libraries/server_privilegs.js:
+       - db with only table specific rights where not displayed if there was not
+         at least one db with db specfic rights
+       - javascript errors
+    * function.js, db_details_structure.php, tbl_properties_structure.php,
+      display_tbl.lib.php, server_databases.php:
+       - added js:markAllRows(), js:unMarkAllRows()
+       - check/uncheck all rows now sets mark color for this rows
+
+2005-11-08 Sebastian Mendel <cybot_tm@users.sourceforge.net>
+    * Documentation.html, browse_foreigners.php, error.php,
+      header_printview.inc.php, index.php, left.php, translators.html,
+      libraries/header_meta_style.inc.php, scripts/decode_bug.php:
+      fixed/added favicon
+    * tbl_indexes.php: bug #1350872 Broken Link in Structure Tab
+
+2005-11-07 Marc Delisle  <lem9@users.sourceforge.net>
+    * tbl_properties_links.php: undefined variable $db_is_information_schema
+    ### 2.7.0-beta1 released
+
+2005-11-06 Sebastian Mendel <cybot_tm@users.sourceforge.net>
+    * libraries/display_tbl.lib.php:
+      bug #985399 MIME-based in print view / need to select the pk
+    * db_details_db_info.php: Undefined variable: db_is_information_schema
+    * tbl_properties.inc.php: bug #1305585 Add field(s) -> type ENTER
+
+2005-11-06 Marc Delisle  <lem9@users.sourceforge.net>
+    * lang/norwegian: Update, thanks to Sven-Erik Andersen
+
+2005-11-06 Sebastian Mendel <cybot_tm@users.sourceforge.net>
+    * libraries/database_interface.lib.php,
+      libraries/dbi/*.dbi.lib.php:
+      - added PMA_DBI_convert_message()
+      - bug #1344654 Not converted mysql error message to chosen user language
+    * sql.php: use fieldset for 'bookmark this'
+
+2005-11-05 Sebastian Mendel <cybot_tm@users.sourceforge.net>
+    * themes/*/css/theme_right.css.php:
+      dropped deprecated style classes
+    * server_databases, libraries/databases_interface.lib.php,
+      libraries/mysql_charsets.lib.php:
+      updated database list:
+      - added PMA_getServerCollation()
+        - display server collation in db list footer
+      - added PMA_DBI_get_databases_full()
+        - make use of info_schema on MySQL 5
+        - always display db stats for MySQL 5
+      - fixed html output
+      - replaced " with ' in some queries
+    * tbl_properties_structure.php, tbl_properties_common.php
+      tbl_properties_links.php:
+      - no drop, empty, operation, insert, import for information_schema tables
+      - enabled export for views
+    * db_details_common.php, db_details_structure.php, db_details_links.php:
+      - no import, drop, rights, operation for information_schema
+
+2005-11-04 Marc Delisle  <lem9@users.sourceforge.net>
+    * lang/spanish: Updated, thanks to Daniel Hinostroza (hinostroza)
+
+2005-11-04 Michal Čihař  <michal@cihar.com>
+    * db_details_structure.php: Read InnoDB exact count before rendering icons
+      for truncating (bug #1337744).
+
+2005-11-04 Sebastian Mendel <cybot_tm@users.sourceforge.net>
+    * db_details_structure.php:
+      fixed display of stats for InnoDB and information_schema
+    * main.php:
+      - bug #1348089 SQL and actions bellow should be same width
+      - removed nowrap, vertical srcolling is really annoying
+    * main.php, libraries/check_user_privileges.lib.php:
+      - bug #1348189 after droping db some links in main.php are missing
+    * header.inc.php, libraries/common.lib.php:
+      - added class icon to img-tags
+    * libraries/header_meta_style.inc.php:
+      fixed position of link meta tag
+    * libraries/select_server.lib.php
+      fixed html output
+
+2005-11-03 Marc Delisle  <lem9@users.sourceforge.net>
+    * tbl_change.php, tbl_replace.php, tbl_replace_fields.php:
+      bug #1339184, problems in strict mode inserting auto-increment fields
+    * libraries/header_meta_style.inc.php: favicon on login panel
+    * lang/japanese: Update, thanks to Tadashi Jokagi - elf2000.
+
+2005-11-03 Michal Čihař  <michal@cihar.com>
+    * libraries/common.lib.php: Incorrect message for validate links (bug
+      #1346608).
+
+2005-11-03 Sebastian Mendel <cybot_tm@users.sourceforge.net>
+    * themes/dakrblue_orange/theme_right.css.php, css/phpmyadmin.css.php:
+      fixed different font sizes
+    * footer.inc.php, libraries/dbg/*:
+      use $GLOBALS as this scripts can be included from inside a function
+    * left.php, libraries/common.lib.php:
+      fixed some rtl lang issues
+
+2005-11-02 Michal Čihař  <michal@cihar.com>
+    * config.default.php: This is not a configuration file.
+    * config.default.php, Documentation.html, libraries/common.lib.php: Use
+      $cfg['Servers'][1] from config.default.php as defaults for settings in
+      config.inc.php (bug #1330847).
+
+2005-11-02 Sebastian Mendel <cybot_tm@users.sourceforge.net>
+    * libraries/dbg/setup.php:
+      - display error in error box
+      - fixed 'not defined function'
+    * libraries/dbg/profiling.php:
+      - minor fixes: html output, speed, rtl lang
+    * tbl_realtion.php:
+      - fixed html output of table
+      - used fieldset for forms
+    * libraries/common.lib.php, browse_foreigners.php:
+      - replaced $cfg['Bgcolor*'] with classes
+      - make use of fieldset
+    * css/print.css, dbv_datadict.php:
+      - replaced $cfg['Bgcolor*'] with classes
+      - reduced output size by 40%
+    * libraries/display_create_tbl.php
+      - XHTML compl.
+      - added class icon
+
+2005-11-01 Marc Delisle  <lem9@users.sourceforge.net>
+    * server_privileges.php: undefined variable when changing a password
+
+2005-11-01 Sebastian Mendel <cybot_tm@users.sourceforge.net>
+    * libraries/common.lib.php:
+      bug #1342332 Error messages wrongly formatted.
+    * themes/*/css/theme_right.css.php:
+       - fixed some rtl languages issues
+       - added style for notice box (server_export.php)
+
+2005-10-31 Sebastian Mendel <cybot_tm@users.sourceforge.net>
+	* themes/*/css/theme_right.css.php:
+	   - use right image path
+	   - fixed icon alignment for rtl languages
+	* main.php, phpmyadmin.css.php, libraries/mysql_charsets.lib.php:
+	   - fixed some rtl language issues
+	* favicon.ico: changed icon
+
+2005-10-31 Marc Delisle  <lem9@users.sourceforge.net>
+    * server_privileges.php: do not display No under the Password column
+      if this is not a "real user" definition
+
+2005-10-31 Michal Čihař  <michal@cihar.com>
+    * libraries/select_lang.lib.php: Simplify code.
+    * libraries/common.lib.php: Allow collation change for ENUM and SET
+      columns (bug #1343627).
+    * main.php: Use normal message on reload, not just plain text.
+    * themes/darkblue_orange/css/theme_right.css.php,
+      themes/original/css/theme_right.css.php: Fix URL for cursor (bug
+      #1342683).
+
+2005-10-30 Michal Čihař  <michal@cihar.com>
+    * lang/slovak: Update, thanks to Ivan Kuriscak - shylauda69.
+    * lang/*: Remove duplicite message.
+    * lang/sync_lang.sh: Sync japanese also, it works now (at least for me).
+    * lang/japanese: Update, thanks to Tadashi Jokagi - elf2000.
+    * libraries/display_tbl.lib.php: Do not break on special chars in column
+      name (bug #1180668).
+    * libraries/common.lib.php: Do not escape SQL query twice while showing it
+      in error message (bug #1336452).
+    * left.php, querywindow.php, tbl_query_box.php: Fix including of files
+      when search path does not contain current directory.
+    * libraries/common.lib.php, libraries/left_header.inc.php: Use common code
+      for generating links to documentation, fixes link to new style docs.
+
+2005-10-29 Michal Čihař  <michal@cihar.com>
+    * Documentation.html, config.default.php, libraries/common.lib.php: Link
+      documentation to version we run (RFE #1334292), fix links for chapter
+      documentation (bug #1341676), drop support for old links.
+    * tbl_indexes.php, tbl_properties.inc.php, tbl_select.php,
+      libraries/display_create_database.lib.php,
+      libraries/sql_query_form.lib.php: Fix documentation links (bug
+      #1341676).
+
+2005-10-29 Olivier Mueller <om@omnis.ch>
+    * scripts/upgrade.pl: various fixes (was not handling rc/pl correctely),
+      and improvements (--force option, installation summary, backup
+      directory timestamp)
+
+2005-10-29 Marc Delisle  <lem9@users.sourceforge.net>
+    * Documentation.html: clarification on FAQ 6.20
+    * server_privileges.php: respect the chosen initial
+    * libraries/display_tbl.lib.php: patch 1328902 (adapted), format row count
+      in the Browse header, thanks to Cal Henderson
+
+2005-10-28 Sebastian Mendel <cybot_tm@users.sourceforge.net>
+    * server_privilegs.php, libraries/common.lib.php,
+      themes/*/theme_right.css.php:
+       - minor tweak in display
+       - added PMA_unescape_mysql_wildcards()
+       - bug #1144110 Unable to escape "_"
+       - now every user from every mysql table is displayed
+       - no table specific rights for db wildcards
+    * index.php, favicon.ico: added favicon.ico
+
+2005-10-27 Sebastian Mendel <cybot_tm@users.sourceforge.net>
+    * libraries/common.lib.php::PMA_formatNumber(),
+      db_details_structure.php: do not truncate rowcount
+    * libraries/mysql_charsets.lib.php::PMA_getDbCollation():
+      - preserve selected db
+      - make use of PMA_DBI_select_db()
+      - documentation
+    * tbl_properties_structure.php:
+      - added browser icon for each field (count unique values)
+      - removed styling
+      - make use of global row highlighting/marking
+      - display 'print table' and row stats for views
+      - no actions for info_schema tables
+    * css/phpmyadmin.css.php:
+      - added style for class selectallarrow
+      - added extra space between icons and text
+    * browse_foreigners.php, header_printview.inc.php, left.php:
+      bug #1334963 Per-server themes - left frame colors unthemed
+    * server_privileges.php:
+      - bug #1274032 Field privileges with database names containing underscores
+      - use DROP USER
+      - use db_name LIKE REPLACE( mysql.db.Db, \_, _ )
+    * libraries/grab_globals.lib.php: [XSS] clean $_SERVER variables
+    * left.php, libraries/common.lib.php: format rowcount in left frame
+    * server_privileges.php:
+      bug #688255 Can't edit priv. when different host in db and user
+
+2005-10-26 Marc Delisle  <lem9@users.sourceforge.net>
+    * lang/french* updates
+
+2005-10-26 Sebastian Mendel <cybot_tm@users.sourceforge.net>
+    * themes/*/theme_right.css.php, libraries/auth/http.auth.lib.php,
+      db_operations.php, mult_submits.inc.php, server_privileges.php,
+      css/phpmyadmin.css.php, libraries/common.lib.php, sql.php,
+      libraries/auth/cookie.auth.lib.php:
+      unified message boxes (error, warning, confirmation)
+    * server_privilegs.php: MySQL 5 requires CREATE USER before GRANT
+
+2005-10-25 Michal Čihař  <michal@cihar.com>
+    * lang/english: "Log in" is correct naming for action (RFE #945440).
+    * tbl_properties_operations.php: Allow to change auto_increment for
+      InnoDB (bug #1337873).
+    * tbl_properties_operations.php: Reread table information after change, so
+      that rendered page contains change, that has been just done.
+
+2005-10-24 Michal Čihař  <michal@cihar.com>
+    * tbl_properties_operations.php: Fix changing table attributes, reread new
+      parameters after changing them (bug #1290413).
+    * main.php: Remove useless isset.
+    * lang/czech: Update.
+
+2005-10-23 Marc Delisle  <lem9@users.sourceforge.net>
+    * libraries/relation.lib.php: there is already a function to do this
+      sort (thanks to Sebastian)
+    * tbl_change.php: bug #1334627, do not set NOW() as default function
+      when the TIMESTAMP has a default value and does not have the
+      ON UPDATE CURRENT TIMESTAMP attribute (phew! repeat this 3 times)
+
+2005-10-21 Marc Delisle  <lem9@users.sourceforge.net>
+    * libraries/relation.lib.php: foreign dropdowns: sort id-content by id
+      and content-id by content
+    * libraries/common.lib.php: bug #1330847, undefined index connect_type
+
+2005-10-21 Sebastian Mendel <cybot_tm@users.sourceforge.net>
+    * db_details_export.php:
+      - replaced for() with foreach()
+      - dont pollute $GLOBALS['table']
+    * libraries/mysql_charsets.lib.php:
+      - make use of mysql variable collation_database
+      - fixed call to PMA_DBI_fetch_value() (return second field, not first)
+    * libraries/database_interface.lib.php:
+      extended function PMA_DBI_get_tables_full():
+       - make use of information_schema
+       - always fill fields for information_schema and show table status
+    * db_details_db_info.php: make use of function PMA_DBI_get_tables_full()
 
 2005-10-20 Marc Delisle  <lem9@users.sourceforge.net>
-    * left.php, queryframe.php, server_databases.php: security fix
-    * libraries/bookmark.lib.php: PHP 5.1.0-dev compatibility
+    * server_databases.php: security fix
     * libraries/common.lib.php, /grab_globals.lib.php: security fix
+
+2005-10-20 Alexander M. Turek  <me@derrabus.de>
+    * libraries/mysql_charsets.lib.php:
+      - On MySQL 5.0.6, we don't have to parse SHOW CREATE DATABASE anymore,
+        if we just want to get to know a database's default collation;
+     - Make use of this fancy new function PMA_DBI_fetch_value().
+
+2005-10-20 Sebastian Mendel <cybot_tm@users.sourceforge.net>
+    * sql.php, footer.inc.php: refresh left frame on view creation
+    * left.php: view icon for views
+    * libraries/left.js: dropped
+    * libraries/function.js: tuned PMA_merkRowsInit():
+      every table with class data now has mark and hover effect
+    * css/phpmyadmin.css.php: nowrap for IE and pre for the rest
+    * css/phpmyadmin.css.php, server_status.php: css cleanup
+    * db_details_structure.php, db_details_db_info.php:
+      - XHTML compliance, styling outsourced, row marker outsourced
+      - do not too much if there is no table
+
+2005-10-19 Alexander M. Turek  <me@derrabus.de>
+    * lang/*.inc.php, libraries/mysql_charsets.lib.php: Correct description
+      for collations utf8_esperanto_ci, ucs2_esperanto_ci.
+    * lang/german-*.inc.php: Updated some untranslated strings.
+
+2005-10-19 Marc Delisle  <lem9@users.sourceforge.net>
+    * libraries/bookmark.lib.php: PHP 5.1.0-dev compatibility
+
+2005-10-19 Sebastian Mendel <cybot_tm@users.sourceforge.net>
+    * footer.inc.php, index.php, server_databases.php, libraries/querywindow.js:
+      fix problem not remembering selected server
+    * libraries/tooltip.js, themes/*/theme_right.css.php:
+      moved not always needed code out of event handler, fixed display with larger font
+    * libraries/function.js, css/phpmyadmin.css.php:
+      added mark and hover effect to every table of class data
+    * libraries/sql_query_form.lib.php: open db link from querywindow in main frame
+    * footer.inc.php, header.inc.php, libraries/tooltip.js:
+      moved tooltip javascript include into header
+
+2005-10-18 Michal Čihař  <michal@cihar.com>
+    * libraries/relation.lib.php: Do not set database if not needed.
+    * libraries/common.lib.php: Use common infrastructure for getting tables.
+    * Documentation.html, config.default.php, libraries/select_lang.lib.php:
+      Allow to limit list of shown languages (RFE #1328003).
+    * libraries/common.lib.php: Fix URL detection when not called from top
+      level directory (eg. transformations overview).
+    * Documentation.html, config.default.php, export.php, import.php,
+      tbl_change.php, tbl_replace_fields.php, libraries/common.lib.php,
+      libraries/display_export.lib.php, libraries/display_import.lib.php,
+      libraries/sql_query_form.lib.php: Support for user specific upload and
+      save directories (RFE #1260039).
+
+2005-10-18 Sebastian Mendel <cybot_tm@users.sourceforge.net>
+    * querywindow.php: wrong handling of linebreaks in query: bug #1243888
+    * left.php, sql.php, tbl_change.php, libraries/common.lib.php,
+      libraries/querywindow.js: update row count in left frame bug #1243908
+    * libraries/common.lib.php:
+      bug #1216521: display duplicate rows for failed unique key creation
+
+2005-10-17 Michal Čihař  <michal@cihar.com>
+    * lang/czech: Translation fixes.
+    * libraries/common.lib.php: Group databases by rightmost separator (bug
+      #1325651).
+    * libraries/string.lib.php: Fix escaping detection on multi byte strings.
+    * libraries/sql_query_form.lib.php: No warning if no db defined.
+    * libraries/sqlparser.lib.php: Avoid warning if analyzing failed.
+
+2005-10-17 Sebastian Mendel <cybot_tm@users.sourceforge.net>
+    * css/phpmyadmin.css.php: border around tabs bug #1326730
+    * libraries/header_meta_style.inc.php, themes/*: removed unused 'js_isDOM'
+    * queryframe.php, db_operations.php, footer.inc.php, header.inc.php,
+      header_printview.inc.php, left.php, querywindow.php,
+      transformation_wrapper.php, left_header.inc.php:
+      removed queryframe.php and references to it
+    * index.php, footer.inc.php, left.php, querywindow.php, server_databases.php
+      libraries/common.lib.php, libraries/left_header.inc.php,
+      libraries/sql_query_form.lib.php, libraries/querywindow.js:
+      code cleanup whole querywindow js stuff, moved all in one new js file,
+      now included in index.php, bug #1327055
+
+2005-10-16 Michal Čihař  <michal@cihar.com>
+    * db_details_links.php: Disable drop tab on mysql database (RFE #1327514).
+    * server_databases.php: Don't allow to check mysql database for dropping
+      (RFE #1327514).
+    * lang/*, libraries/transformations/text_plain__sql.inc.php:
+      Transformation for SQL pretty printing (RFE #1327648).
+
+2005-10-16 Marc Delisle  <lem9@users.sourceforge.net>
+    * tbl_create.php, tbl_alter.php: undefined $field_collation under MySQL < 4.1.x
+    * tbl_properties_structure.php, tbl_alter.php, libraries/sqlparser.lib.php:
+      bug #1320470, timestamp is not shown as being NULL under MySQL < 4.1.x
+
+2005-10-14 Marc Delisle  <lem9@users.sourceforge.net>
+    * libraries/dbi/mysqli.dbi.lib.php: problem under MySQL 4.0.x
+    * libraries/sql_query_form.lib.php: support MySQL < 4.1.x
+
+2005-10-14 Michal Čihař  <michal@cihar.com>
+    * libraries/sql_query_form.lib.php: Do not attempt to read upload dir when
+      not configured.
+    * libraries/sqlparser.lib.php: Do not walk chars for hex and numbers one
+      by one, this boosts performance while inserting huge blobs (bug
+      #1315232).
+    * libraries/sqlparser.lib.php: Handle correctly float like .01 (bug
+      #1252713).
+
+2005-10-14 Sebastian Mendel <cybot_tm@users.sourceforge.net>
+    * lang/*: typo 'unser' -> 'user'
+    * lang/german: partial Update
+    * libraries/import.lib.php: uninitialized variables
+
+2005-10-13 Marc Delisle  <lem9@users.sourceforge.net>
+    * tbl_addfield.php: undefined $field_collation under MySQL < 4.1.x
+
+2005-10-13 Michal Čihař  <michal@cihar.com>
+    * Documentation.html: Fix URL rewriting not to match empty parts.
+    * calendar.php, themes.php, libraries/auth/config.auth.lib.php,
+      libraries/auth/cookie.auth.lib.php, libraries/auth/http.auth.lib.php:
+      Use common header.
+    * libraries/header_meta_style.inc.php: Add support for defining page
+      title.
+    * libraries/left.js, libraries/header_meta_style.inc.php: Move browser
+      detection to only place where it is currently used.
+    * header.inc.php, css/phpmyadmin.css.php: Define CSS normal way and not
+      by writing through JavaScript.
+    * libraries/get_foreign.lib.php: Free temporary query result.
+    * lang/czech: Improve some translations.
+    * sql.php: We need bookmark code to be included everytime.
+    * libraries/common.lib.php: Allow editing of query without database.
+
+2005-10-13 Sebastian Mendel <cybot_tm@users.sourceforge.net>
+    * left.php: preselect db if only one db
+    * server_privileges.php:
+      XHTML compl., NOTICE, Icons for Edit/Revoke Links
+    * server_processlist.php, libraries/display_import.lib.php,
+      css/phpmyadmin.css.php: XHTML compl.
+    * libraries/display_import.lib.php, css/phpmyadmin.css.php:
+      JavaScript errors, layout errors
+    * libraries/display_import.lib.php, css/phpmyadmin.css.php:
+      small CSS fixes
+    * libraries/display_export.lib.php, server_export.php:
+      XHTML compliance, introduced fieldsets
+
+2005-10-12 Sebastian Mendel <cybot_tm@users.sourceforge.net>
+    * css/phpmyadmin.css.php, libraries/common.lib.php,
+      themes/darkblue_orange/css/theme_right.css.php,
+      themes/original/css/theme_right.css.php:
+      use list for navigation tabs RFE #1290423
+    * db_details_structure.php: fixed NOTICE
+    * css/phpmyadmin.css.php, themes/*/css/theme_*.css.php:
+      revert icon size to fixed width and height
+    * libraries/session.inc.php:
+      dont use 6-bit chars on windows
+    * css/phpmyadmin.css.php:
+      display bug in FF with tabs in querywindow
+    * libraries/common.lib.php:
+      fixed rowcount in left frame for tables in information_schema
+    * libraries/sql_query_form.lib.php:
+      XHTML compl.
+    * css/phpmyadmin.css.php, server_status.php, server_databases.php
+      server_collations.php, server_engines.php, server_privileges.php
+      server_variables.php: XHTML compl.
+
+2005-10-12 Michal Čihař  <michal@cihar.com>
+    * libraries/get_foreign.lib.php: Fix paging.
+    * tbl_properties_links.php: Make drop and empty tabs lead to structure
+      instead of SQL.
+    * libraries/common.lib.php: Use normal font sizes for Mozilla browsers.
+    * querywindow.php: Add icon for history tab.
 
 2005-10-11 Marc Delisle  <lem9@users.sourceforge.net>
     * libraries/grab_globals.lib.php: bug #1322871, local file inclusion
-    ### 2.6.4-pl2 released
 
-2005-09-15 Marc Delisle  <lem9@users.sourceforge.net>
-    ### 2.6.4-pl1 released
+2005-10-11 Sebastian Mendel <cybot_tm@users.sourceforge.net>
+    * footer.inc.php, index.php, left.php, queryframe.php, querywindow.php
+      server_databases.php, css/phpmyadmin.css.php, libraries/common.lib.php
+      libraries/left_header.inc.php, libraries/sql_query_form.lib.php
+      themes/darkblue_orange/css/theme_left.css.php
+      themes/original/css/theme_left.css.php:
+      XHTML 1.0 trans. compliance and more semantic XHTML output
+    * tbl_printview.php, tbl_properties_structure.php:
+      no table statistics for information_schema
+    * tbl_properties_table_info.php:
+      bug #1317655 information_schema browsing
+    * db_details_db_info.php, db_details_structure.php:
+      fixed display table statistics for information_schema
+    * db_details_links.php, header.inc.php:
+      moved database comment into header (serverinfo) after database name
+    * header.inc.php, main.php, libraries/header_meta_style.inc.php:
+      XHTML 1.0 trans. compliance
+
+2005-10-09 Marc Delisle  <lem9@users.sourceforge.net>
+    * tbl_properties_links.php: invalid js confirmation and operation feedback
+      when dropping a view
+    * server_privileges.php: bug #1226819, Accepting Negative values in
+      Resource Limits in Privileges
+
+2005-10-09 Michal Čihař  <michal@cihar.com>
+    * libraries/display_export.lib.php, libraries/export/sql.php, lang/*,
+      config.default.php: Add ability to limit maximal size of extended insert
+      query, defaults to 50 KB (RFE #1015378).
+    * import.php, libraries/common.lib.php, lang/*: Show message when
+      bookmark has been created (RFE #477472), show deleted bookmark query.
+    * server_privileges.php: Limit username and hostname to actual limits of
+      MySQL (RFE #1178071).
+    * config.default.php: Add COMPRESS and UNCOMPRESS functions.
+    * tbl_change.php: Show functions for blobs when upload is enabled (RFE
+      #1191792).
+    * tbl_properties.inc.php: Remove unused code, show only available engines,
+      remember value of seleted engine (bug #1239580).
+    * browse_foreigners.php, libraries/get_foreign.lib.php: Support for
+      searching in foreign keys (RFE #871091).
+    * import.php, libraries/sql_query_form.lib.php, lang/*: Ability to replace
+      existing bookmark (RFE #907438).
+    * Documentation.html, libraries/ip_allow_deny.lib.php: Add more useful
+      shortcuts for IP rules (RFE #1022831).
+
+2005-10-08 Marc Delisle  <lem9@users.sourceforge.net>
+    * libraries/session.inc.php: workaround for warnings on session_start()
+      displayed on sf.net server
+    * sql.php: remove old code
+    * server_privileges.php, lang/*.php, libraries/sqlparser.data.php:
+      support MAX_USER_CONNECTIONS
+
+2005-10-08 Michal Čihař  <michal@cihar.com>
+    * libraries/display_export.lib.php: Use same formatting for all options.
+    * libraries/import/ldi.php: This one does not handle charset conversion.
+    * sql.php: Work even if no db set.
+    * server_status.php: Call sql.php directly, we don't need to care about
+      query splitting done im read_dump.
+    * libraries/import/sql.php: Fix import of queries containing `, fix import
+      of queries not terminated by ;.
+    * libraries/sqlparser.lib.php: Do not show error on empty query.
+    * libraries/import.lib.php: Add support for DROP DATABASE checking.
+    * libraries/display_tbl.lib.php, libraries/sql_query_form.lib.php,
+      libraries/common.lib.php: Use import.php.
+    * lang/*: New message for deleting bookmark.
+    * import.php: Add support for bookmarks, support for goto URL, fail
+      correctly if import plugin not found, commented some code.
+    * sql.php, config.default.php: Remove references to read_dump.php.
+    * read_dump.php: Remove unused code.
+    * ldi_check.php, ldi_table.php: Remove unused code.
+    * tbl_change.php: Remove references to ldi_*.
+    * scripts/find_unused_messages.sh: Simplify and addapt to current
+      messages.
+    * import.php: Do not show query in different charset (bug #1028634).
+    * libraries/auth/cookie.auth.lib.php: Keep database and table selection
+      over login, needed for RFE #1278312.
+    * Documentation.html: Add example for redirects like
+      /phpMyAdmin/database/table (RFE  #1278312).
+    * libraries/import.lib.php: Fix execution of single large queries.
+    * import.php, lang/*: Try to detect that upload failed because of limits
+      (RFE #1240480).
+    * libraries/storage_engines.lib.php: Use defined messages.
+    * libraries/auth/cookie.auth.lib.php: Removed unused code parts.
+    * libraries/sqlvalidator.lib.php: Removed unused code.
+    * server_privileges.php, lang/*: Better show error, define used message
+      strDeleteNoUsersSelected.
+    * tbl_properties_operations.php: Use strError instead of non existing
+      strFailure.
+    * lang/*: Remove unused messages.
+    * sql.php: Use common code for superuser detection.
+    * tbl_addfield.php, tbl_alter.php, tbl_create.php,
+      libraries/common.lib.php, libraries/relation.lib.php: Use common code
+      for CREATE/ALTER TABLE, set comments on creating table, so that user can
+      see it in the query.
+    * tbl_addfield.php, tbl_alter.php, tbl_create.php: Do not try to set
+      comment and MIME transformation if field not named.
+    * libraries/relation.lib.php: Fix reading native MySQL comments when no
+      phpMyAdmin one defined (bug #1312758).
+    * tbl_properties_structure.php: Removed query box as discussed on mailing
+      list.
+    * tbl_*: Use more require_once to avoid acquiring table info several
+      times.
+    * libraries/relation.lib.php: Do not try to restore database as control
+      user, it has to fail.
+    * libraries/import/sql.php: Fix query parsing when there is comment or
+      string at the end.
+    * import.php: Reenable LIMIT appending (bug #1318624).
+    * sql.php: Fix appending LIMIT when there are comments.
+    * libraries/common.lib.php: Parse query before inserting LIMIT to know
+      where to place it.
+    * lsng/czech: Update.
+
+2005-10-07 Marc Delisle  <lem9@users.sourceforge.net>
+    * libraries/check_user_privileges.lib.php: bug #1313821, dbname containing a
+      hyphen was not detected as being already created
+
+2005-10-07 Michal Čihař  <michal@cihar.com>
+    * lang/bulgarian: Update, thanks to Stanislav Yordanov - stanprog.
+    * libraries/common.lib.php: Drop some old code.
+
+2005-10-06 Michal Čihař  <michal@cihar.com>
+    * import.php: Correctly report that file could not be read.
+    * libraries/import/sql.php: Fix handling of whitespace at the end of
+      imported file.
+    * calendar.php, libraries/tbl_change.js: Calendar improvements: add submit
+      button (bug# 1312373) and fix entering time begining with 0 (bug
+      #1312373).
+
+2005-10-05 Marc Delisle  <lem9@users.sourceforge.net>
+    * db_details_structure.php, tbl_properties_table_info.php: detect
+      MySQL 5.0.13 views
+    * libraries/display_tbl.lib.php: bug #1306833, full text link broken,
+      thanks to Vernon Lyon - vlyon
+    * libraries/charset_conversion.lib.php: PMA_MYSQL_INT_VERSION is not
+      defined at login time but what tested
+    * libraries/display_create_table.lib.php, bug #1311384, Create table
+      dialog on escaped wildcard privileges
+
+2005-10-04 Sebastian Mendel <cybot_tm@users.sourceforge.net>
+    * libraries/functions.js, libraries/sql_query_form.lib.php:
+      fixed JavaScript malfunction in querybox textarea with Opera
+
+2005-10-03 Marc Delisle  <lem9@users.sourceforge.net>
+    * server_privileges.php: support for Execute_priv
+
+2005-10-01 Michal Čihař  <michal@cihar.com>
+    * lang/czech: Update.
+
+2005-09-30 Marc Delisle  <lem9@users.sourceforge.net>
+    * main.php, db_details_structure.php, db_operations.php,
+      libraries/check_user_privileges.php, /display_create_database.lib.php,
+      /display_create_table.lib.php: bug #1307208, detect lack of privileges
+      before showing the "Create new table" dialog. Please test.
+      TODO: detect escaped wildcard privileges
+
+2005-09-30 Michal Čihař  <michal@cihar.com>
+    * libraries/display_export.lib.php, libraries/export/sql.php,
+      db_operations.php, tbl_properties_operations.php: Fix auto increment
+      export (bug #1309257).
+
+2005-09-28 Marc Delisle  <lem9@users.sourceforge.net>
+    * tbl_alter.php, libraries/common.lib.php, /relation.lib.php:
+      bug #1262250, cannot change ENUM default value to empty
+
+2005-09-28 Sebastian Mendel <cybot_tm@users.sourceforge.net>
+    * libraries/sql_query_form.lib.php: removed unneeded variable,
+      dont display bookmark selection fieldset if no bookmark exists
+    * libraries/session.inc.php: introduced PMA_secureSession()
+    * sql.php: bug #1305830 wrong db choosen
+
+2005-09-27 Sebastian Mendel <cybot_tm@users.sourceforge.net>
+    * libraries/sql_query_form.lib.php, db_details.php, server_sql.php
+      tbl_properties.php, tbl_properties_structure.php, sql.php,
+      querywindow.php, read_dump.php: moved all code for queryboxes into
+      libraries/sql_query_form.lib.php, replaced table with fieldsets, moved
+      styles into css, minor interface changes related to queryboxes
+    * libraries/sql_query_form.lib.php: completed function docblocks
+    * css/phpmyadmin.css.php:
+      partially fixed bug: odd display of navtabs in Gecko-Browsers
+    * libraries/session.inc.php, libraries/grab_globals.lib.php,
+      libraries/common.lib.php, libraries/auth/cookie.auth.lib.php:
+      introducing sessions
+
+2005-09-27 Michal Čihař  <michal@cihar.com>
+    * lang/czech: Update.
+    * server_status.php, lang/*: Separate some new information on MySQL 5.
+    * lang/hebrew, translators.html: New Hebrew translation, thanks to Hadar
+      Porat - hpman28.
+    * lang/*: Add missing messages, remove duplicates and no longer used.
+    * libraries/sql_query_form.lib.php: Do not use strOr, drop file upload
+      from normal SQL dialogs.
+    * libraries/display_import.lib.php, libraries/file_listing.php: Sort file
+      list on import tab, prepare generic framework to be used elsewhere (RFE
+      #1303145).
+    * tbl_change.php: Use file common file listing.
+    * libraries/common.lib.php, libraries/display_import.lib.php,
+      libraries/file_listing.php, libraries/sql_query_form.lib.php: Use common
+      file listing in query window, remove no more used functions. Please note
+      that file import from query windows is currently half rewritten, so
+      compressed imports will not work.
+
+2005-09-26 Sebastian Mendel <cybot_tm@users.sourceforge.net>
+    * libraries/database_interface.lib.php: fixed bug in PMA_DBI_fetch_*()
+      using PMA_DBI_num_rows() on unbuffered queries
+
+2005-09-26 Michal Čihař  <michal@cihar.com>
+    * libraries/export/sql.php: Fix constraint parsing (bug #1304600).
+    * libraries/display_import.lib.php, libraries/import/csv.php: Rename
+      plugin parameters to allow using same parameter by multiple plugins.
+    * config.default.php, lang/*, libraries/import/ldi.php: Alternate LOAD
+      DATA import plugin for CSV.
+    * libraries/display_import.lib.php: Sort list of import plugins.
+    * mult_submits.inc.php, tbl_properties_structure.php: Support for browsing
+      selected columns (RFE #1275909).
+    * libraries/common.lib.php: Do no try to parse empty SQL query (bug
+      #1303994).
+    * tbl_create.php, lang/*: Do not allow to create table that already exists
+      (RFE #1255931).
+
+2005-09-25 Marc Delisle  <lem9@users.sourceforge.net>
+    * server_privileges.php: support MySQL 5 privileges
+
+2005-09-25 Michal Čihař  <michal@cihar.com>
+    * lang/*: Messages for Sebastian.
+    * lang/czech: Partial update.
+
+2005-09-25 Sebastian Mendel <cybot_tm@users.sourceforge.net>
+    * left.php, queryframe.php, libraries/common.lib.php,
+      libraries/left_header.inc.php, css/phpmyadmin.css.php:
+      grouping databases (bug #1281262)
+    * server_status.php, libraries/common.lib.php, css/phpmyadmin.css.php:
+      extended server status information with description and warnings,
+      added PMA_formatNumber()
+    * server_privilegs.php: fixed bug table not found
+    * tbl_properties_structure.php, css/phpmyadmin.css.php:
+      made statistic tables floating, moved styles into css
+    * css/phpmyadmin.css.php: set font-size in caption to normal
+
+2005-09-24 Sebastian Mendel <cybot_tm@users.sourceforge.net>
+    * querywindow.php, css/phpmyadmin.css.php:
+      resize querywindow to content (bug #1277375)
+
+2005-09-24 Marc Delisle  <lem9@users.sourceforge.net>
+    * db_details_links.php, server_privileges.php, server_common.inc.php:
+      bug #1302985, Privileges tab on database
+    * tbl_change.php: bug #1272290, multiple MAX_FILE_SIZE limits BLOB
+      insertion
+
+2005-09-24 Michal Čihař  <michal@cihar.com>
+    * lang/add_message_file.sh: Make it deal with regullar php file, do not
+      mark english text as to translate.
+    * lang/add_message.sh: Do not mark english text as to translate.
+    * *import*, Documentation.html, lang/*, main.php, *links*,
+      css/phpmyadmin.css.php, libraries/unzip.lib.php: New import system,
+      please test it (patch #1288933, RFEs: 618255, 780754, 1017598, 1097670,
+      1274500, 807830).
+    * libraries/import.lib.php, libraries/import/csv.php,
+      libraries/import/sql.php, libraries/import/README: Fix possible data
+      leak when reading large buffer.
+
+2005-09-23 Michal Čihař  <michal@cihar.com>
+    * libraries/auth/cookie.auth.lib.php: Do not pass empty variables as
+      haystack to strpos (bug #1299422).
+    * server_privileges.php: Reload left frame if dropping database (bug
+      #1298678).
+    * libraries/fpdf/fpdf.php: Fix filename for PDF pages containing space in
+      name (bug #1300837).
+
+2005-09-23 Marc Delisle  <lem9@users.sourceforge.net>
+    * libraries/display_export.lib.php, libraries/export/csv.php:
+      bug #1301374, csv on-screen export broken
+
+2005-09-20 Michal Čihař  <michal@cihar.com>
+    * libraries/database_interface.lib.php: Added some useful functions to DBI
+      layer (patch #1286451), thanks to Sebastian Mendel.
+    * Documentation.html, config.default.php, libraries/common.lib.php: Add
+      support for forcing https access to phpMyAdmin (RFE #1111333).
+
+2005-09-20 Marc Delisle  <lem9@users.sourceforge.net>
+    * libraries/sqlparser.data.php: patch #1295365, missing function
+      definitions in parser, thanks to Sebastian Mendel
+    * db_details_links.php: patch #1196806, Privileges link on db page
+
+2005-09-18 Marc Delisle  <lem9@users.sourceforge.net>
+    * libraries/display_export.lib.php: bug #1293937 Export compression
+      default: bzip instead of bzip2, thanks to Rene Leonhardt
+
+2005-09-15 Michal Čihař  <michal@cihar.com>
+    * config.default.php, libraries/common.lib.php: Simplify loading of
+      defaults, why did I write such crap before?
+    * libraries/common.lib.php: Fail if pcre support is missing.
 
 2005-09-14 Marc Delisle  <lem9@users.sourceforge.net>
     * export.php: bug #1290730, https export under MSIE fails
 
+2005-09-14 Michal Čihař  <michal@cihar.com>
+    * css/phpmyadmin.css.php: Do not wrap tabs (patch #1282247), thanks to
+      Sebastian Mendel.
+    * config.default.php: Do not set blowfish_secret here at all, this needs
+      to be done by user (bug #1290990).
+    * libraries/auth/cookie.auth.lib.php: Fix undefined variable warnings.
+    * libraries/common.lib.php, lang/*: Detect wrong authentication method and
+      warn user using error.php (bug #1290888).
+    * tbl_properties_operations.php: Update auto_increment value (bug
+      #1290413).
+    * read_dump.php, server_links.inc.php, server_sql.php, sql.php, lang/*:
+      Add SQL tab for server (patch #1291084), (RFE #1048090).
+    * Documentation.html: We dropped support for PHP 3 some time ago, so let's
+      drop mentions about it from documentation.
+
+2005-09-13 Marc Delisle  <lem9@users.sourceforge.net>
+    * scripts/create-release.sh: no longer copy config.inc.php to
+      config.default.php to keep a backup of the previous version
+
+2005-09-13 Michal Čihař  <michal@cihar.com>
+    * libraries/common.lib.php: Add support for lang/added_messages.php
+      (mostly as feature for developer, to allow easilly adding messages
+      while working on some features).
+    * .cvsignore, Documentation.html, config.default.php,
+      config.inc.php[removed], libraries/common.lib.php,
+      libraries/config_import.lib.php[removed]: New configuration handling,
+      use config.inc.php for configuration, default values are stored in
+      config.default.php.
+    * config.default.php: Remove non configuration stuff.
+    * lang/.cvsignore: Ignore lang/added_messages.php.
+
 2005-09-12 Marc Delisle  <lem9@users.sourceforge.net>
     * tbl_relation.php: bug #1287611, no Save button in Relation view
-      when pmadb is not defined
+          when pmadb is not defined
 
 2005-09-10 Marc Delisle  <lem9@users.sourceforge.net>
     ### 2.6.4 released
 
-2005-09-06 Marc Delisle  <lem9@users.sourceforge.net>
-    * lang/mongolian update, thanks to Bayarsaikhan Enkhtaivan
+2005-09-09 Marc Delisle  <lem9@users.sourceforge.net>
+    * libraries/display_tbl.lib.php: bug #1283813, SHOW STATUS typed in a
+      query box produces a SHOW CREATE TABLE STATUS under MySQL 5.0.x
+    * lang/mongolian* update, thanks to Bayarsaikhan Enkhtaivan
 
 2005-09-07 Michal Čihař  <michal@cihar.com>
     * main.php, libraries/auth/cookie.auth.lib.php: XSS on username (bug
       #1283552)
+    * ChangeLog: Move vim modelines to correctly interpret et after setting
+      file type (otherwise tabs were not expanded as changelog ft sets noet).
 
 2005-09-06 Marc Delisle  <lem9@users.sourceforge.net>
     * lang/serbian: Updated, thanks to Mihailo Stefanovic (mikis).
 
 2005-09-05 Marc Delisle  <lem9@users.sourceforge.net>
-    * libraries/defines.lib.php, themes/*/info.inc.php: needs generation 2
+    * libraries/defines.lib.php, themes/*/info.inc.php: about themes version,
+      phpMyAdmin 2.6.4 needs generation 2, version 1;
+      phpMyAdmin 2.6.5 (currently) needs generation 2, version 2
     * header.inc.php: XSS on $title, thanks to Christian Wenz
+
+2005-09-05 Michal Čihař  <michal@cihar.com>
+    * libraries/export/sql.php: Do not treat BLOBs as number (bug #1277309).
+
+2005-09-04 Marc Delisle  <lem9@users.sourceforge.net>
+    * tbl_properties.inc.php: bug #1281533, collation not kept while
+      changing table field count
 
 2005-09-02 Marc Delisle  <lem9@users.sourceforge.net>
     * lang/turkish update, thanks to boralioglu.
@@ -62,6 +1048,8 @@ $Source: /cvsroot/phpmyadmin/phpMyAdmin/ChangeLog,v $
 2005-08-28 Marc Delisle  <lem9@users.sourceforge.net>
     * lang/belarusian updates, thanks to Jaska Zedlik
     ### 2.6.4-rc1 released
+    * server_privileges, themes/*/css/theme_right.css.php: patch #1251692,
+      fieldsets for privileges interface, thanks to Sebastian Mendel
 
 2005-08-26 Marc Delisle  <lem9@users.sourceforge.net>
     * lang/indonesian: update thanks to Rachim Tamsjadi - tamsy
@@ -70,7 +1058,7 @@ $Source: /cvsroot/phpmyadmin/phpMyAdmin/ChangeLog,v $
 2005-08-23 Marc Delisle  <lem9@users.sourceforge.net>
     * libraries/display_tbl.lib.php: bug #1267177, wrong return page
     * main.php, libraries/common.lib.php, Documentation.html,
-      config.inc.php: patch #1257134, removed code to display the warning if 
+      config.inc.php: patch #1257134, removed code to display the warning if
       PmaAbsoluteUri is not set. A notice will still display if the autodetect
       code is unable to figure out the proper URI. Thanks to Isaac Bennetch
 
@@ -92,7 +1080,7 @@ $Source: /cvsroot/phpmyadmin/phpMyAdmin/ChangeLog,v $
     * libraries/common.lib.php, new error.php: patch #1258978, move common
       code for error pages out of common.lib.php, thanks to Sebastian Mendel
     * lang/german*: bug #1258956, typo
-    * libraries/defines.lib.php, themes/original/info.inc.php, 
+    * libraries/defines.lib.php, themes/original/info.inc.php,
       themes/darkblue_orange/info.inc.php: PMA 2.6.4 needs theme version 3
 
 2005-08-19 Marc Delisle  <lem9@users.sourceforge.net>
@@ -147,7 +1135,7 @@ $Source: /cvsroot/phpmyadmin/phpMyAdmin/ChangeLog,v $
     * db_details.php: undefined $header_url_qry
     * sql.php: bug #1255869, "MySQL returned an empty result set" not
       displayed in all cases
-	  
+
 2005-08-09 Marc Delisle  <lem9@users.sourceforge.net>
     * read_dump.php: add unique numbers to $strFileCouldNotBeRead to
       improve support when someone gets this error
@@ -162,7 +1150,7 @@ $Source: /cvsroot/phpmyadmin/phpMyAdmin/ChangeLog,v $
     * libraries/dbi/mysqli.dbi.lib.php: bug #1253453, using mysqli extension
       with MySQL 4.0.x
     * libraries/mysql_charsets.lib.php, /relation_cleanup.lib.php,
-      /tbl_move_copy.php: patch #1253461 (code cleanup), 
+      /tbl_move_copy.php: patch #1253461 (code cleanup),
       thanks to Sebastian Mendel
     * libraries/sqlparser.lib.php: patch #1253478, variable initialization
       and code cleanup, thanks to Sebastian Mendel
@@ -181,7 +1169,7 @@ $Source: /cvsroot/phpmyadmin/phpMyAdmin/ChangeLog,v $
       group, and proper closing of optgroup, thanks to Ryan Schmidt
 
 2005-08-05 Marc Delisle  <lem9@users.sourceforge.net>
-    * Documentation.html, readme.php, license.php: 
+    * Documentation.html, readme.php, license.php:
       bug #965548, displaying README and LICENSE, thanks to Ryan Schmidt
 
 2005-08-04 Michal Čihař  <michal@cihar.com>
@@ -229,10 +1217,10 @@ $Source: /cvsroot/phpmyadmin/phpMyAdmin/ChangeLog,v $
 
 2005-07-29 Marc Delisle  <lem9@users.sourceforge.net>
     * tbl_change.php, lang/*: new message $strAndThen
-	* libraries/dbg/profiling.php: patch #1160439, improvements,
-	  thanks to Glen Arason
-	* scripts/upgrade.pl: patch #1198492, current version check,
-	  thanks to Herman van Rink - helmo
+    * libraries/dbg/profiling.php: patch #1160439, improvements,
+      thanks to Glen Arason
+    * scripts/upgrade.pl: patch #1198492, current version check,
+      thanks to Herman van Rink - helmo
 
 2005-07-28 Marc Delisle  <lem9@users.sourceforge.net>
     * pdf_pages.php: Go button renamed to Save because it's really used to save coordinates
@@ -306,7 +1294,7 @@ $Source: /cvsroot/phpmyadmin/phpMyAdmin/ChangeLog,v $
     * export.php: bug #1116026, export under IE 6 (XP SP2)
 
 2005-07-11 Marc Delisle  <lem9@users.sourceforge.net>
-    * tbl_relations.php: bug #1227710, unsaved relations lost when changing 
+    * tbl_relations.php: bug #1227710, unsaved relations lost when changing
       field to display
 
 2005-07-11 Michal Čihař  <michal@cihar.com>
@@ -318,7 +1306,7 @@ $Source: /cvsroot/phpmyadmin/phpMyAdmin/ChangeLog,v $
       libraries/config_import.lib.php:
       Document previous foreign-key dropdown work, and also ensure that the
       configuration import code works properly with it.
-	
+
 2005-07-10 Michal Čihař  <michal@cihar.com>
     * libraries/auth/http.auth.lib.php: Support FastGCI in http auth (patch
       #1192219)
@@ -348,7 +1336,7 @@ $Source: /cvsroot/phpmyadmin/phpMyAdmin/ChangeLog,v $
     * db_details_qbe.php: bug #1234616, minor theme text color issue
 
 2005-07-06 Marc Delisle  <lem9@users.sourceforge.net>
-    * db_search.php: bug #1233349, db search in MySQL 5.0.x on fields 
+    * db_search.php: bug #1233349, db search in MySQL 5.0.x on fields
       without a charset
 
 2005-07-04 Marc Delisle  <lem9@users.sourceforge.net>
@@ -377,7 +1365,7 @@ $Source: /cvsroot/phpmyadmin/phpMyAdmin/ChangeLog,v $
     * lang/swedish: Updated, thanks to Björn T. Hallberg (bth).
 
 2005-06-29 Marc Delisle  <lem9@users.sourceforge.net>
-    * tbl_properties_table_info.php: bug #1228862, creating a table under 
+    * tbl_properties_table_info.php: bug #1228862, creating a table under
       MySQL 5.x with wrong table type
 
 2005-06-28 Marc Delisle  <lem9@users.sourceforge.net>
@@ -417,9 +1405,9 @@ $Source: /cvsroot/phpmyadmin/phpMyAdmin/ChangeLog,v $
 
 2005-06-23 Robin Johnson <robbat2@users.sourceforge.net>
     * config.inc.php, libraries/relation.lib.php,
-	libraries/get_foreign.lib.php, tbl_select.php, tbl_change.php: Support for
-	customizing foreign-key dropdown, take #2, now very customizable, incl max
-	item limit.
+      libraries/get_foreign.lib.php, tbl_select.php, tbl_change.php: Support for
+      customizing foreign-key dropdown, take #2, now very customizable, incl max
+      item limit.
 
 2005-06-23 Michal Čihař  <michal@cihar.com>
     * lang/czech: Update.
@@ -429,7 +1417,7 @@ $Source: /cvsroot/phpmyadmin/phpMyAdmin/ChangeLog,v $
 
 2005-06-22 Robin Johnson <robbat2@users.sourceforge.net>
     * config.inc.php, libraries/relation.lib.php: Support for customizing
-	foreign-key dropdown, take #1.
+      foreign-key dropdown, take #1.
 
 2005-06-22 Garvin Hicking  <rabustoldmethatiforgotmyemailaddress@supergarv.de>
     * server_databases.php: Bug #1225315, wrong message displayed
@@ -2213,7 +3201,7 @@ $Source: /cvsroot/phpmyadmin/phpMyAdmin/ChangeLog,v $
     * tbl_properties_export.php: Fix export of queries with empty WHERE clause
       (bug #990330).
     * libraries/display_export.lib.php: Display SQL export after saving file
-      on server	(bug #989657).
+      on server    (bug #989657).
     * tbl_properties_export.php: In case we don't need to reconstruct complete
       query just drop LIMIT part (workaround for bug #955175 and should fix
       bug #990724).
@@ -7060,7 +8048,7 @@ $Source: /cvsroot/phpmyadmin/phpMyAdmin/ChangeLog,v $
          --- Older ChangeLogs can be found on our project website ---
                      http://www.phpmyadmin.net/old-stuff/ChangeLogs/
 
+# vim: et ts=4 sw=4 sts=4
 # vim: ft=changelog fenc=utf-8 encoding=utf-8
-# vim: expandtab ts=4 sw=4 sts=4
 # vim: fde=getline(v\:lnum-1)=~'^\\s*$'&&getline(v\:lnum)=~'\\S'?'>1'\:1&&v\:lnum>8&&getline(v\:lnum)!~'^#'
 # vim: fdn=1 fdm=expr

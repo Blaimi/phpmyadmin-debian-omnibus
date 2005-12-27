@@ -1,11 +1,12 @@
 <?php
-/* $Id: tbl_addfield.php,v 2.14 2005/04/01 17:03:32 lem9 Exp $ */
+/* $Id: tbl_addfield.php,v 2.19 2005/11/18 12:50:49 cybot_tm Exp $ */
 // vim: expandtab sw=4 ts=4 sts=4:
 
 /**
  * Get some core libraries
  */
-require_once('./libraries/grab_globals.lib.php');
+require_once('./libraries/common.lib.php');
+
 $js_to_run = 'functions.js';
 require_once('./header.inc.php');
 
@@ -51,54 +52,13 @@ if (isset($submit_num_fields)) {
     } // end for
     // Builds the field creation statement and alters the table
 
-    // TODO: check to see if this logic is exactly the same
-    //       as in tbl_create.php, and move to an include file
-
     for ($i = 0; $i < $field_cnt; ++$i) {
         // '0' is also empty for php :-(
         if (empty($field_name[$i]) && $field_name[$i] != '0') {
             continue;
         }
 
-        $query .= PMA_backquote($field_name[$i]) . ' ' . $field_type[$i];
-        if ($field_length[$i] != ''
-            && !preg_match('@^(DATE|DATETIME|TIME|TINYBLOB|TINYTEXT|BLOB|TEXT|MEDIUMBLOB|MEDIUMTEXT|LONGBLOB|LONGTEXT)$@i', $field_type[$i])) {
-            $query .= '(' . $field_length[$i] . ')';
-        }
-        if ($field_attribute[$i] != '') {
-            $query .= ' ' . $field_attribute[$i];
-        } else if (PMA_MYSQL_INT_VERSION >= 40100 && isset($field_collation[$i]) && $field_collation[$i] != '') {
-            list($tmp_charset) = explode('_', $field_collation[$i]);
-            $query .= ' CHARACTER SET ' . $tmp_charset . ' COLLATE ' . $field_collation[$i];
-            unset($tmp_charset);
-        }
-
-        if (isset($field_default_current_timestamp[$i]) && $field_default_current_timestamp[$i]) {
-            $query .= ' DEFAULT CURRENT_TIMESTAMP';
-        } elseif ($field_default[$i] != '') {
-            if (strtoupper($field_default[$i]) == 'NULL') {
-                $query .= ' DEFAULT NULL';
-            } else {
-                $query .= ' DEFAULT \'' . PMA_sqlAddslashes($field_default[$i]) . '\'';
-            }
-        }
-        if ($field_null[$i] != '') {
-            $query .= ' ' . $field_null[$i];
-        }
-        if ($field_extra[$i] != '') {
-            $query .= ' ' . $field_extra[$i];
-            // An auto_increment field must be use as a primary key
-            if ($field_extra[$i] == 'AUTO_INCREMENT' && isset($field_primary)) {
-                $primary_cnt = count($field_primary);
-                for ($j = 0; $j < $primary_cnt && $field_primary[$j] != $i; $j++) {
-                    // void
-                } // end for
-                if ($field_primary[$j] == $i) {
-                    $query .= ' PRIMARY KEY';
-                    unset($field_primary[$j]);
-                } // end if
-            } // end if (auto_increment)
-        }
+        $query .= PMA_generateFieldSpec($field_name[$i], $field_type[$i], $field_length[$i], $field_attribute[$i], isset($field_collation[$i]) ? $field_collation[$i] : '', $field_null[$i], $field_default[$i], isset($field_default_current_timestamp[$i]), $field_extra[$i], isset($field_comments[$i]) ? $field_comments[$i] : '', $field_primary, $i);
 
         if ($field_where != 'last') {
             // Only the first field can be added somewhere other than at the end
@@ -205,20 +165,20 @@ if (isset($submit_num_fields)) {
         $cfgRelation = PMA_getRelationsParam();
 
         // garvin: Update comment table, if a comment was set.
-        // lem9: FIXME: here we take care of native comments and
-        //       pmadb-style comments, however, in the case of
-        //       native comments, users do not see the COMMENT clause
-        //       when SQL query is displayed
-        if (isset($field_comments) && is_array($field_comments) && ($cfgRelation['commwork'] || PMA_MYSQL_INT_VERSION >= 40100)) {
+        if (isset($field_comments) && is_array($field_comments) && $cfgRelation['commwork'] && PMA_MYSQL_INT_VERSION < 40100) {
             foreach ($field_comments AS $fieldindex => $fieldcomment) {
-                PMA_setComment($db, $table, $field_name[$fieldindex], $fieldcomment);
+                if (!empty($field_name[$fieldindex])) {
+                    PMA_setComment($db, $table, $field_name[$fieldindex], $fieldcomment, '', 'pmadb');
+                }
             }
         }
 
         // garvin: Update comment table for mime types [MIME]
         if (isset($field_mimetype) && is_array($field_mimetype) && $cfgRelation['commwork'] && $cfgRelation['mimework'] && $cfg['BrowseMIME']) {
             foreach ($field_mimetype AS $fieldindex => $mimetype) {
-                PMA_setMIME($db, $table, $field_name[$fieldindex], $mimetype, $field_transformation[$fieldindex], $field_transformation_options[$fieldindex]);
+                if (!empty($field_name[$fieldindex])) {
+                    PMA_setMIME($db, $table, $field_name[$fieldindex], $mimetype, $field_transformation[$fieldindex], $field_transformation_options[$fieldindex]);
+                }
             }
         }
 
@@ -251,18 +211,18 @@ if ($abort == FALSE) {
     /**
      * Gets tables informations
      */
-    require('./tbl_properties_common.php');
-    require('./tbl_properties_table_info.php');
+    require_once('./tbl_properties_common.php');
+    require_once('./tbl_properties_table_info.php');
     /**
      * Displays top menu links
      */
     $active_page = 'tbl_properties_structure.php';
-    require('./tbl_properties_links.php');
+    require_once('./tbl_properties_links.php');
     /**
      * Display the form
      */
     $action = 'tbl_addfield.php';
-    require('./tbl_properties.inc.php');
+    require_once('./tbl_properties.inc.php');
 
     // Diplays the footer
     echo "\n";

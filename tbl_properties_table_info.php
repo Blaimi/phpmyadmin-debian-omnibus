@@ -1,5 +1,5 @@
 <?php
-/* $Id: tbl_properties_table_info.php,v 2.15 2005/08/11 13:56:32 lem9 Exp $ */
+/* $Id: tbl_properties_table_info.php,v 2.17 2005/10/11 14:00:41 cybot_tm Exp $ */
 // vim: expandtab sw=4 ts=4 sts=4:
 
 // this should be recoded as functions, to avoid messing with global
@@ -37,7 +37,8 @@ if ($table_info_result && PMA_DBI_num_rows($table_info_result) > 0) {
     if (!isset($showtable['Type']) && isset($showtable['Engine'])) {
         $showtable['Type'] =& $showtable['Engine'];
     }
-    if (PMA_MYSQL_INT_VERSION >= 50000 && !isset($showtable['Type']) && isset($showtable['Comment']) && $showtable['Comment'] == 'view') {
+    // MySQL < 5.0.13 returns "view", >= 5.0.13 returns "VIEW"
+    if (PMA_MYSQL_INT_VERSION >= 50000 && !isset($showtable['Type']) && isset($showtable['Comment']) && strtoupper($showtable['Comment']) == 'VIEW') {
         $tbl_is_view     = TRUE;
         $tbl_type        = $strView;
         $show_comment    = NULL;
@@ -53,6 +54,11 @@ if ($table_info_result && PMA_DBI_num_rows($table_info_result) > 0) {
         }
     }
     $tbl_collation       = empty($showtable['Collation']) ? '' : $showtable['Collation'];
+    
+    if ( NULL === $showtable['Rows'] ) {
+        $showtable['Rows']   = PMA_countRecords( $GLOBALS['db'],
+            $showtable['Name'], $return = true, $force_exact = true );
+    }
     $table_info_num_rows = (isset($showtable['Rows']) ? $showtable['Rows'] : 0);
     $auto_increment      = (isset($showtable['Auto_increment']) ? $showtable['Auto_increment'] : '');
 

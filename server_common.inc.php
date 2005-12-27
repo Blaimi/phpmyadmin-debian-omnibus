@@ -1,22 +1,26 @@
 <?php
-/* $Id: server_common.inc.php,v 2.4 2004/10/20 15:12:46 nijel Exp $ */
+/* $Id: server_common.inc.php,v 2.6 2005/11/18 12:50:49 cybot_tm Exp $ */
 // vim: expandtab sw=4 ts=4 sts=4:
 
 /**
  * Gets some core libraries
  */
-require_once('./libraries/grab_globals.lib.php');
 require_once('./libraries/common.lib.php');
 
 /**
  * Handles some variables that may have been sent by the calling script
+ * Note: this can be called also from the db panel to get the privileges of
+ *       a db, in which case we want to keep displaying the tabs of
+ *       the Database panel
  */
-unset($db, $table);
+if (empty($viewing_mode)) {
+    unset($db, $table);
+}
 
 /**
  * Set parameters for links
  */
-$url_query = PMA_generate_common_url();
+$url_query = PMA_generate_common_url((!empty($db) ? $db : ''));
 
 /**
  * Defines the urls to return to in case of error in a sql statement

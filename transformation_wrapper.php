@@ -1,13 +1,8 @@
 <?php
-/* $Id: transformation_wrapper.php,v 2.7.10.1 2005/11/15 15:21:47 lem9 Exp $ */
+/* $Id: transformation_wrapper.php,v 2.10 2005/11/18 12:50:49 cybot_tm Exp $ */
 // vim: expandtab sw=4 ts=4 sts=4:
 
 define('IS_TRANSFORMATION_WRAPPER', true);
-
-/**
- * Get the variables sent or posted to this script and displays the header
- */
-require_once('./libraries/grab_globals.lib.php');
 
 /**
  * Gets a core script and starts output buffering work
@@ -56,7 +51,7 @@ if ($cfgRelation['commwork'] && $cfgRelation['mimework']) {
 
 // garvin: For re-usability, moved http-headers and stylesheets
 // to a seperate file. It can now be included by header.inc.php,
-// queryframe.php, querywindow.php.
+// querywindow.php.
 
 require_once('./libraries/header_http.inc.php');
 // [MIME]

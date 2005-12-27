@@ -1,5 +1,5 @@
 <?php
-/* $Id: storage_engines.lib.php,v 2.5 2005/05/11 09:00:33 lem9 Exp $ */
+/* $Id: storage_engines.lib.php,v 2.6 2005/10/08 14:55:08 nijel Exp $ */
 // vim: expandtab sw=4 ts=4 sts=4:
 
 /**
@@ -195,11 +195,11 @@ class PMA_StorageEngine {
                 $message = $GLOBALS['strEngineAvailable'];
                 break;
             case PMA_ENGINE_SUPPORT_DISABLED:
-                $message = $GLOBALS['strEngineUnsupported'];
+                $message = $GLOBALS['strEngineDisabled'];
                 break;
             case PMA_ENGINE_SUPPORT_NO:
             default:
-                $message = $GLOBALS['strEngineUnavailable'];
+                $message = $GLOBALS['strEngineUnsupported'];
         }
         return sprintf($message, htmlspecialchars($this->title));
     }

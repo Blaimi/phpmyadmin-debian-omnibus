@@ -1,11 +1,10 @@
 <?php
-/* $Id: tbl_move_copy.php,v 2.13 2005/03/06 21:10:53 nijel Exp $ */
+/* $Id: tbl_move_copy.php,v 2.14 2005/11/18 12:50:49 cybot_tm Exp $ */
 // vim: expandtab sw=4 ts=4 sts=4:
 
 /**
  * Gets some core libraries
  */
-require_once('./libraries/grab_globals.lib.php');
 require_once('./libraries/common.lib.php');
 
 // Check parameters

@@ -1,25 +1,10 @@
 <?php
-/* $Id: mysql.dbi.lib.php,v 2.37 2005/03/24 20:57:00 rabus Exp $ */
+/* $Id: mysql.dbi.lib.php,v 2.39 2005/11/17 12:15:59 cybot_tm Exp $ */
 // vim: expandtab sw=4 ts=4 sts=4:
 
 /**
  * Interface to the classic MySQL extension
  */
-
-/**
- * Loads the mysql extensions if it is not loaded yet
- */
-if (!@function_exists('mysql_connect')) {
-    PMA_dl('mysql');
-}
-
-// check whether mysql is available
-if (!@function_exists('mysql_connect')) {
-    require_once('./libraries/header_http.inc.php');
-    echo sprintf($strCantLoad, 'mysql') . '<br />' . "\n"
-         . '<a href="./Documentation.html#faqmysql" target="documentation">' . $GLOBALS['strDocu'] . '</a>' . "\n";
-    exit;
-}
 
 // MySQL client API
 if (!defined('PMA_MYSQL_CLIENT_API')) {
@@ -69,7 +54,7 @@ function PMA_DBI_connect($user, $password, $is_controluser = FALSE) {
     if (empty($link)) {
         PMA_auth_fails();
     } // end if
-    
+
     PMA_DBI_postConnect($link, $is_controluser);
 
     return $link;
@@ -122,7 +107,7 @@ function PMA_mysql_fetch_array($result, $type = FALSE) {
 
     /* No data returned => do not touch it */
     if (! $data) return $data;
-    
+
     if (!defined('PMA_MYSQL_INT_VERSION') || PMA_MYSQL_INT_VERSION >= 40100
         || !(isset($cfg['AllowAnywhereRecoding']) && $cfg['AllowAnywhereRecoding'] && $allow_recoding)) {
         /* No recoding -> return data as we got them */
@@ -167,43 +152,60 @@ function PMA_DBI_free_result($result) {
     }
 }
 
-function PMA_DBI_getError($link = NULL) {
-    unset($GLOBALS['errno']); 
-    if (empty($link)) {
-        if (isset($GLOBALS['userlink'])) {
-            $link = $GLOBALS['userlink'];
+/**
+ * returns last error message or false if no errors occured
+ *
+ * @uses    PMA_MYSQL_INT_VERSION
+ * @uses    PMA_convert_display_charset()
+ * @uses    PMA_DBI_convert_message()
+ * @uses    $GLOBALS['errno']
+ * @uses    $GLOBALS['userlink']
+ * @uses    $GLOBALS['strServerNotResponding']
+ * @uses    $GLOBALS['strSocketProblem']
+ * @uses    mysql_errno()
+ * @uses    mysql_error()
+ * @uses    defined()
+ * @param   resource        $link   mysql link
+ * @return  string|boolean  $error or false
+ */
+function PMA_DBI_getError( $link = NULL ) {
+    unset( $GLOBALS['errno'] );
+    if ( NULL === $link && isset( $GLOBALS['userlink'] ) ) {
+        $link =& $GLOBALS['userlink'];
 
 // Do not stop now. On the initial connection, we don't have a $link,
 // we don't have a $GLOBALS['userlink'], but we can catch the error code
-//        } else {
+//    } else {
 //            return FALSE;
-       }
     }
 
-    if (mysql_errno()) {
-        $error = mysql_errno();
-        $error_message = mysql_error();
-    } elseif ($link) {
-        $error = mysql_errno($link);
-        $error_message = mysql_error($link);
-    }
-
-    // keep the error number for further check after the call to PMA_DBI_getError() 
-    if (isset($error) && $error) {
-        $GLOBALS['errno'] = $error;
+    if ( NULL !== $link ) {
+        $error_number = mysql_errno( $link );
+        $error_message = mysql_error( $link );
     } else {
-        return FALSE;
+        $error_number = mysql_errno();
+        $error_message = mysql_error();
+    }
+    if ( 0 == $error_number ) {
+        return false;
     }
 
-// Some errors messages cannot be obtained by mysql_error()
-    if ($error && $error == 2002) {
-        $error = '#' . ((string) $error) . ' - ' . $GLOBALS['strServerNotResponding'] . ' ' . $GLOBALS['strSocketProblem'];
-    } elseif ($error && $error == 2003) {
-        $error = '#' . ((string) $error) . ' - ' . $GLOBALS['strServerNotResponding'];
-    } elseif ($error && defined('PMA_MYSQL_INT_VERSION') && PMA_MYSQL_INT_VERSION >= 40100) {
-        $error = '#' . ((string) $error) . ' - ' . $error_message;
-    } elseif ($error) {
-        $error = '#' . ((string) $error) . ' - ' . PMA_convert_display_charset($error_message);
+    // keep the error number for further check after the call to PMA_DBI_getError()
+    $GLOBALS['errno'] = $error_number;
+
+    if ( ! empty( $error_message ) ) {
+        $error_message = PMA_DBI_convert_message( $error_message );
+    }
+
+    // Some errors messages cannot be obtained by mysql_error()
+    if ( $error_number == 2002 ) {
+        $error = '#' . ((string) $error_number) . ' - ' . $GLOBALS['strServerNotResponding'] . ' ' . $GLOBALS['strSocketProblem'];
+    } elseif ( $error_number == 2003 ) {
+        $error = '#' . ((string) $error_number ) . ' - ' . $GLOBALS['strServerNotResponding'];
+    } elseif ( defined('PMA_MYSQL_INT_VERSION') && PMA_MYSQL_INT_VERSION >= 40100 ) {
+        $error = '#' . ((string) $error_number ) . ' - ' . $error_message;
+    } else {
+        $error = '#' . ((string) $error_number ) . ' - ' . PMA_convert_display_charset( $error_message );
     }
     return $error;
 }

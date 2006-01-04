@@ -1,11 +1,10 @@
 <?php
-/* $Id: pdf_pages.php,v 2.15 2005/07/28 16:50:37 lem9 Exp $ */
+/* $Id: pdf_pages.php,v 2.17 2005/11/18 12:50:49 cybot_tm Exp $ */
 // vim: expandtab sw=4 ts=4 sts=4:
 
 /**
  * Gets some core libraries
  */
-require_once('./libraries/grab_globals.lib.php');
 require_once('./libraries/common.lib.php');
 require_once('./db_details_common.php');
 
@@ -124,15 +123,14 @@ if ($cfgRelation['pdfwork']) {
                             if (!in_array($foreign_table, $all_tables)) {
                                 $all_tables[] = $foreign_table;
                             }
-
                         }
                         // now generate the coordinates for the schema,
                         // in a clockwise spiral
 
                         $pos_x = 300;
                         $pos_y = 300;
-                        $delta = 50;
-                        $delta_mult = 1.34;
+                        $delta = 110;
+                        $delta_mult = 1.10;
                         $direction = "right";
                         foreach ($all_tables AS $current_table) {
 

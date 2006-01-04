@@ -1,12 +1,11 @@
 <?php
-/* $Id: user_password.php,v 2.8 2004/11/24 02:44:49 lem9 Exp $ */
+/* $Id: user_password.php,v 2.9 2005/11/18 12:50:49 cybot_tm Exp $ */
 // vim: expandtab sw=4 ts=4 sts=4:
 
 
 /**
  * Gets some core libraries
  */
-require_once('./libraries/grab_globals.lib.php');
 require_once('./libraries/common.lib.php');
 
 /**

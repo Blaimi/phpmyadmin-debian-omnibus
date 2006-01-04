@@ -1,15 +1,14 @@
 <?php
-/* $Id: db_create.php,v 2.8 2004/04/17 03:06:53 rabus Exp $ */
+/* $Id: db_create.php,v 2.9 2005/11/18 12:50:49 cybot_tm Exp $ */
 // vim: expandtab sw=4 ts=4 sts=4:
 
 
 /**
  * Gets some core libraries
  */
-require_once('./libraries/grab_globals.lib.php');
+require_once('./libraries/common.lib.php');
 $js_to_run = 'functions.js';
 require_once('./header.inc.php');
-require_once('./libraries/common.lib.php');
 require_once('./libraries/mysql_charsets.lib.php');
 
 

@@ -1,4 +1,4 @@
-# $Id: /trunk/debian/dists/phpmyadmin/debian/packages 381 2005-11-16T21:35:16.580821Z dexter  $
+# $Id: /trunk/debian/dists/phpmyadmin/debian/packages 10 2006-01-06T12:28:18.632589Z dexter  $
 
 # If the debian/rules or debian/control file is missing, rebuild the file:
 #
@@ -17,26 +17,26 @@ Description: set of PHP-scripts to administrate MySQL over the WWW
 Copyright: GPL
      Copyright (C) 1998-2000 Tobias Ratschiller <tobias_at_ratschiller.com>
      Copyright (C) 2001-2005 Marc Delisle <DelislMa_at_CollegeSherbrooke.qc.ca>
-                             Olivier Müller <om_at_omnis.ch>
+                             Olivier Mller <om_at_omnis.ch>
                              Robin Johnson <robbat2_at_users.sourceforge.net>
                              Alexander M. Turek <me_at_derrabus.de>
                              Michal Cihar <michal_at_cihar.com>
                              Garvin Hicking <me_at_supergarv.de>
                              Michael Keck <mkkeck_at_users.sourceforge.net>
                              [check Documentation.txt/.html file for more details]
-Major-Changes:
-%`cd debian/patches; ls *.patch | sed -e 's/^/ /'`
-Patches: patches/*.patch
+# Major-Changes:
+# %`cd debian/patches && ls *.patch | sed -e 's/^/ /'`
+# Patches: patches/*.patch
 
 Package: phpmyadmin
 Architecture: all
-Depends: php4 | php4-cgi | php5 | php5-cgi
-Depends: php4-mysql | php5-mysql | php5-mysqli
+Depends: php5 | php5-cgi | php4 | php4-cgi
+Depends: php5-mysql | php5-mysqli | php4-mysql
 Depends: apache2 | httpd
 Depends: []
-Recommends: php4-mcrypt | php5-mcrypt
+Recommends: php5-mcrypt | php4-mcrypt
 Suggests: mysql-server (>= 3.23.36)
-Suggests: php4-gd | php5-gd
+Suggests: php5-gd | php4-gd
 Suggests: []
 Description: set of PHP-scripts to administrate MySQL over the WWW
  phpMyAdmin is intended to handle the administration of MySQL over the WWW.
@@ -76,7 +76,7 @@ Install: sh
      $ROOT/usr/share/phpmyadmin/config.inc.php > $ROOT/usr/share/phpmyadmin/config.inc.php.tmp
  mv -f $ROOT/usr/share/phpmyadmin/config.inc.php.tmp $ROOT/usr/share/phpmyadmin/config.inc.php
  .
- yada install -doc -subdir examples -gzip config.inc.php
+ yada install -doc -subdir examples -as config.inc.php -gzip config.default.php
  yada install -doc README TODO CREDITS
  yada install -doc Documentation.html translators.html
  yada install -doc -as changelog ChangeLog
@@ -265,9 +265,15 @@ Postinst: bash
                          fi
                      else
                          if [ ! -f /etc/$webserver/mods-enabled/cgi.load -a ! -h /etc/$webserver/mods-enabled/cgi.load -a \
+                              ! -f /etc/$webserver/mods-enabled/cgid.load -a ! -h /etc/$webserver/mods-enabled/cgid.load -a \
                               ! -f /etc/$webserver/mods-enabled/fastcgi.load -a ! -h /etc/$webserver/mods-enabled/fastcgi.load -a \
                               ! -f /etc/$webserver/mods-enabled/fcgid.load -a ! -h /etc/$webserver/mods-enabled/fcgid.load ]; then
-                             ln -s /etc/$webserver/mods-available/cgi.load /etc/$webserver/mods-enabled/cgi.load
+                             if /usr/sbin/$webserver -l 2>&1 | grep -qs prefork.c; then
+                                 cgi=cgi
+                             else
+                                 cgi=cgid
+                             fi
+                             ln -s /etc/$webserver/mods-available/$cgi.load /etc/$webserver/mods-enabled/$cgi.load
                          fi
                      fi
                  fi

@@ -1,14 +1,15 @@
 <?php
-/* $Id: tbl_properties_export.php,v 2.11 2005/06/11 09:22:20 lem9 Exp $ */
+/* $Id: tbl_properties_export.php,v 2.13 2005/11/18 12:50:49 cybot_tm Exp $ */
 // vim: expandtab sw=4 ts=4 sts=4:
 
+require_once('./libraries/common.lib.php');
 
 /**
  * Gets tables informations and displays top links
  */
-require('./tbl_properties_common.php');
+require_once('./tbl_properties_common.php');
 $url_query .= '&amp;goto=tbl_properties_export.php&amp;back=tbl_properties_export.php';
-require('./tbl_properties_table_info.php');
+require_once('./tbl_properties_table_info.php');
 ?>
 
 <!-- Dump of a table -->

@@ -1,6 +1,10 @@
 <?php
-/* $Id: header_http.inc.php,v 2.1.10.1 2005/11/15 15:21:47 lem9 Exp $ */
+/* $Id: header_http.inc.php,v 2.3.2.1 2005/11/24 08:14:45 nijel Exp $ */
 // vim: expandtab sw=4 ts=4 sts=4:
+
+if (isset($_REQUEST['GLOBALS']) || isset($_FILES['GLOBALS'])) {
+    die("GLOBALS overwrite attempt");
+}
 
 /**
  * Sends http headers

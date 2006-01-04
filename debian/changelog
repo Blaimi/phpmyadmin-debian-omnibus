@@ -1,3 +1,14 @@
+phpmyadmin (4:2.7.0-pl2-1) unstable; urgency=low
+
+  * New upstream release. Closes: #342203.
+  * Tweak the dependencies and prefer PHP5 with Apache2.
+  * Support cgid.so module for threaded Apache2.
+  * Removed all Debian specific patches.
+  * Portuguese debconf templates translation, thanks Miguel Figueiredo.
+    Closes: #336444.
+
+ -- Piotr Roszatycki <dexter@debian.org>  Wed,  4 Jan 2006 15:34:36 +0100
+
 phpmyadmin (4:2.6.4-pl4-2) unstable; urgency=high
 
   * Security fix: Cross-site scripting by trusting potentially user-supplied

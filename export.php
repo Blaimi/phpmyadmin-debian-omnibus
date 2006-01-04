@@ -1,11 +1,10 @@
 <?php
-/* $Id: export.php,v 2.27.2.1 2005/09/14 17:06:22 lem9 Exp $ */
+/* $Id: export.php,v 2.30 2005/11/18 12:50:49 cybot_tm Exp $ */
 // vim: expandtab sw=4 ts=4 sts=4:
 
 /**
  * Get the variables sent or posted to this script and a core script
  */
-require_once('./libraries/grab_globals.lib.php');
 require_once('./libraries/common.lib.php');
 require_once('./libraries/zip.lib.php');
 
@@ -265,10 +264,7 @@ if ($asfile) {
 
 // Open file on server if needed
 if ($save_on_server) {
-    if (substr($cfg['SaveDir'], -1) != '/') {
-        $cfg['SaveDir'] .= '/';
-    }
-    $save_filename = $cfg['SaveDir'] . preg_replace('@[/\\\\]@','_',$filename);
+    $save_filename = PMA_userDir($cfg['SaveDir']) . preg_replace('@[/\\\\]@','_',$filename);
     unset($message);
     if (file_exists($save_filename) && empty($onserverover)) {
         $message = sprintf($strFileAlreadyExists, htmlspecialchars($save_filename));

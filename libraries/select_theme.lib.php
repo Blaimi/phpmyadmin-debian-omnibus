@@ -1,5 +1,5 @@
 <?php
-/* $Id: select_theme.lib.php,v 2.13 2005/07/24 12:07:21 nijel Exp $ */
+/* $Id: select_theme.lib.php,v 2.15 2005/11/20 11:49:57 cybot_tm Exp $ */
 // vim: expandtab sw=4 ts=4 sts=4:
 
 /**
@@ -31,7 +31,6 @@
 /**
  * We need some elements of the superglobal $_SERVER array.
  */
-require_once('./libraries/grab_globals.lib.php');
 global $PHP_SELF;
 /**
  * theme manager
@@ -80,7 +79,7 @@ if ($PMA_ThemeAvailable == TRUE) { // themeManager is available
 
 // Allow different theme per server
 $theme_cookie_name = 'pma_theme';
-if ($GLOBALS['cfg']['ThemePerServer']) {
+if ( isset( $server ) && $GLOBALS['cfg']['ThemePerServer'] ) {
     $theme_cookie_name .= '-' . $server;
 }
 

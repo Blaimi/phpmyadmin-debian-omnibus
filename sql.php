@@ -1,13 +1,14 @@
 <?php
-/* $Id: sql.php,v 2.53 2005/08/12 01:06:18 lem9 Exp $ */
+/* $Id: sql.php,v 2.66 2005/11/06 12:33:40 cybot_tm Exp $ */
 // vim: expandtab sw=4 ts=4 sts=4:
 
 /**
  * Gets some core libraries
  */
-require_once('./libraries/grab_globals.lib.php');
 require_once('./libraries/common.lib.php');
 require_once('./libraries/tbl_indexes.lib.php');
+require_once('./libraries/check_user_privileges.lib.php');
+require_once('./libraries/bookmark.lib.php');
 
 /**
  * Defines the url to return to in case of error in a sql statement
@@ -43,7 +44,7 @@ if (isset($fields['dbase'])) {
 }
 
 // Now we can check the parameters
-PMA_checkParameters(array('sql_query', 'db'));
+PMA_checkParameters(array('sql_query'));
 
 // instead of doing the test twice
 $is_drop_database = preg_match('@DROP[[:space:]]+DATABASE[[:space:]]+@i', $sql_query);
@@ -57,14 +58,10 @@ $is_drop_database = preg_match('@DROP[[:space:]]+DATABASE[[:space:]]+@i', $sql_q
  */
 if (!defined('PMA_CHK_DROP')
     && !$cfg['AllowUserDropDatabase']
-    && $is_drop_database) {
-    // Checks if the user is a Superuser
-    // TODO: set a global variable with this information
-    // loic1: optimized query
-    if (!($result = PMA_DBI_select_db('mysql'))) {
-        require_once('./header.inc.php');
-        PMA_mysqlDie($strNoDropDatabases, '', '', $err_url);
-    } // end if
+    && $is_drop_database
+    && !$is_superuser) {
+    require_once('./header.inc.php');
+    PMA_mysqlDie($strNoDropDatabases, '', '', $err_url);
 } // end if
 
 
@@ -81,7 +78,6 @@ if (isset($find_real_end) && $find_real_end) {
  * Bookmark add
  */
 if (isset($store_bkm)) {
-    require_once('./libraries/bookmark.lib.php');
     PMA_addBookmarks($fields, $cfg['Bookmark'], (isset($bkm_all_users) && $bkm_all_users == 'true' ? true : false));
     PMA_sendHeaderLocation($cfg['PmaAbsoluteUri'] . $goto);
 } // end if
@@ -103,6 +99,7 @@ if (isset($btnDrop) || isset($navig)) {
 $GLOBALS['unparsed_sql'] = $sql_query;
 $parsed_sql = PMA_SQP_parse($sql_query);
 $analyzed_sql = PMA_SQP_analyze($parsed_sql);
+
 // Bug #641765 - Robbat2 - 12 January 2003, 10:49PM
 // Reverted - Robbat2 - 13 January 2003, 2:40PM
 
@@ -148,8 +145,8 @@ if ($is_select) {
     else {
         $db = $prev_db;
     }
-    // Nijel don't change reload, if we already decided to reload in read_dump
-    if (!isset($reload) || $reload == 0) {
+    // Nijel: don't change reload, if we already decided to reload in import
+    if ( empty( $reload ) ) {
         $reload  = ($db == $prev_db) ? 0 : 1;
     }
 }
@@ -210,37 +207,15 @@ if (!$cfg['Confirm']
     $do_confirm = isset($analyzed_sql[0]['queryflags']['need_confirm']);
 }
 
-if ($do_confirm) {
+if ( $do_confirm ) {
     $stripped_sql_query = $sql_query;
     require_once('./header.inc.php');
-    echo '<table border="0" cellpadding="3" cellspacing="0">' . "\n";
-    if ($is_drop_database) {
-        echo '    <tr>' . "\n"
-           . '        <td class="tblHeadError">' . "\n";
-        if($cfg['ErrorIconic']){
-            echo '        <img src="' .$pmaThemeImage .'s_warn.png" border="0" hspace="2" vspace="2" align="left" />';
-        }
-        echo $strDropDatabaseStrongWarning . '&nbsp;<br />' . "\n";
-    } else {
-        echo '    <tr>' . "\n"
-           . '        <td class="tblHeadError">' . "\n";
-        if($cfg['ErrorIconic']){
-            echo '        <img src="' .$pmaThemeImage .'s_really.png" border="0" hspace="2" align="middle" />';
-        }
+    if ( $is_drop_database) {
+        echo '<h1 class="warning">' . $strDropDatabaseStrongWarning . '</h1>';
     }
-    echo $strDoYouReally . "\n"
-       . '        </td>' . "\n"
-       . '    </tr>' . "\n"
-       . '    <tr>' . "\n"
-       . '        <td class="tblError">' . "\n"
-       . '            <tt>' . htmlspecialchars($stripped_sql_query) . '</tt>&nbsp;?<br/>' . "\n"
-       . '        </td>' . "\n"
-       . '    </tr>' . "\n"
-       . '    <form action="sql.php" method="post">' . "\n"
-       . '    <tr>' . "\n"
-       . '        <td align="right">' . "\n"
+    echo '<form action="sql.php" method="post">' . "\n"
+        .PMA_generate_common_hidden_inputs($db, (isset($table)?$table:''));
     ?>
-    <?php echo PMA_generate_common_hidden_inputs($db, (isset($table)?$table:'')); ?>
     <input type="hidden" name="sql_query" value="<?php echo urlencode($sql_query); ?>" />
     <input type="hidden" name="zero_rows" value="<?php echo isset($zero_rows) ? PMA_sanitize($zero_rows) : ''; ?>" />
     <input type="hidden" name="goto" value="<?php echo $goto; ?>" />
@@ -250,15 +225,19 @@ if ($do_confirm) {
     <input type="hidden" name="cpurge" value="<?php echo isset($cpurge) ? PMA_sanitize($cpurge) : ''; ?>" />
     <input type="hidden" name="purgekey" value="<?php echo isset($purgekey) ? PMA_sanitize($purgekey) : ''; ?>" />
     <input type="hidden" name="show_query" value="<?php echo isset($show_query) ? PMA_sanitize($show_query) : ''; ?>" />
+    <?php
+    echo '<fieldset class="confirmation">' . "\n"
+        .'    <legend>' . $strDoYouReally . '</legend>'
+        .'    <tt>' . htmlspecialchars( $stripped_sql_query ) . '</tt>' . "\n"
+        .'</fieldset>' . "\n"
+        .'<fieldset class="tblFooters">' . "\n";
+    ?>
     <input type="submit" name="btnDrop" value="<?php echo $strYes; ?>" id="buttonYes" />
     <input type="submit" name="btnDrop" value="<?php echo $strNo; ?>" id="buttonNo" />
     <?php
-    echo '        </td>' . "\n"
-       . '    </tr>' . "\n"
-       . '    </form>' . "\n"
-       . '</table>';
-    echo "\n";
-} // end if
+    echo '</fieldset>' . "\n"
+       . '</form>' . "\n";
+} // end if $do_confirm
 
 
 /**
@@ -272,10 +251,9 @@ else {
     // A table has to be created or renamed -> left frame should be reloaded
     // TODO: use the parser/analyzer
 
-    if ((!isset($reload) || $reload == 0)
-        && (preg_match('@^CREATE TABLE[[:space:]]+(.*)@i', $sql_query)
-         || preg_match('@^ALTER TABLE[[:space:]]+(.*)RENAME@i', $sql_query)
-         || preg_match('@^TRUNCATE@i', $sql_query))) {
+    if ( empty( $reload )
+        && (preg_match('@^CREATE (VIEW|TABLE)\s+@i', $sql_query)
+         || preg_match('@^ALTER TABLE\s+.*RENAME@i', $sql_query))) {
         $reload           = 1;
     }
     // Gets the number of rows per page
@@ -333,29 +311,17 @@ else {
         && !preg_match('@[[:space:]]LIMIT[[:space:]0-9,-]+$@i', $sql_query)) {
         $sql_limit_to_append = " LIMIT $pos, ".$cfg['MaxRows'] . " ";
 
-//        if (preg_match('@(.*)([[:space:]](PROCEDURE[[:space:]](.*)|FOR[[:space:]]+UPDATE|LOCK[[:space:]]+IN[[:space:]]+SHARE[[:space:]]+MODE))$@i', $sql_query, $regs)) {
-//            $full_sql_query  = $regs[1] . $sql_limit_to_append . $regs[2];
-//        } else {
-//            $full_sql_query  = $sql_query . $sql_limit_to_append;
-//        }
-
-        $full_sql_query  = $analyzed_sql[0]['section_before_limit'] . $sql_limit_to_append . $analyzed_sql[0]['section_after_limit']; 
+        $full_sql_query  = $analyzed_sql[0]['section_before_limit'] . "\n" . $sql_limit_to_append . $analyzed_sql[0]['section_after_limit']; 
         // FIXME: pretty printing of this modified query
 
         if (isset($display_query)) {
-//            if (preg_match('@((.|\n)*)(([[:space:]](PROCEDURE[[:space:]](.*)|FOR[[:space:]]+UPDATE|LOCK[[:space:]]+IN[[:space:]]+SHARE[[:space:]]+MODE))|;)[[:space:]]*$@i', $display_query, $regs)) {
-//                $display_query  = $regs[1] . $sql_limit_to_append . $regs[3];
-//            } else {
-//                $display_query  = $display_query . $sql_limit_to_append;
-//            }
-
             // if the analysis of the original query revealed that we found 
             // a section_after_limit, we now have to analyze $display_query
             // to display it correctly
 
             if (!empty($analyzed_sql[0]['section_after_limit'])) {
                 $analyzed_display_query = PMA_SQP_analyze(PMA_SQP_parse($display_query));
-                $display_query  = $analyzed_display_query[0]['section_before_limit'] . $sql_limit_to_append . $analyzed_display_query[0]['section_after_limit']; 
+                $display_query  = $analyzed_display_query[0]['section_before_limit'] . "\n" . $sql_limit_to_append . $analyzed_display_query[0]['section_after_limit']; 
             }
         }
 
@@ -363,7 +329,9 @@ else {
         $full_sql_query      = $sql_query;
     } // end if...else
 
-    PMA_DBI_select_db($db);
+    if (isset($db)) {
+        PMA_DBI_select_db($db);
+    }
 
     // If the query is a DELETE query with no WHERE clause, get the number of
     // rows that will be deleted (mysql_affected_rows will always return 0 in
@@ -625,8 +593,8 @@ else {
             $message = $strAffectedRows . '&nbsp;' . $num_rows;
 
             // Ok, here is an explanation for the !$is_select.
-            // The form generated
-            // by tbl_query_box.php and db_details.php has many submit buttons
+            // The form generated by sql_query_form.lib.php
+            // and db_details.php has many submit buttons
             // on the same form, and some confusion arises from the
             // fact that $zero_rows is sent for every case. 
             // The $zero_rows containing $strSuccess and sent with
@@ -714,14 +682,20 @@ else {
                 require('./tbl_properties_table_info.php');
                 require('./tbl_properties_links.php');
             }
-            else {
+            elseif (!empty($db)) {
                 require('./db_details_common.php');
                 require('./db_details_db_info.php');
             }
+            else {
+                require('./server_common.inc.php');
+                require('./server_links.inc.php');
+            }
         }
 
-        require_once('./libraries/relation.lib.php');
-        $cfgRelation = PMA_getRelationsParam();
+        if (!empty($db)) {
+            require_once('./libraries/relation.lib.php');
+            $cfgRelation = PMA_getRelationsParam();
+        }
 
         // Gets the list of fields properties
         if (isset($result) && $result) {
@@ -801,7 +775,7 @@ else {
                 echo '    <!-- Insert a new row -->' . "\n";
                 echo PMA_linkOrButton(
                     'tbl_change.php' . $url_query,
-                    ($cfg['PropertiesIconic'] ? '<img src="' . $pmaThemeImage . 'b_insrow.png" border="0" height="16" width="16" align="middle" hspace="2" alt="' . $strInsertNewRow . '"/>' : '') . $strInsertNewRow,
+                    ($cfg['PropertiesIconic'] ? '<img class="icon" src="' . $pmaThemeImage . 'b_insrow.png" height="16" width="16" alt="' . $strInsertNewRow . '"/>' : '') . $strInsertNewRow,
                     '', TRUE, TRUE, '') . "\n";
 
                 if ($disp_mode[9] == '1') {
@@ -823,14 +797,14 @@ else {
                 echo '    <!-- Print view -->' . "\n";
                 echo PMA_linkOrButton(
                     'sql.php' . $url_query . ((isset($dontlimitchars) && $dontlimitchars == '1') ? '&amp;dontlimitchars=1' : ''),
-                    ($cfg['PropertiesIconic'] ? '<img src="' . $pmaThemeImage . 'b_print.png" border="0" height="16" width="16" align="middle" hspace="2" alt="' . $strPrintView . '"/>' : '') . $strPrintView,
+                    ($cfg['PropertiesIconic'] ? '<img class="icon" src="' . $pmaThemeImage . 'b_print.png" height="16" width="16" alt="' . $strPrintView . '"/>' : '') . $strPrintView,
                     '', TRUE, TRUE, 'print_view') . "\n";
 
                 if (!$dontlimitchars) {
                     echo   '    &nbsp;&nbsp;' . "\n";
                     echo PMA_linkOrButton(
                         'sql.php' . $url_query . '&amp;dontlimitchars=1',
-                        ($cfg['PropertiesIconic'] ? '<img src="' . $pmaThemeImage . 'b_print.png" border="0" height="16" width="16" align="middle" hspace="2" alt="' . $strPrintViewFull . '"/>' : '') . $strPrintViewFull,
+                        ($cfg['PropertiesIconic'] ? '<img class="icon" src="' . $pmaThemeImage . 'b_print.png" height="16" width="16" alt="' . $strPrintViewFull . '"/>' : '') . $strPrintViewFull,
                         '', TRUE, TRUE, 'print_view') . "\n";
                 }
             } // end displays "printable view"
@@ -852,13 +826,13 @@ else {
             echo   '    &nbsp;&nbsp;' . "\n";
             echo PMA_linkOrButton(
                 'tbl_properties_export.php' . $url_query . '&amp;unlim_num_rows=' . $unlim_num_rows . $single_table,
-                ($cfg['PropertiesIconic'] ? '<img src="' . $pmaThemeImage . 'b_tblexport.png" border="0" height="16" width="16" align="middle" hspace="2" alt="' . $strExport . '" />' : '') . $strExport,
+                ($cfg['PropertiesIconic'] ? '<img class="icon" src="' . $pmaThemeImage . 'b_tblexport.png" height="16" width="16" alt="' . $strExport . '" />' : '') . $strExport,
                 '', TRUE, TRUE, '') . "\n";
         }
 
         // Bookmark Support if required
         if ($disp_mode[7] == '1'
-            && ($cfg['Bookmark']['db'] && $cfg['Bookmark']['table'] && empty($id_bookmark))
+            && ( isset( $cfg['Bookmark'] ) && $cfg['Bookmark']['db'] && $cfg['Bookmark']['table'] && empty($id_bookmark))
             && !empty($sql_query)) {
             echo "\n";
 
@@ -871,39 +845,40 @@ else {
                   . '&amp;dontlimitchars=' . $dontlimitchars
                   . '&amp;sql_query=' . urlencode($sql_query)
                   . '&amp;id_bookmark=1';
-            ?>
-<!-- Bookmark the query -->
-            <?php
-            echo "\n";
+            
             if ($disp_mode[3] == '1') {
-                echo '    <i>' . $strOr . '</i>' . "\n";
-            }else echo '<br /><br />';
-            ?>
+                echo '    <i>' . $strOr . '</i>';
+            } else {
+                echo '<br /><br />';
+            }
+            ?> 
 <form action="sql.php" method="post" onsubmit="return emptyFormElements(this, 'fields[label]');">
-<table border="0" cellpadding="2" cellspacing="0">
-<tr><td class="tblHeaders" colspan="2"><?php
-     echo ($cfg['PropertiesIconic'] ? '<img src="' . $pmaThemeImage . 'b_bookmark.png" border="0" width="16" height="16" hspace="2" align="middle" alt="' . $strBookmarkThis . '" />' : '')
+<?php echo PMA_generate_common_hidden_inputs(); ?>
+<input type="hidden" name="goto" value="<?php echo $goto; ?>" />
+<input type="hidden" name="fields[dbase]" value="<?php echo htmlspecialchars($db); ?>" />
+<input type="hidden" name="fields[user]" value="<?php echo $cfg['Bookmark']['user']; ?>" />
+<input type="hidden" name="fields[query]" value="<?php echo urlencode(isset($complete_query) ? $complete_query : $sql_query); ?>" />
+<fieldset>
+    <legend><?php
+     echo ($cfg['PropertiesIconic'] ? '<img class="icon" src="' . $pmaThemeImage . 'b_bookmark.png" width="16" height="16" alt="' . $strBookmarkThis . '" />' : '')
         . $strBookmarkThis;
-?></td></tr>
-<tr bgcolor="<?php echo $cfg['BgcolorOne']; ?>"><td>
-    <?php echo $strBookmarkLabel; ?>:
-    <?php echo PMA_generate_common_hidden_inputs(); ?>
-    <input type="hidden" name="goto" value="<?php echo $goto; ?>" />
-    <input type="hidden" name="fields[dbase]" value="<?php echo htmlspecialchars($db); ?>" />
-    <input type="hidden" name="fields[user]" value="<?php echo $cfg['Bookmark']['user']; ?>" />
-    <input type="hidden" name="fields[query]" value="<?php echo urlencode(isset($complete_query) ? $complete_query : $sql_query); ?>" />
-        </td><td>
-    <input type="text" name="fields[label]" value="" />
-        </td></tr>
-<tr bgcolor="<?php echo $cfg['BgcolorOne']; ?>"><td align="right" valign="top">
-    <input type="checkbox" name="bkm_all_users" id="bkm_all_users" value="true" /></td>
-    <td><label for="bkm_all_users"><?php echo $strBookmarkAllUsers; ?></label></td>
-</tr>
-<tr>
-    <td class="tblFooters" colspan="2" align="right">
+?> 
+    </legend>
+    
+    <div class="formelement">
+        <label for="fields_label_"><?php echo $strBookmarkLabel; ?>:</label>
+        <input type="text" id="fields_label_" name="fields[label]" value="" />
+    </div>
+    
+    <div class="formelement">
+        <input type="checkbox" name="bkm_all_users" id="bkm_all_users" value="true" />
+        <label for="bkm_all_users"><?php echo $strBookmarkAllUsers; ?></label>
+    </div>
+</fieldset>
+<fieldset class="tblFooters">
     <input type="submit" name="store_bkm" value="<?php echo $strBookmarkThis; ?>" />
-    </td></tr>
-</table></form>
+</fieldset>
+</form>
             <?php
         } // end bookmark support
 
@@ -911,7 +886,7 @@ else {
         if (isset($printview) && $printview == '1') {
             echo "\n";
             ?>
-<script type="text/javascript" language="javascript1.2">
+<script type="text/javascript" language="javascript">
 <!--
 // Do print the page
 if (typeof(window.print) != 'undefined') {

@@ -1,5 +1,5 @@
 <?php
-/* $Id: http.auth.lib.php,v 2.6 2005/07/10 18:03:19 nijel Exp $ */
+/* $Id: http.auth.lib.php,v 2.8 2005/10/26 17:32:19 cybot_tm Exp $ */
 // vim: expandtab sw=4 ts=4 sts=4:
 
 // +--------------------------------------------------------------------------+
@@ -19,8 +19,7 @@
  *
  * @access  public
  */
-function PMA_auth()
-{
+function PMA_auth() {
     global $right_font_family, $font_size, $font_bigger;
 
     header('WWW-Authenticate: Basic realm="phpMyAdmin ' . sprintf($GLOBALS['strRunning'], (empty($GLOBALS['cfg']['Server']['verbose']) ? str_replace('\'', '\\\'',$GLOBALS['cfg']['Server']['host']) : str_replace('\'', '\\\'', $GLOBALS['cfg']['Server']['verbose']))) .  '"');
@@ -29,60 +28,12 @@ function PMA_auth()
 
     // Defines the charset to be used
     header('Content-Type: text/html; charset=' . $GLOBALS['charset']);
+    /* HTML header */
+    $page_title = $GLOBALS['strAccessDenied'];
+    require('./libraries/header_meta_style.inc.php');
     ?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="<?php echo $GLOBALS['available_languages'][$GLOBALS['lang']][2]; ?>" lang="<?php echo $GLOBALS['available_languages'][$GLOBALS['lang']][2]; ?>" dir="<?php echo $GLOBALS['text_dir']; ?>">
-
-<head>
-<title><?php echo $GLOBALS['strAccessDenied']; ?></title>
-<meta http-equiv="Content-Type" content="text/html; charset=<?php echo $GLOBALS['charset']; ?>" />
-<style type="text/css">
-<!--
-body     {font-family: <?php echo $right_font_family; ?>; font-size: <?php echo $font_size; ?>; color: #000000}
-h1       {font-family: <?php echo $right_font_family; ?>; font-size: <?php echo $font_bigger; ?>; font-weight: bold}
-//-->
-</style>
-<script language="JavaScript" type="text/javascript">
-<!--
-    /* added 2004-06-10 by Michael Keck
-     *       we need this for Backwards-Compatibility and resolving problems
-     *       with non DOM browsers, which may have problems with css 2 (like NC 4)
-    */
-    var isDOM      = (typeof(document.getElementsByTagName) != 'undefined'
-                      && typeof(document.createElement) != 'undefined')
-                   ? 1 : 0;
-    var isIE4      = (typeof(document.all) != 'undefined'
-                      && parseInt(navigator.appVersion) >= 4)
-                   ? 1 : 0;
-    var isNS4      = (typeof(document.layers) != 'undefined')
-                   ? 1 : 0;
-    var capable    = (isDOM || isIE4 || isNS4)
-                   ? 1 : 0;
-    // Uggly fix for Opera and Konqueror 2.2 that are half DOM compliant
-    if (capable) {
-        if (typeof(window.opera) != 'undefined') {
-            var browserName = ' ' + navigator.userAgent.toLowerCase();
-            if ((browserName.indexOf('konqueror 7') == 0)) {
-                capable = 0;
-            }
-        } else if (typeof(navigator.userAgent) != 'undefined') {
-            var browserName = ' ' + navigator.userAgent.toLowerCase();
-            if ((browserName.indexOf('konqueror') > 0) && (browserName.indexOf('konqueror/3') == 0)) {
-                capable = 0;
-            }
-        } // end if... else if...
-    } // end if
-    document.writeln('<link rel="stylesheet" type="text/css" href="<?php echo defined('PMA_PATH_TO_BASEDIR') ? PMA_PATH_TO_BASEDIR : './'; ?>css/phpmyadmin.css.php?lang=<?php echo $GLOBALS['available_languages'][$GLOBALS['lang']][2]; ?>&amp;js_frame=right&amp;js_isDOM=' + isDOM + '" />');
-//-->
-</script>
-<noscript>
-    <link rel="stylesheet" type="text/css" href="<?php echo defined('PMA_PATH_TO_BASEDIR') ? PMA_PATH_TO_BASEDIR : './'; ?>css/phpmyadmin.css.php?lang=<?php echo $GLOBALS['available_languages'][$GLOBALS['lang']][2]; ?>&amp;js_frame=right" />
-</noscript>
 </head>
-
-<body bgcolor="<?php echo $GLOBALS['cfg']['RightBgColor']; ?>">
-
+<body>
 <?php include('./config.header.inc.php'); ?>
 
 <br /><br />
@@ -90,18 +41,14 @@ h1       {font-family: <?php echo $right_font_family; ?>; font-size: <?php echo 
     <h1><?php echo sprintf($GLOBALS['strWelcome'], ' phpMyAdmin ' . PMA_VERSION); ?></h1>
 </center>
 <br />
-<div class="warning"><p><?php echo $GLOBALS['strWrongUser']; ?></p></div>
+<div class="warning"><?php echo $GLOBALS['strWrongUser']; ?></div>
 
 <?php include('./config.footer.inc.php'); ?>
 
 </body>
-
 </html>
     <?php
-    echo "\n";
     exit();
-
-    return TRUE;
 } // end of the 'PMA_auth()' function
 
 

@@ -1,7 +1,8 @@
 <?php
-/* $Id: server_engines.php,v 2.8 2005/03/05 21:34:23 rabus Exp $ */
+/* $Id: server_engines.php,v 2.10 2005/11/18 12:50:49 cybot_tm Exp $ */
 // vim: expandtab sw=4 ts=4 sts=4:
 
+require_once('./libraries/common.lib.php');
 
 /**
  * Does the common work
@@ -117,7 +118,7 @@ if (empty($engine) || empty($mysql_storage_engines[$engine])) {
      * Displays the sub-page heading
      */
     echo '<h2>' . "\n"
-       . ($cfg['MainPageIconic'] ? '<img src="' . $pmaThemeImage . 'b_engine.png" width="16" height="16" border="0" hspace="2" align="middle" />' : '' )
+       . ($cfg['MainPageIconic'] ? '<img class="icon" src="' . $pmaThemeImage . 'b_engine.png" width="16" height="16" alt="" />' : '' )
        . '    ' . $strStorageEngines . "\n"
        . '</h2>' . "\n";
 

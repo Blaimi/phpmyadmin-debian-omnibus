@@ -1,5 +1,5 @@
 <?php
-/* $Id: decode_bug.php,v 2.1 2003/11/22 20:57:48 garvinhicking Exp $ */
+/* $Id: decode_bug.php,v 2.2 2005/11/08 09:45:13 cybot_tm Exp $ */
 // vim: expandtab sw=4 ts=4 sts=4 foldmarker={,} fdm=marker:
 
 
@@ -22,6 +22,8 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-US" lang="en-US">
 
 <head>
+    <link rel="icon" href="./favicon.ico" type="image/x-icon" />
+    <link rel="shortcut icon" href="./favicon.ico" type="image/x-icon" />
     <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
     <title>phpMyAdmin - Parser BUG decoder</title>
     <style type="text/css">

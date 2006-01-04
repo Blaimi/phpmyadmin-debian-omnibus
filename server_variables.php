@@ -1,7 +1,8 @@
 <?php
-/* $Id: server_variables.php,v 2.7 2004/08/12 15:13:19 nijel Exp $ */
+/* $Id: server_variables.php,v 2.10 2005/11/18 12:50:49 cybot_tm Exp $ */
 // vim: expandtab sw=4 ts=4 sts=4:
 
+require_once('./libraries/common.lib.php');
 
 /**
  * Does the common work
@@ -19,18 +20,9 @@ require('./server_links.inc.php');
  * Displays the sub-page heading
  */
 echo '<h2>' . "\n"
-   . ($cfg['MainPageIconic'] ? '<img src="' . $pmaThemeImage . 's_vars.png" width="16" height="16" border="0" hspace="2" align="middle" />' : '' )
+   . ($cfg['MainPageIconic'] ? '<img class="icon" src="' . $pmaThemeImage . 's_vars.png" width="16" height="16" alt="" />' : '' )
    . '' . $strServerVars . "\n"
    . '</h2>' . "\n";
-
-
-/**
- * Checks if the user is allowed to do what he tries to...
- */
-if (!$is_superuser && !$cfg['ShowMysqlVars']) {
-    echo $strNoPrivileges;
-    require_once('./footer.inc.php');
-}
 
 
 /**

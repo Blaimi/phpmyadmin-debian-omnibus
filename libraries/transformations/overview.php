@@ -1,5 +1,5 @@
 <?php
-/* $Id: overview.php,v 2.4 2004/05/20 16:14:13 nijel Exp $ */
+/* $Id: overview.php,v 2.5 2005/11/18 13:02:36 cybot_tm Exp $ */
 // vim: expandtab sw=4 ts=4 sts=4:
 
 /**
@@ -16,7 +16,6 @@ define('PMA_DISPLAY_HEADING', 0);
 /**
  * Gets some core libraries and displays a top message if required
  */
-require_once('./libraries/grab_globals.lib.php');
 require_once('./libraries/common.lib.php');
 require_once('./header.inc.php');
 require_once('./libraries/relation.lib.php');

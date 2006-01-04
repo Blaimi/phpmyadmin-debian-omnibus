@@ -8,9 +8,9 @@ Build-Depends-Indep: yada (>= 0.48), po-debconf
 
 Package: phpmyadmin
 Architecture: all
-Depends: php4 | php4-cgi | php5 | php5-cgi, php4-mysql | php5-mysql | php5-mysqli, apache2 | httpd, ${phpmyadmin:Depends}
-Recommends: php4-mcrypt | php5-mcrypt
-Suggests: mysql-server (>= 3.23.36), php4-gd | php5-gd, ${phpmyadmin:Suggests}
+Depends: php5 | php5-cgi | php4 | php4-cgi, php5-mysql | php5-mysqli | php4-mysql, apache2 | httpd, ${phpmyadmin:Depends}
+Recommends: php5-mcrypt | php4-mcrypt
+Suggests: mysql-server (>= 3.23.36), php5-gd | php4-gd, ${phpmyadmin:Suggests}
 Description: set of PHP-scripts to administrate MySQL over the WWW
  phpMyAdmin is intended to handle the administration of MySQL over the WWW.
  Currently it can:

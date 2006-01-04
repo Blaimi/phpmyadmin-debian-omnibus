@@ -1,8 +1,61 @@
-Information about 2.6.4-pl1
+Information about 2.7.0-pl2
+
+   Notes:
+
+     * Configuration files coming from before phpMyAdmin 2.3.0 (released on
+       2002-08-11) are no longer supported.
+     * You can still use your config.inc.php file, but this file can be
+       simplified, containing only the parameters you want to change from
+       their corresponding default value in config.default.php.
+
+   Improvements:
+
+     * New plugin-based import module
+     * Some pages now use fieldsets for better look
+     * Better support for information_schema
+     * Upgrade script new options
+     * Better displaying of privileges when there are differences between the
+       various user definition tables
+     * Structure: count unique value for each field
+     * Can now limit the list of shown languages
+     * User-specific upload and save server directories
+     * Remove Drop tab for mysql database
+     * New transformation: SQL pretty printing
+     * Ability to limit maximum size of extended insert
+     * Support for searching in the foreign key window
+     * Can now replace an existing bookmark
+     * New shortcuts for IP rules
+     * Detect lack of privileges for "Create new table"
+
+   Fixes:
+
+     * Wrong display of localized MySQL error messages
+     * Need to select the primary key for MIME-based print view
+     * Handling of ENTER key when adding fields
+     * InnoDB: truncating icon and exact row count
+     * After dropping a db, links were missing
+     * Strict mode and auto-increment fields insertion
+     * Collation change for ENUM and SET
+     * Display problems on special characters in column name
+     * Links for MySQL documentation
+     * Escaping of "_"
+     * Could not edit privileges when different host in db and user
+     * Changing auto-increment value for InnoDB
+     * Correct sort order for foreign-key dropdowns
+     * Group database by rightmost separator
+     * Performance problem when inserting huge BLOBs
+     * Calendar popup and time beginning by 0
+     * (pl1)  Security fix on variable import_blacklist
+     * (pl2)  Create table dialog was not displayed on some MySQL 4.0.x
+       installations
+
+ ----------------------------------------------------------------------
+
+Information about 2.6.4-pl4
 
    Note:
 
-   phpMyAdmin 2.6.4-pl1 requires a minimum version of 2.1 for custom themes
+   phpMyAdmin 2.6.4-pl4 requires a minimum version of 2.1 for custom themes
 
    Improvements:
 

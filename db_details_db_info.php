@@ -1,5 +1,5 @@
 <?php
-/* $Id: db_details_db_info.php,v 2.10 2004/07/13 16:17:32 rabus Exp $ */
+/* $Id: db_details_db_info.php,v 2.14 2005/11/07 11:59:30 cybot_tm Exp $ */
 // vim: expandtab sw=4 ts=4 sts=4:
 
 
@@ -9,7 +9,14 @@ require_once('./libraries/common.lib.php');
 
 PMA_checkParameters(array('db'));
 
-function fillTooltip(&$tooltip_truename, &$tooltip_aliasname, &$tmp) {
+if ( PMA_MYSQL_INT_VERSION >= 50002 && $db == 'information_schema' ) {
+    $cfg['ShowStats'] = false;
+    $db_is_information_schema = true;
+} else {
+    $db_is_information_schema = false;
+}
+
+function fillTooltip( &$tooltip_truename, &$tooltip_aliasname, &$tmp ) {
     $tooltip_truename[$tmp['Name']] = ($GLOBALS['cfg']['ShowTooltipAliasTB'] && $GLOBALS['cfg']['ShowTooltipAliasTB'] != 'nested' ? (!empty($tmp['Comment']) ? $tmp['Comment'] . ' ' : $tmp['Name']) : $tmp['Name']);
     $tooltip_aliasname[$tmp['Name']] = ($GLOBALS['cfg']['ShowTooltipAliasTB'] && $GLOBALS['cfg']['ShowTooltipAliasTB'] != 'nested'  ? $tmp['Name'] : (!empty($tmp['Comment']) ? $tmp['Comment'] . ' ' : $tmp['Name']));
     if (isset($tmp['Create_time']) && !empty($tmp['Create_time'])) {
@@ -36,19 +43,20 @@ $tables = array();
 
 // When used in Nested table group mode, only show tables matching the given groupname
 if (!empty($tbl_group) && !$cfg['ShowTooltipAliasTB']) {
-    $tbl_group_sql = ' LIKE \'' . $tbl_group . '%\'';
+    $tbl_group_sql = ' LIKE "' . PMA_escape_mysql_wildcards( $tbl_group ) . '%"';
 } else {
     $tbl_group_sql = '';
 }
 
-if ($cfg['ShowTooltip']) {
+if ( $cfg['ShowTooltip'] ) {
     $tooltip_truename = array();
     $tooltip_aliasname = array();
 }
 
 // Special speedup for newer MySQL Versions (in 4.0 format changed)
-if ($cfg['SkipLockedTables'] == TRUE) {
+if ( true === $cfg['SkipLockedTables'] ) {
     $db_info_result = PMA_DBI_query('SHOW OPEN TABLES FROM ' . PMA_backquote($db) . ';');
+    
     // Blending out tables in use
     if ($db_info_result != FALSE && PMA_DBI_num_rows($db_info_result) > 0) {
         while ($tmp = PMA_DBI_fetch_row($db_info_result)) {
@@ -81,12 +89,17 @@ if ($cfg['SkipLockedTables'] == TRUE) {
                             fillTooltip($tooltip_truename, $tooltip_aliasname, $sts_tmp);
                         }
 
-                        $tables[]    = $sts_tmp;
+                        $tables[$sts_tmp['Name']]    = $sts_tmp;
                     } else { // table in use
-                        $tables[]    = array('Name' => $tmp[0]);
+                        $tables[$tmp[0]]    = array('Name' => $tmp[0]);
                     }
                 }
                 PMA_DBI_free_result($db_info_result);
+                
+                if ( $GLOBALS['cfg']['NaturalOrder'] ) {
+                    uksort( $tables, 'strnatcasecmp' );
+                }
+
                 $sot_ready = TRUE;
             }
         }
@@ -95,33 +108,31 @@ if ($cfg['SkipLockedTables'] == TRUE) {
         unset($db_info_result);
     }
 }
-if (!isset($sot_ready)) {
-    $db_info_result = PMA_DBI_query('SHOW TABLE STATUS FROM ' . PMA_backquote($db) . $tbl_group_sql . ';', NULL, PMA_DBI_QUERY_STORE);
-    if ($db_info_result != FALSE && PMA_DBI_num_rows($db_info_result) > 0) {
-        while ($sts_tmp = PMA_DBI_fetch_assoc($db_info_result)) {
-            if (!isset($sts_tmp['Type']) && isset($sts_tmp['Engine'])) {
-                $sts_tmp['Type'] =& $sts_tmp['Engine'];
-            }
-            if (!empty($tbl_group) && $cfg['ShowTooltipAliasTB'] && !preg_match('@' . preg_quote($tbl_group, '@') . '@i', $sts_tmp['Comment'])) {
-                continue;
-            }
 
-            if ($cfg['ShowTooltip']) {
-                fillTooltip($tooltip_truename, $tooltip_aliasname, $sts_tmp);
-            }
-
-            $tables[] = $sts_tmp;
+if ( ! isset( $sot_ready ) ) {
+    if ( ! empty( $tbl_group ) && ! $cfg['ShowTooltipAliasTB'] ) {
+        // only tables for selected group
+        $tables = PMA_DBI_get_tables_full( $db, $tbl_group, true );
+    } elseif ( ! empty( $tbl_group ) && $cfg['ShowTooltipAliasTB'] ) {
+        // only tables for selected group,
+        // but grouping is done on comment ...
+        $tables = PMA_DBI_get_tables_full( $db, $tbl_group, 'comment' );
+    } else {
+        // all tables in db
+        $tables = PMA_DBI_get_tables_full( $db );
+    }
+    
+    if ( $cfg['ShowTooltip'] ) {
+        foreach( $tables as $each_table ) {
+            fillTooltip( $tooltip_truename, $tooltip_aliasname, $each_table );
         }
     }
-    @PMA_DBI_free_result($db_info_result);
-    unset($db_info_result);
 }
-$num_tables = (isset($tables) ? count($tables) : 0);
+
+$num_tables = count( $tables );
 
 /**
  * Displays top menu links
  */
-echo '<!-- Top menu links -->' . "\n";
 require('./db_details_links.php');
-
 ?>

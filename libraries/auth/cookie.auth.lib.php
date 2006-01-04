@@ -1,5 +1,5 @@
 <?php
-/* $Id: cookie.auth.lib.php,v 2.26.2.1 2005/09/07 07:20:01 nijel Exp $ */
+/* $Id: cookie.auth.lib.php,v 2.34.2.1 2005/11/21 12:03:45 nijel Exp $ */
 // vim: expandtab sw=4 ts=4 sts=4:
 
 // +--------------------------------------------------------------------------+
@@ -72,7 +72,7 @@ function PMA_auth()
     // Tries to get the username from cookie whatever are the values of the
     // 'register_globals' and the 'variables_order' directives if last login
     // should be recalled, else skip the IE autocomplete feature.
-    if ($cfg['LoginCookieRecall']) {
+    if ($cfg['LoginCookieRecall'] && !empty($GLOBALS['cfg']['blowfish_secret'])) {
         // username
         // do not try to use pma_cookie_username as it was encoded differently
         // in previous versions and would produce an undefined offset in blowfish
@@ -80,8 +80,12 @@ function PMA_auth()
             $default_user = $_COOKIE['pma_cookie_username-' . $server];
         }
         $decrypted_user = isset($default_user) ? PMA_blowfish_decrypt($default_user, $GLOBALS['cfg']['blowfish_secret']) : '';
-        $pos = strrpos($decrypted_user, ':');
-        $default_user = substr($decrypted_user, 0, $pos);
+        if (!empty($decrypted_user)) {
+            $pos = strrpos($decrypted_user, ':');
+            $default_user = substr($decrypted_user, 0, $pos);
+        } else {
+            $default_user = '';
+        }
         // server name
         if (!empty($GLOBALS['pma_cookie_servername'])) {
             $default_server = $GLOBALS['pma_cookie_servername'];
@@ -109,53 +113,10 @@ function PMA_auth()
     // Defines the "item" image depending on text direction
     $item_img = $GLOBALS['pmaThemeImage'] . 'item_ltr.png';
 
-    // Title
+    /* HTML header */
+    $page_title = 'phpMyAdmin ' . PMA_VERSION;
+    require('./libraries/header_meta_style.inc.php');
     ?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="<?php echo $GLOBALS['available_languages'][$GLOBALS['lang']][2]; ?>" lang="<?php echo $GLOBALS['available_languages'][$GLOBALS['lang']][2]; ?>" dir="<?php echo $GLOBALS['text_dir']; ?>">
-
-<head>
-<title>phpMyAdmin <?php echo PMA_VERSION; ?></title>
-<meta http-equiv="Content-Type" content="text/html; charset=<?php echo $GLOBALS['charset']; ?>" />
-<script language="JavaScript" type="text/javascript">
-<!--
-    /* added 2004-06-10 by Michael Keck
-     *       we need this for Backwards-Compatibility and resolving problems
-     *       with non DOM browsers, which may have problems with css 2 (like NC 4)
-    */
-    var isDOM      = (typeof(document.getElementsByTagName) != 'undefined'
-                      && typeof(document.createElement) != 'undefined')
-                   ? 1 : 0;
-    var isIE4      = (typeof(document.all) != 'undefined'
-                      && parseInt(navigator.appVersion) >= 4)
-                   ? 1 : 0;
-    var isNS4      = (typeof(document.layers) != 'undefined')
-                   ? 1 : 0;
-    var capable    = (isDOM || isIE4 || isNS4)
-                   ? 1 : 0;
-    // Uggly fix for Opera and Konqueror 2.2 that are half DOM compliant
-    if (capable) {
-        if (typeof(window.opera) != 'undefined') {
-            var browserName = ' ' + navigator.userAgent.toLowerCase();
-            if ((browserName.indexOf('konqueror 7') == 0)) {
-                capable = 0;
-            }
-        } else if (typeof(navigator.userAgent) != 'undefined') {
-            var browserName = ' ' + navigator.userAgent.toLowerCase();
-            if ((browserName.indexOf('konqueror') > 0) && (browserName.indexOf('konqueror/3') == 0)) {
-                capable = 0;
-            }
-        } // end if... else if...
-    } // end if
-    document.writeln('<link rel="stylesheet" type="text/css" href="<?php echo defined('PMA_PATH_TO_BASEDIR') ? PMA_PATH_TO_BASEDIR : './'; ?>css/phpmyadmin.css.php?lang=<?php echo $GLOBALS['available_languages'][$GLOBALS['lang']][2]; ?>&amp;js_frame=right&amp;js_isDOM=' + isDOM + '" />');
-//-->
-</script>
-<noscript>
-    <link rel="stylesheet" type="text/css" href="<?php echo defined('PMA_PATH_TO_BASEDIR') ? PMA_PATH_TO_BASEDIR : './'; ?>css/phpmyadmin.css.php?lang=<?php echo $GLOBALS['available_languages'][$GLOBALS['lang']][2]; ?>&amp;js_frame=right" />
-</noscript>
-
-<base href="<?php echo $cfg['PmaAbsoluteUri']; ?>" />
 <script language="javascript" type="text/javascript">
 <!--
 // show login form in top frame
@@ -188,6 +149,14 @@ if (top != self) {
         ?>
 <!-- Language selection -->
 <form method="post" action="index.php" target="_top">
+    <?php
+    if (isset($GLOBALS['db'])) {
+        echo '            <input type="hidden" name="db" value="' . htmlspecialchars($GLOBALS['db']) . '" />' . "\n";
+    }
+    if (isset($GLOBALS['table'])) {
+        echo '            <input type="hidden" name="table" value="' . htmlspecialchars($GLOBALS['table']) . '" />' . "\n";
+    }
+    ?>
     <input type="hidden" name="server" value="<?php echo $server; ?>" />
     <table border="0" cellpadding="3" cellspacing="0">
         <tr>
@@ -217,30 +186,31 @@ if (top != self) {
     }
     echo "\n\n";
 
+    echo '        </table>' . "\n"
+       . '    </form>' . "\n";
+       
     // Displays the warning message and the login form
 
-    if ($GLOBALS['cfg']['blowfish_secret']=='') {
+    if (empty($GLOBALS['cfg']['blowfish_secret'])) {
     ?>
-        <tr><td colspan="2" height="5"></td></tr>
-        <tr>
-            <th colspan="2" align="left" class="tblHeadError">
-                <div class="errorhead"><?php echo $GLOBALS['strError']; ?></div>
-            </th>
-        </tr>
-        <tr>
-            <td class="tblError" colspan="2" align="left"><?php echo $GLOBALS['strSecretRequired']; ?></td>
-        </tr>
+        <div class="error"><h1><?php echo $GLOBALS['strError']; ?></h1>
+            <?php echo $GLOBALS['strSecretRequired']; ?>
+        </div>
 <?php
         include('./config.footer.inc.php');
-        echo '        </table>' . "\n"
-           . '    </form>' . "\n"
-           . '    </body>' . "\n"
+        echo '    </body>' . "\n"
            . '</html>';
         exit();
     }
 ?>
     </table>
 </form>
+<?php
+    if ( !empty($conn_error)) {
+        echo '<div class="error"><h1>' . $GLOBALS['strError'] . '</h1>' . "\n";
+        echo $conn_error . '</div>' . "\n";
+    }
+?>
 <br />
 <!-- Login form -->
 <form method="post" action="index.php" name="login_form"<?php echo $autocomplete; ?> target="_top">
@@ -289,18 +259,16 @@ if (top != self) {
         echo "\n";
         // Displays the MySQL servers choice
         foreach ($cfg['Servers'] AS $key => $val) {
-            if (!empty($val['host']) || $val['auth_type'] == 'arbitrary') {
+            if (!empty($val['host'])) {
                 echo '                <option value="' . $key . '"';
                 if (!empty($server) && ($server == $key)) {
                     echo ' selected="selected"';
                 }
                 echo '>';
                 if ($val['verbose'] != '') {
-                    echo $val['verbose'];
-                } elseif ($val['auth_type'] == 'arbitrary') {
-                    echo $GLOBALS['strArbitrary'];
+                    echo htmlspecialchars($val['verbose']);
                 } else {
-                    echo $val['host'];
+                    echo htmlspecialchars($val['host']);
                     if (!empty($val['port'])) {
                         echo ':' . $val['port'];
                     }
@@ -329,11 +297,6 @@ if (top != self) {
         <?php
     } // end if (server choice)
     echo "\n";
-    if (!empty($conn_error)) {
-        echo '<tr><td colspan="2" height="5"></td></tr>';
-        echo '<tr><th colspan="2" align="left" class="tblHeadError"><div class="errorhead">' . $GLOBALS['strError'] . '</div></th></tr>' . "\n";
-        echo '<tr><td colspan="2" align="left" class="tblError">'. $conn_error . '</td></tr>' . "\n";
-    }
     ?>
     <tr>
         <td colspan="2" align="right">
@@ -348,6 +311,9 @@ if (top != self) {
     <?php
     if (isset($GLOBALS['db'])) {
         echo '            <input type="hidden" name="db" value="' . htmlspecialchars($GLOBALS['db']) . '" />' . "\n";
+    }
+    if (isset($GLOBALS['table'])) {
+        echo '            <input type="hidden" name="table" value="' . htmlspecialchars($GLOBALS['table']) . '" />' . "\n";
     }
     ?>
             <input type="submit" value="<?php echo $GLOBALS['strLogin']; ?>" id="buttonYes" />
@@ -406,7 +372,7 @@ function PMA_auth_check()
     global $from_cookie;
 
     // avoid an error in mcrypt
-    if ($GLOBALS['cfg']['blowfish_secret']=='') {
+    if (empty($GLOBALS['cfg']['blowfish_secret'])) {
         return FALSE;
     }
 
@@ -452,9 +418,13 @@ function PMA_auth_check()
             $from_cookie   = TRUE;
         }
         $decrypted_user = PMA_blowfish_decrypt($PHP_AUTH_USER, $GLOBALS['cfg']['blowfish_secret']);
-        $pos = strrpos($decrypted_user, ':');
-        $PHP_AUTH_USER = substr($decrypted_user, 0, $pos);
-        $decrypted_time = (int)substr($decrypted_user, $pos + 1);
+        if (!empty($decrypted_user)) {
+            $pos = strrpos($decrypted_user, ':');
+            $PHP_AUTH_USER = substr($decrypted_user, 0, $pos);
+            $decrypted_time = (int)substr($decrypted_user, $pos + 1);
+        } else {
+            $decrypted_time = 0;
+        }
 
         // User inactive too long
         if ($decrypted_time > 0 && $decrypted_time < $GLOBALS['current_time'] - $GLOBALS['cfg']['LoginCookieValidity']) {
@@ -587,10 +557,15 @@ function PMA_auth_set_user()
             }
         } // end if
         if (!empty($GLOBALS['SERVER_SOFTWARE']) && $GLOBALS['SERVER_SOFTWARE'] == 'Microsoft-IIS/5.0') {
-            header('Refresh: 0; url=' . $cfg['PmaAbsoluteUri'] . 'index.php?' . PMA_generate_common_url('', '', '&'));
+            header('Refresh: 0; url=' . $cfg['PmaAbsoluteUri'] . 'index.php?' . 
+                PMA_generate_common_url(isset($GLOBALS['db']) ? $GLOBALS['db'] : '', 
+                   isset($GLOBALS['table']) ? $GLOBALS['table'] : '', 
+                   '&'));
         }
         else {
-            header('Location: ' . $cfg['PmaAbsoluteUri'] . 'index.php?' . PMA_generate_common_url('', '', '&'));
+            header( 'Location: ' . $cfg['PmaAbsoluteUri'] . 'index.php?' 
+                . PMA_generate_common_url(isset($GLOBALS['db']) ? $GLOBALS['db'] : '', 
+                       isset($GLOBALS['table']) ? $GLOBALS['table'] : '', '&') . '&' . SID );
         }
         exit();
     } // end if

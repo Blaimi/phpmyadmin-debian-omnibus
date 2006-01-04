@@ -1,5 +1,5 @@
 <?php
-/* $Id: header_printview.inc.php,v 2.4 2004/01/23 15:56:39 rabus Exp $ */
+/* $Id: header_printview.inc.php,v 2.7 2005/11/08 09:45:13 cybot_tm Exp $ */
 // vim: expandtab sw=4 ts=4 sts=4:
 
 /**
@@ -21,7 +21,7 @@ PMA_checkParameters(array('db', 'full_sql_query'));
 
 // garvin: For re-usability, moved http-headers
 // to a seperate file. It can now be included by header.inc.php,
-// queryframe.php, querywindow.php.
+// querywindow.php.
 
 require_once('./libraries/header_http.inc.php');
 
@@ -44,12 +44,13 @@ if ($text_dir == 'ltr') {
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="<?php echo $available_languages[$lang][2]; ?>" lang="<?php echo $available_languages[$lang][2]; ?>" dir="<?php echo $text_dir; ?>">
 
 <head>
+<link rel="icon" href="./favicon.ico" type="image/x-icon" />
+<link rel="shortcut icon" href="./favicon.ico" type="image/x-icon" />
 <title><?php echo $strSQLResult; ?> - phpMyAdmin <?php echo PMA_VERSION ?></title>
 <meta http-equiv="Content-Type" content="text/html; charset=<?php echo $charset; ?>" />
-<link rel="stylesheet" type="text/css" href="./css/phpmyadmin.css.php?lang=<?php echo $lang; ?>&amp;js_frame=print" />
+<link rel="stylesheet" type="text/css" href="./css/phpmyadmin.css.php?<?php echo PMA_generate_common_url( '', '' ); ?>&amp;js_frame=print" />
 </style>
 </head>
-
 
 <body bgcolor="#ffffff">
 <h1><?php echo $strSQLResult; ?></h1>

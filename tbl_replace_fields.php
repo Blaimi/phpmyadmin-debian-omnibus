@@ -1,5 +1,5 @@
 <?php
-/* $Id: tbl_replace_fields.php,v 2.7 2004/05/13 14:56:18 nijel Exp $ */
+/* $Id: tbl_replace_fields.php,v 2.9 2005/11/03 18:22:37 lem9 Exp $ */
 // vim: expandtab sw=4 ts=4 sts=4:
 
 // note: grab_globals has extracted the fields from _FILES
@@ -62,10 +62,7 @@ if (isset(${'me_fields_upload_' . $encoded_key}) && ${'me_fields_upload_' . $enc
         }
 
     } elseif (!empty(${'me_fields_uploadlocal_' . $encoded_key})) {
-        if (substr($cfg['UploadDir'], -1) != '/') {
-            $cfg['UploadDir'] .= '/';
-        }
-        $file_to_upload = $cfg['UploadDir'] . preg_replace('@\.\.*@', '.', ${'me_fields_uploadlocal_' . $encoded_key});
+        $file_to_upload = PMA_userDir($cfg['UploadDir']) . preg_replace('@\.\.*@', '.', ${'me_fields_uploadlocal_' . $encoded_key});
 
         // A local file will be uploaded.
         $open_basedir = @ini_get('open_basedir');
@@ -117,7 +114,7 @@ if (!$check_stop) {
 
     if (isset($me_fields_type[$encoded_key])) $type = $me_fields_type[$encoded_key];
     else $type = '';
-    
+
     $f = 'field_' . md5($key);
     $t_fval = (isset($$f) ? $$f : null);
   
@@ -194,7 +191,12 @@ if (!$check_stop) {
 
                     break;
                 default:
-                    $val = "'" . PMA_sqlAddslashes($val) . "'";
+                    // best way to avoid problems in strict mode (works also in non-strict mode)
+                    if (isset($me_auto_increment)  && isset($me_auto_increment[$encoded_key])) {
+                        $val = 'NULL';
+                    } else {
+                        $val = "'" . PMA_sqlAddslashes($val) . "'";
+                    }
                     break;
             }
             break;

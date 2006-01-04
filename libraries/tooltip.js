@@ -1,11 +1,10 @@
-/* $Id: tooltip.js,v 1.2 2005/01/20 17:37:47 mkkeck Exp $ */
+/* $Id: tooltip.js,v 1.7 2005/11/14 11:23:47 cybot_tm Exp $ */
 
 
 /**
-  * Displays the Tooltips (hints), if we have some
-  * 2005-01-20 added by Michael Keck (mkkeck)
-  */
-
+ * Displays the Tooltips (hints), if we have some
+ * 2005-01-20 added by Michael Keck (mkkeck)
+ */
 
 var ttXpos = 0, ttYpos = 0;
 var ttXadd = 10, ttYadd = -10;
@@ -19,25 +18,22 @@ if (ttDOM) { // if DOM-compatible, set the others to false
     ttIE4 = 0;
 }
 
-if ( (ttDOM) || (ttIE4) || (ttNS4) ) {
-    // reference to TooltipContainer
-    if (ttNS4) {
-        var myTooltipContainer = document.TooltipContainer;
-    } else if (ttIE4) {
-        var myTooltipContainer = document.all('TooltipContainer');
-    } else if (ttDOM) {
-        var myTooltipContainer = document.getElementById('TooltipContainer');
-    }
-    // mouse-event
-    document.onmousemove = mouseMove;
-    if (ttNS4)
-        document.captureEvents(Event.MOUSEMOVE);
+var myTooltipContainer = null;
 
+if ( (ttDOM) || (ttIE4) || (ttNS4) ) {
+    // mouse-event
+    if ( ttNS4 ) {
+        document.captureEvents(Event.MOUSEMOVE);
+    } else {
+        document.onmousemove = mouseMove;
+    }
 }
 
 /**
-  * init the tooltip and write the text into it
-  */
+ * init the tooltip and write the text into it
+ *
+ * @param string theText tooltip content
+ */
 function textTooltip(theText) {
     if	(ttDOM || ttIE4) {                   // document.getEelementById || document.all
         myTooltipContainer.innerHTML = "";  // we should empty it first
@@ -47,12 +43,18 @@ function textTooltip(theText) {
         layerNS4.write(theText);
         layerNS4.close();
     }
-}    
+}
 
 /**
-  * swap the Tooltip // show and hide
-  */
+ * @var integer
+ */
 var ttTimerID = 0;
+
+/**
+ * swap the Tooltip // show and hide
+ *
+ * @param boolean stat view status
+ */
 function swapTooltip(stat) {
     if (ttHoldIt!=1) {
         if (stat!='default') {
@@ -76,8 +78,10 @@ function swapTooltip(stat) {
 }
 
 /**
-  * show / hide the Tooltip
-  */
+ * show / hide the Tooltip
+ *
+ * @param boolean stat view status
+ */
 function showTooltip(stat) {
     if (stat==false) {
         if (ttNS4)
@@ -94,8 +98,8 @@ function showTooltip(stat) {
     }
 }
 /**
-  * hold it, if we create or move the mouse over the tooltip
-  */
+ * hold it, if we create or move the mouse over the tooltip
+ */
 function holdTooltip() {
     ttHoldIt = 1;
     swapTooltip('true');
@@ -103,8 +107,11 @@ function holdTooltip() {
 }
 
 /**
-  * move the tooltip to mouse position
-  */
+ * move the tooltip to mouse position
+ *
+ * @param integer posX    horiz. position
+ * @param integer posY    vert. position
+ */
 function moveTooltip(posX, posY) {
     if (ttDOM || ttIE4) {
         myTooltipContainer.style.left	=	posX + "px";
@@ -116,19 +123,29 @@ function moveTooltip(posX, posY) {
 }
 
 /**
-  * build the tooltip
-  */
-function pmaTooltip(theText) {
-    textTooltip(theText);
-    moveTooltip((ttXpos + ttXadd), (ttYpos + ttYadd));
-    holdTooltip();
-}
+ * build the tooltip
+ *
+ * @param    string    theText    tooltip content
+ */
+function pmaTooltip( theText ) {
+    // reference to TooltipContainer
+    if ( null == myTooltipContainer ) {
+        if (ttNS4) {
+            myTooltipContainer = document.TooltipContainer;
+        } else if (ttIE4) {
+            myTooltipContainer = document.all('TooltipContainer');
+        } else if (ttDOM) {
+            myTooltipContainer = document.getElementById('TooltipContainer');
+        } else {
+            return;
+        }
 
-/**
-  * register mouse moves
-  */
-function mouseMove(e) {
-    var x=0, y=0, plusX=0, plusY=0, docX=0; docY=0;
+        if ( typeof( myTooltipContainer ) == 'undefined' ) {
+            return;
+        }
+    }
+
+    var plusX=0, plusY=0, docX=0, docY=0;
     var divHeight = myTooltipContainer.clientHeight;
     var divWidth  = myTooltipContainer.clientWidth;
     if (navigator.appName.indexOf("Explorer")!=-1) {
@@ -143,18 +160,35 @@ function mouseMove(e) {
             docX = document.body.offsetWidth + plusX;
             docY = document.body.offsetHeight + plusY;
         }
-        x = event.x + plusX;
-        y = event.y + plusY;
     } else {
-        x = e.pageX;
-        y = e.pageY;
         docX = document.body.clientWidth;
         docY = document.body.clientHeight;
     }
-    ttXpos = x;
-    ttYpos = y;
+
+    ttXpos = ttXpos + plusX;
+    ttYpos = ttYpos + plusY;
+
     if ((ttXpos + divWidth) > docX)
         ttXpos = ttXpos - (divWidth + (ttXadd * 2));
     if ((ttYpos + divHeight) > docY)
         ttYpos = ttYpos - (divHeight + (ttYadd * 2));
+
+    textTooltip(theText);
+    moveTooltip((ttXpos + ttXadd), (ttYpos + ttYadd));
+    holdTooltip();
+}
+
+/**
+ * register mouse moves
+ *
+ * @param    event    e
+ */
+function mouseMove(e) {
+    if ( typeof( event ) != 'undefined' ) {
+        ttXpos = event.x;
+        ttYpos = event.y;
+    } else {
+        ttXpos = e.pageX;
+        ttYpos = e.pageY;
+    }
 }

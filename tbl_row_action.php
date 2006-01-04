@@ -1,7 +1,6 @@
 <?php
-/* $Id: tbl_row_action.php,v 2.17 2005/07/10 19:38:54 nijel Exp $ */
+/* $Id: tbl_row_action.php,v 2.18 2005/11/18 12:50:49 cybot_tm Exp $ */
 // vim: expandtab sw=4 ts=4 sts=4:
-require_once('./libraries/grab_globals.lib.php');
 require_once('./libraries/common.lib.php');
 require_once('./libraries/mysql_charsets.lib.php');
 

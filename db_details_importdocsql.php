@@ -1,7 +1,8 @@
 <?php
-/* $Id: db_details_importdocsql.php,v 2.6 2004/10/08 11:14:06 garvinhicking Exp $ */
+/* $Id: db_details_importdocsql.php,v 2.7 2005/11/18 12:50:49 cybot_tm Exp $ */
 // vim: expandtab sw=4 ts=4 sts=4:
 
+require_once('./libraries/common.lib.php');
 
 /**
  * This script imports relation infos from docSQL (www.databay.de)
@@ -13,12 +14,7 @@
  * the headers
  */
 require_once('./libraries/read_dump.lib.php');
-require_once('./libraries/grab_globals.lib.php');
 require_once('./header.inc.php');
-
-//require common added for string importing - Robbat2, 15 January 2003 9.34PM
-//all hardcoded strings converted by Robbat2, 15 January 2003 9.34PM
-require_once('./libraries/common.lib.php');
 
 // Check parameters
 PMA_checkParameters(array('db'));

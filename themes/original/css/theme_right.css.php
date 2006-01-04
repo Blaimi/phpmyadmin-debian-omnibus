@@ -1,5 +1,12 @@
 /* Always enabled stylesheets (right frame) */
+html {
+    margin: 0;
+    padding: 0;
+}
+
 body {
+    margin: 0.5em;
+    padding: 0;
     font-family: <?php echo $right_font_family; ?>;
     font-size: <?php echo $font_size; ?>;
     color: #000000;
@@ -29,23 +36,8 @@ h3              {font-family: <?php echo $right_font_family; ?>; font-size: <?ph
 a:link          {font-family: <?php echo $right_font_family; ?>; font-size: <?php echo $font_size; ?>; text-decoration: none; color: #0000FF}
 a:visited       {font-family: <?php echo $right_font_family; ?>; font-size: <?php echo $font_size; ?>; text-decoration: none; color: #0000FF}
 a:hover         {font-family: <?php echo $right_font_family; ?>; font-size: <?php echo $font_size; ?>; text-decoration: underline; color: #FF0000}
-a.h1:link       {font-family: <?php echo $right_font_family; ?>; font-size: <?php echo $font_biggest; ?>; font-weight: bold; color: #000000}
-a.h1:active     {font-family: <?php echo $right_font_family; ?>; font-size: <?php echo $font_biggest; ?>; font-weight: bold; color: #000000}
-a.h1:visited    {font-family: <?php echo $right_font_family; ?>; font-size: <?php echo $font_biggest; ?>; font-weight: bold; color: #000000}
-a.h1:hover      {font-family: <?php echo $right_font_family; ?>; font-size: <?php echo $font_biggest; ?>; font-weight: bold; color: #FF0000}
-a.h2:link       {font-family: <?php echo $right_font_family; ?>; font-size: <?php echo $font_bigger; ?>; font-weight: bold; color: #000000}
-a.h2:active     {font-family: <?php echo $right_font_family; ?>; font-size: <?php echo $font_bigger; ?>; font-weight: bold; color: #000000}
-a.h2:visited    {font-family: <?php echo $right_font_family; ?>; font-size: <?php echo $font_bigger; ?>; font-weight: bold; color: #000000}
-a.h2:hover      {font-family: <?php echo $right_font_family; ?>; font-size: <?php echo $font_bigger; ?>; font-weight: bold; color: #FF0000}
-a.drop:link     {font-family: <?php echo $right_font_family; ?>; color: #ff0000}
-a.drop:visited  {font-family: <?php echo $right_font_family; ?>; color: #ff0000}
-a.drop:hover    {font-family: <?php echo $right_font_family; ?>; color: #ffffff; background-color:#ff0000; text-decoration: none}
 dfn             {font-style: normal}
 dfn:hover       {font-style: normal; cursor: help}
-.warning        {font-family: <?php echo $right_font_family; ?>; font-size: <?php echo $font_size; ?>; font-weight: bold; color: #FF0000}
-.tblcomment     {font-family: <?php echo $right_font_family; ?>; font-size: <?php echo $font_smallest; ?>; font-weight: normal; color: #000099; }
-td.topline      {font-size: 1px}
-
 
 fieldset        {
     border:     #686868 solid 1px;
@@ -106,19 +98,35 @@ button.mult_submit {
 
 hr{ color: #666666; background-color: #666666; border: 0; height: 1px; }
 
-
 /* topmenu */
-#topmenu {
+ul#topmenu {
     font-weight: bold;
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+}
+
+ul#topmenu li {
+    float: left;
+    margin: 0;
+    padding: 0;
+    vertical-align: middle;
+}
+
+#topmenu img {
+    vertical-align: middle;
+    margin-right: 0.1em;
 }
 
 /* default tab styles */
 .tab, .tabcaution, .tabactive {
-    margin-right: 0.1em;
-    margin-left: 0.1em;
+    display: block;
+    margin: 0.2em 0.2em 0 0.2em;
+    padding: 0.2em 0.2em 0 0.2em;
+    white-space: nowrap;
 }
 
-/* disbaled tabs */
+/* disabled tabs */
 span.tab {
     color: #666666;
 }
@@ -140,75 +148,164 @@ a.tabcaution:hover {
 <?php if ( $GLOBALS['cfg']['LightTabs'] ) { ?>
 /* active tab */
 a.tabactive {
-    border-bottom: 0.1em solid black;
     color: black;
 }
 <?php } else { ?>
 #topmenu {
     margin-top: 0.5em;
-    border-bottom: 0.1em solid black;
     padding: 0.1em 0.3em 0.1em 0.3em;
+}
+
+ul#topmenu li {
+    border-bottom: 1pt solid black;
 }
 
 /* default tab styles */
 .tab, .tabcaution, .tabactive {
-    background-color: #E5E5E5;
-    border: 0.1em solid silver;
-    border-bottom: 0.1em solid black;
-    border-radius-topleft: 0.5em;
-    border-radius-topright: 0.5em;
-    -moz-border-radius-topleft: 0.5em;
-    -moz-border-radius-topright: 0.5em;
-    padding: 0.1em 0.2em 0.1em 0.2em;
+    background-color: <?php echo $GLOBALS['cfg']['BgcolorOne']; ?>;
+    border: 1pt solid <?php echo $GLOBALS['cfg']['BgcolorTwo']; ?>;
+    border-bottom: 0;
+    border-radius-topleft: 0.4em;
+    border-radius-topright: 0.4em;
+    -moz-border-radius-topleft: 0.4em;
+    -moz-border-radius-topright: 0.4em;
 }
 
 /* enabled hover/active tabs */
-a.tab:hover, a.tabcaution:hover, .tabactive {
-    margin-right: 0;
-    margin-left: 0;
-    padding: 0.3em 0.3em 0.1em 0.3em;
+a.tab:hover, a.tabcaution:hover, .tabactive, .tabactive:hover {
+    margin: 0;
+    padding: 0.2em 0.4em 0.2em 0.4em;
+    text-decoration: none;
 }
+
 a.tab:hover, .tabactive {
-    background-color: #CCCCCC;
+    background-color: <?php echo $GLOBALS['cfg']['BgcolorTwo']; ?>;
 }
 
 /* disabled drop/empty tabs */
 span.tab, span.tabcaution {
-    cursor: url(themes/original/img/error.ico), default;
+    cursor: url(themes/original/img/error.ico), url(../themes/original/img/error.ico), default;
 }
 <?php } ?>
 /* end topmenu */
 
 
-/* Warning showing div with right border and optional icon */
-
-div.errorhead {
-    font-weight: bold;
-    color: #ffffff;
-    text-align: left;
-    <?php if ($cfg['ErrorIconic'] && isset($js_isDOM) && $js_isDOM != '0') { ?>
-    background-image: url(../themes/original/img/s_error.png);
+/* message boxes: warning, error, confirmation */
+.notice {
+    color: #000000;
+    background-color: #FFFFDD;
+}
+h1.notice,
+div.notice {
+    margin: 0.5em 0 0.5em 0;
+    border: 0.1em solid #FFD700;
+    <?php if ( $GLOBALS['cfg']['ErrorIconic'] ) { ?>
+    background-image: url(../themes/original/img/s_notice.png);
     background-repeat: no-repeat;
-    background-position: 5px 50%;
-    padding: 0px 0px 0px 25px;
-    <?php } ?>
-    margin: 0px;
+        <?php if ( $GLOBALS['text_dir'] === 'ltr' ) {?>
+    background-position: 10px 50%;
+    padding: 10px 10px 10px 36px;
+        <?php } else {?>
+    background-position: 99% 50%;
+    padding: 10px 5% 10px 10px;
+        <?php }?>
+    <?php } else {?>
+    padding: 0.5em;
+    <?php }?>
+}
+.notice h1 {
+    border-bottom: 0.1em solid #FFD700;
+    font-weight: bold;
+    text-align: <?php echo $left; ?>;
+    margin: 0 0 0.2em 0;
 }
 
-/* tables */
-.tblError {
-    border: 1px solid #FF0000;
+.warning {
+    color: #CC0000;
     background-color: #FFFFCC;
 }
-.tblWarn, div.tblWarn {
-    border: 1px solid #FF0000;
-    background-color: #FFFFFF;
+h1.warning,
+div.warning {
+    margin: 0.5em 0 0.5em 0;
+    border: 0.1em solid #CC0000;
+    <?php if ( $GLOBALS['cfg']['ErrorIconic'] ) { ?>
+    background-image: url(../themes/original/img/s_warn.png);
+    background-repeat: no-repeat;
+        <?php if ( $GLOBALS['text_dir'] === 'ltr' ) {?>
+    background-position: 10px 50%;
+    padding: 10px 10px 10px 36px;
+        <?php } else {?>
+    background-position: 99% 50%;
+    padding: 10px 5% 10px 10px;
+        <?php }?>
+    <?php } else {?>
+    padding: 0.5em;
+    <?php }?>
 }
-div.tblWarn {
-    padding: 5px 5px 5px 5px;
-    margin:  0px 0px 5px 0px;
-    width:   100%;
+.warning h1 {
+    border-bottom: 0.1em solid #cc0000;
+    font-weight: bold;
+    text-align: <?php echo $left; ?>;
+    margin: 0 0 0.2em 0;
 }
+
+.error {
+    background-color: #FFFFCC;
+    color: #ff0000;
+}
+h1.error,
+div.error {
+    margin: 0.5em 0 0.5em 0;
+    border: 0.1em solid #ff0000;
+    <?php if ( $GLOBALS['cfg']['ErrorIconic'] ) { ?>
+    background-image: url(../themes/original/img/s_error.png);
+    background-repeat: no-repeat;
+        <?php if ( $GLOBALS['text_dir'] === 'ltr' ) {?>
+    background-position: 10px 50%;
+    padding: 10px 10px 10px 36px;
+        <?php } else {?>
+    background-position: 99% 50%;
+    padding: 10px 5% 10px 10px;
+        <?php }?>
+    <?php } else {?>
+    padding: 0.5em;
+    <?php }?>
+}
+div.error h1 {
+    border-bottom: 0.1em solid #ff0000;
+    font-weight: bold;
+    text-align: <?php echo $left; ?>;
+    margin: 0 0 0.2em 0;
+}
+
+
+.confirmation {
+    background-color: #FFFFCC;
+}
+fieldset.confirmation {
+    border: 0.1em solid #FF0000;
+}
+fieldset.confirmation legend {
+    border-left: 0.1em solid #FF0000;
+    border-right: 0.1em solid #FF0000;
+    font-weight: bold;
+    <?php if ( $GLOBALS['cfg']['ErrorIconic'] ) { ?>
+    background-image: url(../themes/original/img/s_really.png);
+    background-repeat: no-repeat;
+        <?php if ( $GLOBALS['text_dir'] === 'ltr' ) {?>
+    background-position: 5px 50%;
+    padding: 0.2em 0.2em 0.2em 25px;
+        <?php } else {?>
+    background-position: 97% 50%;
+    padding: 0.2em 25px 0.2em 0.2em;
+        <?php }?>
+    <?php }?>
+}
+/* end messageboxes */
+
+
+.tblcomment     {font-size: <?php echo $font_smallest; ?>; font-weight: normal; color: #000099; }
+
 .tblHeaders {
     background-color: <?php echo $cfg['LeftBgColor']; ?>;
     font-weight: bold;
@@ -219,20 +316,19 @@ div.tblWarn {
     font-weight: normal;
     color: #000000;
 }
-.tblHeaders a:link, .tblHeaders a:active, .tblHeaders a:visited, .tblFooters a:link, .tblFooters a:active, .tblFooters a:visited {
+.tblHeaders a:link,
+.tblHeaders a:active,
+.tblHeaders a:visited,
+.tblFooters a:link,
+.tblFooters a:active,
+.tblFooters a:visited {
     color: #0000FF;
 }
-.tblHeaders a:hover, .tblFooters a:hover { color: #FF0000; }
-.tblHeadError {
-    background-color: #FF0000;
-    font-weight: bold;
-    color: #FFFFFF;
+.tblHeaders a:hover,
+.tblFooters a:hover {
+    color: #FF0000;
 }
-.tblHeadWarn {
-    background-color: #FFCC00;
-    font-weight: bold;
-    color: #000000;
-}
+
 /* forbidden, no privilegs */
 .noPrivileges{
     color: #FF0000;
@@ -264,7 +360,7 @@ img, input, select, button {
     margin: 0 0.1em 0 0.2em;
 }
 
-<?php if (isset($js_isDOM) && $js_isDOM != '0') { ?>
+
 /* disabled text */
 .disabled, .disabled a:link, disabled a:active, .disabled a:visited {
     font-family: <?php echo $right_font_family; ?>;
@@ -284,18 +380,92 @@ tr.disabled td, td.disabled {
     font-family: "Courier New", Courier, mono;
     font-size:   12px;
 }
-<?php } // end of isDom ?>
+
 #TooltipContainer {
     position:   absolute;
     z-index:    99;
-    width:      250px;
-    height:     50px;
-    overflow:   auto;
+    width:      20em;
+    height:     auto;
+    overflow:   visible;
     visibility: hidden;
     background-color: #ffffcc;
     color:            #006600;
-    border:           1px solid #000000;
-    padding:          5px;
+    border:           0.1em solid #000000;
+    padding:          0.5em;
     font-family:      <?php echo $right_font_family; ?>;
     font-size:        <?php echo $font_size; ?>;
+}
+
+fieldset {
+    margin-top: 1em;
+}
+
+fieldset.tblFooters {
+    margin-top: 0;
+    margin-bottom: 0.5em;
+    text-align: right;
+    float: none;
+    clear: both;
+}
+
+#fieldset_add_user_login div.item {
+    border-bottom: 1px solid silver;
+    padding-bottom: 0.3em;
+    margin-bottom: 0.3em;
+}
+
+#fieldset_add_user_login label {
+    float: left;
+    display: block;
+    width: 10em;
+    max-width: 100%;
+    text-align: right;
+    padding-right: 0.5em;
+}
+
+#fieldset_add_user_login span.options #select_pred_username,
+#fieldset_add_user_login span.options #select_pred_hostname,
+#fieldset_add_user_login span.options #select_pred_password {
+    width: 100%;
+    max-width: 100%;
+}
+
+#fieldset_add_user_login span.options {
+    float: left;
+    display: block;
+    width: 12em;
+    max-width: 100%;
+    padding-right: 0.5em;
+}
+
+#fieldset_add_user_login input {
+    width: 12em;
+    clear: right;
+    max-width: 100%;
+}
+
+#fieldset_add_user_login span.options input {
+    width: auto;
+}
+
+#fieldset_user_priv div.item {
+    float: left;
+    width: 9em;
+    max-width: 100%;
+}
+
+#fieldset_user_priv div.item div.item {
+    float: none;
+}
+
+#fieldset_user_priv div.item label{
+    white-space: nowrap;
+}
+
+#fieldset_user_priv div.item select {
+    width: 100%;
+}
+
+#fieldset_user_global_rights fieldset {
+    float: left;
 }

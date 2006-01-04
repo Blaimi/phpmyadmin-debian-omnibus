@@ -1,5 +1,5 @@
 <?php
-/* $Id: string.lib.php,v 2.10 2005/07/16 12:20:59 lem9 Exp $ */
+/* $Id: string.lib.php,v 2.12 2005/11/03 12:53:28 lem9 Exp $ */
 // vim: expandtab sw=4 ts=4 sts=4:
 
 /** Specialized String Functions for phpMyAdmin
@@ -134,7 +134,7 @@ function PMA_STR_charIsEscaped($string, $pos, $start = 0)
 
     $p           = $pos - 1;
     $escaped     = FALSE;
-    while (($p >= $start) && ($string[$p] == '\\')) {
+    while (($p >= $start) && (PMA_substr($string, $p, 1) == '\\')) {
         $escaped = !$escaped;
         $p--;
     } // end while
@@ -310,8 +310,7 @@ function PMA_STR_isSpace($c)
  *
  * @param   string   character to check for
  *
- * @return  boolean  whether the character is an upper alphabetic one or
- *                   not
+ * @return  boolean  whether the character is an accented one or not
  *
  * @see     PMA_STR_numberInRangeInclusive()
  */

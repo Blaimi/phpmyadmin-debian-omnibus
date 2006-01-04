@@ -1,7 +1,8 @@
 <?php
-/* $Id: server_collations.php,v 2.8 2005/03/29 18:09:46 rabus Exp $ */
+/* $Id: server_collations.php,v 2.10 2005/11/18 12:50:49 cybot_tm Exp $ */
 // vim: expandtab sw=4 ts=4 sts=4:
 
+require_once('./libraries/common.lib.php');
 
 /**
  * Does the common work
@@ -19,7 +20,7 @@ require('./server_links.inc.php');
  * Displays the sub-page heading
  */
 echo '<h2>' . "\n"
-   . '    ' . ($GLOBALS['cfg']['MainPageIconic'] ? '<img src="'. $GLOBALS['pmaThemeImage'] . 's_asci.png" border="0" hspace="2" align="middle" />' : '') 
+   . '    ' . ($GLOBALS['cfg']['MainPageIconic'] ? '<img class="icon" src="'. $GLOBALS['pmaThemeImage'] . 's_asci.png" alt="" />' : '') 
    . '' . $strCharsetsAndCollations . "\n"
    . '</h2>' . "\n";
 

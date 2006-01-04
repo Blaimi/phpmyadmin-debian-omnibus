@@ -102,17 +102,14 @@ debian/po/POTFILES.in: $(shell which yada) debian/packages-tmp
 
 debian/build-stamp: debian/build-arch-stamp debian/build-indep-stamp
 	@[ -f $(shell which yada) -a -f debian/rules ]
-	yada patch "debian/patches/*.patch"
 	touch debian/build-stamp
 
 debian/build-arch-stamp:
 	@[ -f $(shell which yada) -a -f debian/rules ]
-	yada patch "debian/patches/*.patch"
 	touch debian/build-arch-stamp
 
 debian/build-indep-stamp:
 	@[ -f $(shell which yada) -a -f debian/rules ]
-	yada patch "debian/patches/*.patch"
 	touch debian/build-indep-stamp
 
 .PHONY: install-tree
@@ -167,7 +164,7 @@ debian/tmp-phpmyadmin/DEBIAN/control: debian/build-indep-stamp debian/control
 	echo -E '    $$ROOT/usr/share/phpmyadmin/config.inc.php > $$ROOT/usr/share/phpmyadmin/config.inc.php.tmp';\
 	echo -E 'mv -f $$ROOT/usr/share/phpmyadmin/config.inc.php.tmp $$ROOT/usr/share/phpmyadmin/config.inc.php';\
 	echo -E '';\
-	echo -E 'yada install -doc -subdir examples -gzip config.inc.php';\
+	echo -E 'yada install -doc -subdir examples -as config.inc.php -gzip config.default.php';\
 	echo -E 'yada install -doc README TODO CREDITS';\
 	echo -E 'yada install -doc Documentation.html translators.html';\
 	echo -E 'yada install -doc -as changelog ChangeLog';\

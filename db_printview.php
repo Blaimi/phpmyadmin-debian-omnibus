@@ -1,17 +1,15 @@
 <?php
-/* $Id: db_printview.php,v 2.10 2005/05/22 17:09:27 lem9 Exp $ */
+/* $Id: db_printview.php,v 2.11 2005/11/18 12:50:49 cybot_tm Exp $ */
 // vim: expandtab sw=4 ts=4 sts=4:
 
+require_once('./libraries/common.lib.php');
 
 /**
  * Gets the variables sent or posted to this script, then displays headers
  */
-require_once('./libraries/grab_globals.lib.php');
 $print_view = TRUE;
 require_once('./header.inc.php');
 
-// Check parameters
-require_once('./libraries/common.lib.php');
 
 PMA_checkParameters(array('db'));
 

@@ -1,5 +1,5 @@
 <?php
-/* $Id: relation.lib.php,v 2.37 2005/07/22 18:00:14 lem9 Exp $ */
+/* $Id: relation.lib.php,v 2.45 2005/10/23 12:14:22 lem9 Exp $ */
 // vim: expandtab sw=4 ts=4 sts=4:
 
 /**
@@ -26,13 +26,18 @@
  function PMA_query_as_cu($sql, $show_error = TRUE, $options = 0) {
     global $err_url_0, $db, $dbh, $cfgRelation;
 
-    PMA_DBI_select_db($cfgRelation['db'], $dbh);
+    if ($dbh == $GLOBALS['userlink']) {
+        PMA_DBI_select_db($cfgRelation['db'], $dbh);
+    }
     if ($show_error) {
         $result = PMA_DBI_query($sql, $dbh, $options);
     } else {
         $result = @PMA_DBI_try_query($sql, $dbh, $options);
     } // end if... else...
-    PMA_DBI_select_db($db, $dbh);
+    // It makes no sense to restore database on control user
+    if ($dbh == $GLOBALS['userlink']) {
+        PMA_DBI_select_db($db, $dbh);
+    }
 
     if ($result) {
         return $result;
@@ -64,7 +69,7 @@
  */
 function PMA_getRelationsParam($verbose = FALSE)
 {
-    global $cfg, $server, $err_url_0, $db, $table;
+    global $cfg, $server, $err_url_0, $db, $table, $dbh;
     global $cfgRelation;
 
     $cfgRelation                = array();
@@ -100,8 +105,8 @@ function PMA_getRelationsParam($verbose = FALSE)
     //  example enable relations but not pdf...
     //  I was thinking of checking if they have all required columns but I
     //  fear it might be too slow
-    // PMA_DBI_select_db($cfgRelation['db']);
 
+    PMA_DBI_select_db($cfgRelation['db'], $dbh);
     $tab_query = 'SHOW TABLES FROM ' . PMA_backquote($cfgRelation['db']);
     $tab_rs    = PMA_query_as_cu($tab_query, FALSE, PMA_DBI_QUERY_STORE);
 
@@ -457,6 +462,9 @@ function PMA_getComments($db, $table = '') {
                         $native_comment[$tmp_col] = $field['Comment'];
                     }
                 }
+                if (isset($native_comment)) {
+                    $comment = $native_comment;
+                }
             }
         }
 
@@ -505,10 +513,6 @@ function PMA_getComments($db, $table = '') {
 
         PMA_DBI_free_result($com_rs);
         unset($com_rs);
-    } else {
-        if (isset($native_comment)) {
-            $comment = $native_comment;
-        }
     }
 
     if (isset($comment) && is_array($comment)) {
@@ -560,59 +564,8 @@ function PMA_setComment($db, $table, $col, $comment, $removekey = '', $mode='aut
 
     // native mode is only for column comments so we need a table name
     if ($mode == 'native' && !empty($table)) {
-        $fields = PMA_DBI_get_fields($db, $table);
-
-
-    // Get more complete field information
-    // For now, this is done just for MySQL 4.1.2+ new TIMESTAMP options
-    // but later, if the analyser returns more information, it
-    // could be executed for any MySQL version and replace
-    // the info given by SHOW FULL FIELDS FROM.
-    // TODO: put this code into a require()
-    // or maybe make it part of PMA_DBI_get_fields();
-
-    if (PMA_MYSQL_INT_VERSION >= 40102) {
-        $show_create_table_query = 'SHOW CREATE TABLE '
-            . PMA_backquote($db) . '.' . PMA_backquote($table);
-        $show_create_table_res = PMA_DBI_query($show_create_table_query);
-        list(,$show_create_table) = PMA_DBI_fetch_row($show_create_table_res);
-        PMA_DBI_free_result($show_create_table_res);
-        unset($show_create_table_res, $show_create_table_query);
-        $analyzed_sql = PMA_SQP_analyze(PMA_SQP_parse($show_create_table));
-    }
-
-        // TODO: get directly the information of $col
-        foreach($fields as $key=>$field) {
-            $tmp_col = $field['Field'];
-            $types[$tmp_col] = $field['Type'];
-            $collations[$tmp_col] = $field['Collation'];
-            $nulls[$tmp_col] = $field['Null'];
-            $defaults[$tmp_col] = $field['Default'];
-            $extras[$tmp_col] = $field['Extra'];
-
-            if (PMA_MYSQL_INT_VERSION >= 40102 && isset($analyzed_sql[0]['create_table_fields'][$tmp_col]['on_update_current_timestamp'])) {
-                $extras[$tmp_col] = 'ON UPDATE CURRENT_TIMESTAMP';
-            }
-
-            if (PMA_MYSQL_INT_VERSION >= 40102 && isset($analyzed_sql[0]['create_table_fields'][$tmp_col]['default_current_timestamp'])) {
-                $default_current_timestamps[$tmp_col] = TRUE; 
-            } else {
-                $default_current_timestamps[$tmp_col] = FALSE; 
-            }
-
-            if ($tmp_col == $col) {
-                break;
-            }
-        }
-        if ($nulls[$col] == 'YES') {
-            $nulls[$col] = '';
-        } else {
-            $nulls[$col] = 'NOT NULL';
-        }
-
         $query = 'ALTER TABLE ' . PMA_backquote($table) . ' CHANGE '
-            . PMA_generateAlterTable($col, $col, $types[$col], $collations[$col], $nulls[$col], $defaults[$col], $default_current_timestamps[$col], $extras[$col], $comment);
-
+            . PMA_generateAlterTable($col, $col, '', '', '', '', FALSE, '', FALSE, '', $comment, '', '');
         PMA_DBI_try_query($query, NULL, PMA_DBI_QUERY_STORE);
         return TRUE;
     }
@@ -779,6 +732,54 @@ function PMA_purgeHistory($username) {
     return true;
 } // end of 'PMA_purgeHistory()' function
 
+
+/**
+ * Prepares the dropdown for one mode 
+ *
+ * @param   array    the keys and values for foreigns
+ * @param   string   the current data of the dropdown
+ * @param   string   the needed mode 
+ *
+ * @global  array    global phpMyAdmin configuration
+ *
+ * @return  array   the <option value=""><option>s
+ *
+ * @access  private
+ */
+function PMA_foreignDropdownBuild($foreign, $data, $mode) {
+    global $cfg;
+
+    $reloptions = array();
+    
+    foreach ($foreign as $key => $value) {
+
+        if (PMA_strlen($value) <= $cfg['LimitChars']) {
+            $vtitle = '';
+            $value  = htmlspecialchars($value);
+        } else {
+            $vtitle  = htmlspecialchars($value);
+            $value  = htmlspecialchars(substr($value, 0, $cfg['LimitChars']) . '...');
+        }
+
+        $reloption = '                <option value="' . htmlspecialchars($key) . '"';
+        if ($vtitle != '') {
+            $reloption .= ' title="' . $vtitle . '"';
+        }
+
+        if ($key == $data) {
+           $reloption .= ' selected="selected"';
+        }
+
+        if ($mode == 'content-id') {
+            $reloptions[] = $reloption . '>' . $value . '&nbsp;-&nbsp;' . htmlspecialchars($key) .  '</option>' . "\n";
+        } else {
+            $reloptions[] = $reloption . '>' . htmlspecialchars($key) .  '&nbsp;-&nbsp;' . $value . '</option>' . "\n";
+        }
+    } // end foreach
+
+    return $reloptions;
+} // end of 'PMA_foreignDropdownBuild' function
+
 /**
  * Outputs dropdown with values of foreign fields
  *
@@ -796,45 +797,48 @@ function PMA_purgeHistory($username) {
 function PMA_foreignDropdown($disp, $foreign_field, $foreign_display, $data, $max) {
     global $cfg;
 
-    $ret = '<option value=""></option>' . "\n";
-
-    $reloptions = array('content-id' => array(), 'id-content' => array());
-    
-    foreach ($disp AS $disp_key => $relrow) {
+    // collect the data
+    foreach ($disp as $relrow) {
         $key   = $relrow[$foreign_field];
 
-        // if the display field has been defined for the foreign table
+        // if the display field has been defined for this foreign table
         if ($foreign_display) {
-            if (PMA_strlen($relrow[$foreign_display]) <= $cfg['LimitChars']) {
-                $value  = htmlspecialchars($relrow[$foreign_display]);
-                $vtitle = '';
-            } else {
-                $vtitle = htmlspecialchars($relrow[$foreign_display]);
-                $value  = htmlspecialchars(substr($vtitle, 0, $cfg['LimitChars']) . '...');
-            }
+            $value  = $relrow[$foreign_display];
         } else {
-            $vtitle = $value = '';
+            $value = '';
         } // end if ($foreign_display)
 
-        $reloption = '<option value="' . htmlspecialchars($key) . '"';
-        if ($vtitle != '') {
-            $reloption .= ' title="' . $vtitle . '"';
-        }
+        $foreign[$key] = $value;
+    } // end foreach
 
-        if ($key == $data) {
-           $reloption .= ' selected="selected"';
-        } // end if
+    // beginning of dropdown
+    $ret = '<option value=""></option>' . "\n";
 
-        $reloptions['content-id'][] = $reloption . '>' . $value . '&nbsp;-&nbsp;' . htmlspecialchars($key) .  '</option>' . "\n";
-        $reloptions['id-content'][] = $reloption . '>' . htmlspecialchars($key) .  '&nbsp;-&nbsp;' . $value . '</option>' . "\n";
-    } // end while
+    // master array for dropdowns
+    $reloptions = array('content-id' => array(), 'id-content' => array());
 
-    // the list of keys looks better if not sorted by description
+    // sort for id-content 
     if ($cfg['NaturalOrder']) {
-        natsort($reloptions['content-id']); }
-    else {
-        asort($reloptions['content-id']);
+        uksort($foreign, 'strnatcasecmp');
+    } else {
+        ksort($foreign);
     }
+
+    // build id-content dropdown
+    $reloptions['id-content'] = PMA_foreignDropdownBuild($foreign, $data, 'id-content');
+
+    // sort for content-id
+    if ($cfg['NaturalOrder']) {
+        natcasesort($foreign);
+    } else {
+        asort($foreign);
+    }
+
+    // build content-id dropdown
+    $reloptions['content-id'] = PMA_foreignDropdownBuild($foreign, $data, 'content-id');
+
+
+    // put the dropdown sections in correct order 
 
     $c = count($cfg['ForeignKeyDropdownOrder']);
     if($c == 2) {
@@ -854,8 +858,8 @@ function PMA_foreignDropdown($disp, $foreign_field, $foreign_display, $data, $ma
         if ($max == -1 || $top_count < $max) {
             $ret .= $str_top;
             if ($top_count > 0) {
-                $ret .= '<option value=""></option>' . "\n";
-                $ret .= '<option value=""></option>' . "\n";
+                $ret .= '                <option value=""></option>' . "\n";
+                $ret .= '                <option value=""></option>' . "\n";
             }
         }
     }

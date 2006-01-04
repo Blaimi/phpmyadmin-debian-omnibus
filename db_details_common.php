@@ -1,15 +1,21 @@
 <?php
-/* $Id: db_details_common.php,v 2.10 2004/10/21 10:18:12 nijel Exp $ */
+/* $Id: db_details_common.php,v 2.11 2005/11/06 00:16:00 cybot_tm Exp $ */
 // vim: expandtab sw=4 ts=4 sts=4:
 
 /**
  * Gets some core libraries
  */
-require_once('./libraries/grab_globals.lib.php');
 require_once('./libraries/common.lib.php');
 require_once('./libraries/bookmark.lib.php');
 
 PMA_checkParameters(array('db'));
+
+if ( PMA_MYSQL_INT_VERSION >= 50002 && $db == 'information_schema' ) {
+    $cfg['ShowStats'] = false;
+    $db_is_information_schema = true;
+} else {
+    $db_is_information_schema = false;
+}
 
 /**
  * Defines the urls to return to in case of error in a sql statement

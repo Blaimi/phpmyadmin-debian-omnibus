@@ -1,5 +1,5 @@
 <?php
-/* $Id: tbl_move_copy.php,v 2.14 2005/11/18 12:50:49 cybot_tm Exp $ */
+/* $Id: tbl_move_copy.php,v 2.16 2006/01/17 17:02:29 cybot_tm Exp $ */
 // vim: expandtab sw=4 ts=4 sts=4:
 
 /**
@@ -43,15 +43,15 @@ if (isset($new_name) && trim($new_name) != '') {
         } else {
             $pma_uri_parts = parse_url($cfg['PmaAbsoluteUri']);
             if (isset($switch_to_new) && $switch_to_new == 'true') {
-                setcookie('pma_switch_to_new', 'true', 0, $GLOBALS['cookie_path'], '' , $GLOBALS['is_https']);
+                setcookie('pma_switch_to_new', 'true', 0, $GLOBALS['cookie_path'], '', $GLOBALS['is_https']);
                 $db        = $target_db;
                 $table     = $new_name;
             } else {
-                setcookie('pma_switch_to_new', '', 0, $GLOBALS['cookie_path'], '' , $GLOBALS['is_https']);
+                setcookie('pma_switch_to_new', '', 0, $GLOBALS['cookie_path'], '', $GLOBALS['is_https']);
             }
         }
     }
-    require_once('./header.inc.php');
+    require_once('./libraries/header.inc.php');
 } // end is target table name
 
 
@@ -59,7 +59,7 @@ if (isset($new_name) && trim($new_name) != '') {
  * No new name for the table!
  */
 else {
-    require_once('./header.inc.php');
+    require_once('./libraries/header.inc.php');
     PMA_mysqlDie($strTableEmpty, '', '', $err_url);
 }
 

@@ -1,5 +1,5 @@
 <?php
-/* $Id: tbl_alter.php,v 2.24 2005/11/18 12:50:49 cybot_tm Exp $ */
+/* $Id: tbl_alter.php,v 2.29 2006/01/14 23:17:15 cybot_tm Exp $ */
 // vim: expandtab sw=4 ts=4 sts=4:
 
 /**
@@ -8,7 +8,7 @@
 require_once('./libraries/common.lib.php');
 
 $js_to_run = 'functions.js';
-require_once('./header.inc.php');
+require_once('./libraries/header.inc.php');
 
 // Check parameters
 PMA_checkParameters(array('db', 'table'));
@@ -16,14 +16,14 @@ PMA_checkParameters(array('db', 'table'));
 /**
  * Gets tables informations
  */
-require_once('./tbl_properties_common.php');
-require_once('./tbl_properties_table_info.php');
+require_once('./libraries/tbl_properties_common.php');
+require_once('./libraries/tbl_properties_table_info.inc.php');
 /**
  * Displays top menu links
  */
 $active_page = 'tbl_properties_structure.php';
 // I don't see the need to display the links here, they will be displayed later
-//require('./tbl_properties_links.php');
+//require('./libraries/tbl_properties_links.inc.php');
 
 
 /**
@@ -83,7 +83,7 @@ if (isset($do_save_data)) {
         // garvin: Update comment table, if a comment was set.
         if (PMA_MYSQL_INT_VERSION < 40100 && isset($field_comments) && is_array($field_comments) && $cfgRelation['commwork']) {
             foreach ($field_comments AS $fieldindex => $fieldcomment) {
-                if (!empty($field_name[$fieldindex])) {
+                if (isset($field_name[$fieldindex]) && strlen($field_name[$fieldindex])) {
                     PMA_setComment($db, $table, $field_name[$fieldindex], $fieldcomment, $field_orig[$fieldindex], 'pmadb');
                 }
             }
@@ -94,7 +94,7 @@ if (isset($do_save_data)) {
             foreach ($field_orig AS $fieldindex => $fieldcontent) {
                 if ($field_name[$fieldindex] != $fieldcontent) {
                     if ($cfgRelation['displaywork']) {
-                        $table_query = 'UPDATE ' . PMA_backquote($cfgRelation['table_info'])
+                        $table_query = 'UPDATE ' . PMA_backquote($GLOBALS['cfgRelation']['db']) . '.' . PMA_backquote($cfgRelation['table_info'])
                                       . ' SET     display_field = \'' . PMA_sqlAddslashes($field_name[$fieldindex]) . '\''
                                       . ' WHERE db_name  = \'' . PMA_sqlAddslashes($db) . '\''
                                       . ' AND table_name = \'' . PMA_sqlAddslashes($table) . '\''
@@ -105,7 +105,7 @@ if (isset($do_save_data)) {
                     }
 
                     if ($cfgRelation['relwork']) {
-                        $table_query = 'UPDATE ' . PMA_backquote($cfgRelation['relation'])
+                        $table_query = 'UPDATE ' . PMA_backquote($GLOBALS['cfgRelation']['db']) . '.' . PMA_backquote($cfgRelation['relation'])
                                       . ' SET     master_field = \'' . PMA_sqlAddslashes($field_name[$fieldindex]) . '\''
                                       . ' WHERE master_db  = \'' . PMA_sqlAddslashes($db) . '\''
                                       . ' AND master_table = \'' . PMA_sqlAddslashes($table) . '\''
@@ -114,7 +114,7 @@ if (isset($do_save_data)) {
                         unset($table_query);
                         unset($tb_rs);
 
-                        $table_query = 'UPDATE ' . PMA_backquote($cfgRelation['relation'])
+                        $table_query = 'UPDATE ' . PMA_backquote($GLOBALS['cfgRelation']['db']) . '.' . PMA_backquote($cfgRelation['relation'])
                                       . ' SET     foreign_field = \'' . PMA_sqlAddslashes($field_name[$fieldindex]) . '\''
                                       . ' WHERE foreign_db  = \'' . PMA_sqlAddslashes($db) . '\''
                                       . ' AND foreign_table = \'' . PMA_sqlAddslashes($table) . '\''
@@ -130,7 +130,7 @@ if (isset($do_save_data)) {
         // garvin: Update comment table for mime types [MIME]
         if (isset($field_mimetype) && is_array($field_mimetype) && $cfgRelation['commwork'] && $cfgRelation['mimework'] && $cfg['BrowseMIME']) {
             foreach ($field_mimetype AS $fieldindex => $mimetype) {
-                if (!empty($field_name[$fieldindex])) {
+                if (isset($field_name[$fieldindex]) && strlen($field_name[$fieldindex])) {
                     PMA_setMIME($db, $table, $field_name[$fieldindex], $mimetype, $field_transformation[$fieldindex], $field_transformation_options[$fieldindex]);
                 }
             }
@@ -142,7 +142,7 @@ if (isset($do_save_data)) {
         PMA_mysqlDie('', '', '', $err_url, FALSE);
         // garvin: An error happened while inserting/updating a table definition.
         // to prevent total loss of that data, we embed the form once again.
-        // The variable $regenerate will be used to restore data in tbl_properties.inc.php
+        // The variable $regenerate will be used to restore data in libraries/tbl_properties.inc.php
         if (isset($orig_field)) {
                 $field = $orig_field;
         }
@@ -194,12 +194,12 @@ if ($abort == FALSE) {
         0, 1 );
     $analyzed_sql = PMA_SQP_analyze( PMA_SQP_parse( $show_create_table ) );
 
-    require('./tbl_properties.inc.php');
+    require('./libraries/tbl_properties.inc.php');
 }
 
 
 /**
  * Displays the footer
  */
-require_once('./footer.inc.php');
+require_once('./libraries/footer.inc.php');
 ?>

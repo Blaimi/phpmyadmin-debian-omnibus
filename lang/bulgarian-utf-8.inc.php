@@ -1,5 +1,5 @@
 <?php
-/* $Id: bulgarian-utf-8.inc.php,v 2.101 2005/11/12 00:35:07 lem9 Exp $ */
+/* $Id: bulgarian-utf-8.inc.php,v 2.123.2.1 2006/02/17 12:42:59 lem9 Exp $ */
 
 /**
  * Translated by Stanislav Yordanov <stanprog at stanprog.com>
@@ -218,7 +218,6 @@ $strDocu = 'Документация';
 $strDoYouReally = 'Действително ли желаете да изпълните заявката';
 $strDropDatabaseStrongWarning = 'Вие ще УНИЩОЖИТЕ цялата база от данни!';
 $strDrop = 'Унищожаване';
-$strDropSelectedDatabases = 'Изтриване на избраните бази от данни';
 $strDropUsersDb = 'Изтриване на базите от данни които имат имена като тези на потребителите.';
 $strDumpingData = 'Дъмп (схема) на данните в таблицата';
 $strDumpSaved = 'Схемата(дъмп) беше записана във файл %s.';
@@ -264,7 +263,6 @@ $strFields = 'Полета';
 $strField = 'Поле';
 $strFileAlreadyExists = 'Файлът %s вече съществува на сървъра, сменете името на файла или включете опцията за препокриване.';
 $strFileCouldNotBeRead = 'Файлът не може да бъде прочетен';
-$strFileNameTemplateHelp = 'Използвайте __DB__ за име на базата от данни, __TABLE__ за име на таблицата и опциите на %sstrftime%s за указване на формата на времето, като разширението ще бъде добавено автоматично. Всеки друг текст ще бъде запазен.';
 $strFileNameTemplateRemember = 'запомняне на шаблона';
 $strFileNameTemplate = 'Шаблон на файловото име';
 $strFileToImport = 'Файл за импортиране';
@@ -312,7 +310,6 @@ $strIgnoreInserts = 'Използване на INSERT IGNORE';
 $strIgnoringFile = 'Игнориране на файл %s';
 $strImportDocSQL = 'Импортирай docSQL файловете';
 $strImportFiles = 'Импортиране на файлове';
-$strImportFinished = 'Импортирането приключи успешно.';
 $strImportFormat = 'Формат на инпортирания файл';
 $strImport = 'Импортиране';
 $strIndexes = 'Индекси';
@@ -336,7 +333,6 @@ $strInternalRelations = 'Вътрешни релации';
 $strInUse = 'Заето';
 $strInvalidColumn = 'Невалидна колона (%s)!';
 $strInvalidColumnCount = 'Броя на колоните трябва да е по-голям от нула.';
-$strInvalidCSVInput = 'Невалиден CSV вход, не може да се анализира!';
 $strInvalidFieldAddCount = 'Трябва да добавите поне едно поле.';
 $strInvalidFieldCount = 'Таблицата трябва да има поне едно поле.';
 $strInvalidRowNumber = '%d не е валиден номер на ред.';
@@ -408,9 +404,7 @@ $strMyISAMRepairThreads = 'Поправка на нишките';
 $strMyISAMSortBufferSize = 'Размер на буфера за сортиране';
 $strMySQLCharset = 'Набор от символи на MySQL';
 $strMySQLConnectionCollation = 'Колация на MySQL';
-$strMySQLReloaded = 'MySQL е презареден.';
 $strMySQLSaid = 'MySQL отговори: ';
-$strMySQLServerProcess = 'MySQL %pma_s1% е стартиран на %pma_s2% като %pma_s3%';
 $strMySQLShowProcess = 'MySQL процеси';
 $strMySQLShowStatus = 'Информация за състоянието на MySQL сървъра';
 $strMySQLShowVars = 'Системни променливи на MySQL';
@@ -551,7 +545,6 @@ $strRelationNotWorking = 'Допълнителните възможности з
 $strRelations = 'Релации';
 $strRelationsForTable = 'РЕЛАЦИИ ЗА ТАБЛИЦА';
 $strRelationView = 'Изглед на релациите';
-$strReloadFailed = 'Неуспешен опит за презареждане на MySQL.';
 $strReloadingThePrivileges = 'Презареждане на привилегиите';
 $strReloadMySQL = 'Презареждане на MySQL';
 $strRemoveSelectedUsers = 'Отстраняване на избраните потребители';
@@ -797,7 +790,6 @@ $strDataPages = 'Pages containing data';  //to translate
 $strDeleteNoUsersSelected = 'No users selected for deleting!';  //to translate
 $strDirtyPages = 'Dirty pages';  //to translate
 
-$strEnclosingOptional = 'Enclosing of fields is optional';  //to translate
 $strEscapeWildcards = 'Wildcards _ and % should be escaped with a \ to use them literally';  //to translate
 
 $strFlushQueryCache = 'Flush query cache';  //to translate
@@ -979,4 +971,34 @@ $strView = 'View';  //to translate
 
 $strWriteRequests = 'Write requests';  //to translate
 
+$strInvalidServerIndex = 'Invalid server index: "%s"';  //to translate
+$strInvalidServerHostname = 'Invalid hostname for server %1$s. Please review your configuration.';  //to translate
+$strFileNameTemplateDescriptionTable = 'table name';  //to translate
+$strFileNameTemplateDescriptionDatabase = 'database name';  //to translate
+$strFileNameTemplateDescriptionServer = 'server name';  //to translate
+$strFileNameTemplateDescription = 'This value is interpreted using %1$sstrftime%2$s, so you can use time formatting strings. Additionally the following transformations will happen: %3$s. Other text will be kept as is.';  //to translate
+$strProtocolVersion = 'Protocol version';  //to translate
+$strMysqlClientVersion = 'MySQL client version';  //to translate
+$strUsedPhpExtensions = 'Used PHP extensions';  //to translate
+$strOpenNewWindow = 'Open new phpMyAdmin window';  //to translate
+$strLanguageUnknown = 'Unknown language: %1$s.';  //to translate
+$strLanguageFileNotFound = 'Language file "%1$s" not found.';  //to translate
+$strThemeNoPreviewAvailable = 'No preview available.';  //to translate
+$strConfigDefaultFileError = 'Could not load default configuration from: "%1$s"';  //to translate
+$strPDF = 'PDF';  //to translate
+$strPDFOptions = 'PDF options';  //to translate
+$strPDFReportTitle = 'Report title';  //to translate
+$strInvalidCSVParameter = 'Invalid parameter for CSV import: %s';  //to translate
+$strInvalidCSVFieldCount = 'Invalid field count in CSV input on line %d.';  //to translate
+$strInvalidCSVFormat = 'Invalid format of CSV input on line %d.';  //to translate
+$strImportSuccessfullyFinished = 'Import has been successfully finished, %d queries executed.';  //to translate
+$strThemeNotFound = 'Theme %s not found!';  //to translate
+$strThemeDefaultNotFound = 'Default theme %s not found!';  //to translate
+$strThemeNoValidImgPath = 'No valid image path for theme %s found!';  //to translate
+$strThemePathNotFound = 'Theme path not found for theme %s!';  //to translate
+$strAccessDeniedCreateConfig = 'Probably reason of this is that you did not create configuration file. You might want to use %1$ssetup script%2$s to create one.';  //to translate
+$strSQLImportOptions = 'SQL options';  //to translate
+$strBrowseDistinctValues = 'Browse distinct values';  //to translate
+$strStatisticsOverrun = 'On a busy server, the byte counters may overrun, so those statistics as reported by the MySQL server may be incorrect.';  //to translate
+$strViewMaxExactCount = 'This view has more than %s rows. Please refer to %sdocumentation%s.';  //to translate
 ?>

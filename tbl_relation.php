@@ -1,21 +1,21 @@
 <?php
-/* $Id: tbl_relation.php,v 2.25 2005/11/02 14:35:26 cybot_tm Exp $ */
+/* $Id: tbl_relation.php,v 2.31 2006/01/17 17:02:29 cybot_tm Exp $ */
 // vim: expandtab sw=4 ts=4 sts=4:
 
 /**
  * Gets some core libraries
  */
 require_once('./libraries/common.lib.php');
-require_once('./tbl_properties_common.php');
+require_once('./libraries/tbl_properties_common.php');
 $url_query .= '&amp;goto=tbl_properties.php';
 
 
 /**
  * Gets tables informations
  */
-require_once('./tbl_properties_table_info.php');
+require_once('./libraries/tbl_properties_table_info.inc.php');
 
-// Note: in tbl_properties_links.php we get and display the table comment.
+// Note: in libraries/tbl_properties_links.inc.php we get and display the table comment.
 // For InnoDB, this comment contains the REFER information but any update
 // has not been done yet (will be done in tbl_relation.php later).
 $avoid_show_comment = TRUE;
@@ -23,7 +23,7 @@ $avoid_show_comment = TRUE;
 /**
  * Displays top menu links
  */
-require_once('./tbl_properties_links.php');
+require_once('./libraries/tbl_properties_links.inc.php');
 
 require_once('./libraries/relation.lib.php');
 
@@ -39,13 +39,10 @@ $options_array = array('CASCADE' => 'CASCADE', 'SET_NULL' => 'SET NULL', 'NO_ACT
  *
  * @access  public
  */
-function PMA_generate_dropdown($dropdown_question,$radio_name,$choices,$selected_value) {
-    global $font_smallest;
-
+function PMA_generate_dropdown($dropdown_question, $radio_name, $choices, $selected_value)
+{
     echo $dropdown_question . '&nbsp;&nbsp;';
 
-    //echo '<select name="' . $radio_name . '" style="font-size: ' . $font_smallest . '">' . "\n";
-    //echo '<option value="nix" style="font-size: ' . $font_smallest . '" >--</option>' . "\n";
     echo '<select name="' . $radio_name . '">' . "\n";
     echo '<option value="nix">--</option>' . "\n";
 
@@ -54,7 +51,6 @@ function PMA_generate_dropdown($dropdown_question,$radio_name,$choices,$selected
         if ($selected_value == $one_value) {
             echo ' selected="selected" ';
         }
-        //echo ' style="font-size: ' . $font_smallest . '">'
         echo '>' . $one_label . '</option>' . "\n";
     }
     echo '</select>' . "\n";
@@ -93,7 +89,7 @@ if (isset($destination) && $cfgRelation['relwork']) {
         if ($foreign_string != 'nix') {
             list($foreign_db, $foreign_table, $foreign_field) = explode('.', $foreign_string);
             if (!isset($existrel[$master_field])) {
-                $upd_query  = 'INSERT INTO ' . PMA_backquote($cfgRelation['relation'])
+                $upd_query  = 'INSERT INTO ' . PMA_backquote($GLOBALS['cfgRelation']['db']) . '.' . PMA_backquote($cfgRelation['relation'])
                             . '(master_db, master_table, master_field, foreign_db, foreign_table, foreign_field)'
                             . ' values('
                             . '\'' . PMA_sqlAddslashes($db) . '\', '
@@ -103,7 +99,7 @@ if (isset($destination) && $cfgRelation['relwork']) {
                             . '\'' . PMA_sqlAddslashes($foreign_table) . '\','
                             . '\'' . PMA_sqlAddslashes($foreign_field) . '\')';
             } elseif ($existrel[$master_field]['foreign_db'] . '.' .$existrel[$master_field]['foreign_table'] . '.' . $existrel[$master_field]['foreign_field'] != $foreign_string) {
-                $upd_query  = 'UPDATE ' . PMA_backquote($cfgRelation['relation']) . ' SET'
+                $upd_query  = 'UPDATE ' . PMA_backquote($GLOBALS['cfgRelation']['db']) . '.' . PMA_backquote($cfgRelation['relation']) . ' SET'
                             . ' foreign_db       = \'' . PMA_sqlAddslashes($foreign_db) . '\', '
                             . ' foreign_table    = \'' . PMA_sqlAddslashes($foreign_table) . '\', '
                             . ' foreign_field    = \'' . PMA_sqlAddslashes($foreign_field) . '\' '
@@ -112,7 +108,7 @@ if (isset($destination) && $cfgRelation['relwork']) {
                             . ' AND master_field = \'' . PMA_sqlAddslashes($master_field) . '\'';
             } // end if... else....
         } elseif (isset($existrel[$master_field])) {
-            $upd_query      = 'DELETE FROM ' . PMA_backquote($cfgRelation['relation'])
+            $upd_query      = 'DELETE FROM ' . PMA_backquote($GLOBALS['cfgRelation']['db']) . '.' . PMA_backquote($cfgRelation['relation'])
                             . ' WHERE master_db  = \'' . PMA_sqlAddslashes($db) . '\''
                             . ' AND master_table = \'' . PMA_sqlAddslashes($table) . '\''
                             . ' AND master_field = \'' . PMA_sqlAddslashes($master_field) . '\'';
@@ -224,17 +220,17 @@ if ($cfgRelation['displaywork']
 
     if ($disp) {
         if ($display_field != '') {
-            $upd_query = 'UPDATE ' . PMA_backquote($cfgRelation['table_info'])
+            $upd_query = 'UPDATE ' . PMA_backquote($GLOBALS['cfgRelation']['db']) . '.' . PMA_backquote($cfgRelation['table_info'])
                        . ' SET display_field = \'' . PMA_sqlAddslashes($display_field) . '\''
                        . ' WHERE db_name  = \'' . PMA_sqlAddslashes($db) . '\''
                        . ' AND table_name = \'' . PMA_sqlAddslashes($table) . '\'';
         } else {
-            $upd_query = 'DELETE FROM ' . PMA_backquote($cfgRelation['table_info'])
+            $upd_query = 'DELETE FROM ' . PMA_backquote($GLOBALS['cfgRelation']['db']) . '.' . PMA_backquote($cfgRelation['table_info'])
                        . ' WHERE db_name  = \'' . PMA_sqlAddslashes($db) . '\''
                        . ' AND table_name = \'' . PMA_sqlAddslashes($table) . '\'';
         }
     } elseif ($display_field != '') {
-        $upd_query = 'INSERT INTO ' . PMA_backquote($cfgRelation['table_info'])
+        $upd_query = 'INSERT INTO ' . PMA_backquote($GLOBALS['cfgRelation']['db']) . '.' . PMA_backquote($cfgRelation['table_info'])
                    . '(db_name, table_name, display_field) '
                    . ' VALUES('
                    . '\'' . PMA_sqlAddslashes($db) . '\','
@@ -285,7 +281,7 @@ if ($cfgRelation['relwork'] || $tbl_type=='INNODB') {
     }
     // [0] of the row is the name
 
-    $tab_rs              = PMA_DBI_query($tab_query, NULL, PMA_DBI_QUERY_STORE);
+    $tab_rs              = PMA_DBI_query($tab_query, null, PMA_DBI_QUERY_STORE);
     $selectboxall['nix'] = '--';
     $selectboxall_innodb['nix'] = '--';
 
@@ -294,7 +290,7 @@ if ($cfgRelation['relwork'] || $tbl_type=='INNODB') {
             PMA_DBI_select_db($db);
 
             // need to use PMA_DBI_QUERY_STORE with PMA_DBI_num_rows() in mysqli
-            $fi_rs    = PMA_DBI_query('SHOW KEYS FROM ' . PMA_backquote($curr_table[0]) . ';', NULL, PMA_DBI_QUERY_STORE);
+            $fi_rs    = PMA_DBI_query('SHOW KEYS FROM ' . PMA_backquote($curr_table[0]) . ';', null, PMA_DBI_QUERY_STORE);
             if ($fi_rs && PMA_DBI_num_rows($fi_rs) > 0) {
                 $seen_a_primary = FALSE;
                 while ($curr_field = PMA_DBI_fetch_assoc($fi_rs)) {
@@ -341,7 +337,7 @@ if ($cfgRelation['relwork'] || $tbl_type=='INNODB') {
             PMA_DBI_select_db($db);
 
             // need to use PMA_DBI_QUERY_STORE with PMA_DBI_num_rows() in mysqli
-            $fi_rs    = PMA_DBI_query('SHOW KEYS FROM ' . PMA_backquote($curr_table[0]) . ';', NULL, PMA_DBI_QUERY_STORE);
+            $fi_rs    = PMA_DBI_query('SHOW KEYS FROM ' . PMA_backquote($curr_table[0]) . ';', null, PMA_DBI_QUERY_STORE);
             if ($fi_rs && PMA_DBI_num_rows($fi_rs) > 0) {
                 while ($curr_field = PMA_DBI_fetch_assoc($fi_rs)) {
                     $field_full = $db . '.' . $curr_field['Table'] . '.' . $curr_field['Column_name'];
@@ -362,17 +358,17 @@ if ($cfgRelation['relwork'] || $tbl_type=='INNODB') {
 
 // Now find out the columns of our $table
 // need to use PMA_DBI_QUERY_STORE with PMA_DBI_num_rows() in mysqli
-$col_rs    = PMA_DBI_try_query('SHOW COLUMNS FROM ' . PMA_backquote($table) . ';', NULL, PMA_DBI_QUERY_STORE);
+$col_rs    = PMA_DBI_try_query('SHOW COLUMNS FROM ' . PMA_backquote($table) . ';', null, PMA_DBI_QUERY_STORE);
 
 if ($col_rs && PMA_DBI_num_rows($col_rs) > 0) {
     while ($row = PMA_DBI_fetch_assoc($col_rs)) {
         $save_row[] = $row;
     }
     $saved_row_cnt  = count($save_row);
-    ?> 
+    ?>
     <fieldset>
     <legend><?php echo $strLinksTo; ?></legend>
-    
+
     <table>
     <tr><th></th>
     <?php
@@ -390,19 +386,19 @@ if ($col_rs && PMA_DBI_num_rows($col_rs) > 0) {
         }
         echo '</th>';
     }
-    ?> 
+    ?>
     </tr>
     <?php
     $odd_row = true;
     for ($i = 0; $i < $saved_row_cnt; $i++) {
         $myfield = $save_row[$i]['Field'];
-        ?> 
+        ?>
     <tr class="<?php echo $odd_row ? 'odd' : 'even'; $odd_row = ! $odd_row; ?>">
         <td align="center">
             <b><?php echo $save_row[$i]['Field']; ?></b></td>
         <?php
-        if ($cfgRelation['relwork']) { 
-            ?> 
+        if ($cfgRelation['relwork']) {
+            ?>
         <td><select name="destination[<?php echo htmlspecialchars($save_row[$i]['Field']); ?>]">
             <?php
             // PMA internal relations
@@ -433,7 +429,7 @@ if ($col_rs && PMA_DBI_num_rows($col_rs) > 0) {
                     .' selected="selected"'
                     .'>' . $foreign_field . '</option>'. "\n";
             }
-            ?> 
+            ?>
             </select>
         </td>
             <?php
@@ -442,7 +438,7 @@ if ($col_rs && PMA_DBI_num_rows($col_rs) > 0) {
         if ($tbl_type=='INNODB') {
             echo '<td>';
             if (!empty($save_row[$i]['Key'])) {
-                ?> 
+                ?>
             <span class="formelement">
             <select name="destination_innodb[<?php echo htmlspecialchars($save_row[$i]['Field']); ?>]">
                 <?php
@@ -474,7 +470,7 @@ if ($col_rs && PMA_DBI_num_rows($col_rs) > 0) {
                     echo '>' . $foreign_field . '</option>' . "\n";
                 }
 
-                ?> 
+                ?>
             </select>
             </span>
             <span class="formelement">
@@ -497,18 +493,18 @@ if ($col_rs && PMA_DBI_num_rows($col_rs) > 0) {
             } // end if (a key exists)
             echo '        </td>';
         } // end if (InnoDB)
-        ?> 
+        ?>
     </tr>
         <?php
     } // end for
-    
+
     echo '    </table>' . "\n";
     echo '</fieldset>' . "\n";
-    
+
     if ($cfgRelation['displaywork']) {
         // Get "display_field" infos
         $disp = PMA_getDisplayField($db, $table);
-        ?> 
+        ?>
     <fieldset>
         <label><?php echo $strChangeDisplay . ': '; ?></label>
         <select name="display_field" style="vertical-align: middle">
@@ -521,12 +517,12 @@ if ($col_rs && PMA_DBI_num_rows($col_rs) > 0) {
             }
             echo '>' . htmlspecialchars($row['Field']) . '</option>'. "\n";
         } // end while
-        ?> 
+        ?>
         </select>
     </fieldset>
         <?php
     } // end if (displayworks)
-    ?> 
+    ?>
     <fieldset class="tblFooters">
         <input type="submit" value="<?php echo $strSave; ?>" />
     </fieldset>
@@ -543,5 +539,5 @@ if ( $tbl_type === 'INNODB' && PMA_MYSQL_INT_VERSION < 40013 ) {
 /**
  * Displays the footer
  */
-require_once('./footer.inc.php');
+require_once('./libraries/footer.inc.php');
 ?>

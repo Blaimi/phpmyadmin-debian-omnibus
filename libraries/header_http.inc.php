@@ -1,5 +1,5 @@
 <?php
-/* $Id: header_http.inc.php,v 2.3.2.1 2005/11/24 08:14:45 nijel Exp $ */
+/* $Id: header_http.inc.php,v 2.4 2005/11/24 08:15:00 nijel Exp $ */
 // vim: expandtab sw=4 ts=4 sts=4:
 
 if (isset($_REQUEST['GLOBALS']) || isset($_FILES['GLOBALS'])) {

@@ -1,8 +1,15 @@
 <?php
-/* $Id: tbl_row_action.php,v 2.18 2005/11/18 12:50:49 cybot_tm Exp $ */
+/* $Id: tbl_row_action.php,v 2.21 2005/11/26 06:59:49 cybot_tm Exp $ */
 // vim: expandtab sw=4 ts=4 sts=4:
 require_once('./libraries/common.lib.php');
 require_once('./libraries/mysql_charsets.lib.php');
+
+/**
+ * Avoids undefined variables
+ */
+if (!isset($pos)) {
+    $pos = 0;
+}
 
 /**
  * No rows were selected => show again the query and tell that user.
@@ -11,7 +18,7 @@ if ((!isset($rows_to_delete) || !is_array($rows_to_delete)) && !isset($mult_btn)
     $disp_message = $strNoRowsSelected;
     $disp_query = '';
     require('./sql.php');
-    require_once('./footer.inc.php');
+    require_once('./libraries/footer.inc.php');
 }
 
 /**
@@ -63,7 +70,7 @@ if ($submit_mult == 'row_delete' || $submit_mult == 'row_export') {
     $js_to_run = 'functions.js';
 }
 
-require_once('./header.inc.php');
+require_once('./libraries/header.inc.php');
 
 if (!empty($submit_mult)) {
     switch($submit_mult) {
@@ -104,7 +111,7 @@ if (!empty($submit_mult)) {
                 $original_url_query = $url_query;
                 $original_pos       = $pos;
             }
-            require('./mult_submits.inc.php');
+            require('./libraries/mult_submits.inc.php');
             $url_query = PMA_generate_common_url($db, $table)
                        . '&amp;goto=tbl_properties.php';
 
@@ -141,7 +148,7 @@ if (!empty($submit_mult)) {
             /**
              * Displays the footer
              */
-            require_once('./footer.inc.php');
+            require_once('./libraries/footer.inc.php');
         break;
     }
 }

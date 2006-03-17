@@ -1,5 +1,5 @@
 <?php
-/* $Id: server_binlog.php,v 2.5 2005/11/18 12:50:49 cybot_tm Exp $ */
+/* $Id: server_binlog.php,v 2.9 2006/01/17 17:02:29 cybot_tm Exp $ */
 // vim: expandtab sw=4 ts=4 sts=4:
 
 require_once('./libraries/common.lib.php');
@@ -7,44 +7,52 @@ require_once('./libraries/common.lib.php');
 /**
  * Does the common work
  */
-require_once('./server_common.inc.php');
+require_once('./libraries/server_common.inc.php');
 
 
 /**
  * Displays the links
  */
-require('./server_links.inc.php');
+require('./libraries/server_links.inc.php');
 
 
 /**
  * Displays the sub-page heading
  */
 echo '<h2>' . "\n"
-   . ($cfg['MainPageIconic'] ? '<img src="' . $pmaThemeImage . 's_process.png" width="16" height="16" border="0" hspace="2" align="middle" />' : '' )
+   . ($cfg['MainPageIconic'] ? '<img src="' . $pmaThemeImage . 's_process.png" width="16" height="16" border="0" hspace="2" align="middle" alt="" />' : '' )
    . '    ' . $strBinaryLog . "\n"
    . '</h2>' . "\n";
 
-if (!isset($log)) $log = '';
+if (!isset($log)) {
+    $log = '';
+}
 
 /**
  * Display log selector.
  */
 if (count($binary_logs) > 1) {
-    echo '<p><form action="server_binlog.php" method="get">';
+    echo '<form action="server_binlog.php" method="get">';
     echo PMA_generate_common_hidden_inputs();
-    echo $strSelectBinaryLog . ': ';
-    echo '<select name="log">';
-    foreach($binary_logs as $name) {
+    echo '<fieldset><legend>';
+    echo $strSelectBinaryLog;
+    echo '</legend><select name="log">';
+    foreach ($binary_logs as $name) {
         echo '<option value="' . $name . '"' . ($name == $log ? ' selected="selected"' : '') . '>' . $name . '</option>';
     }
     echo '</select>';
+    echo '</fieldset>';
+    echo '<fieldset class="tblFooters">';
     echo '<input type="submit" value="' . $strGo . '" />';
-    echo '</form><br /></p>';
+    echo '</fieldset>';
+    echo '</form>';
 }
 
 
 $sql_query = 'SHOW BINLOG EVENTS';
-if (!empty($log)) $sql_query .= ' IN \'' . $log . '\'';
+if (!empty($log)) {
+    $sql_query .= ' IN \'' . $log . '\'';
+}
 
 /**
  * Sends the query and buffers the result
@@ -105,6 +113,6 @@ foreach ($serverProcesses as $value) {
 /**
  * Sends the footer
  */
-require_once('./footer.inc.php');
+require_once('./libraries/footer.inc.php');
 
 ?>

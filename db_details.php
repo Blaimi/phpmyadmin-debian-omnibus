@@ -1,5 +1,5 @@
 <?php
-/* $Id: db_details.php,v 2.21 2005/11/18 12:50:49 cybot_tm Exp $ */
+/* $Id: db_details.php,v 2.23 2005/11/24 09:12:16 nijel Exp $ */
 // vim: expandtab sw=4 ts=4 sts=4:
 
 require_once('./libraries/common.lib.php');
@@ -7,14 +7,14 @@ require_once('./libraries/common.lib.php');
 /**
  * Runs common work
  */
-require('./db_details_common.php');
+require('./libraries/db_details_common.inc.php');
 require_once './libraries/sql_query_form.lib.php';
 
 /**
  * Gets informations about the database and, if it is empty, move to the
  * "db_details_structure.php" script where table can be created
  */
-require('./db_details_db_info.php');
+require('./libraries/db_details_db_info.inc.php');
 if ( $num_tables == 0 && empty( $db_query_force ) ) {
     $sub_part   = '';
     $is_info    = TRUE;
@@ -30,5 +30,5 @@ PMA_sqlQueryForm();
 /**
  * Displays the footer
  */
-require_once './footer.inc.php';
+require_once './libraries/footer.inc.php';
 ?>

@@ -1,5 +1,5 @@
 <?php
-/* $Id: finnish-iso-8859-15.inc.php,v 2.37 2005/11/17 17:24:36 lem9 Exp $ */
+/* $Id: finnish-iso-8859-15.inc.php,v 2.59.2.2 2006/02/17 12:42:59 lem9 Exp $ */
 
 /*
  * Translated by Jouni Kähkönen, <yoneh at users.sourceforge.net>
@@ -27,8 +27,10 @@ $datefmt = '%d.%m.%Y klo %H:%M';
 $timespanfmt = '%s päivää, %s tuntia, %s minuuttia ja %s sekuntia';
 
 'Kertoo, kuinka monesti replikaation SQL-alisäie on uudelleen yrittänyt transkatioita kaikkiaan käynnistyksestä lähtien.';
+
 $strAbortedClients = 'Keskeytetty';
 $strAbsolutePathToDocSqlDir = 'Anna täydellinen polku docSQL-hakemistoon Internet-palvelimella'; 
+$strAccessDeniedCreateConfig = 'Todennäköinen syy tälle on se, ettet ole luonut asetustiedostoa. Voit käyttää %1$sasetusskriptiä%2$s asetustiedoston luomiseen.';
 $strAccessDeniedExplanation = 'phpMyAdmin yritti saada yhteyden MySQL-palvelimeen, mutta se torjui yhteyden. Tarkista palvelin, käyttäjänimi ja salasana config.inc.php-tiedostosta ja varmista, että ne vastaavat MySQL-palvelimen järjestelmänvalvojan antamia tietoja.'; 
 $strAccessDenied = 'Pääsy kielletty';
 $strAction = 'Toiminnot';
@@ -100,6 +102,7 @@ $strBookmarkQuery = 'Tallennettu SQL-lause';
 $strBookmarkReplace = 'Korvaa saman niminen, olemassa oleva kirjanmerkki';
 $strBookmarkThis = 'Tallenna SQL-lause';
 $strBookmarkView = 'Näytä';
+$strBrowseDistinctValues = 'Selaa erillisiä arvoja';
 $strBrowseForeignValues = 'Selaa vieraita arvoja'; 
 $strBrowse = 'Selaa';
 $strBufferPoolActivity = 'Puskurisäiliön aktiivisuus';
@@ -155,6 +158,7 @@ $strCompatibleHashing = 'MySQL&nbsp;4.0 -yhteensopiva';
 $strCompleteInserts = 'Kokonaiset insert-lauseet';
 $strCompression = 'Pakkaus';
 $strCompressionWillBeDetected = 'Seuraavat tiedostopakkausmuodot havaitaan automaattisesti: %s';
+$strConfigDefaultFileError = 'En voi ladata oletusasetuksia kohteesta: "%1$s"';
 $strConfigFileError = 'phpMyAdmin ei pysty lukemaan asetustiedostoa.<br />Tämä saattaa johtua virheestä, jonka PHP löysi tiedostosta tai tiedoston puuttumisesta.<br />Voit avata tiedoston allaolevasta linkistä ja lukea mahdolliset PHP-virheilmoituikset. Todennäköisimmin joltain riviltä puuttuu lainausmerkki tai puolipiste.<br />Jos linkistä avautuva sivu on tyhjä, asetustiedostosta ei löytynyt virhettä.';
 $strConfigureTableCoord = 'Määrittele koordinaatit taululle %s';
 $strConnectionError = 'En voi yhdistää: virheelliset asetukset.'; 
@@ -243,7 +247,6 @@ $strDocu = 'Ohjeet';
 $strDoYouReally = 'Oletko varma että haluat ';
 $strDropDatabaseStrongWarning = 'Olet aikeissasi HÄVITTÄÄ kokonaisen tietokannan!'; 
 $strDrop = 'Pudota';
-$strDropSelectedDatabases = 'Pudota (poista) valitut tietokannat'; 
 $strDropUsersDb = 'Pudota (poista) tietokannat, joilla on sama nimi kuin käyttäjillä.';
 $strDumpingData = 'Vedostetaan dataa taulusta';
 $strDumpSaved = 'Vedos tallennettiin tiedostoon %s.'; 
@@ -258,7 +261,6 @@ $strEmptyResultSet = 'MySQL palautti tyhjän vastauksen (ts. nolla riviä).';
 $strEmpty = 'Tyhjennä';
 $strEnabled = 'Päällä';
 $strEncloseInTransaction = 'Lisää transaktio'; 
-$strEnclosingOptional = 'Kenttien ympäröinti on valinnaista';
 $strEndCut = 'LOPETA CUT';
 $strEnd = 'Loppu';
 $strEndRaw = 'LOPETA RAW';
@@ -291,7 +293,10 @@ $strFields = 'Sarakkeet';
 $strFieldsTerminatedBy = 'Sarakkeiden erotinmerkki';
 $strFileAlreadyExists = 'Tiedosto %s on jo olemassa palvelimella, vaihda tiedostonimeä tai tarkista korvaus-asetuksen tila.'; 
 $strFileCouldNotBeRead = 'Tiedostoa ei voida lukea'; 
-$strFileNameTemplateHelp = 'Käytä __DB__ tietokannan nimenä, __TABLE__ taulun nimenä ja %smitä tahansa strftime%s -valintaa aikamäärittelylle; laajennukset lisätään automaattisesti. Kaikki muu teksti pysyy sellaisenaan.<p>&nbsp;</p>';
+$strFileNameTemplateDescriptionDatabase = 'tietokannan nimi';
+$strFileNameTemplateDescriptionServer = 'palvelimen nimi';
+$strFileNameTemplateDescriptionTable = 'taulukon nimi';
+$strFileNameTemplateDescription = 'Tämä arvo on %1$sstrftime%2$s-funktion mukainen, joten voit käyttää ajanmuodostostukseen käytettyjä merkkijonoja. Lisäksi tapahtuu seuraavat muutokset: %3$s. Muu teksti pysyy alkuperäisenä.';
 $strFileNameTemplateRemember = 'muista pohja';
 $strFileNameTemplate = 'Tiedostonimen pohja';
 $strFileToImport = 'Tuotava tiedosto';
@@ -346,8 +351,8 @@ $strIgnore = 'Jätä huomiotta';
 $strIgnoringFile = 'Jätetään tiedosto %s huolimatta'; 
 $strImportDocSQL = 'Tuo docSQL-tiedostoja'; 
 $strImportFiles = 'Tuo tiedostoja'; 
-$strImportFinished = 'Tuonti suoritettiin onnistuneesti loppuun.';
 $strImportFormat = 'Tuotavan tiedoston muoto';
+$strImportSuccessfullyFinished = 'Tuonti onnistui, %d kyselyä suoritettu.';
 $strImport = 'Tuonti';
 $strIndexes = 'Indeksit';
 $strIndexHasBeenDropped = 'Indeksi %s on pudotettu';
@@ -379,11 +384,15 @@ $strInUse = 'käytössä';
 $strInvalidAuthMethod = 'Asetuksissa on virheellinen todennustapa:';
 $strInvalidColumnCount = 'Sarakkeiden lukumäärän on oltava enemmän suurempi kuin nolla.';
 $strInvalidColumn = 'Virheellinen sarake (%s) määritelty!';
-$strInvalidCSVInput = 'Virheellinen CSV-syöte, en voi parsia!';
+$strInvalidCSVFieldCount = 'Virheellinen kenttien määrä CSV-syötteessä rivillä %d.';
+$strInvalidCSVFormat = 'Virheellinen muoto CSV-syötteessä rivillä %d.';
+$strInvalidCSVParameter = 'Virheellinen parametri CSV-tuonnille: %s';
 $strInvalidFieldAddCount = 'Sinun on lisättävä vähintään yksi kenttä.';
 $strInvalidFieldCount = 'Taulussa täytyy olla vähintään yksi kenttä.';
 $strInvalidLDIImport = 'Tämä lisäosa ei tue pakattujen tuontien käyttöä!';
 $strInvalidRowNumber = '%d on virheellinen rivinumero.';
+$strInvalidServerHostname = 'Virheellinen nimi palvelimelle %1$s. Tarkista asetukset.';
+$strInvalidServerIndex = 'Virheellinen palvelinindeksi: "%s"';
 
 $strJapanese = 'Japanilainen'; 
 $strJoins = 'Liitokset';
@@ -398,6 +407,8 @@ $strKill = 'Lopeta';
 $strKorean = 'Korealainen'; 
 
 $strLandscape = 'Landscape'; 
+$strLanguageFileNotFound = 'Kielitiedostoa "%1$s" ei löydy.';
+$strLanguageUnknown = 'Tuntematon kieli: %1$s.';
 $strLatchedPages = "Lukitut sivut";
 $strLatexCaption = 'Taulun otsikko';
 $strLatexContent = 'Taulun __TABLE__ sisältö';
@@ -464,10 +475,9 @@ $strMyISAMRepairThreads = "Korjaussäikeet"; //not "Korjaa säikeet"
 $strMyISAMSortBufferSizeDesc = "Puskuri joka varataan käyttöön lajitellessa MyISAM-indeksejä REPAIR TABLE:n aikana tai luotaessa indeksejä toiminnolla CREATE INDEX tai ALTER TABLE.";
 $strMyISAMSortBufferSize = "Lajittelupuskurin koko";
 $strMySQLCharset = 'MySQL:n merkistö';
+$strMysqlClientVersion = 'MySQL-asiakasversio';
 $strMySQLConnectionCollation = 'MySQL-yhteyden aakkosjärjestys'; 
-$strMySQLReloaded = 'MySQL käynnistettiin uudelleen.';
 $strMySQLSaid = 'MySQL ilmoittaa: ';
-$strMySQLServerProcess = 'MySQL %pma_s1% palvelimella %pma_s2% käyttäjänä %pma_s3%';
 $strMySQLShowProcess = 'Näytä prosessit';
 $strMySQLShowStatus = 'Näytä MySQL:n ajonaikaiset tiedot';
 $strMySQLShowVars = 'Näytä MySQL:n järjestelmämuuttujat';
@@ -511,6 +521,7 @@ $strNumSearchResultsTotal = '<b>Yhteensä:</b> <i>%s</i> hakutulosta';
 $strNumTables = 'Taulut';
 
 $strOK = 'Kunnossa';
+$strOpenNewWindow = 'Avaa uusi phpMyAdmin-ikkuna';
 $strOperations = 'Toiminnot';
 $strOperator = 'Operaattori'; 
 $strOptimizeTable = 'Optimoi taulu';
@@ -531,6 +542,9 @@ $strPassword = 'Salasana';
 $strPdfDbSchema = 'Kaavio tietokannasta "%s" - Sivu %s';
 $strPdfInvalidTblName = 'Taulua "%s" ei löydy!';
 $strPdfNoTables = 'Ei tauluja';
+$strPDFOptions = 'PDF-valinnat';
+$strPDF = 'PDF';
+$strPDFReportTitle = 'Raportin otsikko';
 $strPerHour = 'tunnissa';
 $strPerMinute = 'minuutissa';
 $strPerSecond = 'sekunnissa';
@@ -591,6 +605,7 @@ $strPrivDescUsage = 'Ei käyttöoikeuksia.';
 $strPrivileges = 'Käyttöoikeudet';
 $strPrivilegesReloaded = 'Käyttöoikeuksien uudelleen lataus onnistui.';
 $strProcesslist = 'Prosessilista';
+$strProtocolVersion = 'Protokollan versio';
 $strPutColNames = 'Laita sarakkeiden nimet ensimmäiselle riville';
 
 $strQBEDel = 'Poista';
@@ -615,7 +630,6 @@ $strRelationNotWorking = 'Relaatioihin ja linkitettyihin tauluihin liittyvät lis
 $strRelationsForTable = 'RELAATIOT TAULULLE'; 
 $strRelations = 'Relaatiot'; 
 $strRelationView = 'Relaationäkymä';
-$strReloadFailed = 'MySQL:n uudelleen käynnistys epäonnistui.';
 $strReloadingThePrivileges = 'Ladataan käyttöoikeuksia uudelleen';
 $strReloadMySQL = 'Käynnistä MySQL uudelleen';
 $strRemoveSelectedUsers = 'Poista valitut käyttäjät';
@@ -821,6 +835,7 @@ $strSpanish = 'Espanjalainen';
 $strSplitWordsWithSpace = 'Sanat erotellaan välilyönnillä.';
 $strSQLExportCompatibility = 'SQL-viennin yhteensopivuus'; 
 $strSQLExportType = 'Vientityyppi'; 
+$strSQLImportOptions = 'SQL-valinnat';
 $strSQLOptions = 'SQL-valinnat';
 $strSQLParserBugMessage = 'Olet mahdollisesti löytänyt ohjelmointivirheen SQL-parserista. Tarkista SQL-lauseesi, erityisesti lainausmerkit merkkijonojen alusta ja lopusta. Toinen mahdollinen virheen aiheuttaja on se, että olet siirtämässä tiedostoa, jossa on binääridataa lainausmerkkien ulkopuolella. Jos mahdollista, kokeile SQL-lausettasi suoraan komentoriviltä. MySQL:n antama virheilmoitus näkyy alla, jos palvelin sellaisen antoi. Jos lause toimi komentorivillä, mutta ei phpMyAdminissa, kokeile etsiä se rivi, joka virheilmoituksen aiheutti ja lähetä meille bugiraportti, johon liität alla olevan koodin:';
 $strSQLParserUserError = 'SQL-lauseessasi oli virhe. SQL-haussasi näyttää olevan jokin virhe. MySQL:n antama virheilmoitus näkyy alla, jos palvelin sellaisen antoi.';
@@ -833,6 +848,7 @@ $strSQPBugUnknownPunctuation = 'Tuntematon välimerkki';
 $strStatCheckTime = 'Viimeksi tarkistettu';
 $strStatCreateTime = 'Luotu';
 $strStatement = 'Tieto';
+$strStatisticsOverrun = 'Ruuhkaisten palvelinten tavulaskurit saattavat ylivuotaa, joten MySQL-palvelimen ilmoittamat tilastotiedot saattavat olla virheellisiä.';
 $strStatUpdateTime = 'Viimeksi päivitetty';
 $strStatus = 'Tila';
 $strStorageEngines = "Tallennustilamoottorit";
@@ -870,6 +886,11 @@ $strTblPrivileges = 'Taulukohtaiset käyttöoikeudet';
 $strTempData = 'Väliaikainen data';
 $strTextAreaLength = ' Pituudestaan johtuen<br /> tätä saraketta ei ehkä voi muokata ';
 $strThai = 'Thai'; 
+$strThemeDefaultNotFound = 'Oletusteemaa %s ei löydy!';
+$strThemeNoPreviewAvailable = 'Esikatselu ei ole saatavilla.';
+$strThemeNotFound = 'Teemaa %s ei löydy!';
+$strThemeNoValidImgPath = 'Kelvollista polkua teemalle %s ei löytynyt.';
+$strThemePathNotFound = 'Teeman %s polkua ei löydy!';
 $strTheme = 'Teema/tyyli'; 
 $strThisHost = 'Tämä isäntä';
 $strThisNotDirectory = 'Tämä ei ole hakemisto'; 
@@ -917,6 +938,7 @@ $strUpgrade = 'Sinun pitäisi päivittää versioon %s %s tai myöhempään.';
 $strUploadLimit = 'Yritit todennäköisesti ladata palvelimelle liian suurta tiedostoa. Viittaa %sdokumentaatioon%s saadaksesi tietoja tämän rajoituksen muuttamisesta.';
 $strUsage = 'Käyttö';
 $strUseBackquotes = 'Pane taulujen ja sarakkeiden nimet lainausmerkkeihin';
+$strUsedPhpExtensions = 'Käytössä olevat PHP-laajennukset';
 $strUseHostTable = 'Käytä host-taulua'; 
 $strUserAlreadyExists = 'Käyttäjä %s on jo olemassa!';
 $strUserEmpty = 'Käyttäjän nimi puuttuu!';
@@ -960,5 +982,9 @@ $strYes = 'Kyllä';
 
 $strZeroRemovesTheLimit = 'Huom: Näiden valintojen asettaminen nollaksi (0) poistaa raja-arvon.';
 $strZip = '"zip-pakattu"';
+
+// To translate:
+
+$strViewMaxExactCount = 'This view has more than %s rows. Please refer to %sdocumentation%s.';  //to translate
 
 ?>

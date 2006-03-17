@@ -1,5 +1,5 @@
 <?php
-/* $Id: header_meta_style.inc.php,v 2.12.2.1 2005/11/24 08:14:45 nijel Exp $ */
+/* $Id: header_meta_style.inc.php,v 2.16 2006/01/17 17:02:30 cybot_tm Exp $ */
 // vim: expandtab sw=4 ts=4 sts=4:
 
 if (isset($_REQUEST['GLOBALS']) || isset($_FILES['GLOBALS'])) {
@@ -9,8 +9,6 @@ if (isset($_REQUEST['GLOBALS']) || isset($_FILES['GLOBALS'])) {
 /**
  * Sends the beginning of the html page then returns to the calling script
  */
-// Gets the font sizes to use
-PMA_setFontSizes();
 // Defines the cell alignment values depending on text direction
 if ($GLOBALS['text_dir'] == 'ltr') {
     $GLOBALS['cell_align_left']  = 'left';
@@ -29,17 +27,13 @@ echo "<?xml version=\"1.0\" encoding=\"" . $GLOBALS['charset'] . "\"?".">";
 <head>
 <link rel="icon" href="./favicon.ico" type="image/x-icon" />
 <link rel="shortcut icon" href="./favicon.ico" type="image/x-icon" />
-<title><?php 
-    if(!empty($page_title)) 
-        echo htmlspecialchars($page_title); 
-    else 
+<title><?php
+    if (!empty($page_title)) {
+        echo htmlspecialchars($page_title);
+    } else {
         echo 'phpMyAdmin';
+    }
 ?></title>
 <meta http-equiv="Content-Type" content="text/html; charset=<?php echo $GLOBALS['charset']; ?>" />
-<?php
-if (!empty($GLOBALS['cfg']['PmaAbsoluteUri'])) {
-    echo '<base href="' . $GLOBALS['cfg']['PmaAbsoluteUri'] . '" />' . "\n";
-}
-?>
     <link rel="stylesheet" type="text/css" href="<?php echo defined('PMA_PATH_TO_BASEDIR') ? PMA_PATH_TO_BASEDIR : './'; ?>css/phpmyadmin.css.php?<?php echo PMA_generate_common_url(); ?>&amp;js_frame=<?php echo isset($print_view) ? 'print' : 'right'; ?>" />
     <link rel="stylesheet" type="text/css" href="<?php echo defined('PMA_PATH_TO_BASEDIR') ? PMA_PATH_TO_BASEDIR : './'; ?>css/print.css?<?php echo PMA_generate_common_url(); ?>" media="print" />

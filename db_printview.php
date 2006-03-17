@@ -1,5 +1,5 @@
 <?php
-/* $Id: db_printview.php,v 2.11 2005/11/18 12:50:49 cybot_tm Exp $ */
+/* $Id: db_printview.php,v 2.15 2006/01/17 17:02:28 cybot_tm Exp $ */
 // vim: expandtab sw=4 ts=4 sts=4:
 
 require_once('./libraries/common.lib.php');
@@ -8,7 +8,7 @@ require_once('./libraries/common.lib.php');
  * Gets the variables sent or posted to this script, then displays headers
  */
 $print_view = TRUE;
-require_once('./header.inc.php');
+require_once('./libraries/header.inc.php');
 
 
 PMA_checkParameters(array('db'));
@@ -44,7 +44,7 @@ if ($cfg['SkipLockedTables'] == TRUE) {
         unset($result);
 
         if (isset($sot_cache)) {
-            $result      = PMA_DBI_query('SHOW TABLES FROM ' . PMA_backquote($db) . ';', NULL, PMA_DBI_QUERY_STORE);
+            $result      = PMA_DBI_query('SHOW TABLES FROM ' . PMA_backquote($db) . ';', null, PMA_DBI_QUERY_STORE);
             if ($result != FALSE && PMA_DBI_num_rows($result) > 0) {
                 while ($tmp = PMA_DBI_fetch_row($result)) {
                     if (!isset($sot_cache[$tmp[0]])) {
@@ -134,7 +134,7 @@ else {
         if (isset($sts_data['Type'])) {
             if ($sts_data['Type'] == 'MRG_MyISAM') {
                 $mergetable = TRUE;
-            } else if (!preg_match('@ISAM|HEAP@i', $sts_data['Type'])) {
+            } elseif (!preg_match('@ISAM|HEAP@i', $sts_data['Type'])) {
                 $nonisam    = TRUE;
             }
         }
@@ -149,18 +149,17 @@ else {
                     } else {
                         list($formated_size, $unit) =  PMA_formatByteDown($tblsize, 3, 0);
                     }
-                } else if ($cfg['ShowStats']) {
+                } elseif ($cfg['ShowStats']) {
                     $formated_size                  = '&nbsp;-&nbsp;';
                     $unit                           = '';
                 }
                 $sum_entries                        += $sts_data['Rows'];
             }
             // MyISAM MERGE Table
-            else if ($cfg['ShowStats'] && $mergetable == TRUE) {
+            elseif ($cfg['ShowStats'] && $mergetable == TRUE) {
                 $formated_size = '&nbsp;-&nbsp;';
                 $unit          = '';
-            }
-            else if ($cfg['ShowStats']) {
+            } elseif ($cfg['ShowStats']) {
                 $formated_size = 'unknown';
                 $unit          = '';
             }
@@ -217,8 +216,8 @@ else {
                 if (isset($sts_data['Create_time']) && !empty($sts_data['Create_time'])) {
                     ?>
                     <tr>
-                        <td style="font-size: <?php echo $font_smaller; ?>" align="right"><?php echo $strStatCreateTime . ': '; ?></td>
-                        <td style="font-size: <?php echo $font_smaller; ?>" align="right"><?php echo PMA_localisedDate(strtotime($sts_data['Create_time'])); ?></td>
+                        <td style="font-size: 80%" align="right"><?php echo $strStatCreateTime . ': '; ?></td>
+                        <td style="font-size: 80%" align="right"><?php echo PMA_localisedDate(strtotime($sts_data['Create_time'])); ?></td>
                     </tr>
                     <?php
                 }
@@ -226,8 +225,8 @@ else {
                 if (isset($sts_data['Update_time']) && !empty($sts_data['Update_time'])) {
                     ?>
                     <tr>
-                        <td style="font-size: <?php echo $font_smaller; ?>" align="right"><?php echo $strStatUpdateTime . ': '; ?></td>
-                        <td style="font-size: <?php echo $font_smaller; ?>" align="right"><?php echo PMA_localisedDate(strtotime($sts_data['Update_time'])); ?></td>
+                        <td style="font-size: 80%" align="right"><?php echo $strStatUpdateTime . ': '; ?></td>
+                        <td style="font-size: 80%" align="right"><?php echo PMA_localisedDate(strtotime($sts_data['Update_time'])); ?></td>
                     </tr>
                     <?php
                 }
@@ -235,8 +234,8 @@ else {
                 if (isset($sts_data['Check_time']) && !empty($sts_data['Check_time'])) {
                     ?>
                     <tr>
-                        <td style="font-size: <?php echo $font_smaller; ?>" align="right"><?php echo $strStatCheckTime . ': '; ?></td>
-                        <td style="font-size: <?php echo $font_smaller; ?>" align="right"><?php echo PMA_localisedDate(strtotime($sts_data['Check_time'])); ?></td>
+                        <td style="font-size: 80%" align="right"><?php echo $strStatCheckTime . ': '; ?></td>
+                        <td style="font-size: 80%" align="right"><?php echo PMA_localisedDate(strtotime($sts_data['Check_time'])); ?></td>
                     </tr>
                     <?php
                 }
@@ -287,8 +286,8 @@ else {
  */
 echo "\n";
 ?>
-<script type="text/javascript" language="javascript1.2">
-<!--
+<script type="text/javascript" language="javascript">
+//<![CDATA[
 function printPage()
 {
     // Do print the page
@@ -296,10 +295,10 @@ function printPage()
         window.print();
     }
 }
-//-->
+//]]>
 </script>
 <?php
 echo '<br /><br />&nbsp;<input type="button" class="print_ignore" style="width: 100px; height: 25px" id="print" value="' . $strPrint . '" onclick="printPage()" />' . "\n";
 
-require_once('./footer.inc.php');
+require_once('./libraries/footer.inc.php');
 ?>

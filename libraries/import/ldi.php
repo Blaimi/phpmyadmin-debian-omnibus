@@ -1,16 +1,16 @@
 <?php
-/* $Id: ldi.php,v 1.4.2.1 2005/11/23 10:34:35 nijel Exp $ */
+/* $Id: ldi.php,v 1.7 2005/12/08 22:52:03 nijel Exp $ */
 // vim: expandtab sw=4 ts=4 sts=4:
 
 /* CSV import plugin for phpMyAdmin */
 
-if ($import_type == 'table') {
-    if (isset($import_list)) {
-        if ($cfg['Import']['ldi_local_option'] == 'auto') {
-            $cfg['Import']['ldi_local_option'] = FALSE;
+if ($plugin_param == 'table') {
+    if (isset($plugin_list)) {
+        if ($GLOBALS['cfg']['Import']['ldi_local_option'] == 'auto') {
+            $GLOBALS['cfg']['Import']['ldi_local_option'] = FALSE;
 
             if (PMA_MYSQL_INT_VERSION < 32349) {
-                    $cfg['Import']['ldi_local_option'] = TRUE;
+                    $GLOBALS['cfg']['Import']['ldi_local_option'] = TRUE;
             }
 
             if (PMA_MYSQL_INT_VERSION > 40003) {
@@ -18,22 +18,22 @@ if ($import_type == 'table') {
                 if ($result != FALSE && PMA_DBI_num_rows($result) > 0) {
                     $tmp = PMA_DBI_fetch_row($result);
                     if ($tmp[1] == 'ON') {
-                        $cfg['Import']['ldi_local_option'] = TRUE;
+                        $GLOBALS['cfg']['Import']['ldi_local_option'] = TRUE;
                     }
                 }
                 PMA_DBI_free_result($result);
                 unset($result);
             }
         }
-        $import_list['ldi'] = array(
+        $plugin_list['ldi'] = array(
             'text' => 'strLDI',
             'extension' => 'ldi', // This is nonsense, however we want to default to our parser for csv
             'options' => array(
                 array('type' => 'bool', 'name' => 'replace', 'text' => 'strReplaceTable'),
                 array('type' => 'bool', 'name' => 'ignore', 'text' => 'strIgnoreDuplicates'),
-                array('type' => 'text', 'name' => 'terminated', 'text' => 'strFieldsTerminatedBy', 'size' => 2, 'len' => 1),
-                array('type' => 'text', 'name' => 'enclosed', 'text' => 'strFieldsEnclosedBy', 'size' => 2, 'len' => 1),
-                array('type' => 'text', 'name' => 'escaped', 'text' => 'strFieldsEscapedBy', 'size' => 2, 'len' => 1),
+                array('type' => 'text', 'name' => 'terminated', 'text' => 'strFieldsTerminatedBy', 'size' => 2, 'len' => 2),
+                array('type' => 'text', 'name' => 'enclosed', 'text' => 'strFieldsEnclosedBy', 'size' => 2, 'len' => 2),
+                array('type' => 'text', 'name' => 'escaped', 'text' => 'strFieldsEscapedBy', 'size' => 2, 'len' => 2),
                 array('type' => 'text', 'name' => 'new_line', 'text' => 'strLinesTerminatedBy', 'size' => 2),
                 array('type' => 'text', 'name' => 'columns', 'text' => 'strColumnNames'),
                 array('type' => 'bool', 'name' => 'local_option', 'text' => 'strLDILocal'),
@@ -61,7 +61,7 @@ if ($import_type == 'table') {
             $sql .= ' INTO TABLE ' . PMA_backquote($table);
 
             if (strlen($ldi_terminated) > 0) {
-                $sql .= ' FIELDS TERMINATED BY \'' . PMA_sqlAddslashes($ldi_terminated) . '\'';
+                $sql .= ' FIELDS TERMINATED BY \'' . $ldi_terminated . '\'';
             }
             if (strlen($ldi_enclosed) > 0) {
                 $sql .= ' ENCLOSED BY \'' . PMA_sqlAddslashes($ldi_enclosed) . '\'';

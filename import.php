@@ -1,5 +1,5 @@
 <?php
-/* $Id: import.php,v 2.10 2005/11/18 12:50:49 cybot_tm Exp $ */
+/* $Id: import.php,v 2.17.2.1 2006/01/31 21:23:11 lem9 Exp $ */
 // vim: expandtab sw=4 ts=4 sts=4:
 
 /* Core script for import, this is just the glue around all other stuff */
@@ -15,40 +15,40 @@ if (!empty($sql_query)) {
     // run SQL query
     $import_text = $sql_query;
     $import_type = 'query';
-    $what = 'sql';
+    $format = 'sql';
     unset($sql_query);
 } elseif (!empty($sql_localfile)) {
     // run SQL file on server
     $local_import_file = $sql_localfile;
     $import_type = 'queryfile';
-    $what = 'sql';
+    $format = 'sql';
     unset($sql_localfile);
 } elseif (!empty($sql_file)) {
     // run uploaded SQL file
     $import_file = $sql_file;
     $import_type = 'queryfile';
-    $what = 'sql';
+    $format = 'sql';
     unset($sql_file);
 } elseif (!empty($id_bookmark)) {
     // run bookmark
     $import_type = 'query';
-    $what = 'sql';
+    $format = 'sql';
 }
 
 // If we didn't get any parameters, either user called this directly, or 
 // upload limit has been reached, let's assume the second possibility.
 if ($_POST == array() && $_GET == array()) {
-    require_once('./header.inc.php');
+    require_once('./libraries/header.inc.php');
     $show_error_header = TRUE;
     PMA_showMessage(sprintf($strUploadLimit, '[a@./Documentation.html#faq1_16@_blank]', '[/a]'));
-    require('./footer.inc.php');
+    require('./libraries/footer.inc.php');
 }
 
 // Check needed parameters
-PMA_checkParameters(array('import_type', 'what'));
+PMA_checkParameters(array('import_type', 'format'));
 
-// We don't want anything special in what
-$what = PMA_securePath($what);
+// We don't want anything special in format
+$format = PMA_securePath($format);
 
 // Import functions
 require_once('./libraries/import.lib.php');
@@ -91,6 +91,10 @@ if (isset($db)) {
 }
 
 @set_time_limit($cfg['ExecTimeLimit']);
+if (!empty($cfg['MemoryLimit'])) {
+    @ini_set('memory_limit', $cfg['MemoryLimit']);
+}
+
 $timestamp = time();
 if (isset($allow_interrupt)) {
     $maximum_time = ini_get('max_execution_time');
@@ -121,7 +125,7 @@ if (!empty($id_bookmark)) {
     require_once('./libraries/bookmark.lib.php');
     switch ($action_bookmark) {
         case 0: // bookmarked query that have to be run
-            $import_text = PMA_queryBookmarks($db, $cfg['Bookmark'], $id_bookmark,'id', isset($action_bookmark_all));
+            $import_text = PMA_queryBookmarks($db, $cfg['Bookmark'], $id_bookmark, 'id', isset($action_bookmark_all));
             if (isset($bookmark_variable) && !empty($bookmark_variable)) {
                 $import_text = preg_replace('|/\*(.*)\[VARIABLE\](.*)\*/|imsU', '${1}' . PMA_sqlAddslashes($bookmark_variable) . '${2}', $import_text);
             }
@@ -152,7 +156,7 @@ if (!empty($bkm_label) && !empty($import_text)) {
     // Should we replace bookmark?
     if (isset($bkm_replace)) {
         $bookmarks = PMA_listBookmarks($db, $cfg['Bookmark']);
-        foreach($bookmarks as $key => $val) {
+        foreach ($bookmarks as $key => $val) {
             if ($val == $bkm_label) {
                 PMA_deleteBookmarks($db, $cfg['Bookmark'], $key);
             }
@@ -167,13 +171,24 @@ if (!empty($bkm_label) && !empty($import_text)) {
 // We can not read all at once, otherwise we can run out of memory
 $memory_limit = trim(@ini_get('memory_limit'));
 // 2 MB as default
-if (empty($memory_limit)) $memory_limit = 2 * 1024 * 1024;
+if (empty($memory_limit)) {
+    $memory_limit = 2 * 1024 * 1024;
+}
+// In case no memory limit we work on 10MB chunks
+if ($memory_limit = -1) {
+    $memory_limit = 10 * 1024 * 1024;
+}
 
 // Calculate value of the limit
-if (strtolower(substr($memory_limit, -1)) == 'm') $memory_limit = (int)substr($memory_limit, 0, -1) * 1024 * 1024;
-elseif (strtolower(substr($memory_limit, -1)) == 'k') $memory_limit = (int)substr($memory_limit, 0, -1) * 1024;
-elseif (strtolower(substr($memory_limit, -1)) == 'g') $memory_limit = (int)substr($memory_limit, 0, -1) * 1024 * 1024 * 1024;
-else $memory_limit = (int)$memory_limit;
+if (strtolower(substr($memory_limit, -1)) == 'm') {
+    $memory_limit = (int)substr($memory_limit, 0, -1) * 1024 * 1024;
+} elseif (strtolower(substr($memory_limit, -1)) == 'k') {
+    $memory_limit = (int)substr($memory_limit, 0, -1) * 1024;
+} elseif (strtolower(substr($memory_limit, -1)) == 'g') {
+    $memory_limit = (int)substr($memory_limit, 0, -1) * 1024 * 1024 * 1024;
+} else {
+    $memory_limit = (int)$memory_limit;
+}
 
 $read_limit = $memory_limit / 4; // Just to be sure, there might be lot of memory needed for uncompression
 
@@ -184,7 +199,7 @@ if (!empty($local_import_file) && !empty($cfg['UploadDir'])) {
     $local_import_file = PMA_securePath($local_import_file);
 
     $import_file  = PMA_userDir($cfg['UploadDir']) . $local_import_file;
-} else if (empty($import_file) || !is_uploaded_file($import_file))  {
+} elseif (empty($import_file) || !is_uploaded_file($import_file))  {
     $import_file  = 'none';
 }
 
@@ -285,11 +300,12 @@ if ($import_file != 'none' && !$error) {
 }
 
 // Convert the file's charset if necessary
-if (PMA_MYSQL_INT_VERSION < 40100
-    && $cfg['AllowAnywhereRecoding'] && $allow_recoding
-    && isset($charset_of_file) && $charset_of_file != $charset) {
-    $charset_conversion = TRUE;
-} else if (PMA_MYSQL_INT_VERSION >= 40100
+if ($cfg['AllowAnywhereRecoding'] && $allow_recoding
+    && isset($charset_of_file)) {
+    if ($charset_of_file != $charset) {
+        $charset_conversion = TRUE;
+    }
+} elseif (PMA_MYSQL_INT_VERSION >= 40100
     && isset($charset_of_file) && $charset_of_file != 'utf8') {
     PMA_DBI_query('SET NAMES \'' . $charset_of_file . '\'');
     // We can not show query in this case, it is in different charset
@@ -310,13 +326,14 @@ if (!$error && isset($skip)) {
 
 if (!$error) {
     // Check for file existance
-    if (!file_exists('./libraries/import/' . $what . '.php')) {
+    if (!file_exists('./libraries/import/' . $format . '.php')) {
         $error = TRUE;
         $message = $strCanNotLoadImportPlugins;
         $show_error_header = TRUE;
     } else {
         // Do the real import
-        require('./libraries/import/' . $what . '.php');
+        $plugin_param = $import_type;
+        require('./libraries/import/' . $format . '.php');
     }
 }
 
@@ -344,7 +361,7 @@ if (!empty($id_bookmark) && $action_bookmark == 2) {
     if ($import_type == 'query') {
         $message = $strSuccess;
     } else {
-        $message = $strImportFinished;
+        $message = sprintf($strImportSuccessfullyFinished, $executed_queries);
     }
 }
 
@@ -357,7 +374,7 @@ if ($timeout_passed) {
 }
 
 // Display back import page
-require_once('./header.inc.php');
+require_once('./libraries/header.inc.php');
 
 // There was an error?
 if (isset($my_die)) {

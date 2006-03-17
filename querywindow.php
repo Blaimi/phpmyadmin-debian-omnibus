@@ -1,5 +1,5 @@
 <?php
-/* $Id: querywindow.php,v 2.28 2005/11/18 12:50:49 cybot_tm Exp $ */
+/* $Id: querywindow.php,v 2.34 2006/01/14 23:17:15 cybot_tm Exp $ */
 // vim: expandtab sw=4 ts=4 sts=4:
 
 require_once('./libraries/common.lib.php');
@@ -8,7 +8,7 @@ require_once('./libraries/common.lib.php');
  * Gets the variables sent to this script, retains the db name that may have
  * been defined as startup option and include a core library
  */
-if (!empty($db)) {
+if (isset($db) && strlen($db)) {
     $db_start = $db;
 }
 
@@ -45,7 +45,7 @@ if ($server > 0) {
 }
 
 // garvin: For re-usability, moved http-headers and stylesheets
-// to a seperate file. It can now be included by header.inc.php,
+// to a seperate file. It can now be included by libraries/header.inc.php,
 // querywindow.php.
 
 require_once('./libraries/header_http.inc.php');
@@ -80,7 +80,7 @@ if ( empty( $querydisplay_tab ) ) {
     $onload = 'onload="resize();"';
 ?>
 function resize() {
-    
+
     // for Gecko
     if ( typeof( self.sizeToContent ) == 'function' ) {
         self.sizeToContent();
@@ -89,14 +89,14 @@ function resize() {
         self.resizeBy( 10, 50 );
         return;
     }
-    
+
     // for IE, Opera
     if (document.getElementById && typeof(document.getElementById('querywindowcontainer')) != 'undefined' ) {
-    
+
         // get content size
         var newWidth  = document.getElementById('querywindowcontainer').offsetWidth;
         var newHeight = document.getElementById('querywindowcontainer').offsetHeight;
-        
+
         // set size to contentsize
         // plus some offset for scrollbars, borders, statusbar, menus ...
         self.resizeTo( newWidth + 45, newHeight + 75 );
@@ -109,11 +109,10 @@ function resize() {
 ?>
 //]]>
 </script>
-<script src="libraries/functions.js" type="text/javascript" language="javascript"></script>
+<script src="./js/functions.js" type="text/javascript" language="javascript"></script>
 </head>
 
-<body id="bodyquerywindow" <?php echo $onload; ?>
-    bgcolor="<?php echo $GLOBALS['cfg']['LeftBgColor']; ?>">
+<body id="bodyquerywindow" <?php echo $onload; ?> >
 <div id="querywindowcontainer">
 <?php
 if ( !isset($no_js) ) {
@@ -150,7 +149,7 @@ if ( !isset($no_js) ) {
 }
 
 if ( true == $GLOBALS['cfg']['PropertiesIconic'] ) {
-    $titles['Change'] = 
+    $titles['Change'] =
          '<img class="icon" width="16" height="16" src="' . $pmaThemeImage
         . 'b_edit.png" alt="' . $strChange . '" title="' . $strChange
         . '" />';
@@ -176,12 +175,12 @@ if ( ! empty( $query_history_latest ) && ! empty( $query_history_latest_db ) ) {
         'db'    => $query_history_latest_db,
         'table' => isset($query_history_latest_table) ? $query_history_latest_table : '',
     );
-        
+
     $_sql_history[$query_history_latest] = array(
         'db'    =>  $query_history_latest_db,
-        'table' => isset( $query_history_latest_table ) ? $query_history_latest_table : '',
+        'table' => isset($query_history_latest_table) ? $query_history_latest_table : '',
     );
-        
+
     $sql_query = urldecode($query_history_latest);
     $db = $query_history_latest_db;
     $table = $query_history_latest_table;
@@ -214,8 +213,8 @@ if ( $GLOBALS['cfg']['QueryHistoryDB'] && $cfgRelation['historywork'] ) {
         foreach ($query_history AS $query_no => $query_sql) {
             if ( ! isset( $_input_query_history[$query_sql] ) ) {
                 $_input_query_history[$query_sql] = array(
-                    'db'    => $query_history_db,
-                    'table' => isset($query_history_table) ? $query_history_table : '',
+                    'db'    => $query_history_db[$query_no],
+                    'table' => isset($query_history_table[$query_no]) ? $query_history_table[$query_no] : '',
                 );
                 $_sql_history[$query_sql] = array(
                     'db'    => $query_history_db[$query_no],
@@ -236,13 +235,11 @@ require_once './libraries/bookmark.lib.php';
 if (isset($no_js) && $no_js) {
     // ... we redirect to appropriate query sql page
     // works only full if $db and $table is also stored/grabbed from $_COOKIE
-    if ( ! empty( $table ) ) {
+    if ( isset( $table ) && strlen($table) ) {
         require './tbl_properties.php';
-    }
-    elseif ( ! empty( $db ) ) {
+    } elseif ( isset($db) && strlen($db) ) {
         require './db_details.php';
-    }
-    else {
+    } else {
         require './server_sql.php';
     }
     exit;
@@ -284,19 +281,19 @@ if ( count( $_sql_history ) > 0
                .'querydisplay_tab.value = \'' . $tab . '\';'
                .' document.getElementById(\'hiddenqueryform\').'
                .'query_history_latest.value = \''
-                . preg_replace('/(\r|\n)+/i', '\\n', 
+                . preg_replace('/(\r|\n)+/i', '\\n',
                     htmlentities( $sql, ENT_QUOTES ) ) . '\';'
                .' document.getElementById(\'hiddenqueryform\').'
                .'auto_commit.value = \'false\';'
                .' document.getElementById(\'hiddenqueryform\').'
                .'db.value = \'' . htmlspecialchars( $query['db'] ) . '\';'
                .' document.getElementById(\'hiddenqueryform\').'
-               .'query_history_latest_db.value = \'' 
+               .'query_history_latest_db.value = \''
                . htmlspecialchars( $query['db'] ) . '\';'
                .' document.getElementById(\'hiddenqueryform\').'
                .'table.value = \'' . htmlspecialchars( $query['table'] ) . '\';'
                .' document.getElementById(\'hiddenqueryform\').'
-               .'query_history_latest_table.value = \'' 
+               .'query_history_latest_table.value = \''
                . htmlspecialchars( $query['table'] ) . '\';'
                .' document.getElementById(\'hiddenqueryform\').submit();'
                .' return false;">' . $titles['Change'] . '</a>';
@@ -306,24 +303,24 @@ if ( count( $_sql_history ) > 0
                .'querydisplay_tab.value = \'' . $tab . '\';'
                .' document.getElementById(\'hiddenqueryform\').'
                .'query_history_latest.value = \''
-                . preg_replace('/(\r|\n)+/i', '\\r\\n', 
+                . preg_replace('/(\r|\n)+/i', '\\r\\n',
                     htmlentities( $sql, ENT_QUOTES ) ) . '\';'
                .' document.getElementById(\'hiddenqueryform\').'
                .'auto_commit.value = \'true\';'
                .' document.getElementById(\'hiddenqueryform\').'
                .'db.value = \'' . htmlspecialchars( $query['db'] ) . '\';'
                .' document.getElementById(\'hiddenqueryform\').'
-               .'query_history_latest_db.value = \'' 
+               .'query_history_latest_db.value = \''
                . htmlspecialchars( $query['db'] ) . '\';'
                .' document.getElementById(\'hiddenqueryform\').'
                .'table.value = \'' . htmlspecialchars( $query['table'] ) . '\';'
                .' document.getElementById(\'hiddenqueryform\').'
-               .'query_history_latest_table.value = \'' 
+               .'query_history_latest_table.value = \''
                . htmlspecialchars( $query['table'] ) . '\';'
                .' document.getElementById(\'hiddenqueryform\').submit();'
-               .' return false;">[' . htmlspecialchars( $query['db'] ) . '] ' 
+               .' return false;">[' . htmlspecialchars( $query['db'] ) . '] '
                . urldecode( $sql ) . '</a>' . "\n";
-            
+
         echo '</li>' . "\n";
     }
     unset( $tab, $_sql_history, $sql, $query );
@@ -343,8 +340,8 @@ foreach ( $_input_query_history as $sql => $history ) {
 }
 unset( $_input_query_history, $sql, $history );
 ?>
-    <input type="hidden" name="db" value="<?php echo (empty($db) ? '' : htmlspecialchars($db)); ?>" />
-    <input type="hidden" name="table" value="<?php echo (empty($table) ? '' : htmlspecialchars($table)); ?>" />
+    <input type="hidden" name="db" value="<?php echo (! isset($db) ? '' : htmlspecialchars($db)); ?>" />
+    <input type="hidden" name="table" value="<?php echo (! isset($table) ? '' : htmlspecialchars($table)); ?>" />
 
     <input type="hidden" name="query_history_latest" value="" />
     <input type="hidden" name="query_history_latest_db" value="" />
@@ -366,8 +363,8 @@ unset( $_input_query_history, $sql, $history );
 /**
  * Close MySql connections
  */
-if (isset($dbh) && $dbh) {
-    PMA_DBI_close($dbh);
+if (isset($controllink) && $controllink) {
+    PMA_DBI_close($controllink);
 }
 if (isset($userlink) && $userlink) {
     PMA_DBI_close($userlink);

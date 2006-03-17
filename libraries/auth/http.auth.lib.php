@@ -1,5 +1,5 @@
 <?php
-/* $Id: http.auth.lib.php,v 2.8 2005/10/26 17:32:19 cybot_tm Exp $ */
+/* $Id: http.auth.lib.php,v 2.14 2006/01/17 17:03:02 cybot_tm Exp $ */
 // vim: expandtab sw=4 ts=4 sts=4:
 
 // +--------------------------------------------------------------------------+
@@ -20,9 +20,8 @@
  * @access  public
  */
 function PMA_auth() {
-    global $right_font_family, $font_size, $font_bigger;
 
-    header('WWW-Authenticate: Basic realm="phpMyAdmin ' . sprintf($GLOBALS['strRunning'], (empty($GLOBALS['cfg']['Server']['verbose']) ? str_replace('\'', '\\\'',$GLOBALS['cfg']['Server']['host']) : str_replace('\'', '\\\'', $GLOBALS['cfg']['Server']['verbose']))) .  '"');
+    header('WWW-Authenticate: Basic realm="phpMyAdmin ' . sprintf($GLOBALS['strRunning'], (empty($GLOBALS['cfg']['Server']['verbose']) ? str_replace('\'', '\\\'', $GLOBALS['cfg']['Server']['host']) : str_replace('\'', '\\\'', $GLOBALS['cfg']['Server']['verbose']))) .  '"');
     header('HTTP/1.0 401 Unauthorized');
     header('status: 401 Unauthorized');
 
@@ -34,7 +33,7 @@ function PMA_auth() {
     ?>
 </head>
 <body>
-<?php include('./config.header.inc.php'); ?>
+<?php require('./libraries/header_custom.inc.php'); ?>
 
 <br /><br />
 <center>
@@ -43,7 +42,7 @@ function PMA_auth() {
 <br />
 <div class="warning"><?php echo $GLOBALS['strWrongUser']; ?></div>
 
-<?php include('./config.footer.inc.php'); ?>
+<?php require('./libraries/footer_custom.inc.php'); ?>
 
 </body>
 </html>
@@ -74,8 +73,6 @@ function PMA_auth() {
 function PMA_auth_check()
 {
     global $PHP_AUTH_USER, $PHP_AUTH_PW;
-    global $REMOTE_USER, $AUTH_USER, $REMOTE_PASSWORD, $AUTH_PASSWORD;
-    global $HTTP_AUTHORIZATION;
     global $old_usr;
 
     // Grabs the $PHP_AUTH_USER variable whatever are the values of the
@@ -85,24 +82,21 @@ function PMA_auth_check()
         if (!empty($_SERVER) && isset($_SERVER['PHP_AUTH_USER'])) {
             $PHP_AUTH_USER = $_SERVER['PHP_AUTH_USER'];
         }
-        else if (isset($REMOTE_USER)) {
-            $PHP_AUTH_USER = $REMOTE_USER;
-        }
-        else if (!empty($_ENV) && isset($_ENV['REMOTE_USER'])) {
-            $PHP_AUTH_USER = $_ENV['REMOTE_USER'];
-        }
-        else if (@getenv('REMOTE_USER')) {
+        // CGI, might be encoded, see bellow
+        elseif (@getenv('REMOTE_USER')) {
             $PHP_AUTH_USER = getenv('REMOTE_USER');
         }
-        // Fix from Matthias Fichtner for WebSite Professional - Part 1
-        else if (isset($AUTH_USER)) {
-            $PHP_AUTH_USER = $AUTH_USER;
-        }
-        else if (!empty($_ENV) && isset($_ENV['AUTH_USER'])) {
-            $PHP_AUTH_USER = $_ENV['AUTH_USER'];
-        }
-        else if (@getenv('AUTH_USER')) {
+        // WebSite Professional
+        elseif (@getenv('AUTH_USER')) {
             $PHP_AUTH_USER = getenv('AUTH_USER');
+        }
+        // IIS, might be encoded, see bellow
+        elseif (@getenv('HTTP_AUTHORIZATION')) {
+            $PHP_AUTH_USER = getenv('HTTP_AUTHORIZATION');
+        }
+        // FastCGI, might be encoded, see bellow
+        elseif (@getenv('Authorization')) {
+            $PHP_AUTH_USER = getenv('Authorization');
         }
     }
     // Grabs the $PHP_AUTH_PW variable whatever are the values of the
@@ -112,56 +106,24 @@ function PMA_auth_check()
         if (!empty($_SERVER) && isset($_SERVER['PHP_AUTH_PW'])) {
             $PHP_AUTH_PW = $_SERVER['PHP_AUTH_PW'];
         }
-        else if (isset($REMOTE_PASSWORD)) {
-            $PHP_AUTH_PW = $REMOTE_PASSWORD;
-        }
-        else if (!empty($_ENV) && isset($_ENV['REMOTE_PASSWORD'])) {
-            $PHP_AUTH_PW = $_ENV['REMOTE_PASSWORD'];
-        }
-        else if (@getenv('REMOTE_PASSWORD')) {
+        // Apache/CGI
+        elseif (@getenv('REMOTE_PASSWORD')) {
             $PHP_AUTH_PW = getenv('REMOTE_PASSWORD');
         }
-        // Fix from Matthias Fichtner for WebSite Professional - Part 2
-        else if (isset($AUTH_PASSWORD)) {
-            $PHP_AUTH_PW = $AUTH_PASSWORD;
-        }
-        else if (!empty($_ENV) && isset($_ENV['AUTH_PASSWORD'])) {
-            $PHP_AUTH_PW = $_ENV['AUTH_PASSWORD'];
-        }
-        else if (@getenv('AUTH_PASSWORD')) {
+        // WebSite Professional
+        elseif (@getenv('AUTH_PASSWORD')) {
             $PHP_AUTH_PW = getenv('AUTH_PASSWORD');
         }
     }
-    // Gets authenticated user settings with IIS
-    if (empty($PHP_AUTH_USER) && empty($PHP_AUTH_PW)) {
-        if (!empty($HTTP_AUTHORIZATION)
-            && substr($HTTP_AUTHORIZATION, 0, 6) == 'Basic ') {
-            list($PHP_AUTH_USER, $PHP_AUTH_PW) = explode(':', base64_decode(substr($HTTP_AUTHORIZATION, 6)));
-        }
-        else if (!empty($_ENV)
-             && isset($_ENV['HTTP_AUTHORIZATION'])
-             && substr($_ENV['HTTP_AUTHORIZATION'], 0, 6) == 'Basic ') {
-            list($PHP_AUTH_USER, $PHP_AUTH_PW) = explode(':', base64_decode(substr($_ENV['HTTP_AUTHORIZATION'], 6)));
-        }
-        else if (@getenv('HTTP_AUTHORIZATION')
-                 && substr(getenv('HTTP_AUTHORIZATION'), 0, 6) == 'Basic ') {
-            list($PHP_AUTH_USER, $PHP_AUTH_PW) = explode(':', base64_decode(substr(getenv('HTTP_AUTHORIZATION'), 6)));
-        }
-    } // end IIS
 
-    // Gets authenticated user settings with FastCGI
-    // set FastCGI option '-pass-header Authorization'
-    if (empty($PHP_AUTH_USER) && empty($PHP_AUTH_PW)) {
-        if (!empty($_ENV)
-            && isset($_ENV['Authorization'])
-            && substr($_ENV['Authorization'], 0, 6) == 'Basic ') {
-            list($PHP_AUTH_USER, $PHP_AUTH_PW) = explode(':', base64_decode(substr($_ENV['Authorization'], 6)));
+    // Decode possibly encoded information (used by IIS/CGI/FastCGI)
+    if (strcmp(substr($PHP_AUTH_USER, 0, 6), 'Basic ') == 0) {
+        $usr_pass = base64_decode(substr($PHP_AUTH_USER, 6));
+        if (!empty($usr_pass) && strpos($usr_pass, ':') !== FALSE) {
+            list($PHP_AUTH_USER, $PHP_AUTH_PW) = explode(':', $usr_pass);
         }
-        else if (@getenv('Authorization')
-                 && substr(getenv('Authorization'), 0, 6) == 'Basic ') {
-            list($PHP_AUTH_USER, $PHP_AUTH_PW) = explode(':', base64_decode(substr(getenv('Authorization'), 6)));
-        }
-    } // end FastCGI
+        unset($usr_pass);
+    }
 
     // User logged out -> ensure the new username is not the same
     if (!empty($old_usr)
@@ -173,10 +135,6 @@ function PMA_auth_check()
     if (empty($PHP_AUTH_USER)) {
         return FALSE;
     } else {
-        if (get_magic_quotes_gpc()) {
-            $PHP_AUTH_USER = stripslashes($PHP_AUTH_USER);
-            $PHP_AUTH_PW   = stripslashes($PHP_AUTH_PW);
-        }
         return TRUE;
     }
 } // end of the 'PMA_auth_check()' function

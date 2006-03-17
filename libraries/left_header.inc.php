@@ -1,5 +1,5 @@
 <?php
-/* $Id: left_header.inc.php,v 2.7 2005/11/16 18:54:53 lem9 Exp $ */
+/* $Id: left_header.inc.php,v 2.10 2006/01/14 23:17:16 cybot_tm Exp $ */
 // vim: expandtab sw=4 ts=4 sts=4:
 
 /**
@@ -8,8 +8,8 @@
  */
 
 if ( empty( $query_url ) ) {
-    $db     = empty( $db )      ? '' : $db;
-    $table  = empty( $table )   ? '' : $table;
+    $db     = ! isset( $db )      ? '' : $db;
+    $table  = ! isset( $table )   ? '' : $table;
     $query_url = PMA_generate_common_url( $db, $table );
 }
 
@@ -80,8 +80,11 @@ if ($GLOBALS['cfg']['MainPageIconic']) {
 }
 echo '</div>' . "\n";
 
-if ( $GLOBALS['cfg']['LeftDisplayServers'] ) {
-    $show_server_left = TRUE;
+/**
+ * Displays the MySQL servers choice form
+ */
+if ($GLOBALS['cfg']['LeftDisplayServers'] && (count($GLOBALS['cfg']['Servers']) > 1 || $server == 0 && count($GLOBALS['cfg']['Servers']) == 1)) {
     include('./libraries/select_server.lib.php');
+    PMA_select_server(TRUE, TRUE);
 } // end if LeftDisplayServers
 ?>

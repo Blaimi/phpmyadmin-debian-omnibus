@@ -1,5 +1,5 @@
 <?php
-/* $Id: db_details_importdocsql.php,v 2.7 2005/11/18 12:50:49 cybot_tm Exp $ */
+/* $Id: db_details_importdocsql.php,v 2.11 2006/01/17 17:02:28 cybot_tm Exp $ */
 // vim: expandtab sw=4 ts=4 sts=4:
 
 require_once('./libraries/common.lib.php');
@@ -14,7 +14,7 @@ require_once('./libraries/common.lib.php');
  * the headers
  */
 require_once('./libraries/read_dump.lib.php');
-require_once('./header.inc.php');
+require_once('./libraries/header.inc.php');
 
 // Check parameters
 PMA_checkParameters(array('db'));
@@ -62,15 +62,17 @@ if (isset($cfg['docSQLDir']) && !empty($cfg['docSQLDir'])) {
             if (isset($lines) && is_array($lines) && count($lines) > 0) {
                 foreach ($lines AS $lkey => $line) {
                     //echo '<p>' . $line . '</p>';
-                    $inf     = explode('|',$line);
+                    $inf     = explode('|', $line);
                     if (!empty($inf[1]) && strlen(trim($inf[1])) > 0) {
-                        $qry = 'INSERT INTO ' . PMA_backquote($GLOBALS['cfgRelation']['column_info'])
-                                . ' (db_name, table_name, column_name, ' . PMA_backquote('comment') . ') '
-                                . ' VALUES('
-                                . '\'' . PMA_sqlAddslashes($GLOBALS['db']) . '\','
-                                . '\'' . PMA_sqlAddslashes(trim($tab)) . '\','
-                                . '\'' . PMA_sqlAddslashes(trim($inf[0])) . '\','
-                                . '\'' . PMA_sqlAddslashes(trim($inf[1])) . '\')';
+                        $qry = '
+                             INSERT INTO
+                                    ' . PMA_backquote($GLOBALS['cfgRelation']['db']) . '.' . PMA_backquote($GLOBALS['cfgRelation']['column_info']) . '
+                                  ( db_name, table_name, column_name, ' . PMA_backquote('comment') . ' )
+                             VALUES (
+                                    \'' . PMA_sqlAddslashes($GLOBALS['db']) . '\',
+                                    \'' . PMA_sqlAddslashes(trim($tab)) . '\',
+                                    \'' . PMA_sqlAddslashes(trim($inf[0])) . '\',
+                                    \'' . PMA_sqlAddslashes(trim($inf[1])) . '\')';
                         if (PMA_query_as_cu($qry)) {
                             echo '<p>' . $GLOBALS['strAddedColumnComment'] . ' ' . htmlspecialchars($tab) . '.' . htmlspecialchars($inf[0]) . '</p>';
                         } else {
@@ -80,15 +82,17 @@ if (isset($cfg['docSQLDir']) && !empty($cfg['docSQLDir'])) {
                     } // end inf[1] exists
                     if (!empty($inf[2]) && strlen(trim($inf[2])) > 0) {
                         $for = explode('->', $inf[2]);
-                        $qry = 'INSERT INTO ' . PMA_backquote($GLOBALS['cfgRelation']['relation'])
-                                . '(master_db, master_table, master_field, foreign_db, foreign_table, foreign_field)'
-                                . ' VALUES('
-                                . '\'' . PMA_sqlAddslashes($GLOBALS['db']) . '\', '
-                                . '\'' . PMA_sqlAddslashes(trim($tab)) . '\', '
-                                . '\'' . PMA_sqlAddslashes(trim($inf[0])) . '\', '
-                                . '\'' . PMA_sqlAddslashes($GLOBALS['db']) . '\', '
-                                . '\'' . PMA_sqlAddslashes(trim($for[0])) . '\','
-                                . '\'' . PMA_sqlAddslashes(trim($for[1])) . '\')';
+                        $qry = '
+                             INSERT INTO 
+                                    ' . PMA_backquote($GLOBALS['cfgRelation']['db']) . '.' . PMA_backquote($GLOBALS['cfgRelation']['relation']) . '
+                                  ( master_db, master_table, master_field, foreign_db, foreign_table, foreign_field)
+                             VALUES (
+                                    \'' . PMA_sqlAddslashes($GLOBALS['db']) . '\',
+                                    \'' . PMA_sqlAddslashes(trim($tab)) . '\',
+                                    \'' . PMA_sqlAddslashes(trim($inf[0])) . '\',
+                                    \'' . PMA_sqlAddslashes($GLOBALS['db']) . '\',
+                                    \'' . PMA_sqlAddslashes(trim($for[0])) . '\',
+                                    \'' . PMA_sqlAddslashes(trim($for[1])) . '\')';
                         if (PMA_query_as_cu($qry)) {
                             echo '<p>' . $GLOBALS['strAddedColumnRelation'] . ' ' . htmlspecialchars($tab) . '.' . htmlspecialchars($inf[0]) . ' to ' . htmlspecialchars($inf[2]) . '</p>';
                         } else {
@@ -97,7 +101,7 @@ if (isset($cfg['docSQLDir']) && !empty($cfg['docSQLDir'])) {
                         echo "\n";
                     } // end inf[2] exists
                 }
-                echo '<p><font color="green">' . $GLOBALS['strImportFinished'] . '</font></p>' . "\n";
+                echo '<p><font color="green">' . sprintf($GLOBALS['strImportSuccessfullyFinished'], count($lines)) . '</font></p>' . "\n";
             } else {
                 echo '<p><font color="red">' . $GLOBALS['strFileCouldNotBeRead'] . '</font></p>' . "\n";
             }
@@ -121,14 +125,11 @@ if (isset($cfg['docSQLDir']) && !empty($cfg['docSQLDir'])) {
     if (empty($DOCUMENT_ROOT)) {
         if (!empty($_SERVER) && isset($_SERVER['DOCUMENT_ROOT'])) {
             $DOCUMENT_ROOT = $_SERVER['DOCUMENT_ROOT'];
-        }
-        else if (!empty($_ENV) && isset($_ENV['DOCUMENT_ROOT'])) {
+        } elseif (!empty($_ENV) && isset($_ENV['DOCUMENT_ROOT'])) {
             $DOCUMENT_ROOT = $_ENV['DOCUMENT_ROOT'];
-        }
-        else if (@getenv('DOCUMENT_ROOT')) {
+        } elseif (@getenv('DOCUMENT_ROOT')) {
             $DOCUMENT_ROOT = getenv('DOCUMENT_ROOT');
-        }
-        else {
+        } else {
             $DOCUMENT_ROOT = '.';
         }
     } // end if
@@ -169,15 +170,13 @@ if (isset($cfg['docSQLDir']) && !empty($cfg['docSQLDir'])) {
                             echo $strFileCouldNotBeRead;
                             exit();
                         }
-                    }
-                    else {
+                    } else {
                         $sql_file_new = $tmp_subdir . basename($sql_file);
                         move_uploaded_file($sql_file, $sql_file_new);
                         $docsql_text = PMA_readFile($sql_file_new, $sql_file_compression);
                         unlink($sql_file_new);
                     }
-                }
-                else {
+                } else {
                     // read from the normal upload dir
                     $docsql_text = PMA_readFile($sql_file, $sql_file_compression);
                 }
@@ -224,7 +223,7 @@ if (isset($cfg['docSQLDir']) && !empty($cfg['docSQLDir'])) {
      */
     ?>
 
-    <form method="post" action="db_details_importdocsql.php" <?php if ($is_upload) echo ' enctype="multipart/form-data"'; ?>>
+    <form method="post" action="db_details_importdocsql.php" <?php if ($is_upload) { echo ' enctype="multipart/form-data"'; } ?>>
         <?php echo PMA_generate_common_hidden_inputs($db); ?>
         <input type="hidden" name="submit_show" value="true" />
         <input type="hidden" name="do" value="import" />
@@ -291,6 +290,6 @@ if (isset($cfg['docSQLDir']) && !empty($cfg['docSQLDir'])) {
  * Displays the footer
  */
 echo "\n";
-require_once('./footer.inc.php');
+require_once('./libraries/footer.inc.php');
 
 ?>

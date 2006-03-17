@@ -1,5 +1,5 @@
 <?php
-/* $Id: string.lib.php,v 2.12 2005/11/03 12:53:28 lem9 Exp $ */
+/* $Id: string.lib.php,v 2.14 2006/01/17 17:02:30 cybot_tm Exp $ */
 // vim: expandtab sw=4 ts=4 sts=4:
 
 /** Specialized String Functions for phpMyAdmin
@@ -17,7 +17,7 @@
 /* Try to load mbstring, unless we're using buggy php version */
 if (PMA_PHP_INT_VERSION != 40203) {
     if (!@extension_loaded('mbstring')) {
-        //PMA_dl('mbstring');
+        PMA_dl('mbstring');
     }
 }
 
@@ -371,7 +371,7 @@ function PMA_STR_binarySearchInArr($str, $arr, $arrsize)
         $res        = strcmp($str, $arr[$mid]);
         if ($res == 0) {
             $found  = TRUE;
-        } else if ($res < 0) {
+        } elseif ($res < 0) {
             $top    = $mid - 1;
         } else {
             $bottom = $mid + 1;

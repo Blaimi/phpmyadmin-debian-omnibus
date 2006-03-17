@@ -1,5 +1,5 @@
 <?php
-/* $Id: db_create.php,v 2.9 2005/11/18 12:50:49 cybot_tm Exp $ */
+/* $Id: db_create.php,v 2.10 2005/11/24 09:12:16 nijel Exp $ */
 // vim: expandtab sw=4 ts=4 sts=4:
 
 
@@ -8,7 +8,7 @@
  */
 require_once('./libraries/common.lib.php');
 $js_to_run = 'functions.js';
-require_once('./header.inc.php');
+require_once('./libraries/header.inc.php');
 require_once('./libraries/mysql_charsets.lib.php');
 
 

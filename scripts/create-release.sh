@@ -1,6 +1,6 @@
 #!/bin/sh
 #
-# $Id: create-release.sh,v 2.14 2005/11/10 17:32:58 nijel Exp $
+# $Id: create-release.sh,v 2.18.4.2 2006/03/16 22:43:42 nijel Exp $
 #
 # 2005-09-13, lem9@users.sourceforge.net
 # - no longer create a config.default.php from config.inc.php
@@ -108,8 +108,8 @@ then
 
 Please ensure you have:
   1. incremented rc count or version in CVS :
-     - in libraries/defines.lib.php the line
-          " define('PMA_VERSION', '$1'); "
+     - in libraries/Config.class.php PMA_Config::__constructor() the line
+          " $this->set( 'PMA_VERSION', '2.7.1-dev' ); "
      - in Documentation.html the 2 lines
           " <title>phpMyAdmin $1 - Documentation</title> "
           " <h1>phpMyAdmin $1 Documentation</h1> "
@@ -185,7 +185,7 @@ find phpMyAdmin -type f -print0 | xargs -0 chmod 644
 find phpMyAdmin \( -name '*.sh' -o -name '*.pl' \) -print0 | xargs -0 chmod 755
 
 # Building Documentation.txt
-lynx --dont_wrap_pre --nolist --dump phpMyAdmin/Documentation.html > phpMyAdmin/Documentation.txt
+LC_ALL=C w3m -dump phpMyAdmin/Documentation.html > phpMyAdmin/Documentation.txt
 
 # Renaming directory
 mv phpMyAdmin phpMyAdmin-$target
@@ -232,7 +232,10 @@ cat <<END
 Todo now:
 ---------
  1. tag the cvs tree with the new revision number for a plain release or a
-    release candidate
+    release candidate:
+    version 2.7.0 gets two tags: RELEASE_2_7_0 and STABLE
+    version 2.7.1-rc1 gets RELEASE_2_7_1RC1 and TESTING
+
  2. upload the files to SF:
         ftp upload.sourceforge.net
         cd incoming
@@ -241,16 +244,20 @@ Todo now:
  3. add files to SF files page (cut and paste changelog since last release)
  4. add SF news item to phpMyAdmin project
  5. update web page:
-        - add MD5s and file sizes to /home/groups/p/ph/phpmyadmin/htdocs/home_page/files.inc.php
-        - add release to /home/groups/p/ph/phpmyadmin/htdocs/home_page/config.inc.php
+        - add MD5s and file sizes to /home/groups/p/ph/phpmyadmin/htdocs/home_page/includes/list_files.inc.php
+        - add release to /home/groups/p/ph/phpmyadmin/htdocs/home_page/includes/list_release.inc.php
  6. announce release on freshmeat (http://freshmeat.net/projects/phpmyadmin/)
  7. send a short mail (with list of major changes) to
         phpmyadmin-devel@lists.sourceforge.net
         phpmyadmin-news@lists.sourceforge.net
         phpmyadmin-users@lists.sourceforge.net
+
+    Don't forget to update the Description section in the announcement,
+    based on Documentation.html.
+
  8. increment rc count or version in CVS :
-        - in libraries/defines.lib.php the line
-              " define('PHPMYADMIN_VERSION', '2.2.2-rc1'); "
+        - in libraries/Config.class.php PMA_Config::__constructor() the line
+              " $this->set( 'PMA_VERSION', '2.7.1-dev' ); "
         - in Documentation.html the 2 lines
               " <title>phpMyAdmin 2.2.2-rc1 - Documentation</title> "
               " <h1>phpMyAdmin 2.2.2-rc1 Documentation</h1> "

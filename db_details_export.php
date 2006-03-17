@@ -1,13 +1,13 @@
 <?php
-/* $Id: db_details_export.php,v 2.6 2005/11/18 12:50:49 cybot_tm Exp $ */
+/* $Id: db_details_export.php,v 2.8 2005/11/24 09:12:16 nijel Exp $ */
 // vim: expandtab sw=4 ts=4 sts=4:
 /**
  * dumps a database
  *
- * @uses    db_details_common.php
- * @uses    db_details_db_info.php
+ * @uses    libraries/db_details_common.inc.php
+ * @uses    libraries/db_details_db_info.inc.php
  * @uses    libraries/display_export.lib.php
- * @uses    $tables     from db_details_db_info.php
+ * @uses    $tables     from libraries/db_details_db_info.inc.php
  */
 
 /**
@@ -16,9 +16,9 @@
 require_once('./libraries/common.lib.php');
 
 $sub_part  = '_export';
-require_once('./db_details_common.php');
+require_once('./libraries/db_details_common.inc.php');
 $url_query .= '&amp;goto=db_details_export.php';
-require_once('./db_details_db_info.php');
+require_once('./libraries/db_details_db_info.inc.php');
 
 /**
  * Displays the form
@@ -28,7 +28,7 @@ $export_page_title = $strViewDumpDB;
 // exit if no tables in db found
 if ( $num_tables < 1 ) {
     echo $strDatabaseNoTable;
-    require('./footer.inc.php');
+    require('./libraries/footer.inc.php');
     exit;
 } // end if
 
@@ -69,5 +69,5 @@ require_once('./libraries/display_export.lib.php');
 /**
  * Displays the footer
  */
-require_once('./footer.inc.php');
+require_once('./libraries/footer.inc.php');
 ?>

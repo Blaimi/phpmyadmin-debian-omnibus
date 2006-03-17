@@ -15,7 +15,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: phpmyadmin_2.5.4-1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-06-25 11:28+0200\n"
+"POT-Creation-Date: 2006-03-17 14:03+0100\n"
 "PO-Revision-Date: 2003-11-19 15:00+0500\n"
 "Last-Translator: Ilgiz Kalmetev <translator@ilgiz.pp.ru>\n"
 "Language-Team: russian <debian-russian@lists.debian.org>\n"
@@ -56,3 +56,44 @@ msgstr ""
 "Помните, что для активизации новой настройки ${webserver} должен быть "
 "перезапущен. Вы можете перезапустить ${webserver} вручную командой /etc/init."
 "d/${webserver} restart"
+
+#. Type: string
+#. Description
+#: ../templates:20
+msgid "User name for web-based setup system:"
+msgstr ""
+
+#. Type: string
+#. Description
+#: ../templates:20
+msgid "Leave empty if you want to use the default user name 'admin'."
+msgstr ""
+
+#. Type: password
+#. Description
+#: ../templates:30
+msgid "Password for web-based setup system:"
+msgstr ""
+
+#. Type: password
+#. Description
+#: ../templates:30
+msgid ""
+"phpMyAdmin comes with a setup script that can help you with creating "
+"configuration. The script is located at http://localhost/scripts/setup.php . "
+"For security reason it requires authorization."
+msgstr ""
+
+#. Type: password
+#. Description
+#: ../templates:30
+msgid ""
+"You can manage the usernames and passwords with `htpasswd' command. They are "
+"stored in /etc/phpmyadmin/htpasswd.setup file."
+msgstr ""
+
+#. Type: password
+#. Description
+#: ../templates:30
+msgid "Leave empty if you want to disable an access to web-based setup."
+msgstr ""

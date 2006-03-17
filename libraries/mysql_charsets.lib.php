@@ -1,5 +1,5 @@
 <?php
-/* $Id: mysql_charsets.lib.php,v 2.41 2005/11/17 12:42:38 cybot_tm Exp $ */
+/* $Id: mysql_charsets.lib.php,v 2.43 2006/01/17 17:02:30 cybot_tm Exp $ */
 // vim: expandtab sw=4 ts=4 sts=4:
 
 if (PMA_MYSQL_INT_VERSION >= 40100){
@@ -50,7 +50,7 @@ if (PMA_MYSQL_INT_VERSION >= 40100){
     define('PMA_CSDROPDOWN_COLLATION', 0);
     define('PMA_CSDROPDOWN_CHARSET',   1);
 
-    function PMA_generateCharsetDropdownBox($type = PMA_CSDROPDOWN_COLLATION, $name = NULL, $id = NULL, $default = NULL, $label = TRUE, $indent = 0, $submitOnChange = FALSE, $displayUnavailable = FALSE) {
+    function PMA_generateCharsetDropdownBox($type = PMA_CSDROPDOWN_COLLATION, $name = null, $id = null, $default = null, $label = TRUE, $indent = 0, $submitOnChange = FALSE, $displayUnavailable = FALSE) {
         global $mysql_charsets, $mysql_charsets_descriptions, $mysql_charsets_available, $mysql_collations, $mysql_collations_available;
 
         if (empty($name)) {
@@ -122,7 +122,7 @@ if (PMA_MYSQL_INT_VERSION >= 40100){
             // for databases.
             PMA_DBI_select_db( $db );
             $return = PMA_DBI_fetch_value( 'SHOW VARIABLES LIKE "collation_database"', 0, 1 );
-            if ( ! empty( $GLOBALS['db'] ) && $db !== $GLOBALS['db'] ) {
+            if ( isset( $GLOBALS['db'] ) && $db !== $GLOBALS['db'] ) {
                 PMA_DBI_select_db( $GLOBALS['db'] );
             }
             return $return;

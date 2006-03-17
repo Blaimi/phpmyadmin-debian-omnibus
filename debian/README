@@ -23,6 +23,12 @@ CONFIGURATION
 
   to the /etc/phpmyadmin/apache.conf file.
 
+  Since 2.8.0 phpMyAdmin provides web-based setup script available at
+  http://localhost/phpmyadmin/scripts/setup.php
+  
+  This setup script requires authorization by default. You can manage usernames
+  and passwords with htpasswd command on /etc/phpmyadmin/htpasswd.setup file.
+
 
 SECURITY
 
@@ -32,4 +38,4 @@ SECURITY
   by anyone who can run its own CGI script!
   
 
- -- Piotr Roszatycki <dexter@debian.org>  Fri, 25 Jun 2004 10:44:22 +0200
+ -- Piotr Roszatycki <dexter@debian.org>  Thu, 16 Mar 2006 17:06:24 +0100

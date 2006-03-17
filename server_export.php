@@ -1,5 +1,5 @@
 <?php
-/* $Id: server_export.php,v 2.6 2005/11/18 12:50:49 cybot_tm Exp $ */
+/* $Id: server_export.php,v 2.8 2005/11/24 09:12:16 nijel Exp $ */
 // vim: expandtab sw=4 ts=4 sts=4:
 
 /**
@@ -12,7 +12,7 @@ $js_to_run = 'functions.js';
 /**
  * Displays the links
  */
-require('./server_links.inc.php');
+require('./libraries/server_links.inc.php');
 
 /**
  * Gets the databases list - if it has not been built yet
@@ -58,5 +58,5 @@ require_once('./libraries/display_export.lib.php');
 /**
  * Displays the footer
  */
-require_once('./footer.inc.php');
+require_once('./libraries/footer.inc.php');
 ?>

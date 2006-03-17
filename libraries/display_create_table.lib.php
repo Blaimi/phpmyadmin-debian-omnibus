@@ -1,5 +1,5 @@
 <?php
-/* $Id: display_create_table.lib.php,v 1.5.2.1 2005/12/20 14:17:35 lem9 Exp $ */
+/* $Id: display_create_table.lib.php,v 1.9 2006/01/19 17:12:12 lem9 Exp $ */
 // vim: expandtab sw=4 ts=4 sts=4:
 
 // Displays form for creating a table (if user has privileges for that)
@@ -16,13 +16,25 @@ require_once('./libraries/check_user_privileges.lib.php');
 //
 // Note: in this case we could even skip the following "foreach" logic
 
+// Addendum, 2006-01-19: ok, I give up. We got some reports about servers
+// where the hostname field in mysql.user is not the same as the one
+// in mysql.db for a user. In this case, SHOW GRANTS does not return
+// the db-specific privileges. And probably, those users are on a shared
+// server, so can't set up a control user with rights to the "mysql" db.
+// We cannot reliably detect the db-specific privileges, so no more
+// warnings about the lack of privileges for CREATE TABLE. Tested
+// on MySQL 5.0.18.
+
+$is_create_table_priv = true;
+
+/*
 if (PMA_MYSQL_INT_VERSION >= 40100) {
     $is_create_table_priv = false;
 } else {
     $is_create_table_priv = true;
 }
 
-foreach( $dbs_where_create_table_allowed as $allowed_db ) {
+foreach ( $dbs_where_create_table_allowed as $allowed_db ) {
 
     // if we find the exact db name, we stop here
     if ($allowed_db == $db) {
@@ -80,7 +92,7 @@ foreach( $dbs_where_create_table_allowed as $allowed_db ) {
     }
 } // end foreach
 unset($i, $max_position, $chunk, $pattern);
-
+*/
 ?>
 <form method="post" action="tbl_create.php"
     onsubmit="return (emptyFormElements(this, 'table') &amp;&amp; checkFormElementInRange(this, 'num_fields', '<?php echo str_replace('\'', '\\\'', $GLOBALS['strInvalidFieldCount']); ?>', 1))">
@@ -103,6 +115,7 @@ echo sprintf( $strCreateNewTable, PMA_getDbLink() );
         <?php echo $strNumberOfFields; ?>:
         <input type="text" name="num_fields" size="2" />
     </div>
+    <div class="clearfloat"></div>
 </fieldset>
 <fieldset class="tblFooters">
     <input type="submit" value="<?php echo $strGo; ?>" />

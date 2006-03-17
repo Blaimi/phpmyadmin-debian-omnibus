@@ -1,0 +1,12 @@
+diff -Nru phpMyAdmin-2.8.0.1.orig/scripts/setup.php phpMyAdmin-2.8.0.1/scripts/setup.php
+--- phpMyAdmin-2.8.0.1.orig/scripts/setup.php	2006-02-06 12:01:48.000000000 +0100
++++ phpMyAdmin-2.8.0.1/scripts/setup.php	2006-03-16 16:53:32.000000000 +0100
+@@ -1195,7 +1195,7 @@
+             message('error', 'Could not write to config file! Not enough space?');
+             break;
+         } else {
+-            message('notice', 'Configuration saved to file config/config.inc.php in phpMyAdmin top level directory, copy it to top level one and delete directory config to use it.', 'File saved');
++            message('notice', 'Configuration saved to file config/config.inc.php in phpMyAdmin top level directory.', 'File saved');
+         }
+         unset($r, $s);
+         fclose($config);

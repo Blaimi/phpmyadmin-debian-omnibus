@@ -1,5 +1,5 @@
 <?php
-/* $Id: error.php,v 2.3 2005/11/08 09:45:13 cybot_tm Exp $ */
+/* $Id: error.php,v 2.4 2006/01/17 17:02:28 cybot_tm Exp $ */
 // vim: expandtab sw=4 ts=4 sts=4:
 
 /**
@@ -59,10 +59,11 @@ header('Content-Type: text/html; charset=' . $charset);
 <body>
 <h1>phpMyAdmin - <?php echo $type; ?></h1>
 <p><?php
-if (get_magic_quotes_gpc())
+if (get_magic_quotes_gpc()) {
     echo PMA_sanitize(stripslashes($_REQUEST['error']));
-else 
+} else { 
     echo PMA_sanitize($_REQUEST['error']);
+}
 ?></p>
 </body>
 </html>

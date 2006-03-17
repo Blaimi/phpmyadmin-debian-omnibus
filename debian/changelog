@@ -1,3 +1,23 @@
+phpmyadmin (4:2.8.0.2-1) unstable; urgency=low
+
+  * New upstream release. Closes: #356013, #355931.
+    - Can work if DocumentRoot is set to phpMyAdmin's directory.
+      Closes: #352403, #349497.
+    - pma_* features work with PersistentConnection mode. Closes: #348489.
+    - Export of table works if __TABLE__ macro is used. Closes: #217364.
+    - Can navigate back to user after changing privileges on database.
+      Closes: #338758.
+  * Reedited package description.
+  * Tweaked dependencies. Prefer php5-cgi package and does not depend on
+    apache2, because the PHP can be started as FastCGI standalone server.
+    Closes: #340286, #307441.
+  * This release provides http://localhost/phpmyadmin/scripts/setup.php setup
+    script. This script requires authorization by default.
+  * Generate longer blowfish secret on install.
+  * Create symlink /var/www/phpmyadmin only at first install.
+
+ -- Piotr Roszatycki <dexter@debian.org>  Fri, 17 Mar 2006 10:56:43 +0100
+
 phpmyadmin (4:2.7.0-pl2-1) unstable; urgency=low
 
   * New upstream release. Closes: #342203.

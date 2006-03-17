@@ -1,26 +1,34 @@
 <?php
-/* $Id: server_collations.php,v 2.10 2005/11/18 12:50:49 cybot_tm Exp $ */
+/* $Id: server_collations.php,v 2.15 2005/12/07 12:58:14 cybot_tm Exp $ */
 // vim: expandtab sw=4 ts=4 sts=4:
 
+/**
+ * requirements
+ */
+if ( ! defined( 'PMA_NO_VARIABLES_IMPORT' ) ) {
+    define( 'PMA_NO_VARIABLES_IMPORT', true );
+}
 require_once('./libraries/common.lib.php');
 
 /**
  * Does the common work
  */
-require('./server_common.inc.php');
+require('./libraries/server_common.inc.php');
 
 
 /**
  * Displays the links
  */
-require('./server_links.inc.php');
+require('./libraries/server_links.inc.php');
 
 
 /**
  * Displays the sub-page heading
  */
 echo '<h2>' . "\n"
-   . '    ' . ($GLOBALS['cfg']['MainPageIconic'] ? '<img class="icon" src="'. $GLOBALS['pmaThemeImage'] . 's_asci.png" alt="" />' : '') 
+   . '    ' . ($GLOBALS['cfg']['MainPageIconic']
+    ? '<img class="icon" src="'. $GLOBALS['pmaThemeImage'] . 's_asci.png" alt="" />'
+    : '')
    . '' . $strCharsetsAndCollations . "\n"
    . '</h2>' . "\n";
 
@@ -30,7 +38,7 @@ echo '<h2>' . "\n"
  */
 if (PMA_MYSQL_INT_VERSION < 40100) {
     // TODO: Some nice Message :-)
-    require_once('./footer.inc.php');
+    require_once('./libraries/footer.inc.php');
 }
 
 
@@ -43,18 +51,11 @@ require_once('./libraries/mysql_charsets.lib.php');
 /**
  * Outputs the result
  */
-echo '<table border="0">' . "\n"
-   . '    <tr>' . "\n"
-   . '        <td valign="top">' . "\n"
-   . '            <table border="0" cellpadding="2" cellspacing="1">' . "\n"
-   . '                <tr>' . "\n"
-   . '                <th>' . "\n"
-   . '                    ' . $strCollation . "\n"
-   . '                </th>' . "\n"
-   . '                <th>' . "\n"
-   . '                    ' . $strDescription . "\n"
-   . '                </th>' . "\n"
-   . '            </tr>' . "\n";
+echo '<div id="div_mysql_charset_collations">' . "\n"
+   . '<table class="data">' . "\n"
+   . '<tr><th>' . $strCollation . '</th>' . "\n"
+   . '    <th>' . $strDescription . '</th>' . "\n"
+   . '</tr>' . "\n";
 
 $i = 0;
 $table_row_count = count($mysql_charsets) + $mysql_collations_count;
@@ -62,46 +63,41 @@ $table_row_count = count($mysql_charsets) + $mysql_collations_count;
 foreach ($mysql_charsets as $current_charset) {
     if ($i >= $table_row_count / 2) {
         $i = 0;
-        echo '            </table>' . "\n"
-           . '        </td>' . "\n"
-           . '        <td valign="top">' . "\n"
-           . '            <table border="0" cellpadding="2" cellspacing="1">' . "\n"
-           . '                <tr>' . "\n"
-           . '                <th>' . "\n"
-           . '                    ' . $strCollation . "\n"
-           . '                </th>' . "\n"
-           . '                <th>' . "\n"
-           . '                    ' . $strDescription . "\n"
-           . '                </th>' . "\n"
-           . '            </tr>' . "\n";
+        echo '</table>' . "\n"
+           . '<table class="data">' . "\n"
+           . '<tr><th>' . $strCollation . '</th>' . "\n"
+           . '    <th>' . $strDescription . '</th>' . "\n"
+           . '</tr>' . "\n";
     }
     $i++;
-    echo '            <tr>' . "\n"
-       . '                <td colspan="2" bgcolor="' . $cfg['ThBgcolor'] . '" align="right">' . "\n"
-       . '                    &nbsp;<b>' . htmlspecialchars($current_charset) . '</b>' . "\n"
-       . (empty($mysql_charsets_descriptions[$current_charset]) ? '' : '                    (<i>' . htmlspecialchars($mysql_charsets_descriptions[$current_charset]) . '</i>)&nbsp;' . "\n")
-       . '                </td>' . "\n"
-       . '            </tr>' . "\n";
-    $useBgcolorOne = TRUE;
+    echo '<tr><th colspan="2" align="right">' . "\n"
+       . '        ' . htmlspecialchars($current_charset) . "\n"
+       . (empty($mysql_charsets_descriptions[$current_charset])
+            ? ''
+            : '        (<i>' . htmlspecialchars(
+                $mysql_charsets_descriptions[$current_charset]) . '</i>)' . "\n")
+       . '    </th>' . "\n"
+       . '</tr>' . "\n";
+    $odd_row = true;
     foreach ($mysql_collations[$current_charset] as $current_collation) {
         $i++;
-        echo '            <tr' . ($mysql_collations_available[$current_collation] ? '' : ' class="disabled"') . '>' . "\n"
-           . '                <td bgcolor="' . ($mysql_default_collations[$current_charset] == $current_collation ? $cfg['BrowseMarkerColor'] : ($useBgcolorOne ? $cfg['BgcolorOne'] : $cfg['BgcolorTwo'])) . '">' . "\n"
-           . '                    &nbsp;' . htmlspecialchars($current_collation) . '&nbsp;' . "\n"
-           . '                </td>' . "\n"
-           . '                <td bgcolor="' . ($useBgcolorOne ? $cfg['BgcolorOne'] : $cfg['BgcolorTwo']) . '">' . "\n"
-           . '                    &nbsp;' . PMA_getCollationDescr($current_collation) . '&nbsp;' . "\n"
-           . '                </td>' . "\n"
-           . '            </tr>' . "\n";
-        $useBgcolorOne = !$useBgcolorOne;
+        echo '<tr class="'
+           . ( $odd_row ? 'odd' : 'even' )
+           . ($mysql_default_collations[$current_charset] == $current_collation
+                ? ' marked'
+                : '')
+           . ($mysql_collations_available[$current_collation] ? '' : ' disabled')
+           . '">' . "\n"
+           . '    <td>' . htmlspecialchars($current_collation) . '</td>' . "\n"
+           . '    <td>' . PMA_getCollationDescr($current_collation) . '</td>' . "\n"
+           . '</tr>' . "\n";
+        $odd_row = !$odd_row;
     }
 }
 unset($table_row_count);
-echo '            </table>' . "\n"
-   . '        </td>' . "\n"
-   . '    </tr>' . "\n"
-   . '</table>' . "\n";
+echo '</table>' . "\n"
+   . '</div>' . "\n";
 
-require_once('./footer.inc.php');
+require_once('./libraries/footer.inc.php');
 
 ?>

@@ -102,14 +102,17 @@ debian/po/POTFILES.in: $(shell which yada) debian/packages-tmp
 
 debian/build-stamp: debian/build-arch-stamp debian/build-indep-stamp
 	@[ -f $(shell which yada) -a -f debian/rules ]
+	yada patch "debian/patches/*.patch"
 	touch debian/build-stamp
 
 debian/build-arch-stamp:
 	@[ -f $(shell which yada) -a -f debian/rules ]
+	yada patch "debian/patches/*.patch"
 	touch debian/build-arch-stamp
 
 debian/build-indep-stamp:
 	@[ -f $(shell which yada) -a -f debian/rules ]
+	yada patch "debian/patches/*.patch"
 	touch debian/build-indep-stamp
 
 .PHONY: install-tree
@@ -141,12 +144,15 @@ debian/tmp-phpmyadmin/DEBIAN/control: debian/build-indep-stamp debian/control
 	  && export DEB_BUILD_GNU_SYSTEM="$(DEB_BUILD_GNU_SYSTEM)" && (\
 	echo -E 'eval "yada () { perl $$(which yada) \"\$$@\"; }"; set -e; set -v';\
 	echo -E 'yada install -data -into /usr/share/phpmyadmin *.php *.css';\
+	echo -E 'yada install -data -into /usr/share/phpmyadmin/scripts scripts/setup.php';\
 	echo -E 'yada copy -data -into /usr/share/phpmyadmin css lang libraries themes';\
 	echo -E 'yada remove -data -into /usr/share/phpmyadmin/lang *.sh';\
 	echo -E 'yada remove -data -into /usr/share/phpmyadmin/libraries/fpdf README';\
 	echo -E 'yada remove -data -into /usr/share/phpmyadmin/libraries/transformations *.sh README TEMPLATE*';\
 	echo -E 'yada install -data -into /usr/share/phpmyadmin Documentation.html translators.html';\
 	echo -E 'yada install -data -into /usr/share/phpmyadmin ChangeLog INSTALL README';\
+	echo -E 'yada install -dir /var/lib/phpmyadmin';\
+	echo -E 'yada symlink -data -into /usr/share/phpmyadmin/config /var/lib/phpmyadmin/config.inc.php';\
 	echo -E 'yada install -dir /etc/phpmyadmin';\
 	echo -E 'yada install -conf -ucf -subdir phpmyadmin debian/conf/config.inc.php';\
 	echo -E 'yada install -conf -ucf -subdir phpmyadmin debian/conf/config.header.inc.php';\
@@ -154,24 +160,20 @@ debian/tmp-phpmyadmin/DEBIAN/control: debian/build-indep-stamp debian/control
 	echo -E 'yada install -conf -ucf -subdir phpmyadmin debian/conf/htaccess';\
 	echo -E 'yada install -conf -ucf -subdir phpmyadmin debian/conf/apache.conf';\
 	echo -E 'yada symlink -into /usr/share/phpmyadmin -as .htaccess /etc/phpmyadmin/htaccess';\
-	echo -E 'yada symlink -into /var/www /usr/share/phpmyadmin';\
 	echo -E 'yada install -into /usr/share/phpmyadmin debian/src/config.inc.php';\
 	echo -E 'yada install -into /usr/share/phpmyadmin debian/src/config.header.inc.php';\
 	echo -E 'yada install -into /usr/share/phpmyadmin debian/src/config.footer.inc.php';\
 	echo -E '';\
-	echo -E 'version=$$(grep "define.'\''PMA_VERSION" libraries/defines.lib.php | sed "s/.*, '\''//; s/'\''.*//")-Debian-$${VERSION##*-}';\
-	echo -E 'sed -e '\''s/@VERSION@/'\''"$$version"'\''/'\'' \';\
-	echo -E '    $$ROOT/usr/share/phpmyadmin/config.inc.php > $$ROOT/usr/share/phpmyadmin/config.inc.php.tmp';\
-	echo -E 'mv -f $$ROOT/usr/share/phpmyadmin/config.inc.php.tmp $$ROOT/usr/share/phpmyadmin/config.inc.php';\
+	echo -E 'perl -pi -e "s/'\''([0-9a-z.]+)'\''/'\''\$$1-Debian-$${VERSION##*-}'\''/ if /set..PMA_VERSION/" $$ROOT/usr/share/phpmyadmin/libraries/Config.class.php';\
 	echo -E '';\
-	echo -E 'yada install -doc -subdir examples -as config.inc.php -gzip config.default.php';\
 	echo -E 'yada install -doc README TODO CREDITS';\
 	echo -E 'yada install -doc Documentation.html translators.html';\
 	echo -E 'yada install -doc -as changelog ChangeLog';\
 	echo -E 'yada install -doc -as README.Debian debian/README';\
 	echo -E 'yada install -doc -as NEWS.Debian -gzip debian/NEWS';\
 	echo -E 'yada install -doc -as NEWS debian/NEWS.upstream';\
-	echo -E 'yada install -doc -subdir scripts scripts/*') | /bin/sh
+	echo -E 'yada install -doc -subdir scripts scripts/*';\
+	echo -E 'yada remove -doc -subdir scripts setup.php') | /bin/sh
 	@umask 022 \
 	  && export pwd="$$(pwd)" \
 	  && export ROOT="$$(pwd)/debian/tmp-phpmyadmin" \

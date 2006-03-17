@@ -1,13 +1,14 @@
 <?php
-/* $Id: sql.php,v 1.5.2.1 2005/11/20 23:58:13 nijel Exp $ */
+/* $Id: sql.php,v 1.10 2006/01/17 17:03:02 cybot_tm Exp $ */
 // vim: expandtab sw=4 ts=4 sts=4:
 
 /* SQL import plugin for phpMyAdmin */
 
-if (isset($import_list)) {
-    $import_list['sql'] = array(
+if (isset($plugin_list)) {
+    $plugin_list['sql'] = array(
         'text' => 'strSQL',
         'extension' => 'sql',
+        'options_text' => 'strSQLImportOptions',
         );
 } else {
 /* We do not define function when plugin is just queried for information above */
@@ -28,34 +29,52 @@ if (isset($import_list)) {
             // Append new data to buffer
             $buffer .= $data;
             // Do not parse string when we're not at the end and don't have ; inside
-            if ((strpos($buffer, ';') === FALSE) && !$finished) continue;
+            if ((strpos($buffer, ';') === FALSE) && !$finished) {
+                continue;
+            }
         }
         // Current length of our buffer
         $len = strlen($buffer);
         // Grab some SQL queries out of it
-        while($i < $len) {
+        while ($i < $len) {
             // Find first interesting character, several strpos seem to be faster than simple loop in php:
-            //while(($i < $len) && (strpos('\'";#-/', $buffer[$i]) === FALSE)) $i++;
+            //while (($i < $len) && (strpos('\'";#-/', $buffer[$i]) === FALSE)) $i++;
             //if ($i == $len) break;
             $oi = $i;
             $p1 = strpos($buffer, '\'', $i);
-            if ($p1 === FALSE) $p1 = 2147483647;
+            if ($p1 === FALSE) {
+                $p1 = 2147483647;
+            }
             $p2 = strpos($buffer, '"', $i);
-            if ($p2 === FALSE) $p2 = 2147483647;
+            if ($p2 === FALSE) {
+                $p2 = 2147483647;
+            }
             $p3 = strpos($buffer, ';', $i);
-            if ($p3 === FALSE) $p3 = 2147483647;
+            if ($p3 === FALSE) {
+                $p3 = 2147483647;
+            }
             $p4 = strpos($buffer, '#', $i);
-            if ($p4 === FALSE) $p4 = 2147483647;
+            if ($p4 === FALSE) {
+                $p4 = 2147483647;
+            }
             $p5 = strpos($buffer, '--', $i);
-            if ($p5 === FALSE) $p5 = 2147483647;
+            if ($p5 === FALSE) {
+                $p5 = 2147483647;
+            }
             $p6 = strpos($buffer, '/*', $i);
-            if ($p6 === FALSE) $p6 = 2147483647;
+            if ($p6 === FALSE) {
+                $p6 = 2147483647;
+            }
             $p7 = strpos($buffer, '`', $i);
-            if ($p7 === FALSE) $p7 = 2147483647;
+            if ($p7 === FALSE) {
+                $p7 = 2147483647;
+            }
             $i = min ($p1, $p2, $p3, $p4, $p5, $p6, $p7);
             if ($i == 2147483647) {
                 $i = $oi;
-                if (!$finished) break;
+                if (!$finished) {
+                    break;
+                }
                 // at the end there might be some whitespace...
                 if (trim($buffer) == '') {
                     $buffer = '';
@@ -77,7 +96,14 @@ if (isset($import_list)) {
                     // Find next quote
                     $pos = strpos($buffer, $quote, $i + 1);
                     // No quote? Too short string
-                    if ($pos === FALSE) break;
+                    if ($pos === FALSE) {
+                        // We hit end of string => unclosed quote, but we handle it as end of query
+                        if ($finished) {
+                            $endq = TRUE;
+                            $i = $len - 1;
+                        }
+                        break;
+                    }
                     // Was not the quote escaped?
                     $j = $pos - 1;
                     while ($buffer[$j] == '\\') $j--;
@@ -86,7 +112,9 @@ if (isset($import_list)) {
                     // Skip the string
                     $i = $pos;
                 }
-                if (!$endq) break;
+                if (!$endq) {
+                    break;
+                }
                 $i++;
                 // Aren't we at the end?
                 if ($finished && $i == $len) {
@@ -123,7 +151,9 @@ if (isset($import_list)) {
                     }
                 }
                 // Skip *
-                if ($ch == '/') $i++;
+                if ($ch == '/') {
+                    $i++;
+                }
                 // Skip last char
                 $i++;
                 // Next query part will start here 
@@ -138,22 +168,33 @@ if (isset($import_list)) {
 
             // End of SQL
             if ($ch == ';' || ($finished && ($i == $len - 1))) {
+                $tmp_sql = $sql;
                 if ($start_pos < $len) {
-                    $sql .= substr($buffer, $start_pos, $i - $start_pos + 1);
+                    $tmp_sql .= substr($buffer, $start_pos, $i - $start_pos + 1);
                 }
-                PMA_importRunQuery($sql, substr($buffer, 0, $i + 1));
-                $buffer = substr($buffer, $i + 1);
-                // Reset parser:
-                $len = strlen($buffer);
-                $sql = '';
-                $i = 0;
-                $start_pos = 0;
-                // Any chance we will get a complete query?
-                if ((strpos($buffer, ';') === FALSE) && !$finished) break;
+                // Do not try to execute empty SQL
+                if (!preg_match('/^([\s]*;)*$/', trim($tmp_sql))) {
+                    $sql = $tmp_sql;
+                    PMA_importRunQuery($sql, substr($buffer, 0, $i + 1));
+                    $buffer = substr($buffer, $i + 1);
+                    // Reset parser:
+                    $len = strlen($buffer);
+                    $sql = '';
+                    $i = 0;
+                    $start_pos = 0;
+                    // Any chance we will get a complete query?
+                    if ((strpos($buffer, ';') === FALSE) && !$finished) {
+                        break;
+                    }
+                } else {
+                    $i++;
+                    $start_pos = $i;
+                }
             }
         } // End of parser loop
     } // End of import loop
     // Commit any possible data in buffers
+    PMA_importRunQuery('', substr($buffer, 0, $len));
     PMA_importRunQuery();
 }
 ?>

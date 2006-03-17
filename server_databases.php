@@ -1,5 +1,5 @@
 <?php
-/* $Id: server_databases.php,v 2.29 2005/11/18 11:31:15 cybot_tm Exp $ */
+/* $Id: server_databases.php,v 2.35.2.2 2006/02/04 16:08:41 lem9 Exp $ */
 // vim: expandtab sw=4 ts=4 sts=4:
 
 /**
@@ -9,7 +9,7 @@ require_once('./libraries/common.lib.php');
 
 
 $js_to_run = 'functions.js';
-require('./server_common.inc.php');
+require('./libraries/server_common.inc.php');
 
 /**
  * Sorts the databases array according to the user's choice
@@ -66,14 +66,22 @@ $dbstats = empty( $dbstats ) ? 0 : 1;
 /**
  * Drops multiple databases
  */
+
+// workaround for IE behavior (it returns some coordinates based on where
+// the mouse was on the Drop image):
+
+if (isset($drop_selected_dbs_x)) {
+    $drop_selected_dbs = 'Drop';
+}
+
 if ((!empty($drop_selected_dbs) || isset($query_type)) && ($is_superuser || $cfg['AllowUserDropDatabase'])) {
-    if (empty($selected_db) && ! (isset($query_type) && !empty($selected))) {
+    if (! isset($selected_db) && ! isset($query_type)) {
         $message = $strNoDatabasesSelected;
     } else {
         $action = 'server_databases.php';
         $submit_mult = 'drop_db' ;
         $err_url = 'server_databases.php?' . PMA_generate_common_url();
-        require('./mult_submits.inc.php');
+        require('./libraries/mult_submits.inc.php');
         if ($mult_btn == $strYes) {
             $message = sprintf($strDatabasesDropped, count($selected));
         } else {
@@ -85,7 +93,7 @@ if ((!empty($drop_selected_dbs) || isset($query_type)) && ($is_superuser || $cfg
 /**
  * Displays the links
  */
-require('./server_links.inc.php');
+require('./libraries/server_links.inc.php');
 
 
 /**
@@ -102,8 +110,8 @@ echo '<h2>' . "\n"
 /**
  * Gets the databases list
  */
-if ( $server > 0 ) {
-    $databases = PMA_DBI_get_databases_full( NULL, $dbstats );
+if ($server > 0) {
+    $databases = PMA_DBI_get_databases_full(null, $dbstats);
 } else {
     $databases = array();
 }
@@ -112,13 +120,13 @@ if ( $server > 0 ) {
 /**
  * Displays the page
  */
-if ( count($databases) > 0 ) {
+if (count($databases) > 0) {
     // sorts the array
     usort( $databases, 'PMA_dbCmp' );
 
     // table col order
     // there is no db specific collation or charset prior 4.1.0
-    if ( PMA_MYSQL_INT_VERSION >= 40100 ) {
+    if (PMA_MYSQL_INT_VERSION >= 40100) {
         $column_order['DEFAULT_COLLATION_NAME'] = array(
                 'disp_name' => $strCollation,
                 'description_function' => 'PMA_getCollationDescr',
@@ -332,6 +340,6 @@ echo '</ul>' . "\n";
 /**
  * Sends the footer
  */
-require_once('./footer.inc.php');
+require_once('./libraries/footer.inc.php');
 
 ?>

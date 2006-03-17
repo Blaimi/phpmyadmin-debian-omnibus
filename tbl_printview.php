@@ -1,5 +1,5 @@
 <?php
-/* $Id: tbl_printview.php,v 2.14 2005/11/18 12:50:49 cybot_tm Exp $ */
+/* $Id: tbl_printview.php,v 2.21 2006/01/21 10:53:22 cybot_tm Exp $ */
 
 require_once('./libraries/common.lib.php');
 
@@ -8,7 +8,7 @@ require_once('./libraries/common.lib.php');
  */
 $print_view = TRUE;
 if (!isset($selected_tbl)) {
-    require_once('./header.inc.php');
+    require_once('./libraries/header.inc.php');
 }
 
 // Check parameters
@@ -44,19 +44,19 @@ PMA_DBI_select_db($db);
 
 
 /**
- * Multi-tables printview thanks to Christophe Gesché from the "MySQL Form
+ * Multi-tables printview thanks to Christophe Geschï¿½ from the "MySQL Form
  * Generator for PHPMyAdmin" (http://sourceforge.net/projects/phpmysqlformgen/)
  */
 if (isset($selected_tbl) && is_array($selected_tbl)) {
     $the_tables   = $selected_tbl;
-} else if (isset($table)) {
+} elseif (isset($table)) {
     $the_tables[] = $table;
 }
 $multi_tables     = (count($the_tables) > 1);
 
 if ($multi_tables) {
     if (empty($GLOBALS['is_header_sent'])) {
-        require_once('./header.inc.php');
+        require_once('./libraries/header.inc.php');
     }
     $tbl_list     = '';
     foreach ($the_tables AS $key => $table) {
@@ -102,7 +102,7 @@ foreach ($the_tables AS $key => $table) {
     /**
      * Gets fields properties
      */
-    $result      = PMA_DBI_query('SHOW FIELDS FROM ' . PMA_backquote($table) . ';', NULL, PMA_DBI_QUERY_STORE);
+    $result      = PMA_DBI_query('SHOW FIELDS FROM ' . PMA_backquote($table) . ';', null, PMA_DBI_QUERY_STORE);
     $fields_cnt  = PMA_DBI_num_rows($result);
 
     // Check if we can use Relations (Mike Beck)
@@ -116,8 +116,7 @@ foreach ($the_tables AS $key => $table) {
         } else {
             $have_rel = FALSE;
         }
-    }
-    else {
+    } else {
            $have_rel = FALSE;
     } // end if
 
@@ -198,7 +197,7 @@ foreach ($the_tables AS $key => $table) {
             $strAttribute = 'UNSIGNED ZEROFILL';
         }
         if (!isset($row['Default'])) {
-            if ($row['Null'] != '') {
+            if ($row['Null'] != ''  && $row['Null'] != 'NO') {
                 $row['Default'] = '<i>NULL</i>';
             }
         } else {
@@ -219,8 +218,8 @@ foreach ($the_tables AS $key => $table) {
     </td>
     <td width="80" class="print"<?php echo $type_nowrap; ?>><?php echo $type; ?><bdo dir="ltr"></bdo></td>
     <!--<td width="50" bgcolor="<?php echo $bgcolor; ?>" nowrap="nowrap"><?php echo $strAttribute; ?></td>-->
-    <td width="40" class="print"><?php echo (($row['Null'] == '') ? $strNo : $strYes); ?>&nbsp;</td>
-    <td width="70" class="print" nowrap="nowrap"><?php if (isset($row['Default'])) echo $row['Default']; ?>&nbsp;</td>
+    <td width="40" class="print"><?php echo (($row['Null'] == '' || $row['Null'] == 'NO') ? $strNo : $strYes); ?>&nbsp;</td>
+    <td width="70" class="print" nowrap="nowrap"><?php if (isset($row['Default'])) { echo $row['Default']; } ?>&nbsp;</td>
     <!--<td width="50" bgcolor="<?php echo $bgcolor; ?>" nowrap="nowrap"><?php echo $row['Extra']; ?>&nbsp;</td>-->
     <?php
     echo "\n";
@@ -231,7 +230,7 @@ foreach ($the_tables AS $key => $table) {
         }
         echo '&nbsp;</td>' . "\n";
     }
-    if ($cfgRelation['commwork']) {
+    if ($cfgRelation['commwork'] || PMA_MYSQL_INT_VERSION >= 40100) {
         echo '    <td class="print">';
         $comments = PMA_getComments($db, $table);
         if (isset($comments[$field_name])) {
@@ -413,7 +412,7 @@ foreach ($the_tables AS $key => $table) {
                     echo '                ';
                     if ($showtable['Row_format'] == 'Fixed') {
                         echo $strFixed;
-                    } else if ($showtable['Row_format'] == 'Dynamic') {
+                    } elseif ($showtable['Row_format'] == 'Dynamic') {
                         echo $strDynamic;
                     } else {
                         echo $showtable['Row_format'];
@@ -543,8 +542,8 @@ foreach ($the_tables AS $key => $table) {
  */
 echo "\n";
 ?>
-<script type="text/javascript" language="javascript1.2">
-<!--
+<script type="text/javascript" language="javascript">
+//<![CDATA[
 function printPage()
 {
     // Do print the page
@@ -552,10 +551,10 @@ function printPage()
         window.print();
     }
 }
-//-->
+//]]>
 </script>
 <?php
 echo '<br /><br />&nbsp;<input type="button" class="print_ignore" style="width: 100px; height: 25px" id="print" value="' . $strPrint . '" onclick="printPage()" />' . "\n";
 
-require_once('./footer.inc.php');
+require_once('./libraries/footer.inc.php');
 ?>

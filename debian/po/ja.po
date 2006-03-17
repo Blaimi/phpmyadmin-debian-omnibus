@@ -16,7 +16,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-06-25 11:28+0200\n"
+"POT-Creation-Date: 2006-03-17 14:03+0100\n"
 "PO-Revision-Date: 2003-11-20 11:13+0900\n"
 "Last-Translator: Hideki Yamane <henrich@samba.gr.jp>\n"
 "Language-Team: Japanese <debian-japanese@lists.debian.org>\n"
@@ -37,8 +37,8 @@ msgid ""
 "phpMyAdmin supports any web server that PHP does, but this automatic "
 "configuration process only supports Apache."
 msgstr ""
-"phpMyAdmin は PHP が動作する web サーバをサポートしていますが、この自動設定"
-"プロセスは Apache のみサポートしています。"
+"phpMyAdmin は PHP が動作する web サーバをサポートしていますが、この自動設定プ"
+"ロセスは Apache のみサポートしています。"
 
 #. Type: boolean
 #. Description
@@ -57,3 +57,44 @@ msgstr ""
 "${webserver} の新規設定を有効にするためには再起動が必要なことに留意してくださ"
 "い。手動で /etc/init.d/${webserver} restart を実行することでも再起動ができま"
 "す。"
+
+#. Type: string
+#. Description
+#: ../templates:20
+msgid "User name for web-based setup system:"
+msgstr ""
+
+#. Type: string
+#. Description
+#: ../templates:20
+msgid "Leave empty if you want to use the default user name 'admin'."
+msgstr ""
+
+#. Type: password
+#. Description
+#: ../templates:30
+msgid "Password for web-based setup system:"
+msgstr ""
+
+#. Type: password
+#. Description
+#: ../templates:30
+msgid ""
+"phpMyAdmin comes with a setup script that can help you with creating "
+"configuration. The script is located at http://localhost/scripts/setup.php . "
+"For security reason it requires authorization."
+msgstr ""
+
+#. Type: password
+#. Description
+#: ../templates:30
+msgid ""
+"You can manage the usernames and passwords with `htpasswd' command. They are "
+"stored in /etc/phpmyadmin/htpasswd.setup file."
+msgstr ""
+
+#. Type: password
+#. Description
+#: ../templates:30
+msgid "Leave empty if you want to disable an access to web-based setup."
+msgstr ""

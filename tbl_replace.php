@@ -1,5 +1,5 @@
 <?php
-/* $Id: tbl_replace.php,v 2.29 2005/11/18 12:50:49 cybot_tm Exp $ */
+/* $Id: tbl_replace.php,v 2.36.2.1 2006/02/12 14:15:56 lem9 Exp $ */
 // vim: expandtab sw=4 ts=4 sts=4:
 
 /**
@@ -8,7 +8,7 @@
 require_once('./libraries/common.lib.php');
 
 // Check parameters
-PMA_checkParameters(array('db','table','goto'));
+PMA_checkParameters(array('db', 'table', 'goto'));
 
 PMA_DBI_select_db($db);
 
@@ -22,6 +22,9 @@ if (isset($sql_query)) {
 if (!isset($dontlimitchars)) {
     $dontlimitchars = 0;
 }
+if (!isset($pos)) {
+    $pos = 0;
+}
 $is_gotofile = FALSE;
 if (isset($after_insert) && $after_insert == 'new_insert') {
     $goto = 'tbl_change.php?'
@@ -32,6 +35,7 @@ if (isset($after_insert) && $after_insert == 'new_insert') {
           . '&disp_direction=' . $disp_direction
           . '&repeat_cells=' . $repeat_cells
           . '&dontlimitchars=' . $dontlimitchars
+          . '&after_insert=' . $after_insert
           . (empty($sql_query) ? '' : '&sql_query=' . urlencode($sql_query));
 } elseif (isset($after_insert) && $after_insert == 'same_insert') {
     $goto = 'tbl_change.php?'
@@ -42,6 +46,7 @@ if (isset($after_insert) && $after_insert == 'new_insert') {
           . '&disp_direction=' . $disp_direction
           . '&repeat_cells=' . $repeat_cells
           . '&dontlimitchars=' . $dontlimitchars
+          . '&after_insert=' . $after_insert
           . (empty($sql_query) ? '' : '&sql_query=' . urlencode($sql_query));
     if (isset($primary_key)) {
         foreach ($primary_key AS $pk) {
@@ -57,6 +62,7 @@ if (isset($after_insert) && $after_insert == 'new_insert') {
           . '&disp_direction=' . $disp_direction
           . '&repeat_cells=' . $repeat_cells
           . '&dontlimitchars=' . $dontlimitchars
+          . '&after_insert=' . $after_insert
           . (empty($sql_query) ? '' : '&sql_query=' . urlencode($sql_query));
     if (isset($primary_key)) {
         foreach ($primary_key AS $pk) {
@@ -67,7 +73,7 @@ if (isset($after_insert) && $after_insert == 'new_insert') {
             $goto .= '&primary_key[]=' . urlencode(PMA_getUvaCondition($res, count($row), $meta, $row));
         }
     }
-} else if ($goto == 'sql.php') {
+} elseif ($goto == 'sql.php') {
     $goto = 'sql.php?'
           . PMA_generate_common_url($db, $table, '&')
           . '&pos=' . $pos
@@ -76,11 +82,11 @@ if (isset($after_insert) && $after_insert == 'new_insert') {
           . '&repeat_cells=' . $repeat_cells
           . '&dontlimitchars=' . $dontlimitchars
           . '&sql_query=' . urlencode($sql_query);
-} else if (!empty($goto)) {
+} elseif (!empty($goto)) {
     // Security checkings
     $is_gotofile     = preg_replace('@^([^?]+).*$@', '\\1', $goto);
     if (!@file_exists('./' . $is_gotofile)) {
-        $goto        = (empty($table)) ? 'db_details.php' : 'tbl_properties.php';
+        $goto        = (! isset($table) || ! strlen($table)) ? 'db_details.php' : 'tbl_properties.php';
         $is_gotofile = TRUE;
     } else {
         $is_gotofile = ($is_gotofile == $goto);
@@ -119,7 +125,9 @@ $message = '';
 
 foreach ($loop_array AS $primary_key_index => $enc_primary_key) {
     // skip fields to be ignored
-    if (!$using_key && isset($GLOBALS['insert_ignore_' . $enc_primary_key])) continue;
+    if (!$using_key && isset($GLOBALS['insert_ignore_' . $enc_primary_key])) {
+        continue;
+    }
 
     // Restore the "primary key" to a convenient format
     $primary_key = urldecode($enc_primary_key);
@@ -134,6 +142,7 @@ foreach ($loop_array AS $primary_key_index => $enc_primary_key) {
     $me_funcs       = isset($funcs['multi_edit'])       && isset($funcs['multi_edit'][$enc_primary_key])       ? $funcs['multi_edit'][$enc_primary_key]       : null;
     $me_fields_type = isset($fields_type['multi_edit']) && isset($fields_type['multi_edit'][$enc_primary_key]) ? $fields_type['multi_edit'][$enc_primary_key] : null;
     $me_fields_null = isset($fields_null['multi_edit']) && isset($fields_null['multi_edit'][$enc_primary_key]) ? $fields_null['multi_edit'][$enc_primary_key] : null;
+    $me_fields_null_prev = isset($fields_null_prev['multi_edit']) && isset($fields_null_prev['multi_edit'][$enc_primary_key]) ? $fields_null_prev['multi_edit'][$enc_primary_key] : null;
     $me_auto_increment  = isset($auto_increment['multi_edit']) && isset($auto_increment['multi_edit'][$enc_primary_key])       ? $auto_increment['multi_edit'][$enc_primary_key]       : null;
 
     if ($using_key && isset($me_fields_type) && is_array($me_fields_type) && isset($primary_key)) {
@@ -147,13 +156,13 @@ foreach ($loop_array AS $primary_key_index => $enc_primary_key) {
         $key         = urldecode($encoded_key);
         $fieldlist   .= PMA_backquote($key) . ', ';
 
-        require('./tbl_replace_fields.php');
+        require('./libraries/tbl_replace_fields.inc.php');
 
         if (empty($me_funcs[$encoded_key])) {
             $cur_value = $val . ', ';
-        } else if (preg_match('@^(UNIX_TIMESTAMP)$@', $me_funcs[$encoded_key]) && $val != '\'\'') {
+        } elseif (preg_match('@^(UNIX_TIMESTAMP)$@', $me_funcs[$encoded_key]) && $val != '\'\'') {
             $cur_value = $me_funcs[$encoded_key] . '(' . $val . '), ';
-        } else if (preg_match('@^(NOW|CURDATE|CURTIME|UNIX_TIMESTAMP|RAND|USER|LAST_INSERT_ID)$@', $me_funcs[$encoded_key])) {
+        } elseif (preg_match('@^(NOW|CURDATE|CURTIME|UNIX_TIMESTAMP|RAND|USER|LAST_INSERT_ID)$@', $me_funcs[$encoded_key])) {
             $cur_value = $me_funcs[$encoded_key] . '(), ';
         } else {
             $cur_value = $me_funcs[$encoded_key] . '(' . $val . '), ';
@@ -162,13 +171,18 @@ foreach ($loop_array AS $primary_key_index => $enc_primary_key) {
         if ($is_insert) {
             // insert, no need to add column
             $valuelist .= $cur_value;
-        } else if (empty($me_funcs[$encoded_key])
+        } elseif (isset($me_fields_null_prev) && isset($me_fields_null_prev[$encoded_key]) && !isset($me_fields_null[$encoded_key])) {
+            // field had the null checkbox
+            // field no longer has the null checkbox
+            // field does not have the same value
+            $valuelist .= PMA_backquote($key) . ' = ' . $cur_value;
+        } elseif (empty($me_funcs[$encoded_key])
             && isset($me_fields_prev) && isset($me_fields_prev[$encoded_key])
             && ("'" . PMA_sqlAddslashes(urldecode($me_fields_prev[$encoded_key])) . "'" == $val)) {
             // No change for this column and no MySQL function is used -> next column
             continue;
-        }
-        else if (!empty($val)) {
+        } elseif (!empty($val)) {
+            // TODO: avoid setting a field to NULL when it's already NULL
             $valuelist .= PMA_backquote($key) . ' = ' . $cur_value;
         }
     } // end while
@@ -204,7 +218,7 @@ if (empty($valuelist) && empty($query)) {
     $message = $strNoModification;
     if ($is_gotofile) {
         $js_to_run = 'functions.js';
-        require_once('./header.inc.php');
+        require_once('./libraries/header.inc.php');
         require('./' . PMA_securePath($goto));
     } else {
         PMA_sendHeaderLocation($cfg['PmaAbsoluteUri'] . $goto . '&disp_message=' . urlencode($message) . '&disp_query=');
@@ -252,12 +266,12 @@ if ($total_affected_rows != 0) {
 $message .= $last_message;
 
 if ($is_gotofile) {
-    if ($goto == 'db_details.php' && !empty($table)) {
+    if ($goto == 'db_details.php' && isset($table)) {
         unset($table);
     }
     $js_to_run = 'functions.js';
     $active_page = $goto;
-    require_once('./header.inc.php');
+    require_once('./libraries/header.inc.php');
     require('./' . PMA_securePath($goto));
 } else {
     // I don't understand this one:

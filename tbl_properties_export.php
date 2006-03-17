@@ -1,5 +1,5 @@
 <?php
-/* $Id: tbl_properties_export.php,v 2.13 2005/11/18 12:50:49 cybot_tm Exp $ */
+/* $Id: tbl_properties_export.php,v 2.17 2005/12/08 16:13:51 nijel Exp $ */
 // vim: expandtab sw=4 ts=4 sts=4:
 
 require_once('./libraries/common.lib.php');
@@ -7,13 +7,12 @@ require_once('./libraries/common.lib.php');
 /**
  * Gets tables informations and displays top links
  */
-require_once('./tbl_properties_common.php');
+require_once('./libraries/tbl_properties_common.php');
 $url_query .= '&amp;goto=tbl_properties_export.php&amp;back=tbl_properties_export.php';
-require_once('./tbl_properties_table_info.php');
-?>
+require_once('./libraries/tbl_properties_table_info.inc.php');
 
-<!-- Dump of a table -->
-<?php
+// Dump of a table
+
 $export_page_title = $strViewDump;
 
 // When we have some query, we need to remove LIMIT from that and possibly
@@ -104,7 +103,7 @@ if (isset($sql_query)) {
 /**
  * Displays top menu links
  */
-require('./tbl_properties_links.php');
+require('./libraries/tbl_properties_links.inc.php');
 
 $export_type = 'table';
 require_once('./libraries/display_export.lib.php');
@@ -113,5 +112,5 @@ require_once('./libraries/display_export.lib.php');
 /**
  * Displays the footer
  */
-require_once('./footer.inc.php');
+require_once('./libraries/footer.inc.php');
 ?>

@@ -1,14 +1,42 @@
 <?php
-/* $Id: tbl_change.php,v 2.66 2005/11/18 12:50:49 cybot_tm Exp $ */
+/* $Id: tbl_change.php,v 2.77.2.3 2006/02/18 14:32:38 lem9 Exp $ */
 // vim: expandtab sw=4 ts=4 sts=4:
 
 /**
- * Get the variables sent or posted to this script and displays the header
+ * Gets the variables sent or posted to this script and displays the header
  */
 require_once('./libraries/common.lib.php');
 
+/**
+ * Sets global variables. 
+ * Here it's better to use a if, instead of the '?' operator
+ * to avoid setting a variable to '' when it's not present in $_REQUEST
+ */
+if (isset($_REQUEST['pos'])) {
+    $pos =  $_REQUEST['pos'];
+}
+if (isset($_REQUEST['session_max_rows'])) {
+    $session_max_rows = $_REQUEST['session_max_rows'];
+}
+if (isset($_REQUEST['disp_direction'])) {
+    $disp_direction = $_REQUEST['disp_direction'];
+}
+if (isset($_REQUEST['repeat_cells'])) {
+    $repeat_cells = $_REQUEST['repeat_cells'];
+}
+if (isset($_REQUEST['dontlimitchars'])) {
+    $dontlimitchars = $_REQUEST['dontlimitchars'];
+}
+if (isset($_REQUEST['primary_key'])) {
+    $primary_key = $_REQUEST['primary_key'];
+}
+if (isset($_REQUEST['sql_query'])) {
+    $sql_query = $_REQUEST['sql_query'];
+}
+
+
 $js_to_run = 'tbl_change.js';
-require_once('./header.inc.php');
+require_once('./libraries/header.inc.php');
 require_once('./libraries/relation.lib.php'); // foreign keys
 require_once('./libraries/file_listing.php'); // file listing
 
@@ -47,11 +75,13 @@ if (!empty($disp_message)) {
 
 /**
  * Defines the url to return to in case of error in a sql statement
+ * (at this point, $goto might be set but empty)
  */
-if (!isset($goto)) {
+if (empty($goto)) {
     $goto    = 'db_details.php';
 }
-if (!preg_match('@^(db_details|tbl_properties|tbl_select)@', $goto)) {
+// TODO: check if we could replace by "db_details|tbl"
+if (!preg_match('@^(db_details|tbl_properties|tbl_select|tbl_import)@', $goto)) {
     $err_url = $goto . "?" . PMA_generate_common_url($db) . "&amp;sql_query=" . urlencode($sql_query);
 } else {
     $err_url = $goto . '?'
@@ -72,7 +102,7 @@ require_once('./libraries/db_table_exists.lib.php');
 $url_query = PMA_generate_common_url($db, $table)
            . '&amp;goto=tbl_properties.php';
 
-require_once('./tbl_properties_table_info.php');
+require_once('./libraries/tbl_properties_table_info.inc.php');
 
 /* Get comments */
 
@@ -84,7 +114,7 @@ if ($GLOBALS['cfg']['ShowPropertyComments']) {
 
     $cfgRelation = PMA_getRelationsParam();
 
-    if ($cfgRelation['commwork']) {
+    if ($cfgRelation['commwork'] || PMA_MYSQL_INT_VERSION >= 40100) {
         $comments_map = PMA_getComments($db, $table);
     }
 }
@@ -92,7 +122,7 @@ if ($GLOBALS['cfg']['ShowPropertyComments']) {
 /**
  * Displays top menu links
  */
-require_once('./tbl_properties_links.php');
+require_once('./libraries/tbl_properties_links.inc.php');
 
 
 /**
@@ -108,7 +138,7 @@ unset($show_create_table);
  * Get the list of the fields of the current table
  */
 PMA_DBI_select_db($db);
-$table_def = PMA_DBI_query('SHOW FIELDS FROM ' . PMA_backquote($table) . ';', NULL, PMA_DBI_QUERY_STORE);
+$table_def = PMA_DBI_query('SHOW FIELDS FROM ' . PMA_backquote($table) . ';', null, PMA_DBI_QUERY_STORE);
 if (isset($primary_key)) {
     if (is_array($primary_key)) {
         $primary_key_array = $primary_key;
@@ -120,7 +150,7 @@ if (isset($primary_key)) {
     $result = array();
     foreach ($primary_key_array AS $rowcount => $primary_key) {
         $local_query             = 'SELECT * FROM ' . PMA_backquote($table) . ' WHERE ' . $primary_key . ';';
-        $result[$rowcount]       = PMA_DBI_query($local_query, NULL, PMA_DBI_QUERY_STORE);
+        $result[$rowcount]       = PMA_DBI_query($local_query, null, PMA_DBI_QUERY_STORE);
         $row[$rowcount]          = PMA_DBI_fetch_assoc($result[$rowcount]);
         $primary_keys[$rowcount] = $primary_key;
 
@@ -146,11 +176,11 @@ if (isset($primary_key)) {
                 unset($sql_query_cpy);
             }
             echo "\n";
-            require_once('./footer.inc.php');
+            require_once('./libraries/footer.inc.php');
         } // end if (no record returned)
     }
 } else {
-    $result = PMA_DBI_query('SELECT * FROM ' . PMA_backquote($table) . ' LIMIT 1;', NULL, PMA_DBI_QUERY_STORE);
+    $result = PMA_DBI_query('SELECT * FROM ' . PMA_backquote($table) . ' LIMIT 1;', null, PMA_DBI_QUERY_STORE);
     unset($row);
 }
 
@@ -174,17 +204,17 @@ $chg_evt_handler = (PMA_USR_BROWSER_AGENT == 'IE' && PMA_USR_BROWSER_VER >= 5)
 
 <?php if ($cfg['CtrlArrowsMoving']) { ?>
 <!-- Set on key handler for moving using by Ctrl+arrows -->
-<script src="libraries/keyhandler.js" type="text/javascript" language="javascript"></script>
+<script src="./js/keyhandler.js" type="text/javascript" language="javascript"></script>
 <script type="text/javascript" language="javascript">
-<!--
+//<![CDATA[
 var switch_movement = 0;
 document.onkeydown = onKeyDownArrowsHandler;
-// -->
+//]]>
 </script>
 <?php } ?>
 
 <!-- Change table properties form -->
-<form method="post" action="tbl_replace.php" name="insertForm" <?php if ($is_upload) echo ' enctype="multipart/form-data"'; ?>>
+<form method="post" action="tbl_replace.php" name="insertForm" <?php if ($is_upload) { echo ' enctype="multipart/form-data"'; } ?>>
     <?php echo PMA_generate_common_hidden_inputs($db, $table); ?>
     <input type="hidden" name="goto" value="<?php echo urlencode($goto); ?>" />
     <input type="hidden" name="pos" value="<?php echo isset($pos) ? $pos : 0; ?>" />
@@ -333,7 +363,7 @@ foreach ($loop_array AS $vrowcount => $vrow) {
             && !isset($row_table_def['Default'])
             && isset($row_table_def['Null'])
             && $row_table_def['Null'] == 'YES') {
-            $row_table_def['Default'] = NULL;
+            $row_table_def['Default'] = null;
         }
 
         if ($row_table_def['Type'] == 'datetime'
@@ -348,9 +378,9 @@ foreach ($loop_array AS $vrowcount => $vrow) {
                 }
             }
             // UPDATE case with an empty and not NULL value under PHP4
-            else if (empty($vrow[$rowfield]) && is_null($vrow[$rowfield])) {
+            elseif (empty($vrow[$rowfield]) && is_null($vrow[$rowfield])) {
                 $vrow[$rowfield] = date('Y-m-d H:i:s', time());
-            } // end if... else if...
+            } // end if... elseif...
         }
         $len             = (preg_match('@float|double@', $row_table_def['Type']))
                          ? 100
@@ -456,7 +486,7 @@ foreach ($loop_array AS $vrowcount => $vrow) {
             if (($cfg['ProtectBinary'] && $is_blob && !$is_upload)
                 || ($cfg['ProtectBinary'] == 'all' && $is_binary)) {
                 echo '        <td align="center" bgcolor="'. $bgcolor . '">' . $strBinary . '</td>' . "\n";
-            } else if (strstr($row_table_def['True_Type'], 'enum') || strstr($row_table_def['True_Type'], 'set')) {
+            } elseif (strstr($row_table_def['True_Type'], 'enum') || strstr($row_table_def['True_Type'], 'set')) {
                 echo '        <td align="center" bgcolor="'. $bgcolor . '">--</td>' . "\n";
             } else {
                 ?>
@@ -543,6 +573,13 @@ foreach ($loop_array AS $vrowcount => $vrow) {
         echo '        <td bgcolor="' . $bgcolor . '">' . "\n";
         if (!(($cfg['ProtectBinary'] && $is_blob) || ($cfg['ProtectBinary'] == 'all' && $is_binary))
             && $row_table_def['Null'] == 'YES') {
+
+            echo '            <input type="hidden" name="fields_null_prev' . $vkey . '[' . urlencode($field) . ']"';
+            if ($real_null_value && !$first_timestamp) {
+                echo ' checked="checked"';
+            }
+            echo ' />' . "\n";
+
             echo '            <input type="checkbox" tabindex="' . ($tabindex + $tabindex_for_null) . '"'
                  . ' name="fields_null' . $vkey . '[' . urlencode($field) . ']"';
             if ($real_null_value && !$first_timestamp) {
@@ -556,9 +593,9 @@ foreach ($loop_array AS $vrowcount => $vrow) {
                 } else {
                     $onclick .= '2, ';
                 }
-            } else if (strstr($row_table_def['True_Type'], 'set')) {
+            } elseif (strstr($row_table_def['True_Type'], 'set')) {
                 $onclick     .= '3, ';
-            } else if ($foreigners && isset($foreigners[$field])) {
+            } elseif ($foreigners && isset($foreigners[$field])) {
                 $onclick     .= '4, ';
             } else {
                 $onclick     .= '5, ';
@@ -583,11 +620,13 @@ foreach ($loop_array AS $vrowcount => $vrow) {
             <input type="hidden" name="fields<?php echo $vkey; ?>[<?php echo urlencode($field); ?>]" value="" id="field_<?php echo ($idindex); ?>_1" />
             <input type="text"   name="field_<?php echo md5($field); ?><?php echo $vkey; ?>[]" class="textfield" <?php echo $chg_evt_handler; ?>="return unNullify('<?php echo urlencode($field); ?>', '<?php echo $jsvkey; ?>')" tabindex="<?php echo ($tabindex + $tabindex_for_value); ?>" id="field_<?php echo ($idindex); ?>_3" value="<?php echo htmlspecialchars($data); ?>" />
             <script type="text/javascript" language="javascript">
+            //<![CDATA[
                 document.writeln('<a target="_blank" onclick="window.open(this.href, \'foreigners\', \'width=640,height=240,scrollbars=yes,resizable=yes\'); return false" href="browse_foreigners.php?<?php echo PMA_generate_common_url($db, $table); ?>&amp;field=<?php echo urlencode($field) . $browse_foreigners_uri; ?>"><?php echo str_replace("'", "\'", $titles['Browse']); ?></a>');
+            //]]>
             </script>
             </td>
             <?php
-        } else if (isset($disp_row) && is_array($disp_row)) {
+        } elseif (isset($disp_row) && is_array($disp_row)) {
             ?>
             <td bgcolor="<?php echo $bgcolor; ?>">
             <?php echo $backup_field . "\n"; ?>
@@ -599,8 +638,7 @@ foreach ($loop_array AS $vrowcount => $vrow) {
             </td>
             <?php
             unset($disp_row);
-        }
-        else if ($cfg['LongtextDoubleTextarea'] && strstr($type, 'longtext')) {
+        } elseif ($cfg['LongtextDoubleTextarea'] && strstr($type, 'longtext')) {
             ?>
             <td bgcolor="<?php echo $bgcolor; ?>">&nbsp;</td>
         </tr>
@@ -611,8 +649,7 @@ foreach ($loop_array AS $vrowcount => $vrow) {
                     <?php echo $chg_evt_handler; ?>="return unNullify('<?php echo urlencode($field); ?>', '<?php echo $jsvkey; ?>')" tabindex="<?php echo ($tabindex + $tabindex_for_value); ?>"><?php echo $special_chars; ?></textarea>
             </td>
           <?php
-        }
-        else if (strstr($type, 'text')) {
+        } elseif (strstr($type, 'text')) {
             ?>
             <td bgcolor="<?php echo $bgcolor; ?>">
                 <?php echo $backup_field . "\n"; ?>
@@ -624,8 +661,7 @@ foreach ($loop_array AS $vrowcount => $vrow) {
             if (strlen($special_chars) > 32000) {
                 echo '        <td bgcolor="' . $bgcolor . '">' . $strTextAreaLength . '</td>' . "\n";
             }
-        }
-        else if ($type == 'enum') {
+        } elseif ($type == 'enum') {
             $enum        = PMA_getEnumSetOptions($row_table_def['Type']);
             $enum_cnt    = count($enum);
             ?>
@@ -661,8 +697,7 @@ foreach ($loop_array AS $vrowcount => $vrow) {
                 ?>
                 </select>
                 <?php
-            } // end if
-            else {
+            } else {
                 echo "\n";
                 for ($j = 0; $j < $enum_cnt; $j++) {
                     // Removes automatic MySQL escape format
@@ -684,8 +719,7 @@ foreach ($loop_array AS $vrowcount => $vrow) {
             </td>
             <?php
             echo "\n";
-        }
-        else if ($type == 'set') {
+        } elseif ($type == 'set') {
             $set = PMA_getEnumSetOptions($row_table_def['Type']);
 
             if (isset($vset)) {
@@ -720,7 +754,7 @@ foreach ($loop_array AS $vrowcount => $vrow) {
         }
         // Change by Bernard M. Piller <bernard@bmpsystems.com>
         // We don't want binary data destroyed
-        else if ($is_binary || $is_blob) {
+        elseif ($is_binary || $is_blob) {
             if (($cfg['ProtectBinary'] && $is_blob)
                 || ($cfg['ProtectBinary'] == 'all' && $is_binary)) {
                 echo "\n";
@@ -738,7 +772,7 @@ foreach ($loop_array AS $vrowcount => $vrow) {
                 <input type="hidden" name="fields_type<?php echo $vkey; ?>[<?php echo urlencode($field); ?>]" value="protected" />
                 <input type="hidden" name="fields<?php echo $vkey; ?>[<?php echo urlencode($field); ?>]" value="" />
                 <?php
-            } else if ($is_blob) {
+            } elseif ($is_blob) {
                 echo "\n";
                 ?>
             <td bgcolor="<?php echo $bgcolor; ?>">
@@ -807,7 +841,7 @@ foreach ($loop_array AS $vrowcount => $vrow) {
 
             echo '</td>';
 
-        } // end else if ( binary or blob)
+        } // end elseif ( binary or blob)
         else {
             // For char or varchar, respect the maximum length (M); for other
             // types (int or float), the length is not a limit on the values that
@@ -818,8 +852,7 @@ foreach ($loop_array AS $vrowcount => $vrow) {
             if ($is_char) {
                 $fieldsize = (($len > 40) ? 40 : $len);
                 $maxlength = $len;
-            }
-            else {
+            } else {
                 $fieldsize = 20;
                 $maxlength = 99;
             } // end if... else...
@@ -844,12 +877,17 @@ foreach ($loop_array AS $vrowcount => $vrow) {
 <input type="hidden" name="auto_increment<?php echo $vkey; ?>[<?php echo urlencode($field); ?>]" value="1" />
                 <?php
                 } // end if
+                if (substr($type, 0, 9) == 'timestamp') {
+                ?>
+                <input type="hidden" name="fields_type<?php echo $vkey; ?>[<?php echo urlencode($field); ?>]" value="timestamp" />
+                <?php
+                }
                 if ($type == 'date' || $type == 'datetime' || substr($type, 0, 9) == 'timestamp') {
                     ?>
-                    <script type="text/javascript">
-                    <!--
+                    <script type="text/javascript" language="javascript">
+                    //<![CDATA[
                     document.write('<a title="<?php echo $strCalendar;?>" href="javascript:openCalendar(\'<?php echo PMA_generate_common_url();?>\', \'insertForm\', \'field_<?php echo ($idindex); ?>_3\', \'<?php echo (PMA_MYSQL_INT_VERSION >= 40100 && substr($type, 0, 9) == 'timestamp') ? 'datetime' : substr($type, 0, 9); ?>\')"><img class="calendar" src="<?php echo $pmaThemeImage; ?>b_calendar.png" alt="<?php echo $strCalendar; ?>"/></a>');
-                    //-->
+                    //]]>
                     </script>
                     <?php
                 }
@@ -874,27 +912,21 @@ foreach ($loop_array AS $vrowcount => $vrow) {
     <table border="0" cellpadding="5" cellspacing="0">
     <tr>
         <td valign="middle" nowrap="nowrap">
-            <select name="submit_type">
+            <select name="submit_type" tabindex="<?php echo ($tabindex + $tabindex_for_value + 1); ?>">
 <?php
 if (isset($primary_key)) {
     ?>
-                <option value="<?php echo $strSave; ?>" tabindex="<?php echo ($tabindex + $tabindex_for_value + 1); ?>"><?php echo $strSave; ?></option>
+                <option value="<?php echo $strSave; ?>"><?php echo $strSave; ?></option>
     <?php
 }
     ?>
-                <option value="<?php echo $strInsertAsNewRow; ?>" tabindex="<?php echo ($tabindex + $tabindex_for_value + 2); ?>"><?php echo $strInsertAsNewRow; ?></option>
+                <option value="<?php echo $strInsertAsNewRow; ?>"><?php echo $strInsertAsNewRow; ?></option>
             </select>
     <?php
 echo "\n";
 
-// Defines whether "insert another new row" should be
-// selected or not (keep this choice sticky)
-if (!empty($disp_message)) {
-    $selected_after_insert_new_insert = ' selected="selected"';
-    $selected_after_insert_back = '';
-} else {
-    $selected_after_insert_back = ' selected="selected"';
-    $selected_after_insert_new_insert = '';
+if (!isset($after_insert)) {
+    $after_insert = 'back';
 }
 ?>
         </td>
@@ -903,18 +935,18 @@ if (!empty($disp_message)) {
         </td>
         <td valign="middle" nowrap="nowrap">
             <select name="after_insert">
-                <option value="back" <?php echo $selected_after_insert_back; ?>><?php echo $strAfterInsertBack; ?></option>
-                <option value="new_insert" <?php echo $selected_after_insert_new_insert; ?>><?php echo $strAfterInsertNewInsert; ?></option>
+                <option value="back" <?php echo ($after_insert == 'back' ? 'selected="selected"' : ''); ?>><?php echo $strAfterInsertBack; ?></option>
+                <option value="new_insert" <?php echo ($after_insert == 'new_insert' ? 'selected="selected"' : ''); ?>><?php echo $strAfterInsertNewInsert; ?></option>
 <?php
-if (isset($primary_key))
-{?>
-                <option value="same_insert"><?php echo $strAfterInsertSame; ?></option>
-<?php
+if (isset($primary_key)) {
+    ?>
+                <option value="same_insert" <?php echo ($after_insert == 'same_insert' ? 'selected="selected"' : ''); ?>><?php echo $strAfterInsertSame; ?></option>
+    <?php
     // If we have just numeric primary key, we can also edit next
     if (preg_match('@^[\s]*`[^`]*` = [0-9]+@', $primary_key)) {
-?>
+        ?>
                 <option value="edit_next"><?php echo $strAfterInsertNext; ?></option>
-<?php
+        <?php
     }
 }
 ?>
@@ -944,5 +976,5 @@ if (isset($primary_key))
  * Displays the footer
  */
 echo "\n";
-require_once('./footer.inc.php');
+require_once('./libraries/footer.inc.php');
 ?>

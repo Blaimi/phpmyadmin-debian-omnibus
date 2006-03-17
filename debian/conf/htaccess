@@ -1,5 +1,5 @@
 DirectoryIndex index.php
-Options +FollowSymLinks
+Options +FollowSymLinks -Indexes
 
 <IfModule mod_mime.c>
     <IfModule mod_php4.c>
@@ -39,3 +39,19 @@ Options +FollowSymLinks
     </IfModule>
     </IfModule>
 </IfModule>
+
+# Deny config.inc.php file
+<Files config.inc.php>
+    Order deny,allow
+    Deny from all
+</Files>
+	
+# Authorize for setup
+<Files setup.php>
+    <IfModule mod_auth.c>
+	AuthType Basic
+	AuthName "phpMyAdmin Setup"
+	AuthUserFile /etc/phpmyadmin/htpasswd.setup
+    </IfModule>
+    Require valid-user
+</Files>

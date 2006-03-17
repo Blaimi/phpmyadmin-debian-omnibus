@@ -4,13 +4,11 @@
  * is located at /etc/phpmyadmin directory.
  */
 
-// Debian package version
-if (!defined('PMA_VERSION')) {
-    define('PMA_VERSION', '@VERSION@');
-}
-
 // Load secret generated on postinst
 include('/etc/phpmyadmin/blowfish_secret.inc.php');
+
+// Load autoconf local config
+include('config/config.inc.php');
 
 // Load user's local config
 include('/etc/phpmyadmin/config.inc.php');
@@ -96,4 +94,5 @@ for ($i=1; (!empty($cfg['Servers'][$i]['host']) || (isset($cfg['Servers'][$i]['c
                                                   'rules' => array());
     }
 }
+
 ?>

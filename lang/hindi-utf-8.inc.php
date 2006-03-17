@@ -1,5 +1,5 @@
 <?php
-/* $Id: hindi-utf-8.inc.php,v 2.96 2005/10/30 10:03:49 nijel Exp $ */
+/* $Id: hindi-utf-8.inc.php,v 2.118.2.1 2006/02/17 12:43:00 lem9 Exp $ */
 
 // Hindi translation
 // 1st release   :   by Girish Nair <girishn@nagpur.dot.net.in(outdated)> : 08-Aug-2002
@@ -107,7 +107,6 @@ $strDisplayPDF = 'PDF schema दिखाओ';
 $strDoYouReally = 'क्या आप सचमुच चाहते है की';
 $strDocu = 'डोक्युमेंटेशन';
 $strDrop = ' ड्रोप';
-$strDropSelectedDatabases = 'चुने हुऎ डाटाबेसों को ड्रोप करें';  
 $strDropUsersDb = 'Drop the databases that have the same names as the users.'; 
 
 $strEdit = 'एडिट';
@@ -160,7 +159,6 @@ $strLogout = 'लोग औट';
 
 $strMoveTable = ' टेबल को (database<b>.</b>table) में  मूव करें:';
 $strMoveTableOK = ' %s टेबल को %s में मूव कर दिया.';
-$strMySQLServerProcess = 'MySQL %pma_s1%  %pma_s3% से %pma_s2% पर चल रहा है';
 $strMySQLShowProcess = 'प्रोसेस दिखाओ';
 $strMySQLShowStatus = 'MySQL के runtime जानकारी  दिखाओ';
 $strMySQLShowVars = 'MySQL के  system variables दिखाओ';
@@ -389,7 +387,6 @@ $strFieldsTerminatedBy = 'Fields terminated by'; //to translate
 $strFileAlreadyExists = 'File %s already exists on server, change filename or check overwrite option.';  //to translate
 $strFileCouldNotBeRead = 'File could not be read';  //to translate
 $strFileNameTemplate = 'File name template';//to translate
-$strFileNameTemplateHelp = 'Use __DB__ for database name, __TABLE__ for table name and %sany strftime%s options for time specification, extension will be automagically added. Any other text will be preserved.';//to translate
 $strFileNameTemplateRemember = 'remember template';//to translate
 $strFixed = 'fixed'; //to translate
 $strFlushPrivilegesNote = 'Note: phpMyAdmin gets the users\' privileges directly from MySQL\'s privilege tables. The content of this tables may differ from the privileges the server uses if manual changes have made to it. In this case, you should %sreload the privileges%s before you continue.'; //to translate
@@ -418,7 +415,6 @@ $strIgnore = 'Ignore'; //to translate
 $strIgnoringFile = 'Ignoring file %s';  //to translate
 $strImportDocSQL = 'Import docSQL Files';  //to translate
 $strImportFiles = 'Import files';  //to translate
-$strImportFinished = 'Import finished';  //to translate
 $strInUse = 'in use'; //to translate
 $strIndex = 'Index'; //to translate
 $strIndexHasBeenDropped = 'Index %s has been dropped'; //to translate
@@ -471,7 +467,6 @@ $strModifyIndexTopic = 'Modify an index'; //to translate
 $strMoveTableSameNames = 'Can\'t move table to same one!';  //to translate
 $strMultilingual = 'multilingual';  //to translate
 $strMySQLCharset = 'MySQL charset'; //to translate
-$strMySQLReloaded = 'MySQL reloaded.'; //to translate
 $strMySQLSaid = 'MySQL said: '; //to translate
 
 $strNoDescription = 'no Description'; //to translate
@@ -568,7 +563,6 @@ $strRelationNotWorking = 'The additional Features for working with linked Tables
 $strRelationView = 'Relation view'; //to translate
 $strRelationalSchema = 'Relational schema';  //to translate
 $strRelations = 'Relations';  //to translate
-$strReloadFailed = 'MySQL reload failed.'; //to translate
 $strReloadMySQL = 'Reload MySQL'; //to translate
 $strReloadingThePrivileges = 'Reloading the privileges'; //to translate
 $strRemoveSelectedUsers = 'Remove selected users'; //to translate
@@ -831,7 +825,6 @@ $strImportFormat = 'Format of imported file';  //to translate
 $strFileToImport = 'File to import';  //to translate
 $strCompressionWillBeDetected = 'Imported file compression will be automatically detected from: %s';  //to translate
 $strCanNotLoadImportPlugins = 'Could not load import plugins, please check your installation!';  //to translate
-$strEnclosingOptional = 'Enclosing of fields is optional';  //to translate
 $strCSVImportOptions = 'CSV options';  //to translate
 $strPartialImport = 'Partial import';  //to translate
 $strAllowInterrupt = 'Allow interrupt of import in case script detects it is close to time limit. This might be good way to import large files, however it can break transactions.';  //to translate
@@ -843,7 +836,6 @@ $strNothingToImport = 'You didn\'t enter any data to import!';  //to translate
 $strIgnoreDuplicates = 'Ignore duplicate rows';  //to translate
 $strSkipQueries = 'Number of records(queries) to skip from start';  //to translate
 $strInvalidColumn = 'Invalid column (%s) specified!';  //to translate
-$strInvalidCSVInput = 'Invalid CSV input, could not parse!';  //to translate
 $strNoFilesFoundInZip = 'No files found inside ZIP archive!';  //to translate
 $strErrorInZipFile = 'Error in ZIP archive:';  //to translate
 $strFlushQueryCache = 'Flush query cache';  //to translate
@@ -984,4 +976,34 @@ $strBookmarkCreated = 'Bookmark %s created';  //to translate
 $strBookmarkReplace = 'Replace existing bookmark of same name';  //to translate
 $strTransformation_text_plain__sql = 'Formats text as SQL query with syntax highlighting.';  //to translate
 $strEsperanto = 'Esperanto';  //to translate
+$strInvalidServerIndex = 'Invalid server index: "%s"';  //to translate
+$strInvalidServerHostname = 'Invalid hostname for server %1$s. Please review your configuration.';  //to translate
+$strFileNameTemplateDescriptionTable = 'table name';  //to translate
+$strFileNameTemplateDescriptionDatabase = 'database name';  //to translate
+$strFileNameTemplateDescriptionServer = 'server name';  //to translate
+$strFileNameTemplateDescription = 'This value is interpreted using %1$sstrftime%2$s, so you can use time formatting strings. Additionally the following transformations will happen: %3$s. Other text will be kept as is.';  //to translate
+$strProtocolVersion = 'Protocol version';  //to translate
+$strMysqlClientVersion = 'MySQL client version';  //to translate
+$strUsedPhpExtensions = 'Used PHP extensions';  //to translate
+$strOpenNewWindow = 'Open new phpMyAdmin window';  //to translate
+$strLanguageUnknown = 'Unknown language: %1$s.';  //to translate
+$strLanguageFileNotFound = 'Language file "%1$s" not found.';  //to translate
+$strThemeNoPreviewAvailable = 'No preview available.';  //to translate
+$strConfigDefaultFileError = 'Could not load default configuration from: "%1$s"';  //to translate
+$strPDF = 'PDF';  //to translate
+$strPDFOptions = 'PDF options';  //to translate
+$strPDFReportTitle = 'Report title';  //to translate
+$strInvalidCSVParameter = 'Invalid parameter for CSV import: %s';  //to translate
+$strInvalidCSVFieldCount = 'Invalid field count in CSV input on line %d.';  //to translate
+$strInvalidCSVFormat = 'Invalid format of CSV input on line %d.';  //to translate
+$strImportSuccessfullyFinished = 'Import has been successfully finished, %d queries executed.';  //to translate
+$strThemeNotFound = 'Theme %s not found!';  //to translate
+$strThemeDefaultNotFound = 'Default theme %s not found!';  //to translate
+$strThemeNoValidImgPath = 'No valid image path for theme %s found!';  //to translate
+$strThemePathNotFound = 'Theme path not found for theme %s!';  //to translate
+$strAccessDeniedCreateConfig = 'Probably reason of this is that you did not create configuration file. You might want to use %1$ssetup script%2$s to create one.';  //to translate
+$strSQLImportOptions = 'SQL options';  //to translate
+$strBrowseDistinctValues = 'Browse distinct values';  //to translate
+$strStatisticsOverrun = 'On a busy server, the byte counters may overrun, so those statistics as reported by the MySQL server may be incorrect.';  //to translate
+$strViewMaxExactCount = 'This view has more than %s rows. Please refer to %sdocumentation%s.';  //to translate
 ?>

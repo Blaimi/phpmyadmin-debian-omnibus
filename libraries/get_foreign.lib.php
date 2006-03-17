@@ -1,5 +1,5 @@
 <?php
-/* $Id: get_foreign.lib.php,v 2.9 2005/10/13 15:42:52 nijel Exp $ */
+/* $Id: get_foreign.lib.php,v 2.10 2006/01/17 17:02:30 cybot_tm Exp $ */
 // vim: expandtab sw=4 ts=4 sts=4:
 
 
@@ -64,8 +64,7 @@ if ($foreigners && isset($foreigners[$field])) {
             }
             @PMA_DBI_free_result($disp);
         }
-    }
-    else {
+    } else {
         unset($disp_row);
         $foreign_link = true;
     }

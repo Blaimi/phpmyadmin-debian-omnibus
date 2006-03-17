@@ -1,5 +1,5 @@
 <?php
-/* $Id: transformation_wrapper.php,v 2.10 2005/11/18 12:50:49 cybot_tm Exp $ */
+/* $Id: transformation_wrapper.php,v 2.13 2006/01/17 17:02:29 cybot_tm Exp $ */
 // vim: expandtab sw=4 ts=4 sts=4:
 
 define('IS_TRANSFORMATION_WRAPPER', true);
@@ -22,12 +22,12 @@ require_once('./libraries/db_table_exists.lib.php');
  * Get the list of the fields of the current table
  */
 PMA_DBI_select_db($db);
-$table_def = PMA_DBI_query('SHOW FIELDS FROM ' . PMA_backquote($table), NULL, PMA_DBI_QUERY_STORE);
+$table_def = PMA_DBI_query('SHOW FIELDS FROM ' . PMA_backquote($table), null, PMA_DBI_QUERY_STORE);
 if (isset($primary_key)) {
-    $result      = PMA_DBI_query('SELECT * FROM ' . PMA_backquote($table) . ' WHERE ' . $primary_key . ';', NULL, PMA_DBI_QUERY_STORE);
+    $result      = PMA_DBI_query('SELECT * FROM ' . PMA_backquote($table) . ' WHERE ' . $primary_key . ';', null, PMA_DBI_QUERY_STORE);
     $row         = PMA_DBI_fetch_assoc($result);
 } else {
-    $result      = PMA_DBI_query('SELECT * FROM ' . PMA_backquote($table) . ' LIMIT 1;', NULL, PMA_DBI_QUERY_STORE);
+    $result      = PMA_DBI_query('SELECT * FROM ' . PMA_backquote($table) . ' LIMIT 1;', null, PMA_DBI_QUERY_STORE);
     $row         = PMA_DBI_fetch_assoc($result);
 }
 
@@ -50,7 +50,7 @@ if ($cfgRelation['commwork'] && $cfgRelation['mimework']) {
 }
 
 // garvin: For re-usability, moved http-headers and stylesheets
-// to a seperate file. It can now be included by header.inc.php,
+// to a seperate file. It can now be included by libraries/header.inc.php,
 // querywindow.php.
 
 require_once('./libraries/header_http.inc.php');
@@ -87,7 +87,7 @@ if (!isset($resize)) {
     if ($ratioWidth < $ratioHeight){
         $destWidth = $srcWidth/$ratioHeight;
         $destHeight = $newHeight;
-    }else{
+    } else {
         $destWidth = $newWidth;
         $destHeight = $srcHeight/$ratioWidth;
     }
@@ -101,7 +101,7 @@ if (!isset($resize)) {
     ImageCopyResampled( $destImage, $srcImage, 0, 0, 0, 0, $destWidth, $destHeight, $srcWidth, $srcHeight );
 
     if ($resize == 'jpeg') {
-        ImageJPEG( $destImage,'',75 );
+        ImageJPEG( $destImage, '', 75 );
     }
     if ($resize == 'png') {
         ImagePNG( $destImage);
@@ -113,8 +113,8 @@ if (!isset($resize)) {
 /**
  * Close MySql non-persistent connections
  */
-if (isset($GLOBALS['dbh']) && $GLOBALS['dbh']) {
-    @PMA_DBI_close($GLOBALS['dbh']);
+if (isset($GLOBALS['controllink']) && $GLOBALS['controllink']) {
+    @PMA_DBI_close($GLOBALS['controllink']);
 }
 if (isset($GLOBALS['userlink']) && $GLOBALS['userlink']) {
     @PMA_DBI_close($GLOBALS['userlink']);

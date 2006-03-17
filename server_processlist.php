@@ -1,5 +1,5 @@
 <?php
-/* $Id: server_processlist.php,v 2.13 2005/11/18 12:50:49 cybot_tm Exp $ */
+/* $Id: server_processlist.php,v 2.16 2006/01/14 23:17:15 cybot_tm Exp $ */
 // vim: expandtab sw=4 ts=4 sts=4:
 
 require_once('./libraries/common.lib.php');
@@ -7,7 +7,7 @@ require_once('./libraries/common.lib.php');
 /**
  * Does the common work
  */
-require_once('./server_common.inc.php');
+require_once('./libraries/server_common.inc.php');
 
 
 /**
@@ -25,7 +25,7 @@ if (!empty($kill)) {
 /**
  * Displays the links
  */
-require('./server_links.inc.php');
+require('./libraries/server_links.inc.php');
 
 
 /**
@@ -77,7 +77,7 @@ foreach ( $serverProcesses AS $process ) {
     <td class="value"><?php echo $process['Id']; ?></td>
     <td><?php echo $process['User']; ?></td>
     <td><?php echo $process['Host']; ?></td>
-    <td><?php echo (empty($process['db']) ? '<i>' . $strNone . '</i>' : $process['db']); ?></td>
+    <td><?php echo (( ! isset( $process['db'] ) || ! strlen($process['db']) ) ? '<i>' . $strNone . '</i>' : $process['db']); ?></td>
     <td><?php echo $process['Command']; ?></td>
     <td class="value"><?php echo $process['Time']; ?></td>
     <td><?php echo (empty($process['State']) ? '---' : $process['State']); ?></td>
@@ -94,5 +94,5 @@ foreach ( $serverProcesses AS $process ) {
 /**
  * Sends the footer
  */
-require_once('./footer.inc.php');
+require_once('./libraries/footer.inc.php');
 ?>

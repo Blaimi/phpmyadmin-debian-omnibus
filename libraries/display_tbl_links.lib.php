@@ -1,12 +1,12 @@
 <?php
-/* $Id: display_tbl_links.lib.php,v 2.11 2005/11/14 15:01:20 cybot_tm Exp $ */
+/* $Id: display_tbl_links.lib.php,v 2.13 2006/01/17 17:02:30 cybot_tm Exp $ */
 // vim: expandtab sw=4 ts=4 sts=4:
 
 // modified 2004-05-08 by Michael Keck <mail_at_michaelkeck_dot_de>
 // - bugfix for select all checkboxes
 // - copy right to left (or left to right) if user click on a check box
 // - reversed the right modify links: 1. drop, 2. edit, 3. checkbox
-// - also changes made in libraries/functions.js
+// - also changes made in js/functions.js
 
 if ( $doWriteModifyAt == 'left' ){
 
@@ -28,7 +28,7 @@ if ( $doWriteModifyAt == 'left' ){
            . PMA_linkOrButton($del_url, $del_str, (isset($js_conf) ? $js_conf : ''), FALSE)
            . '    </td>' . "\n";
     }
-} else if ($doWriteModifyAt == 'right') {
+} elseif ($doWriteModifyAt == 'right') {
     if (!empty($del_url)) {
         echo '    <td align="center">' . "\n"
            . PMA_linkOrButton($del_url, $del_str, (isset($js_conf) ? $js_conf : ''), FALSE)

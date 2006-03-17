@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: phpmyadmin_2.5.5-pl1-1_templates\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-06-25 11:28+0200\n"
+"POT-Creation-Date: 2006-03-17 14:03+0100\n"
 "PO-Revision-Date: 2004-01-31 19:57GMT\n"
 "Last-Translator: Aleix Badia i Bosch <abadia@ica.es>\n"
 "Language-Team: Debian L10n Catalan <debian-l10n-catalan@lists.debian.org>\n"
@@ -28,8 +28,8 @@ msgid ""
 "phpMyAdmin supports any web server that PHP does, but this automatic "
 "configuration process only supports Apache."
 msgstr ""
-"El phpMyAdmin suporta qualsevol servidor web que suporti PHP, però el "
-"procés de configuració automàtica només suporta l'Apache."
+"El phpMyAdmin suporta qualsevol servidor web que suporti PHP, però el procés "
+"de configuració automàtica només suporta l'Apache."
 
 #. Type: boolean
 #. Description
@@ -48,3 +48,44 @@ msgstr ""
 "Recordeu que per activar la nova configuració s'ha de reiniciar el "
 "${webserver}. També podeu reiniciar el ${webserver} manualment executant /"
 "etc/init.d/${webserver} restart"
+
+#. Type: string
+#. Description
+#: ../templates:20
+msgid "User name for web-based setup system:"
+msgstr ""
+
+#. Type: string
+#. Description
+#: ../templates:20
+msgid "Leave empty if you want to use the default user name 'admin'."
+msgstr ""
+
+#. Type: password
+#. Description
+#: ../templates:30
+msgid "Password for web-based setup system:"
+msgstr ""
+
+#. Type: password
+#. Description
+#: ../templates:30
+msgid ""
+"phpMyAdmin comes with a setup script that can help you with creating "
+"configuration. The script is located at http://localhost/scripts/setup.php . "
+"For security reason it requires authorization."
+msgstr ""
+
+#. Type: password
+#. Description
+#: ../templates:30
+msgid ""
+"You can manage the usernames and passwords with `htpasswd' command. They are "
+"stored in /etc/phpmyadmin/htpasswd.setup file."
+msgstr ""
+
+#. Type: password
+#. Description
+#: ../templates:30
+msgid "Leave empty if you want to disable an access to web-based setup."
+msgstr ""

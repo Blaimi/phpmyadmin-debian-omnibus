@@ -1,11 +1,11 @@
-# (c) 2003 Piotr Roszatycki <dexter@debian.org>, GPL
+# (c) 2003-2006 Piotr Roszatycki <dexter@debian.org>, GPL
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: phpmyadmin 2.5.4-1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-06-25 11:28+0200\n"
-"PO-Revision-Date: 2003-10-27 18:28+0100\n"
+"POT-Creation-Date: 2006-03-17 14:03+0100\n"
+"PO-Revision-Date: 2006-03-16 18:36+0100\n"
 "Last-Translator: Piotr Roszatycki <dexter@debian.org>\n"
 "Language-Team: Polish Localization <debian-l10n-polish@lists.debian.org>\n"
 "MIME-Version: 1.0\n"
@@ -44,3 +44,51 @@ msgid ""
 msgstr ""
 "Aby uaktywniæ zmiany, potrzeby jest restart ${webserver}. Mo¿na dokonaæ tego "
 "rêcznie wywo³uj±c polecenie /etc/init.d/${webserver} restart"
+
+#. Type: string
+#. Description
+#: ../templates:20
+msgid "User name for web-based setup system:"
+msgstr "Nazwa u¿ytkownika dla konfiguratora z poziomu przegl±darki:"
+
+#. Type: string
+#. Description
+#: ../templates:20
+msgid "Leave empty if you want to use the default user name 'admin'."
+msgstr ""
+"Pozostaw puste, je¿eli chcesz pozostawiæ domy¶l± nazwê u¿ytkownika 'admin'."
+
+#. Type: password
+#. Description
+#: ../templates:30
+msgid "Password for web-based setup system:"
+msgstr "Has³o dla konfiguratora z poziomu przegl±darki:"
+
+#. Type: password
+#. Description
+#: ../templates:30
+msgid ""
+"phpMyAdmin comes with a setup script that can help you with creating "
+"configuration. The script is located at http://localhost/scripts/setup.php . "
+"For security reason it requires authorization."
+msgstr ""
+"phpMyAdmina mo¿na skonfigurowaæ z poziomu przegl±darki WWW. Skrypt "
+"konfiguratora jest dostêpny pod adresem http://localhost/scripts/setup.php ."
+
+#. Type: password
+#. Description
+#: ../templates:30
+msgid ""
+"You can manage the usernames and passwords with `htpasswd' command. They are "
+"stored in /etc/phpmyadmin/htpasswd.setup file."
+msgstr ""
+"Nazwê u¿ytkownika i has³o mo¿na zmienic za pomoc± polecenia `htpasswd'. Dane "
+"do autoryzacji s± przechowywane w pliku /etc/phpmyadmin/htpasswd.setup ."
+
+#. Type: password
+#. Description
+#: ../templates:30
+msgid "Leave empty if you want to disable an access to web-based setup."
+msgstr ""
+"Pozostaw puste, je¿eli chcesz zablokowaæ dostêp do konfiguratora z poziomu "
+"przegl±darki."

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: phpmyadmin 4/2.6.2-3\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-06-25 11:28+0200\n"
+"POT-Creation-Date: 2006-03-17 14:03+0100\n"
 "PO-Revision-Date: 2005-07-04 17:02+0930\n"
 "Last-Translator: Clytie Siddall <clytie@riverland.net.au>\n"
 "Language-Team: Vietnamese <gnomevi-list@lists.sourceforge.net>\n"
@@ -16,31 +16,77 @@ msgstr ""
 "Plural-Forms: nplurals=1; plural=0\n"
 "X-Generator: LocFactoryEditor 1.2.2\n"
 
-#.Type: multiselect
-#.Description
-#:../templates:5
+#. Type: multiselect
+#. Description
+#: ../templates:5
 msgid "Which web server would you like to reconfigure automatically?"
 msgstr "Bạn muốn tự động cấu hình lại máy phục vụ Mạng nào?"
 
-#.Type: multiselect
-#.Description
-#:../templates:5
+#. Type: multiselect
+#. Description
+#: ../templates:5
 msgid ""
 "phpMyAdmin supports any web server that PHP does, but this automatic "
 "configuration process only supports Apache."
-msgstr "Trình phpMyAdmin có hỗ trợ cùng mọi trình phục vụ Mạng với PHP, nhưng mà tiến trình cấu hình tự động này hỗ trợ chỉ Apache thôi."
+msgstr ""
+"Trình phpMyAdmin có hỗ trợ cùng mọi trình phục vụ Mạng với PHP, nhưng mà "
+"tiến trình cấu hình tự động này hỗ trợ chỉ Apache thôi."
 
-#.Type: boolean
-#.Description
-#:../templates:12
+#. Type: boolean
+#. Description
+#: ../templates:12
 msgid "Do you want me to restart ${webserver} now?"
 msgstr "Bạn có muốn trình này khởi chạy lại «${webserver}» ngay bây giờ không?"
 
-#.Type: boolean
-#.Description
-#:../templates:12
+#. Type: boolean
+#. Description
+#: ../templates:12
 msgid ""
 "Remember that in order to activate the new configuration ${webserver} has to "
 "be restarted. You can also restart ${webserver} manually executing /etc/init."
 "d/${webserver} restart"
-msgstr "Hãy ghi nhớ: để hoạt hóa cấu hình mới, cần phải khởi chạy lại trình phục vụ Mạng «${webserver}». Cũng có thể tự khởi chạy lại «${webserver}» bằng cách thực hiện lệnh «/etc/init.d/${webserver} restart»."
+msgstr ""
+"Hãy ghi nhớ: để hoạt hóa cấu hình mới, cần phải khởi chạy lại trình phục vụ "
+"Mạng «${webserver}». Cũng có thể tự khởi chạy lại «${webserver}» bằng cách "
+"thực hiện lệnh «/etc/init.d/${webserver} restart»."
+
+#. Type: string
+#. Description
+#: ../templates:20
+msgid "User name for web-based setup system:"
+msgstr ""
+
+#. Type: string
+#. Description
+#: ../templates:20
+msgid "Leave empty if you want to use the default user name 'admin'."
+msgstr ""
+
+#. Type: password
+#. Description
+#: ../templates:30
+msgid "Password for web-based setup system:"
+msgstr ""
+
+#. Type: password
+#. Description
+#: ../templates:30
+msgid ""
+"phpMyAdmin comes with a setup script that can help you with creating "
+"configuration. The script is located at http://localhost/scripts/setup.php . "
+"For security reason it requires authorization."
+msgstr ""
+
+#. Type: password
+#. Description
+#: ../templates:30
+msgid ""
+"You can manage the usernames and passwords with `htpasswd' command. They are "
+"stored in /etc/phpmyadmin/htpasswd.setup file."
+msgstr ""
+
+#. Type: password
+#. Description
+#: ../templates:30
+msgid "Leave empty if you want to disable an access to web-based setup."
+msgstr ""

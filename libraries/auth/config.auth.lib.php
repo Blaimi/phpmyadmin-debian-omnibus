@@ -1,5 +1,5 @@
 <?php
-/* $Id: config.auth.lib.php,v 2.12 2005/10/13 15:01:19 nijel Exp $ */
+/* $Id: config.auth.lib.php,v 2.18 2005/12/08 20:47:24 nijel Exp $ */
 // vim: expandtab sw=4 ts=4 sts=4:
 
 // +--------------------------------------------------------------------------+
@@ -44,7 +44,7 @@ function PMA_auth_check()
 function PMA_auth_set_user()
 {
     return TRUE;
-} // end of the 'PMA_auth_set_user()' function 
+} // end of the 'PMA_auth_set_user()' function
 
 
 /**
@@ -68,26 +68,25 @@ function PMA_auth_set_user()
 function PMA_auth_fails()
 {
     global $php_errormsg, $cfg;
-    global $right_font_family, $font_size, $font_bigger;
-    if (PMA_DBI_getError()) {
-        $conn_error = PMA_DBI_getError();
-    } else if (isset($php_errormsg)) {
-        $conn_error = $php_errormsg;
-    } else {
-        $conn_error = $GLOBALS['strConnectionError'];
+
+    $conn_error = PMA_DBI_getError();
+    if (!$conn_error) {
+        if (isset($php_errormsg)) {
+            $conn_error = $php_errormsg;
+        } else {
+            $conn_error = $GLOBALS['strConnectionError'];
+        }
     }
 
     // Defines the charset to be used
     header('Content-Type: text/html; charset=' . $GLOBALS['charset']);
-    // Defines the theme to be used
-    require_once('./libraries/select_theme.lib.php');
     /* HTML header */
     $page_title = $GLOBALS['strAccessDenied'];
     require('./libraries/header_meta_style.inc.php');
     ?>
 </head>
 
-<body bgcolor="<?php echo $cfg['RightBgColor']; ?>">
+<body>
 <br /><br />
 <center>
     <h1><?php echo sprintf($GLOBALS['strWelcome'], ' phpMyAdmin ' . PMA_VERSION); ?></h1>
@@ -100,7 +99,7 @@ function PMA_auth_fails()
     echo "\n";
     $GLOBALS['is_header_sent'] = TRUE;
 
-    //TODO: I have included this div from header.inc.php to work around
+    //TODO: I have included this div from libraries/header.inc.php to work around
     //      an undefined variable in tooltip.js, when the server
     //      is not responding. Work has to be done to merge all code that
     //      starts the page (DOCTYPE and this div) to one place
@@ -109,7 +108,7 @@ function PMA_auth_fails()
     <?php
 
     // if we display the "Server not responding" error, do not confuse users
-    // by telling them they have a settings problem 
+    // by telling them they have a settings problem
     // (note: it's true that they could have a badly typed host name, but
     //  anyway the current $strAccessDeniedExplanation tells that the server
     //  rejected the connection, which is not really what happened)
@@ -120,7 +119,12 @@ function PMA_auth_fails()
         echo '<p>' . $GLOBALS['strAccessDenied'] . '</p>' . "\n";
     } else {
         if (!isset($GLOBALS['errno']) || (isset($GLOBALS['errno']) && $GLOBALS['errno'] != 2002) && $GLOBALS['errno'] != 2003) {
-            echo '<p>' . $GLOBALS['strAccessDeniedExplanation'] . '</p>' . "\n";
+            // Check whether user has configured something
+            if ($_SESSION['PMA_Config']->source_mtime == 0) {
+                echo '<p>' . sprintf($GLOBALS['strAccessDeniedCreateConfig'], '<a href="scripts/setup.php">', '</a>') . '</p>' . "\n";
+            } else {
+                echo '<p>' . $GLOBALS['strAccessDeniedExplanation'] . '</p>' . "\n";
+            }
         }
         PMA_mysqlDie($conn_error, '');
     }
@@ -129,7 +133,7 @@ function PMA_auth_fails()
     </tr>
 </table>
 <?php
-    require_once('./footer.inc.php');
+    require_once('./libraries/footer.inc.php');
     return TRUE;
 } // end of the 'PMA_auth_fails()' function
 

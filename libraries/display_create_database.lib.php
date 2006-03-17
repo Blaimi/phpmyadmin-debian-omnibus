@@ -1,5 +1,5 @@
 <?php
-/* $Id: display_create_database.lib.php,v 1.4 2005/11/15 11:18:48 nijel Exp $ */
+/* $Id: display_create_database.lib.php,v 1.5 2006/01/17 17:02:30 cybot_tm Exp $ */
 // vim: expandtab sw=4 ts=4 sts=4:
 
 // Displays form for creating database (if user has privileges for that)
@@ -17,7 +17,7 @@ if ($is_create_db_priv) {
             <?php
     if (PMA_MYSQL_INT_VERSION >= 40101) {
         require_once('./libraries/mysql_charsets.lib.php');
-        echo PMA_generateCharsetDropdownBox(PMA_CSDROPDOWN_COLLATION, 'db_collation', NULL, NULL, TRUE, 5);
+        echo PMA_generateCharsetDropdownBox(PMA_CSDROPDOWN_COLLATION, 'db_collation', null, null, TRUE, 5);
     }
             ?>
             <input type="submit" value="<?php echo $strCreate; ?>" id="buttonGo" />

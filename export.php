@@ -1,5 +1,5 @@
 <?php
-/* $Id: export.php,v 2.30 2005/11/18 12:50:49 cybot_tm Exp $ */
+/* $Id: export.php,v 2.38 2006/01/20 12:23:18 lem9 Exp $ */
 // vim: expandtab sw=4 ts=4 sts=4:
 
 /**
@@ -8,7 +8,7 @@
 require_once('./libraries/common.lib.php');
 require_once('./libraries/zip.lib.php');
 
-PMA_checkParameters(array('what'));
+PMA_checkParameters(array('what', 'export_type'));
 
 // What type of export are we doing?
 if ($what == 'excel') {
@@ -23,16 +23,21 @@ require('./libraries/export/' . PMA_securePath($type) . '.php');
 // Generate error url
 if ($export_type == 'server') {
     $err_url = 'server_export.php?' . PMA_generate_common_url();
-} elseif ($export_type == 'database') {
+} elseif ($export_type == 'database' && isset($db) && strlen($db)) {
     $err_url = 'db_details_export.php?' . PMA_generate_common_url($db);
-} else {
+} elseif ($export_type == 'table' && isset($db) && strlen($db) && isset($table) && strlen($table)) {
     $err_url = 'tbl_properties_export.php?' . PMA_generate_common_url($db, $table);
+} else {
+    die('Bad parameters!');
 }
 
 /**
  * Increase time limit for script execution and initializes some variables
  */
 @set_time_limit($cfg['ExecTimeLimit']);
+if (!empty($cfg['MemoryLimit'])) {
+    @ini_set('memory_limit', $cfg['MemoryLimit']);
+}
 
 // Start with empty buffer
 $dump_buffer = '';
@@ -75,7 +80,7 @@ function PMA_exportOutputHandler($line)
                     $dump_buffer = bzcompress($dump_buffer);
                 }
                 // as a gzipped file
-                else if ($GLOBALS['compression'] == 'gzip' && @function_exists('gzencode')) {
+                elseif ($GLOBALS['compression'] == 'gzip' && @function_exists('gzencode')) {
                     // without the optional parameter level because it bug
                     $dump_buffer = gzencode($dump_buffer);
                 }
@@ -167,17 +172,26 @@ $onfly_compression = $GLOBALS['cfg']['CompressOnFly'] && isset($compression) && 
 if ($onfly_compression) {
     $memory_limit = trim(@ini_get('memory_limit'));
     // 2 MB as default
-    if (empty($memory_limit)) $memory_limit = 2 * 1024 * 1024;
+    if (empty($memory_limit)) {
+        $memory_limit = 2 * 1024 * 1024;
+    }
 
-    if (strtolower(substr($memory_limit, -1)) == 'm') $memory_limit = (int)substr($memory_limit, 0, -1) * 1024 * 1024;
-    elseif (strtolower(substr($memory_limit, -1)) == 'k') $memory_limit = (int)substr($memory_limit, 0, -1) * 1024;
-    elseif (strtolower(substr($memory_limit, -1)) == 'g') $memory_limit = (int)substr($memory_limit, 0, -1) * 1024 * 1024 * 1024;
-    else $memory_limit = (int)$memory_limit;
+    if (strtolower(substr($memory_limit, -1)) == 'm') {
+        $memory_limit = (int)substr($memory_limit, 0, -1) * 1024 * 1024;
+    } elseif (strtolower(substr($memory_limit, -1)) == 'k') {
+        $memory_limit = (int)substr($memory_limit, 0, -1) * 1024;
+    } elseif (strtolower(substr($memory_limit, -1)) == 'g') {
+        $memory_limit = (int)substr($memory_limit, 0, -1) * 1024 * 1024 * 1024;
+    } else {
+        $memory_limit = (int)$memory_limit;
+    }
 
     // Some of memory is needed for other thins and as treshold.
     // Nijel: During export I had allocated (see memory_get_usage function)
     //        approx 1.2MB so this comes from that.
-    if ($memory_limit > 1500000) $memory_limit -= 1500000;
+    if ($memory_limit > 1500000) {
+        $memory_limit -= 1500000;
+    }
 
     // Some memory is needed for compression, assume 1/3
     $memory_limit *= 2/3;
@@ -188,17 +202,17 @@ if ($asfile) {
     $pma_uri_parts = parse_url($cfg['PmaAbsoluteUri']);
     if ($export_type == 'server') {
         if (isset($remember_template)) {
-            setcookie('pma_server_filename_template', $filename_template , 0, $GLOBALS['cookie_path'], '' , $GLOBALS['is_https']);
+            setcookie('pma_server_filename_template', $filename_template, 0, $GLOBALS['cookie_path'], '', $GLOBALS['is_https']);
         }
         $filename = str_replace('__SERVER__', $GLOBALS['cfg']['Server']['host'], strftime($filename_template));
     } elseif ($export_type == 'database') {
         if (isset($remember_template)) {
-            setcookie('pma_db_filename_template', $filename_template , 0, $GLOBALS['cookie_path'], '' , $GLOBALS['is_https']);
+            setcookie('pma_db_filename_template', $filename_template, 0, $GLOBALS['cookie_path'], '', $GLOBALS['is_https']);
         }
         $filename = str_replace('__DB__', $db, str_replace('__SERVER__', $GLOBALS['cfg']['Server']['host'], strftime($filename_template)));
     } else {
         if (isset($remember_template)) {
-            setcookie('pma_table_filename_template', $filename_template , 0, $GLOBALS['cookie_path'], '' , $GLOBALS['is_https']);
+            setcookie('pma_table_filename_template', $filename_template, 0, $GLOBALS['cookie_path'], '', $GLOBALS['is_https']);
         }
         $filename = str_replace('__TABLE__', $table, str_replace('__DB__', $db, str_replace('__SERVER__', $GLOBALS['cfg']['Server']['host'], strftime($filename_template))));
     }
@@ -214,21 +228,24 @@ if ($asfile) {
     if ($type == 'csv') {
         $filename  .= '.csv';
         $mime_type = 'text/comma-separated-values';
-    } else if ($type == 'htmlexcel') {
+    } elseif ($type == 'htmlexcel') {
         $filename  .= '.xls';
         $mime_type = 'application/vnd.ms-excel';
-    } else if ($type == 'htmlword') {
+    } elseif ($type == 'htmlword') {
         $filename  .= '.doc';
         $mime_type = 'application/vnd.ms-word';
-    } else if ($type == 'xls') {
+    } elseif ($type == 'xls') {
         $filename  .= '.xls';
         $mime_type = 'application/vnd.ms-excel';
-    } else if ($type == 'xml') {
+    } elseif ($type == 'xml') {
         $filename  .= '.xml';
         $mime_type = 'text/xml';
-    } else if ($type == 'latex') {
+    } elseif ($type == 'latex') {
         $filename  .= '.tex';
         $mime_type = 'application/x-tex';
+    } elseif ($type == 'pdf') {
+        $filename  .= '.pdf';
+        $mime_type = 'application/pdf';
     } else {
         $filename  .= '.sql';
         // text/x-sql is correct MIME type, however safari ignores further
@@ -247,7 +264,7 @@ if ($asfile) {
         // browsers don't like this:
         //$content_encoding = 'x-bzip2';
         $mime_type = 'application/x-bzip2';
-    } else if (isset($compression) && $compression == 'gzip') {
+    } elseif (isset($compression) && $compression == 'gzip') {
         $filename  .= '.gz';
         // Needed to avoid recompression by server modules like mod_gzip.
         // It seems necessary to check about zlib.output_compression
@@ -256,7 +273,7 @@ if ($asfile) {
             $content_encoding = 'x-gzip';
             $mime_type = 'application/x-gzip';
         }
-    } else if (isset($compression) && $compression == 'zip') {
+    } elseif (isset($compression) && $compression == 'zip') {
         $filename  .= '.zip';
         $mime_type = 'application/zip';
     }
@@ -264,7 +281,7 @@ if ($asfile) {
 
 // Open file on server if needed
 if ($save_on_server) {
-    $save_filename = PMA_userDir($cfg['SaveDir']) . preg_replace('@[/\\\\]@','_',$filename);
+    $save_filename = PMA_userDir($cfg['SaveDir']) . preg_replace('@[/\\\\]@', '_', $filename);
     unset($message);
     if (file_exists($save_filename) && empty($onserverover)) {
         $message = sprintf($strFileAlreadyExists, htmlspecialchars($save_filename));
@@ -282,7 +299,7 @@ if ($save_on_server) {
     }
     if (isset($message)) {
         $js_to_run = 'functions.js';
-        require_once('./header.inc.php');
+        require_once('./libraries/header.inc.php');
         if ($export_type == 'server') {
             $active_page = 'server_export.php';
             require('./server_export.php');
@@ -309,9 +326,9 @@ if (!$save_on_server) {
         }
         header('Content-Type: ' . $mime_type);
         header('Expires: ' . gmdate('D, d M Y H:i:s') . ' GMT');
-        // lem9: Tested behavior of 
+        // lem9: Tested behavior of
         //       IE 5.50.4807.2300
-        //       IE 6.0.2800.1106 (small glitch, asks twice when I click Open) 
+        //       IE 6.0.2800.1106 (small glitch, asks twice when I click Open)
         //       IE 6.0.2900.2180
         //       Firefox 1.0.6
         // in http and https
@@ -325,7 +342,7 @@ if (!$save_on_server) {
     } else {
         // HTML
         $backup_cfgServer = $cfg['Server'];
-        require_once('./header.inc.php');
+        require_once('./libraries/header.inc.php');
         $cfg['Server'] = $backup_cfgServer;
         unset($backup_cfgServer);
         echo "\n" . '<div align="' . $cell_align_left . '">' . "\n";
@@ -346,7 +363,7 @@ if ($export_type == 'database') {
     if ($num_tables == 0) {
         $message = $strNoTablesFound;
         $js_to_run = 'functions.js';
-        require_once('./header.inc.php');
+        require_once('./libraries/header.inc.php');
         if ($export_type == 'server') {
             $active_page = 'server_export.php';
             require('./server_export.php');
@@ -366,7 +383,9 @@ if ($export_type == 'database') {
 do {
 
 // Add possibly some comments to export
-if (!PMA_exportHeader()) break;
+if (!PMA_exportHeader()) {
+    break;
+}
 
 // Will we need relation & co. setup?
 $do_relation = isset($GLOBALS[$what . '_relation']);
@@ -403,29 +422,35 @@ if ($export_type == 'server') {
     foreach ($dblist AS $current_db) {
         if ((isset($tmp_select) && strpos(' ' . $tmp_select, '|' . $current_db . '|'))
             || !isset($tmp_select)) {
-            if (!PMA_exportDBHeader($current_db))
+            if (!PMA_exportDBHeader($current_db)) {
                 break 2;
-            if (!PMA_exportDBCreate($current_db))
+            }
+            if (!PMA_exportDBCreate($current_db)) {
                 break 2;
+            }
             $tables = PMA_DBI_get_tables($current_db);
             foreach ($tables as $table) {
                 $local_query  = 'SELECT * FROM ' . PMA_backquote($current_db) . '.' . PMA_backquote($table);
                 if (isset($GLOBALS[$what . '_structure'])) {
-                    if (!PMA_exportStructure($current_db, $table, $crlf, $err_url, $do_relation, $do_comments, $do_mime, $do_dates))
+                    if (!PMA_exportStructure($current_db, $table, $crlf, $err_url, $do_relation, $do_comments, $do_mime, $do_dates)) {
                         break 3;
+                    }
                 }
                 if (isset($GLOBALS[$what . '_data'])) {
-                    if (!PMA_exportData($current_db, $table, $crlf, $err_url, $local_query))
+                    if (!PMA_exportData($current_db, $table, $crlf, $err_url, $local_query)) {
                         break 3;
+                    }
                 }
             }
-            if (!PMA_exportDBFooter($current_db))
+            if (!PMA_exportDBFooter($current_db)) {
                 break 2;
+            }
         }
     }
 } elseif ($export_type == 'database') {
-    if (!PMA_exportDBHeader($db))
+    if (!PMA_exportDBHeader($db)) {
         break;
+    }
 
     if (isset($table_select)) {
         $tmp_select = implode($table_select, '|');
@@ -438,20 +463,24 @@ if ($export_type == 'server') {
             || !isset($tmp_select)) {
 
             if (isset($GLOBALS[$what . '_structure'])) {
-                if (!PMA_exportStructure($db, $table, $crlf, $err_url, $do_relation, $do_comments, $do_mime, $do_dates))
+                if (!PMA_exportStructure($db, $table, $crlf, $err_url, $do_relation, $do_comments, $do_mime, $do_dates)) {
                     break 2;
+                }
             }
             if (isset($GLOBALS[$what . '_data'])) {
-                if (!PMA_exportData($db, $table, $crlf, $err_url, $local_query))
+                if (!PMA_exportData($db, $table, $crlf, $err_url, $local_query)) {
                     break 2;
+                }
             }
         }
     }
-    if (!PMA_exportDBFooter($db))
+    if (!PMA_exportDBFooter($db)) {
         break;
+    }
 } else {
-    if (!PMA_exportDBHeader($db))
+    if (!PMA_exportDBHeader($db)) {
         break;
+    }
     // We export just one table
 
     if ($limit_to > 0 && $limit_from >= 0) {
@@ -463,6 +492,11 @@ if ($export_type == 'server') {
     }
 
     if (!empty($sql_query)) {
+        // only preg_replace if needed
+        if (!empty($add_query)) {
+            // remove trailing semicolon before adding a LIMIT
+            $sql_query = preg_replace('%;\s*$%', '', $sql_query);
+        }
         $local_query = $sql_query . $add_query;
         PMA_DBI_select_db($db);
     } else {
@@ -470,24 +504,29 @@ if ($export_type == 'server') {
     }
 
     if (isset($GLOBALS[$what . '_structure'])) {
-        if (!PMA_exportStructure($db, $table, $crlf, $err_url, $do_relation, $do_comments, $do_mime, $do_dates))
+        if (!PMA_exportStructure($db, $table, $crlf, $err_url, $do_relation, $do_comments, $do_mime, $do_dates)) {
             break;
+        }
     }
     if (isset($GLOBALS[$what . '_data'])) {
-        if (!PMA_exportData($db, $table, $crlf, $err_url, $local_query))
+        if (!PMA_exportData($db, $table, $crlf, $err_url, $local_query)) {
             break;
+        }
     }
-    if (!PMA_exportDBFooter($db))
+    if (!PMA_exportDBFooter($db)) {
         break;
+    }
 }
-if (!PMA_exportFooter()) break;
+if (!PMA_exportFooter()) {
+    break;
+}
 
 } while (FALSE);
 // End of fake loop
 
 if ($save_on_server && isset($message)) {
     $js_to_run = 'functions.js';
-    require_once('./header.inc.php');
+    require_once('./libraries/header.inc.php');
     if ($export_type == 'server') {
         $active_page = 'server_export.php';
         require('./server_export.php');
@@ -520,18 +559,18 @@ if (!empty($asfile)) {
         }
     }
     // 2. as a bzipped file
-    else if (isset($compression) && $compression == 'bzip') {
+    elseif (isset($compression) && $compression == 'bzip') {
         if (@function_exists('bzcompress')) {
             $dump_buffer = bzcompress($dump_buffer);
             if ($dump_buffer === -8) {
-                require_once('./header.inc.php');
+                require_once('./libraries/header.inc.php');
                 echo sprintf($strBzError, '<a href="http://bugs.php.net/bug.php?id=17300" target="_blank">17300</a>');
-                require_once('./footer.inc.php');
+                require_once('./libraries/footer.inc.php');
             }
         }
     }
     // 3. as a gzipped file
-    else if (isset($compression) && $compression == 'gzip') {
+    elseif (isset($compression) && $compression == 'gzip') {
         if (@function_exists('gzencode')) {
             // without the optional parameter level because it bug
             $dump_buffer = gzencode($dump_buffer);
@@ -549,7 +588,7 @@ if (!empty($asfile)) {
         }
 
         $js_to_run = 'functions.js';
-        require_once('./header.inc.php');
+        require_once('./libraries/header.inc.php');
         if ($export_type == 'server') {
             $active_page = 'server_export.php';
             require_once('./server_export.php');
@@ -577,13 +616,14 @@ else {
        . '    </form>' . "\n";
     echo '</div>' . "\n";
     echo "\n";
-?><script language="JavaScript" type="text/javascript">
-<!--
+?>
+<script type="text/javascript" language="javascript">
+//<![CDATA[
     var bodyWidth=null; var bodyHeight=null;
     if (document.getElementById('textSQLDUMP')) {
         bodyWidth  = self.innerWidth;
         bodyHeight = self.innerHeight;
-        if(!bodyWidth && !bodyHeight){
+        if (!bodyWidth && !bodyHeight) {
             if (document.compatMode && document.compatMode == "BackCompat") {
                 bodyWidth  = document.body.clientWidth;
                 bodyHeight = document.body.clientHeight;
@@ -595,9 +635,9 @@ else {
         document.getElementById('textSQLDUMP').style.width=(bodyWidth-50) + 'px';
         document.getElementById('textSQLDUMP').style.height=(bodyHeight-100) + 'px';
     }
-//-->
+//]]>
 </script>
 <?php
-    require_once('./footer.inc.php');
+    require_once('./libraries/footer.inc.php');
 } // end if
 ?>

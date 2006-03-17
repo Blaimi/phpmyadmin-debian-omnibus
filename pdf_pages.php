@@ -1,12 +1,12 @@
 <?php
-/* $Id: pdf_pages.php,v 2.17 2005/11/18 12:50:49 cybot_tm Exp $ */
+/* $Id: pdf_pages.php,v 2.24 2006/01/17 17:02:29 cybot_tm Exp $ */
 // vim: expandtab sw=4 ts=4 sts=4:
 
 /**
  * Gets some core libraries
  */
 require_once('./libraries/common.lib.php');
-require_once('./db_details_common.php');
+require_once('./libraries/db_details_common.inc.php');
 
 
 /**
@@ -31,13 +31,13 @@ $query_default_option = PMA_DBI_QUERY_STORE;
 if (!$cfgRelation['relwork']) {
     echo sprintf($strNotSet, 'relation', 'config.inc.php') . '<br />' . "\n"
          . '<a href="./Documentation.html#relation" target="documentation">' . $strDocu . '</a>' . "\n";
-    require_once('./footer.inc.php');
+    require_once('./libraries/footer.inc.php');
 }
 
 if (!$cfgRelation['displaywork']) {
     echo sprintf($strNotSet, 'table_info', 'config.inc.php') . '<br />' . "\n"
          . '<a href="./Documentation.html#table_info" target="documentation">' . $strDocu . '</a>' . "\n";
-    require_once('./footer.inc.php');
+    require_once('./libraries/footer.inc.php');
 }
 
 if (!isset($cfgRelation['table_coords'])){
@@ -57,12 +57,12 @@ if ($cfgRelation['pdfwork']) {
         switch ($do) {
             case 'choosepage':
                 if ($action_choose=="1") {
-                    $ch_query = 'DELETE FROM ' . PMA_backquote($cfgRelation['table_coords'])
+                    $ch_query = 'DELETE FROM ' . PMA_backquote($GLOBALS['cfgRelation']['db']) . '.' . PMA_backquote($cfgRelation['table_coords'])
                               .   ' WHERE db_name = \'' . PMA_sqlAddslashes($db) . '\''
                               .   ' AND   pdf_page_number = ' . $chpage;
                     PMA_query_as_cu($ch_query, FALSE, $query_default_option);
 
-                    $ch_query = 'DELETE FROM ' . PMA_backquote($cfgRelation['pdf_pages'])
+                    $ch_query = 'DELETE FROM ' . PMA_backquote($GLOBALS['cfgRelation']['db']) . '.' . PMA_backquote($cfgRelation['pdf_pages'])
                               .   ' WHERE db_name = \'' . PMA_sqlAddslashes($db) . '\''
                               .   ' AND   page_nr = ' . $chpage;
                     PMA_query_as_cu($ch_query, FALSE, $query_default_option);
@@ -74,7 +74,7 @@ if ($cfgRelation['pdfwork']) {
                 if (!isset($newpage) || $newpage == '') {
                     $newpage = $strNoDescription;
                 }
-                $ins_query   = 'INSERT INTO ' . PMA_backquote($cfgRelation['pdf_pages'])
+                $ins_query   = 'INSERT INTO ' . PMA_backquote($GLOBALS['cfgRelation']['db']) . '.' . PMA_backquote($cfgRelation['pdf_pages'])
                              . ' (db_name, page_descr)'
                              . ' VALUES (\'' . PMA_sqlAddslashes($db) . '\', \'' . PMA_sqlAddslashes($newpage) . '\')';
                 PMA_query_as_cu($ins_query, FALSE, $query_default_option);
@@ -85,12 +85,12 @@ if ($cfgRelation['pdfwork']) {
 
                 if (isset($autolayout)) {
                     // save the page number
-                    $pdf_page_number = PMA_DBI_insert_id((isset($dbh)?$dbh:''));
+                    $pdf_page_number = PMA_DBI_insert_id((isset($controllink)?$controllink:''));
 
                     // get the tables that have relations, by descending
                     // number of links
                     $master_tables = 'SELECT COUNT(master_table), master_table'
-                                . ' FROM ' . PMA_backquote($cfgRelation['relation'])
+                                . ' FROM ' . PMA_backquote($GLOBALS['cfgRelation']['db']) . '.' . PMA_backquote($cfgRelation['relation'])
                                 . ' WHERE master_db = \'' . $db . '\''
                                 . ' GROUP BY master_table'
                                 . ' ORDER BY ' . PMA_backquote('COUNT(master_table)') . ' DESC ';
@@ -99,7 +99,7 @@ if ($cfgRelation['pdfwork']) {
                         // first put all the master tables at beginning
                         // of the list, so they are near the center of
                         // the schema
-                        while (list(,$master_table) = PMA_DBI_fetch_row($master_tables_rs)) {
+                        while (list(, $master_table) = PMA_DBI_fetch_row($master_tables_rs)) {
                             $all_tables[] = $master_table;
                         }
 
@@ -135,7 +135,7 @@ if ($cfgRelation['pdfwork']) {
                         foreach ($all_tables AS $current_table) {
 
                             // save current table's coordinates
-                            $insert_query = 'INSERT INTO ' . PMA_backquote($cfgRelation['table_coords']) . ' '
+                            $insert_query = 'INSERT INTO ' . PMA_backquote($GLOBALS['cfgRelation']['db']) . '.' . PMA_backquote($cfgRelation['table_coords']) . ' '
                                           . '(db_name, table_name, pdf_page_number, x, y) '
                                           . 'VALUES (\'' . PMA_sqlAddslashes($db) . '\', \'' . PMA_sqlAddslashes($current_table) . '\',' . $pdf_page_number . ',' . $pos_x . ',' . $pos_y . ')';
                             PMA_query_as_cu($insert_query, FALSE, $query_default_option);
@@ -182,26 +182,26 @@ if ($cfgRelation['pdfwork']) {
                         $arrvalue['y'] = 0;
                     }
                     if (isset($arrvalue['name']) && $arrvalue['name'] != '--') {
-                        $test_query = 'SELECT * FROM ' . PMA_backquote($cfgRelation['table_coords'])
+                        $test_query = 'SELECT * FROM ' . PMA_backquote($GLOBALS['cfgRelation']['db']) . '.' . PMA_backquote($cfgRelation['table_coords'])
                                     .   ' WHERE db_name = \'' .  PMA_sqlAddslashes($db) . '\''
                                     .   ' AND   table_name = \'' . PMA_sqlAddslashes($arrvalue['name']) . '\''
                                     .   ' AND   pdf_page_number = ' . $chpage;
                         $test_rs    = PMA_query_as_cu($test_query, FALSE, $query_default_option);
                         if ($test_rs && PMA_DBI_num_rows($test_rs) > 0) {
                             if (isset($arrvalue['delete']) && $arrvalue['delete'] == 'y') {
-                                $ch_query = 'DELETE FROM ' . PMA_backquote($cfgRelation['table_coords'])
+                                $ch_query = 'DELETE FROM ' . PMA_backquote($GLOBALS['cfgRelation']['db']) . '.' . PMA_backquote($cfgRelation['table_coords'])
                                           .   ' WHERE db_name = \'' . PMA_sqlAddslashes($db) . '\''
                                           .   ' AND   table_name = \'' . PMA_sqlAddslashes($arrvalue['name']) . '\''
                                           .   ' AND   pdf_page_number = ' . $chpage;
                             } else {
-                                $ch_query = 'UPDATE ' . PMA_backquote($cfgRelation['table_coords']) . ' '
+                                $ch_query = 'UPDATE ' . PMA_backquote($GLOBALS['cfgRelation']['db']) . '.' . PMA_backquote($cfgRelation['table_coords']) . ' '
                                           . 'SET x = ' . $arrvalue['x'] . ', y= ' . $arrvalue['y']
                                           .   ' WHERE db_name = \'' . PMA_sqlAddslashes($db) . '\''
                                           .   ' AND   table_name = \'' . PMA_sqlAddslashes($arrvalue['name']) . '\''
                                           .   ' AND   pdf_page_number = ' . $chpage;
                             }
                         } else {
-                            $ch_query     = 'INSERT INTO ' . PMA_backquote($cfgRelation['table_coords']) . ' '
+                            $ch_query     = 'INSERT INTO ' . PMA_backquote($GLOBALS['cfgRelation']['db']) . '.' . PMA_backquote($cfgRelation['table_coords']) . ' '
                                           . '(db_name, table_name, pdf_page_number, x, y) '
                                           . 'VALUES (\'' . PMA_sqlAddslashes($db) . '\', \'' . PMA_sqlAddslashes($arrvalue['name']) . '\',' . $chpage . ',' . $arrvalue['x'] . ',' . $arrvalue['y'] . ')';
                         }
@@ -211,7 +211,7 @@ if ($cfgRelation['pdfwork']) {
                 break;
             case 'deleteCrap':
                 foreach ($delrow AS $current_row) {
-                    $d_query = 'DELETE FROM ' . PMA_backquote($cfgRelation['table_coords']) . ' ' . "\n"
+                    $d_query = 'DELETE FROM ' . PMA_backquote($GLOBALS['cfgRelation']['db']) . '.' . PMA_backquote($cfgRelation['table_coords']) . ' ' . "\n"
                              .   ' WHERE db_name = \'' . PMA_sqlAddslashes($db) . '\'' . "\n"
                              .   ' AND   table_name = \'' . PMA_sqlAddslashes($current_row) . '\'' . "\n"
                              .   ' AND   pdf_page_number = ' . $chpage;
@@ -223,13 +223,13 @@ if ($cfgRelation['pdfwork']) {
 
     // We will need an array of all tables in this db
     $selectboxall = array('--');
-    $alltab_rs    = PMA_DBI_query('SHOW TABLES FROM ' . PMA_backquote($db) . ';', NULL, PMA_DBI_QUERY_STORE);
+    $alltab_rs    = PMA_DBI_query('SHOW TABLES FROM ' . PMA_backquote($db) . ';', null, PMA_DBI_QUERY_STORE);
     while ($val = @PMA_DBI_fetch_row($alltab_rs)) {
         $selectboxall[] = $val[0];
     }
 
     // Now first show some possibility to choose a page for the pdf
-    $page_query = 'SELECT * FROM ' . PMA_backquote($cfgRelation['pdf_pages'])
+    $page_query = 'SELECT * FROM ' . PMA_backquote($GLOBALS['cfgRelation']['db']) . '.' . PMA_backquote($cfgRelation['pdf_pages'])
                 . ' WHERE db_name = \'' . PMA_sqlAddslashes($db) . '\'';
     $page_rs    = PMA_query_as_cu($page_query, FALSE, $query_default_option);
 
@@ -285,7 +285,7 @@ if ($cfgRelation['pdfwork']) {
 <h2><?php echo $strSelectTables ;?></h2>
 
 <?php
-$page_query = 'SELECT * FROM ' . PMA_backquote($cfgRelation['table_coords'])
+$page_query = 'SELECT * FROM ' . PMA_backquote($GLOBALS['cfgRelation']['db']) . '.' . PMA_backquote($cfgRelation['table_coords'])
             . ' WHERE db_name = \'' . PMA_sqlAddslashes($db) . '\''
             . ' AND pdf_page_number = ' . $chpage;
 $page_rs    = PMA_query_as_cu($page_query, FALSE, $query_default_option);
@@ -303,7 +303,7 @@ if ($cfg['WYSIWYG-PDF']) {
         $with_field_names = TRUE;
     }
 ?>
-<script type="text/javascript" src="./libraries/dom-drag.js"></script>
+<script type="text/javascript" language="javascript" src="./js/dom-drag.js"></script>
 <form method="post" action="pdf_pages.php" name="dragdrop">
 <input type="button" name="dragdrop" value="<?php echo $strToggleScratchboard; ?>" onclick="ToggleDragDrop('pdflayout');" />
  <input type="button" name="dragdropreset" value="<?php echo $strReset; ?>" onclick="resetDrag();" />
@@ -344,8 +344,8 @@ foreach ($array_sh_page AS $key => $temp_sh_page) {
 }
 ?>
 </div>
-<script type="text/javascript">
-<!--
+<script type="text/javascript" language="javascript">
+//<![CDATA[
 function init() {
     refreshLayout();
     myid = getElement('pdflayout');
@@ -355,7 +355,7 @@ function init() {
 function resetDrag() {
     <?php echo $reset_draginit; ?>
 }
-// -->
+//]]>
 </script>
 <?php
 } // end if WYSIWYG-PDF
@@ -517,10 +517,10 @@ function resetDrag() {
 <?php
         if ((isset($showwysiwyg) && $showwysiwyg == '1')) {
 ?>
-<script type="text/javascript">
-<!--
+<script type="text/javascript" language="javascript">
+//<![CDATA[
 ToggleDragDrop('pdflayout');
-// -->
+//]]>
 </script>
 <?php
         }
@@ -532,5 +532,5 @@ ToggleDragDrop('pdflayout');
  * Displays the footer
  */
 echo "\n";
-require_once('./footer.inc.php');
+require_once('./libraries/footer.inc.php');
 ?>

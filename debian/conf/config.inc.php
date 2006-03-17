@@ -2,6 +2,9 @@
 /**
  * Debian local configuration file
  *
+ * This file overrides the settings made by phpMyAdmin interactive setup
+ * utility.
+ *
  * For example configuration see /usr/share/doc/phpmyadmin/examples/config.default.php.gz
  */
 

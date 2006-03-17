@@ -1,5 +1,5 @@
 <?php
-/* $Id: german-utf-8.inc.php,v 2.121 2005/11/17 13:15:25 cybot_tm Exp $ */
+/* $Id: german-utf-8.inc.php,v 2.144 2006/01/25 09:56:13 cybot_tm Exp $ */
 
 /**
  * For suggestions concerning this file please contact
@@ -234,7 +234,6 @@ $strDocu = 'Dokumentation';
 $strDoYouReally = 'Möchten Sie wirklich diese Abfrage ausführen ';
 $strDropDatabaseStrongWarning = 'Sie sind dabei eine komplette Datenbank zu ZERSTÖREN!';
 $strDrop = 'Löschen';
-$strDropSelectedDatabases = 'Ausgewählte Datenbanken löschen';
 $strDropUsersDb = 'Die gleichnamigen Datenbanken löschen.';
 $strDumpingData = 'Daten für Tabelle';
 $strDumpSaved = 'Dump (Schema) wurde in Datei %s gespeichert.';
@@ -281,7 +280,6 @@ $strFieldsTerminatedBy = 'Felder getrennt mit';
 $strFileAlreadyExists = 'Die Datei %s besteht bereits auf dem Server. Bitte ändern Sie den Dateinamen oder wählen Sie die Überschreibungs-Option.';
 $strFileCouldNotBeRead = 'Die Datei konnte nicht gelesen werden';
 $strFileNameTemplate = 'Dateinamenskonvention';
-$strFileNameTemplateHelp = 'Benutzen Sie __DB__ für den Datenbanknamen, __TABLE__ für den Tabellennamen und %sbeliebige strftime-Optionen%s zur Angabe von Datumsvariablen. Die Erweiterung wird automatisch hinzugefügt. Jeglicher anderer Text wird beibehalten.';
 $strFileNameTemplateRemember = 'Konvention merken';
 $strFixed = 'starr';
 $strFlushPrivilegesNote = 'Anmerkung: phpMyAdmin liest die Benutzerprofile direkt aus den entsprechenden MySQL-Tabellen aus. Der Inhalt dieser Tabellen kann sich von den Benutzprofilen, die MySQL z.Zt. verwendet, unterscheiden, wenn manuelle Änderungen vorgenommen wurden. In diesem Fall sollten Sie  %sdie Benutzerprofile neu laden%s bevor Sie fortfahren.';
@@ -432,9 +430,7 @@ $strMyISAMSortBufferSizeDesc = 'Der Puffer, der beim Sortieren des Indexes zugew
 $strMyISAMSortBufferSize = 'Größe des Sortierungspuffers';
 $strMySQLCharset = 'MySQL-Zeichensatz';
 $strMySQLConnectionCollation = 'Zeichensatz / Kollation der MySQL-Verbindung';
-$strMySQLReloaded = 'Die MySQL-Benutzertabellen wurden neu geladen.';
 $strMySQLSaid = 'MySQL meldet: ';
-$strMySQLServerProcess = 'Verbunden mit MySQL %pma_s1% auf %pma_s2% als %pma_s3%';
 $strMySQLShowProcess = 'Prozesse anzeigen';
 $strMySQLShowStatus = 'MySQL-Laufzeit-Informationen anzeigen';
 $strMySQLShowVars = 'MySQL-System-Variablen anzeigen';
@@ -570,7 +566,6 @@ $strRelationNotWorking = 'Die zusätzlichen Funktionen für verknüpfte Tabellen
 $strRelationsForTable = 'RELATIONEN DER TABELLE';
 $strRelations = 'Tabellenverknüpfungen';
 $strRelationView = 'Beziehungsübersicht';
-$strReloadFailed = 'MySQL Neuladen fehlgeschlagen.';
 $strReloadingThePrivileges = 'Lade die Benutzertabellen neu';
 $strReloadMySQL = 'Benutzertabellen neu laden';
 $strRemoveSelectedUsers = 'Die ausgewählten Benutzer löschen';
@@ -792,7 +787,7 @@ $strZip = 'Zip-komprimiert';
 
 // To translate:
 $strAllowInterrupt = 'Abbruch wenn die maximale Scriptlaufzeit errreicht wird. Damit ist es möglich große Dateien zu importieren, allerdings kann es Transaktionen zerstören.';  //recently translated
-$strAndThen = 'and then';  //to translate
+$strAndThen = 'und';  //recently translated
 
 $strBookmarkCreated = 'Bookmark %s gespeichert';  //recently translated
 $strBookmarkReplace = 'Überschreibe gleichnamiges Bookmark';  //recently translated
@@ -803,7 +798,6 @@ $strCSVImportOptions = 'CSV Optionen';  //recently translated
 
 $strDeleteNoUsersSelected = 'Keine Benutzer zum Löschen ausgewählt!';  //recently translated
 
-$strEnclosingOptional = 'Enclosing of fields is optional';  //to translate
 $strErrorInZipFile = 'Fehler im ZIP-Archive:';  //recently translated
 
 $strFileToImport = 'Datei zum Importieren';  //recently translated
@@ -813,13 +807,11 @@ $strFlushTables = 'Leeren des gesamten Tabellencaches ("FLUSH")';  //recently tr
 $strHandler = 'Handler';  //recently translated
 
 $strIgnoreDuplicates = 'Ignoriere doppelte Zeilen';  //recently translated
-$strImportFinished = 'Der Import wurde erfolgreich beendet.';  //recently translated
 $strImportFormat = 'Dateiformat';  //recently translated
 $strImport = 'Importieren';  //recently translated
-$strInvalidAuthMethod = 'Invalid authentication method set in configuration:';  //to translate
+$strInvalidAuthMethod = 'Ungültige Authentifizierungsmethode in der Konfiguration eingestellt:';  //recently translated
 $strInvalidColumnCount = 'Die Spaltenanzahl muss größer als 0 sein.';  //recently translated
 $strInvalidColumn = 'Ungültige Spalte (%s) angegeben!';  //recently translated
-$strInvalidCSVInput = 'Ungültige CSV Daten, verarbeitung nicht möglich!';  //recently translated
 $strInvalidFieldCount = 'Die Tabelle muss mindestens ein Feld haben.';  //recently translated
 $strInvalidLDIImport = 'Dieses Plugin unterstützt keine Komprimierung!';  //recently translated
 $strInvalidRowNumber = '%d ist keine gültige Zeilennummer.';  //recently translated
@@ -896,10 +888,10 @@ $strShowStatusInnodb_data_fsyncsDescr = 'The number of fsync() operations so far
 $strShowStatusInnodb_data_pending_fsyncsDescr = 'The current number of pending fsync() operations.';  //to translate
 $strShowStatusInnodb_data_pending_readsDescr = 'The current number of pending reads.';  //to translate
 $strShowStatusInnodb_data_pending_writesDescr = 'The current number of pending writes.';  //to translate
-$strShowStatusInnodb_data_readDescr = 'The amount of data read so far, in bytes.';  //to translate
-$strShowStatusInnodb_data_readsDescr = 'The total number of data reads.';  //to translate
-$strShowStatusInnodb_data_writesDescr = 'The total number of data writes.';  //to translate
-$strShowStatusInnodb_data_writtenDescr = 'The amount of data written so far, in bytes.';  //to translate
+$strShowStatusInnodb_data_readDescr = 'Wieviel Daten bisher gelesen wurden, in Byte.';  //recently translated
+$strShowStatusInnodb_data_readsDescr = 'Wie oft Daten gelesen wurden.';  //recently translated
+$strShowStatusInnodb_data_writesDescr = 'Wie oft Daten geschrieben wurden.';  //recently translated
+$strShowStatusInnodb_data_writtenDescr = 'Wieviel Daten bisher geschrieben wurden, in Byte.';  //recently translated
 $strShowStatusInnodb_dblwr_pages_writtenDescr = 'The number of doublewrite writes that have been performed and the number of pages that have been written for this purpose.';  //to translate
 $strShowStatusInnodb_dblwr_writesDescr = 'The number of doublewrite writes that have been performed and the number of pages that have been written for this purpose.';  //to translate
 $strShowStatusInnodb_log_waitsDescr = 'The number of waits we had because log buffer was too small and we had to wait for it to be flushed before continuing.';  //to translate
@@ -920,8 +912,8 @@ $strShowStatusInnodb_row_lock_time_maxDescr = 'The maximum time to acquire a row
 $strShowStatusInnodb_row_lock_waitsDescr = 'The number of times a row lock had to be waited for.';  //to translate
 $strShowStatusInnodb_rows_deletedDescr = 'The number of rows deleted from InnoDB tables.';  //to translate
 $strShowStatusInnodb_rows_insertedDescr = 'The number of rows inserted in InnoDB tables.';  //to translate
-$strShowStatusInnodb_rows_readDescr = 'The number of rows read from InnoDB tables.';  //to translate
-$strShowStatusInnodb_rows_updatedDescr = 'The number of rows updated in InnoDB tables.';  //to translate
+$strShowStatusInnodb_rows_readDescr = 'Anzahl der Zeilen die aus InnoDB-Tabellen gelesen wurden.';  //recently translated
+$strShowStatusInnodb_rows_updatedDescr = 'Anzahl der Zeilen die in InnoDB-Tabellen aktualisiert wurden.';  //recently translated
 $strShowStatusKey_blocks_not_flushedDescr = 'Schlüssel-Blöcke im Schlüssel-Cache, die verändert wurden, aber noch nicht auf die Platte zurück geschrieben (flush). Auch bekannt als Not_flushed_key_blocks.';  //recently translated
 $strShowStatusKey_blocks_unusedDescr = 'Die Anzahl der unbenutzten Schlüssel-Blöcke im Schlüssel-Cache. Dieser Wert kann dazu dienen die Auslastung des Schlüssel-Cache zu bestimmen.';  //recently translated
 $strShowStatusKey_blocks_usedDescr = 'Die Anzahl der maximal gleichzeitig benutzten Blocks im Schlüssel-Cache.';  //recently translated
@@ -971,13 +963,43 @@ $strSorting = 'Sortierung';  //recently translated
 $strTableAlreadyExists = 'Die Tabelle %s existiert bereits!';  //recently translated
 $strTempData = 'Temporäre Daten';  //recently translated
 $strThreads = 'Prozesse';  //recently translated
-$strTimeoutInfo = 'Previous import timed out, after resubmitting will continue from position %d.';  //to translate
-$strTimeoutNothingParsed = 'However on last run no data has been parsed, this usually means phpMyAdmin won\'t be able to finish this import unless you increase php time limits.';  //to translate
-$strTimeoutPassed = 'Script timeout passed, if you want to finish import, please resubmit same file and import will resume.';  //to translate
+$strTimeoutInfo = 'Zeitüberschreitung beim Importieren, durch erneutes senden wird an Position %d fortgesetzt.';  //recently translated
+$strTimeoutNothingParsed = 'Allerdings wurden beim letzten durchlauf keine Daten verarbeited, dies bedeuted das phpMyAdmin den Import nicht durchführen kann ohne das die maximale Scriptlaufzeit für php erhöht wird.';  //recently translated
+$strTimeoutPassed = 'Maximale Script-Laufzeit erreicht, senden Sie die Datei noch einmal zum Fertigstellen des Imports.';  //recently translated
 $strTransactionCoordinator = 'Transaction coordinator';  //to translate
-$strTransformation_application_octetstream__hex = 'Displays hexadecimal representation of data.';  //to translate
-$strTransformation_text_plain__sql = 'Formats text as SQL query with syntax highlighting.';  //to translate
+$strTransformation_application_octetstream__hex = 'Daten in hexadezimaler Schreibweise darstellen.';  //recently translated
+$strTransformation_text_plain__sql = 'Formatiert den Text als SQL mit Syntaxhervorhebung.';  //recently translated
 
 $strUploadLimit = 'Möglicherweise wurde eine zu große Datei hochgeladen. Bitte schauen Sie in die %sDokumentation%s zur Lösung diese Problems.';  //recently translated
 
+$strInvalidServerIndex = 'Ungültige Server-Nummer: "%s"';  //recently translated
+$strInvalidServerHostname = 'Ungültiger Host-Name für Serverr %1$s. Bitte überprüfen Sie Ihre Konfiguration.';  //recently translated
+$strFileNameTemplateDescriptionTable = 'Tabellen-Name';  //recently translated
+$strFileNameTemplateDescriptionDatabase = 'Datenbank-Name';  //recently translated
+$strFileNameTemplateDescriptionServer = 'Server-Name';  //recently translated
+$strFileNameTemplateDescription = 'This value is interpreted using %1$sstrftime%2$s, so you can use time formatting strings. Additionally the following transformations will happen: %3$s. Other text will be kept as is.';  //to translate
+$strProtocolVersion = 'Protokoll-Version';  //recently translated
+$strMysqlClientVersion = 'MySQL Client-Version';  //recently translated
+$strUsedPhpExtensions = 'Verwendete php Erweiterungen';  //recently translated
+$strOpenNewWindow = 'Neues phpMyAdmin Fenster';  //recently translated
+$strLanguageUnknown = 'Unbekannte Sprache: "%1$s".';  //recently translated
+$strLanguageFileNotFound = 'Sprachdatei "%1$s" nicht gefunden.';  //recently translated
+$strThemeNoPreviewAvailable = 'Keine Vorschau verfügbar.';  //recently translated
+$strConfigDefaultFileError = 'Fehelr beim laden der Standard-Konfiguration von: "%1$s"';  //recently translated
+$strPDF = 'PDF';  //recently translated
+$strPDFOptions = 'PDF Optionen';  //recently translated
+$strPDFReportTitle = 'Report Titel';  //recently translated
+$strInvalidCSVParameter = 'Ungültiger Parameter für CSV-Import: "%s"';  //recently translated
+$strInvalidCSVFieldCount = 'Ungültige Anzahl an Feldern in Zeile %d.';  //recently translated
+$strInvalidCSVFormat = 'Ungültiges Format in Zeile %d.';  //recently translated
+$strImportSuccessfullyFinished = 'Der Import wurde erfolgreich beendet, %d Abfragen ausgeführt.';  //recently translated
+$strThemeNotFound = 'Theme "%s" nicht gefunden!';  //recently translated
+$strThemeDefaultNotFound = 'Standard-Theme "%s" nicht gefunden!';  //recently translated
+$strThemeNoValidImgPath = 'Keinen gültiges Bilder-Verzeichnis für das Theme "%s" gefunden!';  //recently translated
+$strThemePathNotFound = 'Verzeichnis für das theme "%s" nicht gefunden!';  //recently translated
+$strAccessDeniedCreateConfig = 'Probably reason of this is that you did not create configuration file. You might want to use %1$ssetup script%2$s to create one.';  //to translate
+$strSQLImportOptions = 'SQL Optionen';  //recently translated
+$strBrowseDistinctValues = 'Zeige unterschiedliche Werte';  //recently translated
+$strStatisticsOverrun = 'Auf stark frequentierten Server kann der Byte-Zähler "überlaufen" (Wieder bei 0 beginnen), deshalb können diese Werte wie sie vom MySQL Server ausgegeben werden falsch sein.';  //recently translated
+$strViewMaxExactCount = 'Dieses View hat mehr als %d Zeilen. Bitte schlagen Sie im %sHandbuch%s nach.';  //recently translated
 ?>

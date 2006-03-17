@@ -1,5 +1,5 @@
 <?php
-/* $Id: server_sql.php,v 2.3 2005/11/18 12:50:49 cybot_tm Exp $ */
+/* $Id: server_sql.php,v 2.5 2005/11/24 09:12:16 nijel Exp $ */
 // vim: expandtab sw=4 ts=4 sts=4:
 
 require_once('./libraries/common.lib.php');
@@ -8,14 +8,14 @@ require_once('./libraries/common.lib.php');
  * Does the common work
  */
 $js_to_run = 'functions.js';
-require_once './server_common.inc.php';
+require_once './libraries/server_common.inc.php';
 require_once './libraries/sql_query_form.lib.php';
 
 
 /**
  * Displays the links
  */
-require './server_links.inc.php';
+require './libraries/server_links.inc.php';
 
 
 /**
@@ -26,5 +26,5 @@ PMA_sqlQueryForm();
 /**
  * Displays the footer
  */
-require_once './footer.inc.php';
+require_once './libraries/footer.inc.php';
 ?>

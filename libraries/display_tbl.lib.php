@@ -1,10 +1,17 @@
 <?php
-/* $Id: display_tbl.lib.php,v 2.90 2005/11/14 15:01:20 cybot_tm Exp $ */
+/* $Id: display_tbl.lib.php,v 2.96.2.2.2.2 2006/03/04 19:44:10 lem9 Exp $ */
 // vim: expandtab sw=4 ts=4 sts=4:
 
 /**
  * Set of functions used to display the records returned by a sql query
  */
+
+/**
+ * Avoids undefined variables
+ */
+if (!isset($pos)) {
+    $pos = 0;
+}
 
 /**
  * Defines the display mode to use for the results of a sql query
@@ -23,7 +30,7 @@
  *     the "display printable view" option.
  *     Of course '0'/'1' means the feature won't/will be enabled.
  *
- * @param   string   the synthetic value for display_mode (see §1 a few
+ * @param   string   the synthetic value for display_mode (see ï¿½1 a few
  *                   lines above for explanations)
  * @param   integer  the total number of rows returned by the sql query
  *                   without any programmatically appended "LIMIT" clause
@@ -79,7 +86,7 @@ function PMA_setDisplayMode(&$the_disp_mode, &$the_total)
         // 2.1 Statement is a "SELECT COUNT", a
         //     "CHECK/ANALYZE/REPAIR/OPTIMIZE", an "EXPLAIN" one or
         //     contains a "PROC ANALYSE" part
-        else if ($GLOBALS['is_count'] || $GLOBALS['is_analyse'] || $GLOBALS['is_maint'] || $GLOBALS['is_explain']) {
+        elseif ($GLOBALS['is_count'] || $GLOBALS['is_analyse'] || $GLOBALS['is_maint'] || $GLOBALS['is_explain']) {
             $do_display['edit_lnk']  = 'nn'; // no edit link
             $do_display['del_lnk']   = 'nn'; // no delete link
             $do_display['sort_lnk']  = (string) '0';
@@ -94,14 +101,13 @@ function PMA_setDisplayMode(&$the_disp_mode, &$the_total)
             $do_display['pview_lnk'] = (string) '1';
         }
         // 2.2 Statement is a "SHOW..."
-        else if ($GLOBALS['is_show']) {
+        elseif ($GLOBALS['is_show']) {
             // 2.2.1 TODO : defines edit/delete links depending on show statement
-            $tmp = preg_match('@^SHOW[[:space:]]+(VARIABLES|(FULL[[:space:]]+)?PROCESSLIST|STATUS|TABLE|GRANTS|CREATE|LOGS|DATABASES|FIELDS)@i', $GLOBALS['sql_query'], $which = array() );
+            $tmp = preg_match('@^SHOW[[:space:]]+(VARIABLES|(FULL[[:space:]]+)?PROCESSLIST|STATUS|TABLE|GRANTS|CREATE|LOGS|DATABASES|FIELDS)@i', $GLOBALS['sql_query'], $which);
             if (isset($which[1]) && strpos(' ' . strtoupper($which[1]), 'PROCESSLIST') > 0) {
                 $do_display['edit_lnk'] = 'nn'; // no edit link
                 $do_display['del_lnk']  = 'kp'; // "kill process" type edit link
-            }
-            else {
+            } else {
                 // Default case -> no links
                 $do_display['edit_lnk'] = 'nn'; // no edit link
                 $do_display['del_lnk']  = 'nn'; // no delete link
@@ -148,9 +154,8 @@ function PMA_setDisplayMode(&$the_disp_mode, &$the_total)
     // 3. Gets the total number of rows if it is unknown
     if (isset($unlim_num_rows) && $unlim_num_rows != '') {
         $the_total = $unlim_num_rows;
-    }
-    else if (($do_display['nav_bar'] == '1' || $do_display['sort_lnk'] == '1')
-             && (!empty($db) && !empty($table))) {
+    } elseif (($do_display['nav_bar'] == '1' || $do_display['sort_lnk'] == '1')
+             && (isset($db) && strlen($db) && !empty($table))) {
         $the_total   = PMA_countRecords($db, $table, TRUE);
     }
 
@@ -365,7 +370,7 @@ function PMA_displayTableNavigation($pos_next, $pos_prev, $encoded_query)
    </td>
    <td>
         <?php //<form> for keep the form alignment of button < and << ?>
-        <form>
+        <form action="none">
         <?php echo PMA_pageselector(
                      'sql.php?sql_query='        . $encoded_query .
                         '&amp;session_max_rows=' . $session_max_rows .
@@ -470,10 +475,10 @@ function PMA_displayTableHeaders(&$is_display, &$fields_meta, $fields_cnt = 0, $
         // we need $sort_expression and $sort_expression_nodir
         // even if there are many table references
 
-        $sort_expression = trim(str_replace('  ', ' ',$analyzed_sql[0]['order_by_clause']));
+        $sort_expression = trim(str_replace('  ', ' ', $analyzed_sql[0]['order_by_clause']));
 
         // Get rid of ASC|DESC (TODO: analyzer)
-        preg_match('@(.*)([[:space:]]*(ASC|DESC))@si',$sort_expression,$matches = array());
+        preg_match('@(.*)([[:space:]]*(ASC|DESC))@si', $sort_expression, $matches);
         $sort_expression_nodir = isset($matches[1]) ? trim($matches[1]) : $sort_expression;
 
         // sorting by indexes, only if it makes sense (only one table ref)
@@ -519,9 +524,15 @@ function PMA_displayTableHeaders(&$is_display, &$fields_meta, $fields_cnt = 0, $
 
                 if ($disp_direction == 'horizontal' || $disp_direction == 'horizontalflipped') {
                     $span = $fields_cnt;
-                    if ($is_display['edit_lnk'] != 'nn') $span++;
-                    if ($is_display['del_lnk'] != 'nn') $span++;
-                    if ($is_display['del_lnk'] != 'kp' && $is_display['del_lnk'] != 'nn') $span++;
+                    if ($is_display['edit_lnk'] != 'nn') {
+                        $span++;
+                    }
+                    if ($is_display['del_lnk'] != 'nn') {
+                        $span++;
+                    }
+                    if ($is_display['del_lnk'] != 'kp' && $is_display['del_lnk'] != 'nn') {
+                        $span++;
+                    }
                 } else {
                     $span = $num_rows + floor($num_rows/$repeat_cells) + 1;
                 }
@@ -644,7 +655,7 @@ function PMA_displayTableHeaders(&$is_display, &$fields_meta, $fields_cnt = 0, $
         } // end vertical mode
     }
 
-    //     ... else if no button, displays empty(ies) col(s) if required
+    //     ... elseif no button, displays empty(ies) col(s) if required
     elseif ($GLOBALS['cfg']['ModifyDeleteAtLeft']
              && ($is_display['edit_lnk'] != 'nn' || $is_display['del_lnk'] != 'nn')) {
         $vertical_display['emptypre'] = ($is_display['edit_lnk'] != 'nn' && $is_display['del_lnk'] != 'nn') ? 3 : 0;
@@ -664,13 +675,14 @@ function PMA_displayTableHeaders(&$is_display, &$fields_meta, $fields_cnt = 0, $
 
     // 2.0.1 Prepare Display column comments if enabled ($GLOBALS['cfg']['ShowBrowseComments']).
     //       Do not show comments, if using horizontalflipped mode, because of space usage
-    if ($GLOBALS['cfg']['ShowBrowseComments'] && $GLOBALS['cfgRelation']['commwork'] && $disp_direction != 'horizontalflipped') {
+    if ($GLOBALS['cfg']['ShowBrowseComments'] && ($GLOBALS['cfgRelation']['commwork'] || PMA_MYSQL_INT_VERSION >= 40100) && $disp_direction != 'horizontalflipped') {
         $comments_map = array();
-        foreach ($analyzed_sql[0]['table_ref'] as $tbl) {
-
-            $tb = $tbl['table_true_name'];
-
-            $comments_map[$tb] = PMA_getComments($db, $tb);
+        if (isset($analyzed_sql[0]) && is_array($analyzed_sql[0])) {
+            foreach ($analyzed_sql[0]['table_ref'] as $tbl) {
+                $tb = $tbl['table_true_name'];
+                $comments_map[$tb] = PMA_getComments($db, $tb);
+                unset($tb);
+            }
         }
     }
 
@@ -729,12 +741,12 @@ function PMA_displayTableHeaders(&$is_display, &$fields_meta, $fields_cnt = 0, $
             //       FROM `PMA_relation` AS `1` , `PMA_relation` AS `2`
 
             if (($is_join
-                && !preg_match('~([^[:space:],]|`[^`]`)[[:space:]]+(as[[:space:]]+)?' . strtr($fields_meta[$i]->name, array('[' => '\\[', '~' => '\\~', '\\' => '\\\\')) . '~i', $select_expr, $parts = array()))
+                && !preg_match('~([^[:space:],]|`[^`]`)[[:space:]]+(as[[:space:]]+)?' . strtr($fields_meta[$i]->name, array('[' => '\\[', '~' => '\\~', '\\' => '\\\\')) . '~i', $select_expr, $parts))
                || ( isset($analyzed_sql[0]['select_expr'][$i]['expr'])
                    && isset($analyzed_sql[0]['select_expr'][$i]['column'])
                    && $analyzed_sql[0]['select_expr'][$i]['expr'] !=
                    $analyzed_sql[0]['select_expr'][$i]['column']
-                  && !empty($fields_meta[$i]->table)) ) {
+                  && isset($fields_meta[$i]->table) && strlen($fields_meta[$i]->table)) ) {
                 $sort_tbl = PMA_backquote($fields_meta[$i]->table) . ' . ';
             } else {
                 $sort_tbl = '';
@@ -781,7 +793,7 @@ function PMA_displayTableHeaders(&$is_display, &$fields_meta, $fields_cnt = 0, $
                 $order_img   = ' <img class="icon" src="' . $GLOBALS['pmaThemeImage'] . 's_asc.png" width="11" height="9" alt="'. $GLOBALS['strAscending'] . '" title="'. $GLOBALS['strAscending'] . '" id="soimg' . $i . '" />';
             }
 
-            if (preg_match('@(.*)([[:space:]](LIMIT (.*)|PROCEDURE (.*)|FOR UPDATE|LOCK IN SHARE MODE))@i', $unsorted_sql_query, $regs3 = array())) {
+            if (preg_match('@(.*)([[:space:]](LIMIT (.*)|PROCEDURE (.*)|FOR UPDATE|LOCK IN SHARE MODE))@i', $unsorted_sql_query, $regs3)) {
                 $sorted_sql_query = $regs3[1] . $sort_order . $regs3[2];
             } else {
                 $sorted_sql_query = $unsorted_sql_query . $sort_order;
@@ -800,10 +812,10 @@ function PMA_displayTableHeaders(&$is_display, &$fields_meta, $fields_cnt = 0, $
             //                    enable sord order swapping for image
             $order_link_params = array();
             if (isset($order_img) && $order_img!='') {
-                if (strstr($order_img,'asc')) {
+                if (strstr($order_img, 'asc')) {
                     $order_link_params['onmouseover'] = 'if(document.getElementById(\'soimg' . $i . '\')){ document.getElementById(\'soimg' . $i . '\').src=\'' . $GLOBALS['pmaThemeImage'] . 's_desc.png\'; }';
                     $order_link_params['onmouseout']  = 'if(document.getElementById(\'soimg' . $i . '\')){ document.getElementById(\'soimg' . $i . '\').src=\'' . $GLOBALS['pmaThemeImage'] . 's_asc.png\'; }';
-                } else if (strstr($order_img,'desc')) {
+                } elseif (strstr($order_img, 'desc')) {
                     $order_link_params['onmouseover'] = 'if(document.getElementById(\'soimg' . $i . '\')){ document.getElementById(\'soimg' . $i . '\').src=\'' . $GLOBALS['pmaThemeImage'] . 's_asc.png\'; }';
                     $order_link_params['onmouseout']  = 'if(document.getElementById(\'soimg' . $i . '\')){ document.getElementById(\'soimg' . $i . '\').src=\'' . $GLOBALS['pmaThemeImage'] . 's_desc.png\'; }';
                 }
@@ -818,7 +830,7 @@ function PMA_displayTableHeaders(&$is_display, &$fields_meta, $fields_cnt = 0, $
 
             if ($disp_direction == 'horizontal' || $disp_direction == 'horizontalflipped') {
                 ?>
-<th <?php echo $column_style; ?> <?php if ($disp_direction == 'horizontalflipped') echo 'valign="bottom"'; ?>>
+<th <?php echo $column_style; ?> <?php if ($disp_direction == 'horizontalflipped') { echo 'valign="bottom"'; } ?>>
     <?php echo $order_link; ?>
     <?php echo $comments; ?>
 </th>
@@ -834,7 +846,7 @@ function PMA_displayTableHeaders(&$is_display, &$fields_meta, $fields_cnt = 0, $
         else {
             if ($disp_direction == 'horizontal' || $disp_direction == 'horizontalflipped') {
                 ?>
-<th <?php echo $column_style; ?> <?php if ($disp_direction == 'horizontalflipped') echo 'valign="bottom"'; ?>  <?php echo ($disp_direction == 'horizontalflipped' && $GLOBALS['cfg']['HeaderFlipType'] == 'css' ? 'style="direction: ltr; writing-mode: tb-rl;"' : ''); ?>>
+<th <?php echo $column_style; ?> <?php if ($disp_direction == 'horizontalflipped') { echo 'valign="bottom"'; } ?>  <?php echo ($disp_direction == 'horizontalflipped' && $GLOBALS['cfg']['HeaderFlipType'] == 'css' ? 'style="direction: ltr; writing-mode: tb-rl;"' : ''); ?>>
     <?php echo ($disp_direction == 'horizontalflipped' && $GLOBALS['cfg']['HeaderFlipType'] == 'fake'? PMA_flipstring(htmlspecialchars($fields_meta[$i]->name), "<br />\n") : htmlspecialchars($fields_meta[$i]->name)) . "\n"; ?>
     <?php echo $comments; ?>
 </th>
@@ -868,9 +880,9 @@ function PMA_displayTableHeaders(&$is_display, &$fields_meta, $fields_cnt = 0, $
         } // end vertical mode
     }
 
-    //     ... else if no button, displays empty cols if required
+    //     ... elseif no button, displays empty cols if required
     // (unless coming from Browse mode print view)
-    else if ($GLOBALS['cfg']['ModifyDeleteAtRight']
+    elseif ($GLOBALS['cfg']['ModifyDeleteAtRight']
              && ($is_display['edit_lnk'] == 'nn' && $is_display['del_lnk'] == 'nn')
              && (!$GLOBALS['is_header_sent'])) {
         $vertical_display['emptyafter'] = ($is_display['edit_lnk'] != 'nn' && $is_display['del_lnk'] != 'nn') ? 3 : 1;
@@ -1111,7 +1123,7 @@ function PMA_displayTableBody(&$dt_result, &$is_display, $map, $analyzed_sql) {
                         $del_str .= ' ' . $GLOBALS['strDelete'] . '</div>';
                     }
                 }
-            } else if ($is_display['del_lnk'] == 'kp') { // kill process case
+            } elseif ($is_display['del_lnk'] == 'kp') { // kill process case
                 $lnk_goto = 'sql.php'
                           . '?' . str_replace('&amp;', '&', $url_query)
                           . '&sql_query=' . urlencode($url_sql_query)
@@ -1216,13 +1228,13 @@ function PMA_displayTableBody(&$dt_result, &$is_display, $map, $analyzed_sql) {
                 //if (!isset($row[$meta->name])
                 if (!isset($row[$i]) || is_null($row[$i])) {
                     $vertical_display['data'][$row_no][$i]     = '    <td align="right"' . $column_style . $bgcolor . '><i>NULL</i></td>' . "\n";
-                } else if ($row[$i] != '') {
+                } elseif ($row[$i] != '') {
                     $vertical_display['data'][$row_no][$i]     = '    <td align="right"' . $column_style . $bgcolor . ' class="nowrap">';
 
                     if (isset($analyzed_sql[0]['select_expr']) && is_array($analyzed_sql[0]['select_expr'])) {
                         foreach ($analyzed_sql[0]['select_expr'] AS $select_expr_position => $select_expr) {
                             $alias = $analyzed_sql[0]['select_expr'][$select_expr_position]['alias'];
-                            if (!empty($alias)) {
+                            if (isset($alias) && strlen($alias)) {
                                 $true_column = $analyzed_sql[0]['select_expr'][$select_expr_position]['column'];
                                 if ($alias == $meta->name) {
                                     $meta->name = $true_column;
@@ -1233,21 +1245,19 @@ function PMA_displayTableBody(&$dt_result, &$is_display, $map, $analyzed_sql) {
 
                     if (isset($map[$meta->name])) {
                         // Field to display from the foreign table?
-                        if (!empty($map[$meta->name][2])) {
+                        if (isset($map[$meta->name][2]) && strlen($map[$meta->name][2])) {
                             $dispsql     = 'SELECT ' . PMA_backquote($map[$meta->name][2])
                                          . ' FROM ' . PMA_backquote($map[$meta->name][3]) . '.' . PMA_backquote($map[$meta->name][0])
                                          . ' WHERE ' . PMA_backquote($map[$meta->name][1])
                                          . ' = ' . $row[$i];
-                            $dispresult  = PMA_DBI_try_query($dispsql, NULL, PMA_DBI_QUERY_STORE);
+                            $dispresult  = PMA_DBI_try_query($dispsql, null, PMA_DBI_QUERY_STORE);
                             if ($dispresult && PMA_DBI_num_rows($dispresult) > 0) {
                                 list($dispval) = PMA_DBI_fetch_row($dispresult, 0);
-                            }
-                            else {
+                            } else {
                                 $dispval = $GLOBALS['strLinkNotFound'];
                             }
                             @PMA_DBI_free_result($dispresult);
-                        }
-                        else {
+                        } else {
                             $dispval     = '';
                         } // end if... else...
 
@@ -1272,7 +1282,7 @@ function PMA_displayTableBody(&$dt_result, &$is_display, $map, $analyzed_sql) {
 
             //  b l o b
 
-            } else if ($GLOBALS['cfg']['ShowBlob'] == FALSE && stristr($meta->type, 'BLOB')) {
+            } elseif ($GLOBALS['cfg']['ShowBlob'] == FALSE && stristr($meta->type, 'BLOB')) {
                 // loic1 : PMA_mysql_fetch_fields returns BLOB in place of
                 // TEXT fields type, however TEXT fields must be displayed
                 // even if $GLOBALS['cfg']['ShowBlob'] is false -> get the true type
@@ -1289,13 +1299,17 @@ function PMA_displayTableBody(&$dt_result, &$is_display, $map, $analyzed_sql) {
                     }
 
                     $blobtext .= ']';
+                    // FIXME: octetstream/download seems to fail
+                    if (strpos($transform_function, 'octetstream')) {
+                        $blobtext = $row[$i];
+                    }
                     $blobtext = ($default_function != $transform_function ? $transform_function($blobtext, $transform_options, $meta) : $default_function($blobtext, array(), $meta));
 
                     $vertical_display['data'][$row_no][$i]      = '    <td align="center"' . $column_style . $bgcolor . '>' . $blobtext . '</td>';
                 } else {
                     if (!isset($row[$i]) || is_null($row[$i])) {
                         $vertical_display['data'][$row_no][$i] = '    <td' . $column_style . $bgcolor . '><i>NULL</i></td>' . "\n";
-                    } else if ($row[$i] != '') {
+                    } elseif ($row[$i] != '') {
                         // garvin: if a transform function for blob is set, none of these replacements will be made
                         if (PMA_strlen($row[$i]) > $GLOBALS['cfg']['LimitChars'] && ($dontlimitchars != 1)) {
                             $row[$i] = PMA_substr($row[$i], 0, $GLOBALS['cfg']['LimitChars']) . '...';
@@ -1312,7 +1326,7 @@ function PMA_displayTableBody(&$dt_result, &$is_display, $map, $analyzed_sql) {
             } else {
                 if (!isset($row[$i]) || is_null($row[$i])) {
                     $vertical_display['data'][$row_no][$i]     = '    <td' . $column_style . $bgcolor . '><i>NULL</i></td>' . "\n";
-                } else if ($row[$i] != '') {
+                } elseif ($row[$i] != '') {
                     // loic1: support blanks in the key
                     $relation_id = $row[$i];
 
@@ -1348,7 +1362,7 @@ function PMA_displayTableBody(&$dt_result, &$is_display, $map, $analyzed_sql) {
                     if (isset($analyzed_sql[0]['select_expr']) && is_array($analyzed_sql[0]['select_expr'])) {
                         foreach ($analyzed_sql[0]['select_expr'] AS $select_expr_position => $select_expr) {
                             $alias = $analyzed_sql[0]['select_expr'][$select_expr_position]['alias'];
-                            if (!empty($alias)) {
+                            if (isset($alias) && strlen($alias)) {
                                 $true_column = $analyzed_sql[0]['select_expr'][$select_expr_position]['column'];
                                 if ($alias == $meta->name) {
                                     $meta->name = $true_column;
@@ -1359,21 +1373,19 @@ function PMA_displayTableBody(&$dt_result, &$is_display, $map, $analyzed_sql) {
 
                     if (isset($map[$meta->name])) {
                         // Field to display from the foreign table?
-                        if (!empty($map[$meta->name][2])) {
+                        if (isset($map[$meta->name][2]) && strlen($map[$meta->name][2])) {
                             $dispsql     = 'SELECT ' . PMA_backquote($map[$meta->name][2])
                                          . ' FROM ' . PMA_backquote($map[$meta->name][3]) . '.' . PMA_backquote($map[$meta->name][0])
                                          . ' WHERE ' . PMA_backquote($map[$meta->name][1])
                                          . ' = \'' . PMA_sqlAddslashes($row[$i]) . '\'';
-                            $dispresult  = PMA_DBI_try_query($dispsql, NULL, PMA_DBI_QUERY_STORE);
+                            $dispresult  = PMA_DBI_try_query($dispsql, null, PMA_DBI_QUERY_STORE);
                             if ($dispresult && PMA_DBI_num_rows($dispresult) > 0) {
                                 list($dispval) = PMA_DBI_fetch_row($dispresult);
                                 @PMA_DBI_free_result($dispresult);
-                            }
-                            else {
+                            } else {
                                 $dispval = $GLOBALS['strLinkNotFound'];
                             }
-                        }
-                        else {
+                        } else {
                             $dispval = '';
                         }
                         $title = (!empty($dispval))? ' title="' . htmlspecialchars($dispval) . '"' : '';
@@ -1709,7 +1721,12 @@ function PMA_displayTable(&$dt_result, &$the_disp_mode, $analyzed_sql)
                         ? $total - 1
                         : $pos_next - 1;
         PMA_showMessage($GLOBALS['strShowingRecords'] . " $pos - $last_shown_rec (" . PMA_formatNumber( $total, 0 ) . ' ' . $GLOBALS['strTotal'] . $selectstring . ', ' . sprintf($GLOBALS['strQueryTime'], $GLOBALS['querytime']) . ')');
-    } else if (!isset($GLOBALS['printview']) || $GLOBALS['printview'] != '1') {
+        if (PMA_tableIsView($db, $table) && $total ==  $GLOBALS['cfg']['MaxExactCount']) {
+            echo '<div class="notice">' . "\n";
+            echo PMA_sanitize(sprintf($GLOBALS['strViewMaxExactCount'], PMA_formatNumber($GLOBALS['cfg']['MaxExactCount'], 0), '[a@./Documentation.html#cfg_MaxExactCount@_blank]', '[/a]')) . "\n";
+            echo '</div>' . "\n";
+        }
+    } elseif (!isset($GLOBALS['printview']) || $GLOBALS['printview'] != '1') {
         PMA_showMessage($GLOBALS['strSQLQuery']);
     }
 
@@ -1728,7 +1745,7 @@ function PMA_displayTable(&$dt_result, &$the_disp_mode, $analyzed_sql)
     if ($is_display['nav_bar'] == '1') {
         PMA_displayTableNavigation($pos_next, $pos_prev, $encoded_sql_query);
         echo "\n";
-    } else if (!isset($GLOBALS['printview']) || $GLOBALS['printview'] != '1') {
+    } elseif (!isset($GLOBALS['printview']) || $GLOBALS['printview'] != '1') {
         echo "\n" . '<br /><br />' . "\n";
     }
 
@@ -1749,13 +1766,13 @@ function PMA_displayTable(&$dt_result, &$the_disp_mode, $analyzed_sql)
     $tabs    = '(\'' . join('\',\'', $target) . '\')';
 
     if ($cfgRelation['displaywork']) {
-        if (empty($table)) {
+        if (! isset($table) || ! strlen($table)) {
             $exist_rel = FALSE;
         } else {
             $exist_rel = PMA_getForeigners($db, $table, '', 'both');
             if ($exist_rel) {
                 foreach ($exist_rel AS $master_field => $rel) {
-                    $display_field = PMA_getDisplayField($rel['foreign_db'],$rel['foreign_table']);
+                    $display_field = PMA_getDisplayField($rel['foreign_db'], $rel['foreign_table']);
                     $map[$master_field] = array($rel['foreign_table'],
                                           $rel['foreign_field'],
                                           $display_field,
@@ -1855,7 +1872,7 @@ function PMA_displayTable(&$dt_result, &$the_disp_mode, $analyzed_sql)
     if ($is_display['nav_bar'] == '1') {
         echo '<br />' . "\n";
         PMA_displayTableNavigation($pos_next, $pos_prev, $encoded_sql_query);
-    } else if (!isset($GLOBALS['printview']) || $GLOBALS['printview'] != '1') {
+    } elseif (!isset($GLOBALS['printview']) || $GLOBALS['printview'] != '1') {
         echo "\n" . '<br /><br />' . "\n";
     }
 } // end of the 'PMA_displayTable()' function

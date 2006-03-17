@@ -14,13 +14,13 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-06-25 11:28+0200\n"
+"POT-Creation-Date: 2006-03-17 14:03+0100\n"
 "PO-Revision-Date: 2005-09-02 02:48+0200\n"
 "Last-Translator: Daniel Knabl <daniel@knabl.com>\n"
 "Language-Team: German <gnome-de@gnome.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
-"Content-Transfer-Encoding: 8bit"
+"Content-Transfer-Encoding: 8bit\n"
 
 #. Type: multiselect
 #. Description
@@ -53,6 +53,46 @@ msgid ""
 "d/${webserver} restart"
 msgstr ""
 "Beachten Sie, dass ${webserver} neu gestartet werden muss, um die neue "
-"Konfiguration zu verwenden. Sie können ${webserver} auch mit dem Befehl "
-"\"/etc/init.d/${webserver} restart\" neu starten."
+"Konfiguration zu verwenden. Sie können ${webserver} auch mit dem Befehl \"/"
+"etc/init.d/${webserver} restart\" neu starten."
 
+#. Type: string
+#. Description
+#: ../templates:20
+msgid "User name for web-based setup system:"
+msgstr ""
+
+#. Type: string
+#. Description
+#: ../templates:20
+msgid "Leave empty if you want to use the default user name 'admin'."
+msgstr ""
+
+#. Type: password
+#. Description
+#: ../templates:30
+msgid "Password for web-based setup system:"
+msgstr ""
+
+#. Type: password
+#. Description
+#: ../templates:30
+msgid ""
+"phpMyAdmin comes with a setup script that can help you with creating "
+"configuration. The script is located at http://localhost/scripts/setup.php . "
+"For security reason it requires authorization."
+msgstr ""
+
+#. Type: password
+#. Description
+#: ../templates:30
+msgid ""
+"You can manage the usernames and passwords with `htpasswd' command. They are "
+"stored in /etc/phpmyadmin/htpasswd.setup file."
+msgstr ""
+
+#. Type: password
+#. Description
+#: ../templates:30
+msgid "Leave empty if you want to disable an access to web-based setup."
+msgstr ""

@@ -8,19 +8,32 @@ Build-Depends-Indep: yada (>= 0.48), po-debconf
 
 Package: phpmyadmin
 Architecture: all
-Depends: php5 | php5-cgi | php4 | php4-cgi, php5-mysql | php5-mysqli | php4-mysql, apache2 | httpd, ${phpmyadmin:Depends}
-Recommends: php5-mcrypt | php4-mcrypt
-Suggests: mysql-server (>= 3.23.36), php5-gd | php4-gd, ${phpmyadmin:Suggests}
+Depends: php5-cgi | php5 | php4-cgi | php4, php5-mysql | php5-mysqli | php4-mysql, ${phpmyadmin:Depends}
+Recommends: apache2 | httpd, php5-mcrypt | php4-mcrypt, php5-gd | php4-gd, ${phpmyadmin:Recommends}
+Suggests: mysql-server (>= 3.23.36), ${phpmyadmin:Suggests}
 Description: set of PHP-scripts to administrate MySQL over the WWW
  phpMyAdmin is intended to handle the administration of MySQL over the WWW.
  Currently it can:
-  - create and drop databases
-  - create, copy, drop and alter tables
-  - delete, edit and add fields
-  - execute any SQL-statement, even batch-queries
-  - manage keys on fields
-  - load text files into tables
-  - create and read dumps of tables
-  - export and import CSV data
-  - administer one single database as well as a whole database server
-  - communicate in 50 different languages
+   - easily browse through databases and tables
+   - create, copy, rename, alter and drop databases
+   - create, copy, rename, alter and drop tables
+   - do table maintenance
+   - add, edit and drop fields
+   - execute any SQL-statement, even multiple queries
+   - create, alter and drop indexes
+   - load text files into tables
+   - create and read dumps of tables or databases
+   - export data to SQL, CSV, XML, Word, Excel, PDF and Latex formats
+   - administer multiple servers
+   - manage MySQL users and privileges
+   - check server settings and runtime information with configuration hints
+   - check referential integrity in MyISAM tables
+   - using Query-by-example (QBE), create complex queries automatically
+     connecting required tables
+   - create PDF graphics of your Database layout
+   - search globally in a database or a subset of it
+   - transform stored data into any format using a set of predefined
+     functions, like displaying BLOB-data as image or download-link
+   - support InnoDB tables and foreign keys
+   - support mysqli, the improved MySQL extension
+   - communicate in 50 different languages

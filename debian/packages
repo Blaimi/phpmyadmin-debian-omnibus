@@ -1,4 +1,4 @@
-# $Id: /trunk/debian/dists/phpmyadmin/debian/packages 20 2006-03-17T16:07:28.675897Z dexter  $
+# $Id: /trunk/debian/dists/phpmyadmin/debian/packages 22 2006-03-18T14:05:41.928464Z dexter  $
 
 # If the debian/rules or debian/control file is missing, rebuild the file:
 #
@@ -272,7 +272,7 @@ Postinst: bash
  .
      if [ ! -f /var/lib/phpmyadmin/config.inc.php ]; then
          if [ -z "$2" ] || dpkg --compare-versions "$2" lt-nl "4:2.8.0.2-1"; then
-             date=`822-date`
+             date=`LANG=C date -R`
              for php in /usr/bin/php /usr/bin/php5 /usr/bin/php4 /usr/lib/cgi-bin/php /usr/lib/cgi-bin/php5 /usr/lib/cgi-bin/php4 ''; do
                  test -n "$php" || break
                  test -x $php || continue

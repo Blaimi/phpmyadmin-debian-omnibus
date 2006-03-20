@@ -14,9 +14,9 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: phpmyadmin\n"
-"Report-Msgid-Bugs-To: \n"
+"Report-Msgid-Bugs-To: debian-l10n-portuguese@lists.debian.org\n"
 "POT-Creation-Date: 2006-03-17 14:03+0100\n"
-"PO-Revision-Date: 2005-05-26 14:03-0300\n"
+"PO-Revision-Date: 2006-03-19 17:50-0300\n"
 "Last-Translator: André Luís Lopes <andrelop@debian.org>\n"
 "Language-Team: Debian-BR Project <debian-l10n-portuguese@lists.debian.org>\n"
 "MIME-Version: 1.0\n"
@@ -55,25 +55,27 @@ msgid ""
 msgstr ""
 "Lembre-se que, para que a nova configuração seja ativada, o ${webserver} "
 "precisa ser reiniciado. Você também pode reiniciar o ${webserver} "
-"manualmente executando o '/etc/init.d/${webserver} restart'"
+"manualmente executando '/etc/init.d/${webserver} restart'"
 
 #. Type: string
 #. Description
 #: ../templates:20
 msgid "User name for web-based setup system:"
-msgstr ""
+msgstr "Nome do usuário para o sistema de configuração baseado na Web :"
 
 #. Type: string
 #. Description
 #: ../templates:20
 msgid "Leave empty if you want to use the default user name 'admin'."
 msgstr ""
+"Mantenha em branco caso você deseje utilizar o nome de usuário padrão "
+"'admin'."
 
 #. Type: password
 #. Description
 #: ../templates:30
 msgid "Password for web-based setup system:"
-msgstr ""
+msgstr "Senha para o sistema de configuração baseado na Web :"
 
 #. Type: password
 #. Description
@@ -83,6 +85,10 @@ msgid ""
 "configuration. The script is located at http://localhost/scripts/setup.php . "
 "For security reason it requires authorization."
 msgstr ""
+"O phpMyAdmin é fornecido com um script de configuração que pode "
+"auxiliá-lo em sua configuração. O script está localizado em "
+"http://localhost/scripts/setup.php . Por razões de segurança, o "
+"mesmo requer autorização."
 
 #. Type: password
 #. Description
@@ -91,9 +97,14 @@ msgid ""
 "You can manage the usernames and passwords with `htpasswd' command. They are "
 "stored in /etc/phpmyadmin/htpasswd.setup file."
 msgstr ""
+"Você pode gerenciar os nomes de usuários e senhas com o comando "
+"'htpasswd'. Os mesmos estão armazenados no arquivo "
+"/etc/phpmyadmin/htpasswd.setup."
 
 #. Type: password
 #. Description
 #: ../templates:30
 msgid "Leave empty if you want to disable an access to web-based setup."
 msgstr ""
+"Mantenha em branco caso você deseje desabilitar acesso à configuração "
+"baseada na Web."

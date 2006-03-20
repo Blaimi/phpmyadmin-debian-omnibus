@@ -1,4 +1,4 @@
-# $Id: /trunk/debian/dists/phpmyadmin/debian/packages 22 2006-03-18T14:05:41.928464Z dexter  $
+# $Id: /trunk/debian/dists/phpmyadmin/debian/packages 24 2006-03-20T10:14:33.109888Z dexter  $
 
 # If the debian/rules or debian/control file is missing, rebuild the file:
 #
@@ -69,7 +69,7 @@ Description: set of PHP-scripts to administrate MySQL over the WWW
 Install: sh
  yada install -data -into /usr/share/phpmyadmin *.php *.css
  yada install -data -into /usr/share/phpmyadmin/scripts scripts/setup.php
- yada copy -data -into /usr/share/phpmyadmin css lang libraries themes
+ yada copy -data -into /usr/share/phpmyadmin css js lang libraries themes
  yada remove -data -into /usr/share/phpmyadmin/lang *.sh
  yada remove -data -into /usr/share/phpmyadmin/libraries/fpdf README
  yada remove -data -into /usr/share/phpmyadmin/libraries/transformations *.sh README TEMPLATE*

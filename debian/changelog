@@ -1,3 +1,11 @@
+phpmyadmin (4:2.8.0.2-3) unstable; urgency=low
+
+  * Add missing javascript files. Closes: #357743, #357579.
+  * Updated Brazilian Portuguese debconf templates translation, thanks Andre
+    Luis Lopes. Closes: #357840.
+
+ -- Piotr Roszatycki <dexter@debian.org>  Mon, 20 Mar 2006 11:06:09 +0100
+
 phpmyadmin (4:2.8.0.2-2) unstable; urgency=low
 
   * Do not use 822-date command in postinst script. Close: #357605.

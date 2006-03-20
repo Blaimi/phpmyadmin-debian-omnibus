@@ -145,7 +145,7 @@ debian/tmp-phpmyadmin/DEBIAN/control: debian/build-indep-stamp debian/control
 	echo -E 'eval "yada () { perl $$(which yada) \"\$$@\"; }"; set -e; set -v';\
 	echo -E 'yada install -data -into /usr/share/phpmyadmin *.php *.css';\
 	echo -E 'yada install -data -into /usr/share/phpmyadmin/scripts scripts/setup.php';\
-	echo -E 'yada copy -data -into /usr/share/phpmyadmin css lang libraries themes';\
+	echo -E 'yada copy -data -into /usr/share/phpmyadmin css js lang libraries themes';\
 	echo -E 'yada remove -data -into /usr/share/phpmyadmin/lang *.sh';\
 	echo -E 'yada remove -data -into /usr/share/phpmyadmin/libraries/fpdf README';\
 	echo -E 'yada remove -data -into /usr/share/phpmyadmin/libraries/transformations *.sh README TEMPLATE*';\

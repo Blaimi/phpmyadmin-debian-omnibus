@@ -7,14 +7,14 @@ msgstr ""
 "Project-Id-Version: phpmyadmin 4/2.6.2-3\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2006-03-17 14:03+0100\n"
-"PO-Revision-Date: 2005-07-04 17:02+0930\n"
+"PO-Revision-Date: 2006-03-29 17:25+1030\n"
 "Last-Translator: Clytie Siddall <clytie@riverland.net.au>\n"
 "Language-Team: Vietnamese <gnomevi-list@lists.sourceforge.net>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0\n"
-"X-Generator: LocFactoryEditor 1.2.2\n"
+"X-Generator: LocFactoryEditor 1.6b36\n"
 
 #. Type: multiselect
 #. Description
@@ -54,28 +54,33 @@ msgstr ""
 #. Description
 #: ../templates:20
 msgid "User name for web-based setup system:"
-msgstr ""
+msgstr "Tên người dùng cho hệ thống thiết lập đựa vào Mạng:"
 
 #. Type: string
 #. Description
 #: ../templates:20
 msgid "Leave empty if you want to use the default user name 'admin'."
 msgstr ""
+"Hãy bỏ rỗng nếu bạn muốn sử dụng tên người dùng mặc định « admin » (quản "
+"trị)."
 
 #. Type: password
 #. Description
 #: ../templates:30
 msgid "Password for web-based setup system:"
-msgstr ""
+msgstr "Mật khẩu cho hệ thống thiết lập đựa vào Mạng:"
 
 #. Type: password
 #. Description
 #: ../templates:30
 msgid ""
 "phpMyAdmin comes with a setup script that can help you with creating "
-"configuration. The script is located at http://localhost/scripts/setup.php . "
+"configuration. The script is located at http://localhost/phpmyadmin/scripts/setup.php . "
 "For security reason it requires authorization."
 msgstr ""
+"Phần mềm phpMyAdmin có sẵn một tập lệnh thiết lập để hướng dẫn bạn tạo cấu "
+"hình. Tập lệnh này nằm ở <http://localhost/phpmyadmin/scripts/setup.php>. Vì lý do bảo "
+"mật, bạn cần quyền quản trị để sử dụng nó."
 
 #. Type: password
 #. Description
@@ -84,9 +89,13 @@ msgid ""
 "You can manage the usernames and passwords with `htpasswd' command. They are "
 "stored in /etc/phpmyadmin/htpasswd.setup file."
 msgstr ""
+"Bạn có thể quản lý các tên người dùng và mật khẩu bằng lệnh « htpasswd ». "
+"Chúng được cất giữ trong tập tin </etc/phpmyadmin/htpasswd.setup>."
 
 #. Type: password
 #. Description
 #: ../templates:30
-msgid "Leave empty if you want to disable an access to web-based setup."
+msgid "Leave empty if you want to disable access to web-based setup."
 msgstr ""
+"Hãy bỏ rỗng nếu bạn muốn vô hiệu hoá khả năng truy cập thiết lập đựa vào "
+"Mạng."

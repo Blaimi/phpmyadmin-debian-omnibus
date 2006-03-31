@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-03-17 14:03+0100\n"
+"POT-Creation-Date: 2006-03-31 15:03+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -68,8 +68,8 @@ msgstr ""
 #: ../templates:30
 msgid ""
 "phpMyAdmin comes with a setup script that can help you with creating "
-"configuration. The script is located at http://localhost/scripts/setup.php . "
-"For security reason it requires authorization."
+"configuration. The script is located at http://localhost/phpmyadmin/scripts/"
+"setup.php . For security reason it requires authorization."
 msgstr ""
 
 #. Type: password
@@ -83,5 +83,5 @@ msgstr ""
 #. Type: password
 #. Description
 #: ../templates:30
-msgid "Leave empty if you want to disable an access to web-based setup."
+msgid "Leave empty if you want to disable access to web-based setup."
 msgstr ""

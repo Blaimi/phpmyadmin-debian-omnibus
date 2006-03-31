@@ -78,7 +78,7 @@ msgstr ""
 #: ../templates:30
 msgid ""
 "phpMyAdmin comes with a setup script that can help you with creating "
-"configuration. The script is located at http://localhost/scripts/setup.php . "
+"configuration. The script is located at http://localhost/phpmyadmin/scripts/setup.php . "
 "For security reason it requires authorization."
 msgstr ""
 
@@ -93,5 +93,5 @@ msgstr ""
 #. Type: password
 #. Description
 #: ../templates:30
-msgid "Leave empty if you want to disable an access to web-based setup."
+msgid "Leave empty if you want to disable access to web-based setup."
 msgstr ""

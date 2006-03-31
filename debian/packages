@@ -1,4 +1,4 @@
-# $Id: /trunk/debian/dists/phpmyadmin/debian/packages 24 2006-03-20T10:14:33.109888Z dexter  $
+# $Id: /trunk/debian/dists/phpmyadmin/debian/packages 30 2006-03-31T13:13:20.627481Z dexter  $
 
 # If the debian/rules or debian/control file is missing, rebuild the file:
 #
@@ -120,7 +120,7 @@ Templates:
  Default: admin
  _Description: User name for web-based setup system:
   phpMyAdmin comes with a setup script that can help you with creating
-  configuration. The script is located at http://localhost/scripts/setup.php .
+  configuration. The script is located at http://localhost/phpmyadmin/scripts/setup.php .
   For security reason it requires authorization.
   .
   Leave empty if you want to use the default user name 'admin'.
@@ -130,13 +130,13 @@ Templates:
  Default:
  _Description: Password for web-based setup system:
   phpMyAdmin comes with a setup script that can help you with creating
-  configuration. The script is located at http://localhost/scripts/setup.php .
+  configuration. The script is located at http://localhost/phpmyadmin/scripts/setup.php .
   For security reason it requires authorization.
   .
   You can manage the usernames and passwords with `htpasswd' command.
   They are stored in /etc/phpmyadmin/htpasswd.setup file.
   .
-  Leave empty if you want to disable an access to web-based setup.
+  Leave empty if you want to disable access to web-based setup.
 Config: bash
  db_input medium phpmyadmin/reconfigure-webserver || true
  db_go || true

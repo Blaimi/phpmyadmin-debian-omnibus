@@ -1,3 +1,15 @@
+phpmyadmin (4:2.8.0.2-4) unstable; urgency=low
+
+  * Fixed typos in debconf template. Closes: #360059.
+  * Updated Czech debconf templates translation, thanks Miroslav Kure.
+    Closes: #359757.
+  * Updated German debconf templates translation, thanks Daniel Knabl.
+    Closes: #359752.
+  * Updated Swedish debconf templates translation, thanks Daniel Nylander.
+  * Updated Vietnamese debconf templates translation, thanks Clytie Siddall.
+
+ -- Piotr Roszatycki <dexter@debian.org>  Fri, 31 Mar 2006 14:54:00 +0200
+
 phpmyadmin (4:2.8.0.2-3) unstable; urgency=low
 
   * Add missing javascript files. Closes: #357743, #357579.

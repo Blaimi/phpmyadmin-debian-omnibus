@@ -15,7 +15,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2006-03-17 14:03+0100\n"
-"PO-Revision-Date: 2005-09-02 02:48+0200\n"
+"PO-Revision-Date: 2006-03-28 19:25+0200\n"
 "Last-Translator: Daniel Knabl <daniel@knabl.com>\n"
 "Language-Team: German <gnome-de@gnome.org>\n"
 "MIME-Version: 1.0\n"
@@ -60,28 +60,33 @@ msgstr ""
 #. Description
 #: ../templates:20
 msgid "User name for web-based setup system:"
-msgstr ""
+msgstr "Benutzername für die webbasierte Installaton:"
 
 #. Type: string
 #. Description
 #: ../templates:20
 msgid "Leave empty if you want to use the default user name 'admin'."
 msgstr ""
+"Lassen Sie das leer, wenn sie den Standardbenutzernamen 'admin' verwenden "
+"möchten."
 
 #. Type: password
 #. Description
 #: ../templates:30
 msgid "Password for web-based setup system:"
-msgstr ""
+msgstr "Passwort für die webbasierte Installation:"
 
 #. Type: password
 #. Description
 #: ../templates:30
 msgid ""
 "phpMyAdmin comes with a setup script that can help you with creating "
-"configuration. The script is located at http://localhost/scripts/setup.php . "
+"configuration. The script is located at http://localhost/phpmyadmin/scripts/setup.php . "
 "For security reason it requires authorization."
 msgstr ""
+"phpMyAdmin kommt mit einem Installationsscript, welches Ihnen beim Erstellen "
+"der Konfiguration hilft. Das Script befindet sich unter http://localhost/phpmyadmin/scripts/setup.php . "
+"Aus Sicherheitsgründen erfordert es Authorisierung."
 
 #. Type: password
 #. Description
@@ -90,9 +95,14 @@ msgid ""
 "You can manage the usernames and passwords with `htpasswd' command. They are "
 "stored in /etc/phpmyadmin/htpasswd.setup file."
 msgstr ""
+"Sie können die Benutzernamen und Passwörter mittels dem 'htpasswd' Kommando "
+"verwalten. Sie werden in der Datei /etc/phpmyadmin/htpasswd.setup "
+"gespeichert."
 
 #. Type: password
 #. Description
 #: ../templates:30
-msgid "Leave empty if you want to disable an access to web-based setup."
+msgid "Leave empty if you want to disable access to web-based setup."
 msgstr ""
+"Lassen Sie das leer, wenn Sie den Zugriff auf die webbasierte Installation "
+"verbieten möchten."

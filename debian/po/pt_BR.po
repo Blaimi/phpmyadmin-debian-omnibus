@@ -14,7 +14,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: phpmyadmin\n"
-"Report-Msgid-Bugs-To: debian-l10n-portuguese@lists.debian.org\n"
+"Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2006-03-17 14:03+0100\n"
 "PO-Revision-Date: 2006-03-19 17:50-0300\n"
 "Last-Translator: André Luís Lopes <andrelop@debian.org>\n"
@@ -82,13 +82,12 @@ msgstr "Senha para o sistema de configuração baseado na Web :"
 #: ../templates:30
 msgid ""
 "phpMyAdmin comes with a setup script that can help you with creating "
-"configuration. The script is located at http://localhost/scripts/setup.php . "
+"configuration. The script is located at http://localhost/phpmyadmin/scripts/setup.php . "
 "For security reason it requires authorization."
 msgstr ""
-"O phpMyAdmin é fornecido com um script de configuração que pode "
-"auxiliá-lo em sua configuração. O script está localizado em "
-"http://localhost/scripts/setup.php . Por razões de segurança, o "
-"mesmo requer autorização."
+"O phpMyAdmin é fornecido com um script de configuração que pode auxiliá-lo "
+"em sua configuração. O script está localizado em http://localhost/phpmyadmin/scripts/"
+"setup.php . Por razões de segurança, o mesmo requer autorização."
 
 #. Type: password
 #. Description
@@ -97,14 +96,13 @@ msgid ""
 "You can manage the usernames and passwords with `htpasswd' command. They are "
 "stored in /etc/phpmyadmin/htpasswd.setup file."
 msgstr ""
-"Você pode gerenciar os nomes de usuários e senhas com o comando "
-"'htpasswd'. Os mesmos estão armazenados no arquivo "
-"/etc/phpmyadmin/htpasswd.setup."
+"Você pode gerenciar os nomes de usuários e senhas com o comando 'htpasswd'. "
+"Os mesmos estão armazenados no arquivo /etc/phpmyadmin/htpasswd.setup."
 
 #. Type: password
 #. Description
 #: ../templates:30
-msgid "Leave empty if you want to disable an access to web-based setup."
+msgid "Leave empty if you want to disable access to web-based setup."
 msgstr ""
 "Mantenha em branco caso você deseje desabilitar acesso à configuração "
 "baseada na Web."

@@ -1,3 +1,4 @@
+# translation of fr.po to French
 #
 #    Translators, if you are not familiar with the PO format, gettext
 #    documentation is worth reading, especially sections dedicated to
@@ -11,17 +12,19 @@
 #
 #    Developers do not need to manually edit POT or PO files.
 #
+# Christian Perrier <bubulle@debian.org>, 2006.
 msgid ""
 msgstr ""
-"Project-Id-Version: phpmyadmin 2.5.1-1\n"
+"Project-Id-Version: fr\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2006-03-17 14:03+0100\n"
-"PO-Revision-Date: 2003-11-10 18:29+0100\n"
+"PO-Revision-Date: 2006-03-19 08:02+0100\n"
 "Last-Translator: Christian Perrier <bubulle@debian.org>\n"
 "Language-Team: French <debian-l10n-french@lists.debian.org>\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=iso-8859-15\n"
+"Content-Type: text/plain; charset=ISO-8859-15\n"
 "Content-Transfer-Encoding: 8bit\n"
+"X-Generator: KBabel 1.11.2\n"
 
 #. Type: multiselect
 #. Description
@@ -61,28 +64,31 @@ msgstr ""
 #. Description
 #: ../templates:20
 msgid "User name for web-based setup system:"
-msgstr ""
+msgstr "Identifiant pour la configuration par le web :"
 
 #. Type: string
 #. Description
 #: ../templates:20
 msgid "Leave empty if you want to use the default user name 'admin'."
-msgstr ""
+msgstr "Laissez ce champ vide pour utiliser la valeur par défaut (« admin »)."
 
 #. Type: password
 #. Description
 #: ../templates:30
 msgid "Password for web-based setup system:"
-msgstr ""
+msgstr "Mot de passe pour la configuration par le web :"
 
 #. Type: password
 #. Description
 #: ../templates:30
 msgid ""
 "phpMyAdmin comes with a setup script that can help you with creating "
-"configuration. The script is located at http://localhost/scripts/setup.php . "
+"configuration. The script is located at http://localhost/phpmyadmin/scripts/setup.php . "
 "For security reason it requires authorization."
 msgstr ""
+"PhpMyAdmin est fourni avec un script d'assistance à la configuration. Ce "
+"script peut être accédé à l'adresse « http://localhost/phpmyadmin/scripts/setup.php ». "
+"L'utilisation de ce script impose une authentification."
 
 #. Type: password
 #. Description
@@ -91,9 +97,13 @@ msgid ""
 "You can manage the usernames and passwords with `htpasswd' command. They are "
 "stored in /etc/phpmyadmin/htpasswd.setup file."
 msgstr ""
+"Les identifiants et mots de passe peuvent être gérés avec la commande "
+"« htpasswd ». Ils sont conservés dans le fichier « /etc/phpmyadmin/htpasswd."
+"setup »."
 
 #. Type: password
 #. Description
 #: ../templates:30
-msgid "Leave empty if you want to disable an access to web-based setup."
+msgid "Leave empty if you want to disable access to web-based setup."
 msgstr ""
+"Si vous laissez ce champ vide, la configuration par le web sera désactivée."

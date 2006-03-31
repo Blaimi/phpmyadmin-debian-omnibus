@@ -19,7 +19,7 @@ Type: string
 Default: admin
 _Description: User name for web-based setup system:
  phpMyAdmin comes with a setup script that can help you with creating
- configuration. The script is located at http://localhost/scripts/setup.php .
+ configuration. The script is located at http://localhost/phpmyadmin/scripts/setup.php .
  For security reason it requires authorization.
  .
  Leave empty if you want to use the default user name 'admin'.
@@ -29,11 +29,11 @@ Type: password
 Default:
 _Description: Password for web-based setup system:
  phpMyAdmin comes with a setup script that can help you with creating
- configuration. The script is located at http://localhost/scripts/setup.php .
+ configuration. The script is located at http://localhost/phpmyadmin/scripts/setup.php .
  For security reason it requires authorization.
  .
  You can manage the usernames and passwords with `htpasswd' command.
  They are stored in /etc/phpmyadmin/htpasswd.setup file.
  .
- Leave empty if you want to disable an access to web-based setup.
+ Leave empty if you want to disable access to web-based setup.
 

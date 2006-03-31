@@ -69,11 +69,11 @@ msgstr "Has³o dla konfiguratora z poziomu przegl±darki:"
 #: ../templates:30
 msgid ""
 "phpMyAdmin comes with a setup script that can help you with creating "
-"configuration. The script is located at http://localhost/scripts/setup.php . "
+"configuration. The script is located at http://localhost/phpmyadmin/scripts/setup.php . "
 "For security reason it requires authorization."
 msgstr ""
 "phpMyAdmina mo¿na skonfigurowaæ z poziomu przegl±darki WWW. Skrypt "
-"konfiguratora jest dostêpny pod adresem http://localhost/scripts/setup.php ."
+"konfiguratora jest dostêpny pod adresem http://localhost/phpmyadmin/scripts/setup.php ."
 
 #. Type: password
 #. Description
@@ -88,7 +88,7 @@ msgstr ""
 #. Type: password
 #. Description
 #: ../templates:30
-msgid "Leave empty if you want to disable an access to web-based setup."
+msgid "Leave empty if you want to disable access to web-based setup."
 msgstr ""
 "Pozostaw puste, je¿eli chcesz zablokowaæ dostêp do konfiguratora z poziomu "
 "przegl±darki."

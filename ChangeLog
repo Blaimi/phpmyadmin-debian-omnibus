@@ -2,8 +2,20 @@
 phpMyAdmin - Changelog
 ----------------------
 
-$Id: ChangeLog,v 2.1929.2.51.2.24 2006/03/17 00:28:30 lem9 Exp $
+$Id: ChangeLog,v 2.1929.2.51.2.28 2006/04/06 12:33:37 lem9 Exp $
 $Source: /cvsroot/phpmyadmin/phpMyAdmin/ChangeLog,v $
+
+2006-04-06 Marc Delisle  <lem9@users.sourceforge.net>
+    * themes/*/css/theme_left.css.php, /theme_right.css.php:
+      protection from unplanned execution path
+    ### 2.8.0.3 released from branch MAINT_2_8_0
+
+2006-03-22 Alexander M. Turek  <me@derrabus.de>
+    * lang/spanish-*.inc.php: Updates, thanks to Daniel Hinostroza.
+    * lang/galician-*.inc.php: Updates, thanks to Xosé Calvo.
+
+2006-03-20 Alexander M. Turek  <me@derrabus.de>
+    * Documentation.html: Added a note about Connector/PHP to FAQ 1.17.
 
 2006-03-16 Marc Delisle  <lem9@users.sourceforge.net>
     * libraries/Theme_Manager.class.php: XSS vulnerability

@@ -5,15 +5,15 @@ Configuration
 Transformations  -  FAQ  -  Developers  -  Credits  -  Translators
 -------------------------------------------------------------------------------
 
-phpMyAdmin 2.8.0.2 Documentation
+phpMyAdmin 2.8.0.3 Documentation
 
   * SourceForge phpMyAdmin project page   [ http://www.phpmyadmin.net/ ]
   * Local documents:
       + Version history: ChangeLog
       + General notes: README
       + License: LICENSE
-  * Documentation version: $Id: Documentation.html,v 2.205.2.11.2.6 2006/03/17
-    00:28:58 lem9 Exp $
+  * Documentation version: $Id: Documentation.html,v 2.205.2.11.2.9 2006/04/06
+    12:40:28 lem9 Exp $
 
 
 Requirements
@@ -1652,7 +1652,9 @@ extension for MySQL 4.0 and below and MySQLi for MySQL 4.1 and newer.
 When compiling php, we strongly recommend that you manually link the MySQL
 extension of your choice to a MySQL client library of at least the same minor
 version since the one that is bundled with some php distributions is rather old
-and might cause problems (see also FAQ 1.17a).
+and might cause problems (see also FAQ 1.17a). If your webserver is running on
+a windows system, you might want to try MySQL's Connector/PHP instead of the
+MySQL / MySQLi extensions that are bundled with the official php Win32 builds.
 MySQL 5.1 is not yet supported.
 
 [1.17a] I cannot connect to the MySQL server. It always returns the error

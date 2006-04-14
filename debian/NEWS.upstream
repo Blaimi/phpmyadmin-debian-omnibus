@@ -1,4 +1,4 @@
-Information about version 2.8.0.2
+Information about version 2.8.0.3
 
  ----------------------------------------------------------------------
 
@@ -13,6 +13,8 @@ Information about version 2.8.0.2
      * XSS vulnerability (set_theme)
      * mysqli problems with zend.ze1_compatibility_mode enabled
      * setup script did not save the mysql/mysqli extension
+   Fixes for 2.8.0.3:
+     * XSS vulnerability (calling directly css files under themes)
 
  ----------------------------------------------------------------------
 

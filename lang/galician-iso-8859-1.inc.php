@@ -1,5 +1,5 @@
 <?php
-/* $Id: galician-iso-8859-1.inc.php,v 2.129.2.1 2006/02/17 12:43:00 lem9 Exp $ */
+/* $Id: galician-iso-8859-1.inc.php,v 2.129.2.1.2.1 2006/03/23 00:21:23 rabus Exp $ */
 
 /**
  * Translated by Xosé Calvo <xosecalvo at terra.es>
@@ -25,6 +25,7 @@ $timespanfmt = '%s días, %s horas, %s minutos e %s segundos';
 $strAbortedClients = 'Cancelado';
 $strAbsolutePathToDocSqlDir = 'Introduza a rota absoluta completa ao directorio docSQL no servidor';
 $strAccessDenied = 'Acceso Negado';
+$strAccessDeniedCreateConfig = 'Isto débese, posibelmente, a que non creou un ficheiro de configuración. Talvez queira utilizar %1$ssetup script%2$s para crear un.';
 $strAccessDeniedExplanation = 'O phpMyAdmin tentouse conectar ao servidor de MySQL, mais o servidor rexeitou a conexión. Deberá comprobar o nome do servidor, o nome de usuario e o contrasinal no ficheiro config.inc.php e asegurarse de que corresponden coa información proporcionada polo administrador do servidor do MySQL.';
 $strAction = 'Acción';
 $strAddAutoIncrement = 'Engadir o valor incremental (AUTO_INCREMENT)';
@@ -95,6 +96,7 @@ $strBookmarkQuery = 'A procura de SQL foi gardada';
 $strBookmarkReplace = 'Substituir un marcador xa existente que ten o mesmo nome';
 $strBookmarkThis = 'Gardar esta procura de SQL';
 $strBookmarkView = 'Só visualizar';
+$strBrowseDistinctValues = 'Examinar valores claramente distintos';
 $strBrowseForeignValues = 'Visualizar valores alleos';
 $strBrowse = 'Visualizar';
 $strBufferPoolActivity = 'Actividade da reserva da memoria intermedia';
@@ -345,6 +347,7 @@ $strImportDocSQL = 'Importar ficheiros de docSQL';
 $strImportFiles = 'Importar ficheiros';
 $strImportFormat = 'Formato do ficheiro importado';
 $strImport = 'Importar';
+$strImportSuccessfullyFinished = 'A importación rematou sen problemas. Executáronse %d procuras.';
 $strIndexes = 'Índices';
 $strIndexHasBeenDropped = 'Eliminouse o índice %s';
 $strIndexName = 'Nome do índice&nbsp;:';
@@ -375,6 +378,9 @@ $strInUse = 'en uso';
 $strInvalidAuthMethod = 'Na configuración indicouse un método de autenticación non válido::';
 $strInvalidColumnCount = 'O número de columnas ten que ser maior de cero';
 $strInvalidColumn = 'Especificouse unha columna non válida (%s)!';
+$strInvalidCSVFieldCount = 'Contaxe de campos non válida na entrada de CSV na liña %d.';
+$strInvalidCSVFormat = 'Formato de entrada de CSV non válido na liña %d.';
+$strInvalidCSVParameter = 'Parámetro non válido para a importación de CSV: %s';
 $strInvalidFieldAddCount = 'Ten que engadir un campo polo menos';
 $strInvalidFieldCount = 'A tabela ha de ter, polo menos, un campo.';
 $strInvalidLDIImport = 'Esta extensión non é capaz de realizar importacións comprimidas!';
@@ -530,6 +536,9 @@ $strPasswordNotSame = 'Os contrasinais non son os mesmos!';
 $strPdfDbSchema = 'Esquema da base de datos "%s" - Páxina %s';
 $strPdfInvalidTblName = 'Non existe a tabela "%s".';
 $strPdfNoTables = 'Sen tabelas';
+$strPDFOptions = 'Opcións de PDF';
+$strPDF = 'PDF';
+$strPDFReportTitle = 'Título do informe';
 $strPerHour = 'por hora';
 $strPerMinute = 'por minuto';
 $strPerSecond = 'por segundo';
@@ -820,6 +829,7 @@ $strSpanish = 'Español';
 $strSplitWordsWithSpace = 'As palabras divídense cun carácter de espazo (" ").';
 $strSQLExportCompatibility = 'Compatibilidade coa exportación SQL';
 $strSQLExportType = 'Tipo de exportación';  
+$strSQLImportOptions = 'Opcións de SQL';
 $strSQLOptions = 'Opcións SQL';
 $strSQLParserBugMessage = 'Cabe a posibilidade de que atopase un erro no procesador de SQL. Examine a súa pesquisa con atención e comprobe que as aspas son correctas e que cada un ten o seu par. Outras causas posíbeis serían que tentase enviar un ficheiro con binario fora dunha área de texto entre aspas. Tamén pode tentar facer a súa pesquisa na liña de comandos do MySQL. A mensaxe de erro que lle envía o servidor de MySQL, e que aparece máis abaixo (de habela), tamén o pode axudar a diagnosticar o problema. Se persisten os erros ou se o procesador falla cando mesmo a liña de comandos vai ben,reduza o texto da pesquisa à parte concreta que produce o erro e envíe unha mensaxe de erro co texto da sección RECORTE que aparece a continuación:';
 $strSQLParserUserError = 'Parece que houbo un problema na súa pesquisa en SQL. Se máis abaixo aparece unha mensaxe de erro do servidor de MySQL, isto pode axudar a diagnosticar o problema';
@@ -832,6 +842,7 @@ $strSQPBugUnknownPunctuation = 'Hai unha secuencia de puntuación que resulta des
 $strStatCheckTime = 'Comprobación máis recente';
 $strStatCreateTime = 'Creación';
 $strStatement = 'Informacións';
+$strStatisticsOverrun = 'Nun servidor ocupado, os contadores de bytes poden sobrecarregarse, de maneria que esas estatísticas, tal e como as transmite o servidor de MySQL, poden resultar incorrectas.'
 $strStatUpdateTime = 'Actualización máis recente';
 $strStatus = 'Estado';
 $strStorageEngine = 'Motor de armacenamento';
@@ -869,7 +880,11 @@ $strTblPrivileges = 'Privilexios proprios de tabela';
 $strTempData = 'Datos temporais';
 $strTextAreaLength = ' Por causa da sua lonxitude,<br /> este campo pode non ser editábel ';
 $strThai = 'Tailandés';
+$strThemeDefaultNotFound = 'Non se atopou o tema por omisión %s!';
 $strThemeNoPreviewAvailable = 'Non se dispón de ante-visión.';
+$strThemeNotFound = 'Non se atopou o tema %s!';
+$strThemeNoValidImgPath = 'Non hai unha rota válida de imaxe para o tema %s!';
+$strThemePathNotFound = 'Non se atopou a rota do tema para o tema %s!';
 $strTheme = 'Tema / Estilo';  
 $strThisHost = 'Este servidor';
 $strThisNotDirectory = 'Isto non era un directorio';
@@ -941,6 +956,7 @@ $strViewDumpDatabases = 'Ver o volcado das bases de datos';
 $strViewDumpDB = 'Ver o esquema do volcado da base de datos';
 $strViewDump = 'Ver o esquema do volcado da tabela';
 $strViewHasBeenDropped = 'Deixouse a vista %s';
+$strViewMaxExactCount = 'Esta vista ten máis de %s fileiras. Consulte a %sdocumentación%.';
 $strView = 'Vista';
 
 $strWebServerUploadDirectory = 'directorio de subida (upload) do servidor web';
@@ -962,25 +978,4 @@ $strYes = 'Si';
 $strZeroRemovesTheLimit = 'Nota: Se estas opcións se configuran como 0 (cero) elimina-se o limite.';
 $strZip = 'comprimido no formato "zip"';
 
-// To translate:
-
-$strImportSuccessfullyFinished = 'Import has been successfully finished, %d queries executed.';  //to translate
-$strInvalidCSVFieldCount = 'Invalid field count in CSV input on line %d.';  //to translate
-$strInvalidCSVFormat = 'Invalid format of CSV input on line %d.';  //to translate
-$strInvalidCSVParameter = 'Invalid parameter for CSV import: %s';  //to translate
-
-$strPDFOptions = 'PDF options';  //to translate
-$strPDF = 'PDF';  //to translate
-$strPDFReportTitle = 'Report title';  //to translate
-
-$strThemeDefaultNotFound = 'Default theme %s not found!';  //to translate
-$strThemeNotFound = 'Theme %s not found!';  //to translate
-$strThemeNoValidImgPath = 'No valid image path for theme %s found!';  //to translate
-$strThemePathNotFound = 'Theme path not found for theme %s!';  //to translate
-
-$strAccessDeniedCreateConfig = 'Probably reason of this is that you did not create configuration file. You might want to use %1$ssetup script%2$s to create one.';  //to translate
-$strSQLImportOptions = 'SQL options';  //to translate
-$strBrowseDistinctValues = 'Browse distinct values';  //to translate
-$strStatisticsOverrun = 'On a busy server, the byte counters may overrun, so those statistics as reported by the MySQL server may be incorrect.';  //to translate
-$strViewMaxExactCount = 'This view has more than %s rows. Please refer to %sdocumentation%s.';  //to translate
 ?>

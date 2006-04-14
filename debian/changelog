@@ -1,3 +1,13 @@
+phpmyadmin (4:2.8.0.3-1) unstable; urgency=medium
+
+  * New upstream release.
+  * Security fix: XSS vulnerability (calling directly css files under themes)
+    See: http://www.phpmyadmin.net/home_page/security.php?issue=PMASA-2006-1
+    See: http://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2006-1678
+    Closes: #362567.
+
+ -- Piotr Roszatycki <dexter@debian.org>  Fri, 14 Apr 2006 14:47:28 +0200
+
 phpmyadmin (4:2.8.0.2-4) unstable; urgency=low
 
   * Fixed typos in debconf template. Closes: #360059.

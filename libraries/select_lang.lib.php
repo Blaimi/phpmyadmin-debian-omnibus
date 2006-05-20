@@ -1,5 +1,5 @@
 <?php
-/* $Id: select_lang.lib.php,v 2.36 2006/01/17 17:02:30 cybot_tm Exp $ */
+/* $Id: select_lang.lib.php,v 2.36.2.2 2006/05/02 09:28:57 nijel Exp $ */
 // vim: expandtab sw=4 ts=4 sts=4:
 
 /**
@@ -53,8 +53,8 @@ function PMA_langCheck()
     }
 
     // try to findout user's language by checking its HTTP_ACCEPT_LANGUAGE variable
-    if (! empty($_SERVER['HTTP_ACCEPT_LANGUAGE'])) {
-        foreach (explode(',', $_SERVER['HTTP_ACCEPT_LANGUAGE']) as $lang) {
+    if (PMA_getenv('HTTP_ACCEPT_LANGUAGE')) {
+        foreach (explode(',', PMA_getenv('HTTP_ACCEPT_LANGUAGE')) as $lang) {
             if (PMA_langDetect($lang, 1)) {
                 return true;
             }
@@ -62,7 +62,7 @@ function PMA_langCheck()
     }
 
     // try to findout user's language by checking its HTTP_USER_AGENT variable
-    if (PMA_langDetect($_SERVER['HTTP_USER_AGENT'], 2)) {
+    if (PMA_langDetect(PMA_getenv('HTTP_USER_AGENT'), 2)) {
         return true;
     }
 
@@ -409,13 +409,13 @@ require_once($lang_file);
 
 // now, that we have loaded the language strings we can send the errors
 if ($lang_failed_cfg) {
-    $GLOBALS['PMA_errors'][] = sprintf($strLanguageUnknown, $lang_failed_cfg);
+    $GLOBALS['PMA_errors'][] = sprintf($strLanguageUnknown, htmlspecialchars($lang_failed_cfg));
 }
 if ($lang_failed_cookie) {
-    $GLOBALS['PMA_errors'][] = sprintf($strLanguageUnknown, $lang_failed_cookie);
+    $GLOBALS['PMA_errors'][] = sprintf($strLanguageUnknown, htmlspecialchars($lang_failed_cookie));
 }
 if ($lang_failed_request) {
-    $GLOBALS['PMA_errors'][] = sprintf($strLanguageUnknown, $lang_failed_request);
+    $GLOBALS['PMA_errors'][] = sprintf($strLanguageUnknown, htmlspecialchars($lang_failed_request));
 }
 
 unset($lang_file, $lang_path, $strLanguageFileNotFound, $line, $fall_back_lang,

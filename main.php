@@ -1,5 +1,5 @@
 <?php
-/* $Id: main.php,v 2.100.4.1 2006/03/06 13:13:49 lem9 Exp $ */
+/* $Id: main.php,v 2.100.2.2 2006/04/24 07:30:14 nijel Exp $ */
 // vim: expandtab sw=4 ts=4 sts=4:
 
 /**
@@ -205,7 +205,7 @@ if ( $server > 0 ) {
                      : '';
         PMA_printListItem( '<strong>' . $strLogout . '</strong> ' . $http_logout,
             'li_log_out',
-            './user_password.php?' . $common_url_query . '&amp;old_usr=' . urlencode($PHP_AUTH_USER) );
+            './index.php?' . $common_url_query . '&amp;old_usr=' . urlencode($PHP_AUTH_USER), null, '_parent');
     } // end if
 
     echo '</ul>';

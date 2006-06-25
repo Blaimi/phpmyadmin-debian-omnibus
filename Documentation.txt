@@ -5,15 +5,15 @@ Configuration
 Transformations  -  FAQ  -  Developers  -  Credits  -  Translators
 -------------------------------------------------------------------------------
 
-phpMyAdmin 2.8.0.3 Documentation
+phpMyAdmin 2.8.1 Documentation
 
   * SourceForge phpMyAdmin project page   [ http://www.phpmyadmin.net/ ]
   * Local documents:
       + Version history: ChangeLog
       + General notes: README
       + License: LICENSE
-  * Documentation version: $Id: Documentation.html,v 2.205.2.11.2.9 2006/04/06
-    12:40:28 lem9 Exp $
+  * Documentation version: $Id: Documentation.html,v 2.205.2.17.2.1 2006/05/20
+    17:16:47 lem9 Exp $
 
 
 Requirements
@@ -191,6 +191,9 @@ Just copy config.inc.php from previous installation into a newly unpacked one.
 If your previous phpMyAdmin version was 2.3.0 or older, some tweaking may be
 required because, as of 2.7.0, using those old config files is no longer
 supported.
+
+You should not copy libraries/config.default.php over config.inc.php because
+the default configuration file is version-specific.
 
 Using authentication modes
 
@@ -2384,7 +2387,7 @@ explained in the configuration section. Then create the example tables:
      ) TYPE=MyISAM;
 
      INSERT INTO REL_towns VALUES ('S', 'Sherbrooke');
-     INSERT INTO REL_towns VALUES ('M', 'Montr?al');
+     INSERT INTO REL_towns VALUES ('M', 'Montre'al');
 
 To setup appropriate links and display information:
 
@@ -2461,7 +2464,7 @@ and the underscore means "any character". So, if the database name is
 If you put a backslash before the underscore, it means that the database name
 will have a real underscore.
 
-[6.11] What is the curious symbol ? in the statistics pages?
+[6.11] What is the curious symbol o/ in the statistics pages?
 
 It means "average".
 
@@ -2511,7 +2514,7 @@ beta, so this single command "pear -d preferred_state=beta install -a SOAP"
 installed all the needed modules.
 If you use the Validator, you should be aware that any SQL statement you submit
 will be stored anonymously (database/table/column names, strings, numbers
-replaced with generic values). The Mimer SQL Validator itself, is ? 2001
+replaced with generic values). The Mimer SQL Validator itself, is (C) 2001
 Upright Database Technology. We utilize it as free SOAP service.
 
 [6.15] I want to add a BLOB field and put an index on it, but MySQL says "BLOB
@@ -2840,14 +2843,14 @@ CREDITS, in chronological order
     * SQL analyser (most of it)
     * current project maintainer
 
-- Olivier M?ller <om_at_omnis.ch>
+- Olivier Mu:ller <om_at_omnis.ch>
     * started SourceForge phpMyAdmin project in March 2001
     * sync'ed different existing CVS trees with new features and bugfixes
     * multi-language improvements, dynamic language selection
     * current project maintainer
     * many bugfixes and improvements
 
-- Lo?c Chapeaux <lolo_at_phpheaven.net>
+- Loi:c Chapeaux <lolo_at_phpheaven.net>
     * rewrote and optimized javascript, DHTML and DOM stuff
     * rewrote the scripts so they fit the PEAR coding standards and
       generate XHTML1.0 and CSS2 compliant codes
@@ -2909,7 +2912,7 @@ CREDITS, in chronological order
     * various features and fixes
     * Czech language file updates
 
-- Christophe Gesch? from the "MySQL Form Generator for PHPMyAdmin"
+- Christophe Gesche' from the "MySQL Form Generator for PHPMyAdmin"
   (http://sourceforge.net/projects/phpmysqlformgen/)
     * suggested the patch for multiple table printviews
 
@@ -2956,7 +2959,7 @@ CREDITS, in chronological order
     * redesign for 2.6.0
     * phpMyAdmin sailboat logo (June 2004)
 
-- Mathias Landh?u?er
+- Mathias Landha:usser
     * Representation at conferences
 
 - Sebastian Mendel <cybot_tm_at_users.sourceforge.net>
@@ -2967,13 +2970,13 @@ And also to the following people who have contributed minor changes,
 enhancements, bugfixes or support for a new language since version 2.1.0:
 
 Bora Alioglu, Ricardo ?, Sven-Erik Andersen, Alessandro Astarita,
-P?ter Bakondy, Borges Botelho, Olivier Bussier, Neil Darlow,
-Mats Engstrom, Ian Davidson, Laurent Dhima, Kristof Hamann, Thomas Kl?ger,
+Pe'ter Bakondy, Borges Botelho, Olivier Bussier, Neil Darlow,
+Mats Engstrom, Ian Davidson, Laurent Dhima, Kristof Hamann, Thomas Kla:ger,
 Lubos Klokner, Martin Marconcini, Girish Nair, David Nordenberg, Andreas Pauley,
 Bernard M. Piller, Laurent Haas, "Sakamoto", Yuval Sarna,
 www.securereality.com.au, Alexis Soulard, Alvar Soome, Siu Sun, Peter Svec,
 Michael Tacelosky, Rachim Tamsjadi, Kositer Uros,
-Lu?s V., Martijn W. van der Lee,
+Lui's V., Martijn W. van der Lee,
 Algis Vainauskas, Daniel Villanueva, Vinay, Ignacio Vazquez-Abrams, Chee Wai,
 Jakub Wilk, Thomas Michael Winningham, Vilius Zigmantas, "Manuzhai".
 

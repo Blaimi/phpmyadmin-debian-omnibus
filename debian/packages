@@ -1,4 +1,4 @@
-# $Id: /trunk/debian/dists/phpmyadmin/debian/packages 30 2006-03-31T13:13:20.627481Z dexter  $
+# $Id: /trunk/debian/dists/phpmyadmin/debian/packages 54 2006-06-26T08:56:00.163161Z dexter  $
 
 # If the debian/rules or debian/control file is missing, rebuild the file:
 #
@@ -10,7 +10,7 @@ Source: phpmyadmin
 Section: web
 Priority: extra
 Maintainer: Piotr Roszatycki <dexter@debian.org>
-Standards-Version: 3.6.2
+Standards-Version: 3.7.2
 Upstream-Source: <USCAN:http://sf.net/phpmyadmin/phpMyAdmin-([0-9.]*(?:-pl[0-9]*)?)\.tar\.gz>
 Home-Page: <URL:http://www.phpmyadmin.net/>
 Description: set of PHP-scripts to administrate MySQL over the WWW

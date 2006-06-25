@@ -2,7 +2,7 @@ Source: phpmyadmin
 Maintainer: Piotr Roszatycki <dexter@debian.org>
 Section: web
 Priority: extra
-Standards-Version: 3.6.2
+Standards-Version: 3.7.2
 Build-Depends: yada (>= 0.48), po-debconf
 Build-Depends-Indep: yada (>= 0.48), po-debconf
 

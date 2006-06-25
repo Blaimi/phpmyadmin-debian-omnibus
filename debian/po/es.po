@@ -21,14 +21,14 @@ msgstr ""
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=ISO-8859-15\n"
+"Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
 #. Type: multiselect
 #. Description
 #: ../templates:5
 msgid "Which web server would you like to reconfigure automatically?"
-msgstr "¿Qué servidor web le gustaría reconfigurar automáticamente?"
+msgstr "Â¿QuÃ© servidor web le gustarÃ­a reconfigurar automÃ¡ticamente?"
 
 #. Type: multiselect
 #. Description
@@ -38,7 +38,7 @@ msgid ""
 "configuration process only supports Apache."
 msgstr ""
 "phpMyAdmin funciona con cualquier servidor web que tenga soporte para PHP, "
-"pero el proceso de configuración automática sólo sirve con Apache."
+"pero el proceso de configuraciÃ³n automÃ¡tica sÃ³lo sirve con Apache."
 
 #. Type: boolean
 #. Description

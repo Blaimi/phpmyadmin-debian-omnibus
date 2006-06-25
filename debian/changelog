@@ -1,3 +1,24 @@
+phpmyadmin (4:2.8.1-1) unstable; urgency=medium
+
+  * New upstream release. Closes: #373204.
+    - The French translation is correct. Closes: #362154.
+    - Generates correct dumps with UPDATE syntax. Closes: #364702.
+  * Security fix: XSRF vulnerability.
+    See: http://www.phpmyadmin.net/home_page/security.php?issue=PMASA-2006-3
+    See: http://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2006-1804
+  * Security fix: XSS vulnerabilities. It was not a problem for Debian with
+    the default settings.
+    See: http://www.phpmyadmin.net/home_page/security.php?issue=PMASA-2006-2
+    See: http://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2006-2031
+    Closes: #363519, #368082.
+  * Updated Portuguese debconf templates translation, thanks Miguel Figueiredo.
+    Closes: #363597.
+  * Updated Russian debconf templates translation, thanks Yuriy Talakan.
+    Closes: #367146.
+  * Convert non-ISO-8859-1 debconf templates translation to UTF-8.
+
+ -- Piotr Roszatycki <dexter@debian.org>  Sun, 25 Jun 2006 18:10:23 +0200
+
 phpmyadmin (4:2.8.0.3-1) unstable; urgency=medium
 
   * New upstream release.

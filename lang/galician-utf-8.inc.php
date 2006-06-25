@@ -1,5 +1,5 @@
 <?php
-/* $Id: galician-utf-8.inc.php,v 2.129.2.1.2.1 2006/03/23 00:21:23 rabus Exp $ */
+/* $Id: galician-utf-8.inc.php,v 2.129.2.5 2006/04/11 14:11:46 nijel Exp $ */
 
 /**
  * Translated by Xosé Calvo <xosecalvo at terra.es>
@@ -843,7 +843,7 @@ $strSQPBugUnknownPunctuation = 'Hai unha secuencia de puntuación que resulta de
 $strStatCheckTime = 'Comprobación máis recente';
 $strStatCreateTime = 'Creación';
 $strStatement = 'Informacións';
-$strStatisticsOverrun = 'Nun servidor ocupado, os contadores de bytes poden sobrecarregarse, de maneria que esas estatísticas, tal e como as transmite o servidor de MySQL, poden resultar incorrectas.'
+$strStatisticsOverrun = 'Nun servidor ocupado, os contadores de bytes poden sobrecarregarse, de maneria que esas estatísticas, tal e como as transmite o servidor de MySQL, poden resultar incorrectas.';
 $strStatUpdateTime = 'Actualización máis recente';
 $strStatus = 'Estado';
 $strStorageEngine = 'Motor de armacenamento';

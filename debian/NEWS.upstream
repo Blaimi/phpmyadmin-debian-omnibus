@@ -1,6 +1,41 @@
-Information about version 2.8.0.3
+Information about version 2.8.1
+
+   Fixes:
+     * Unable to login with cookie auth in IIS 4
+     * Page variable not preserved on refresh
+     * Error on empty BLOB with transformation
+     * Search combos default to key zero
+     * Dropping basetable of a view
+     * VIEW data export
+     * config.default.php changes not recognized
+     * Octetstream download
+     * BLOBs centered
+     * Processing of theme directory
+     * PHP 4.2.2 and array_key_exists()
+     * Red border in outdated themes
+     * Column expander does not work
+     * Loading binary data very slow
+     * Export to MS Excel
+     * Socket can be empty
+     * Export of InnoDB with mysqli
+     * Import and -- comments
+     * Javascript error in new print window
+     * CONVERT not in reserved words list
+     * Adding foreign key when column has a quote in its name
+     * Version number change after update
+     * Galician messages do not load
+     * Missing property in Theme_Manager class
+     * Having sql.php as a default table-page
+     * Various import problems
+     * Wrong logout link
+     * REPLACE reports double results affected
+     * XSRF via the sql_query parameter
+     * Detection of writable config
+     * Reading database list with MySQL wildcards
 
  ----------------------------------------------------------------------
+
+Information about version 2.8.0.3
 
    Improvements:
      * PHP 5.1.2 compatibility

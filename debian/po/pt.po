@@ -1,14 +1,13 @@
 # Portuguese translation of phpMyAdmin's debconf messages.
-# 2005, Miguel Figueiredo <elmig@debianpt.org>
+# Miguel Figueiredo <elmig@debianpt.org>, 2005, 2006
 #
-# 30-10-2005 - Miguel Figueiredo <elmig@debianpt.org> - initial translation
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: phpmyadmin 4:2.6.4-pl3-1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2006-03-17 14:03+0100\n"
-"PO-Revision-Date: 2005-10-30 11:08+0000\n"
+"PO-Revision-Date: 2006-04-19 23:35+0000\n"
 "Last-Translator: Miguel Figueiredo <elmig@debianpt.org>\n"
 "Language-Team: Portuguese <traduz.org>\n"
 "MIME-Version: 1.0\n"
@@ -53,19 +52,19 @@ msgstr ""
 #. Description
 #: ../templates:20
 msgid "User name for web-based setup system:"
-msgstr ""
+msgstr "Nome do utilizador para o sistema de configuração web:"
 
 #. Type: string
 #. Description
 #: ../templates:20
 msgid "Leave empty if you want to use the default user name 'admin'."
-msgstr ""
+msgstr "Deixe vazio se deseja utilizar o nome por omissão 'admin'."
 
 #. Type: password
 #. Description
 #: ../templates:30
 msgid "Password for web-based setup system:"
-msgstr ""
+msgstr "Password para o sistema de configuração web:"
 
 #. Type: password
 #. Description
@@ -75,6 +74,10 @@ msgid ""
 "configuration. The script is located at http://localhost/phpmyadmin/scripts/setup.php . "
 "For security reason it requires authorization."
 msgstr ""
+"O phpMyAdmin vem com um script de configuração que pode ajuda-lo com a "
+"criação da configuração. O script está localizado em "
+"http://localhost/phpmyadmin/scripts/setup.php . "
+"Por razões de segurança necessita de autorização."
 
 #. Type: password
 #. Description
@@ -83,9 +86,11 @@ msgid ""
 "You can manage the usernames and passwords with `htpasswd' command. They are "
 "stored in /etc/phpmyadmin/htpasswd.setup file."
 msgstr ""
+"Você pode gerir os utilizadores e passwords com o comando `htpasswd'. "
+"Estas estão guardadas no ficheiro /etc/phpmyadmin/htpasswd.setup."
 
 #. Type: password
 #. Description
 #: ../templates:30
 msgid "Leave empty if you want to disable access to web-based setup."
-msgstr ""
+msgstr "Deixe vazio se deseja desabilitar o acesso à configuração web."

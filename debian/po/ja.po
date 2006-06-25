@@ -21,14 +21,14 @@ msgstr ""
 "Last-Translator: Hideki Yamane <henrich@samba.gr.jp>\n"
 "Language-Team: Japanese <debian-japanese@lists.debian.org>\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=EUC-JP\n"
+"Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
 #. Type: multiselect
 #. Description
 #: ../templates:5
 msgid "Which web server would you like to reconfigure automatically?"
-msgstr "¤É¤Î web ¥µ¡¼¥Ğ¤ò¼«Æ°Åª¤ËºÆÀßÄê¤·¤Ş¤¹¤«?"
+msgstr "ã©ã® web ã‚µãƒ¼ãƒã‚’è‡ªå‹•çš„ã«å†è¨­å®šã—ã¾ã™ã‹?"
 
 #. Type: multiselect
 #. Description
@@ -37,14 +37,14 @@ msgid ""
 "phpMyAdmin supports any web server that PHP does, but this automatic "
 "configuration process only supports Apache."
 msgstr ""
-"phpMyAdmin ¤Ï PHP ¤¬Æ°ºî¤¹¤ë web ¥µ¡¼¥Ğ¤ò¥µ¥İ¡¼¥È¤·¤Æ¤¤¤Ş¤¹¤¬¡¢¤³¤Î¼«Æ°ÀßÄê¥×"
-"¥í¥»¥¹¤Ï Apache ¤Î¤ß¥µ¥İ¡¼¥È¤·¤Æ¤¤¤Ş¤¹¡£"
+"phpMyAdmin ã¯ PHP ãŒå‹•ä½œã™ã‚‹ web ã‚µãƒ¼ãƒã‚’ã‚µãƒãƒ¼ãƒˆã—ã¦ã„ã¾ã™ãŒã€ã“ã®è‡ªå‹•è¨­å®šãƒ—"
+"ãƒ­ã‚»ã‚¹ã¯ Apache ã®ã¿ã‚µãƒãƒ¼ãƒˆã—ã¦ã„ã¾ã™ã€‚"
 
 #. Type: boolean
 #. Description
 #: ../templates:12
 msgid "Do you want me to restart ${webserver} now?"
-msgstr "${webserver} ¤ò¤¹¤°¤ËºÆµ¯Æ°¤·¤Ş¤¹¤«?"
+msgstr "${webserver} ã‚’ã™ãã«å†èµ·å‹•ã—ã¾ã™ã‹?"
 
 #. Type: boolean
 #. Description
@@ -54,9 +54,9 @@ msgid ""
 "be restarted. You can also restart ${webserver} manually executing /etc/init."
 "d/${webserver} restart"
 msgstr ""
-"${webserver} ¤Î¿·µ¬ÀßÄê¤òÍ­¸ú¤Ë¤¹¤ë¤¿¤á¤Ë¤ÏºÆµ¯Æ°¤¬É¬Í×¤Ê¤³¤È¤ËÎ±°Õ¤·¤Æ¤¯¤À¤µ"
-"¤¤¡£¼êÆ°¤Ç /etc/init.d/${webserver} restart ¤ò¼Â¹Ô¤¹¤ë¤³¤È¤Ç¤âºÆµ¯Æ°¤¬¤Ç¤­¤Ş"
-"¤¹¡£"
+"${webserver} ã®æ–°è¦è¨­å®šã‚’æœ‰åŠ¹ã«ã™ã‚‹ãŸã‚ã«ã¯å†èµ·å‹•ãŒå¿…è¦ãªã“ã¨ã«ç•™æ„ã—ã¦ãã ã•"
+"ã„ã€‚æ‰‹å‹•ã§ /etc/init.d/${webserver} restart ã‚’å®Ÿè¡Œã™ã‚‹ã“ã¨ã§ã‚‚å†èµ·å‹•ãŒã§ãã¾"
+"ã™ã€‚"
 
 #. Type: string
 #. Description

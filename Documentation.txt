@@ -5,15 +5,15 @@ Configuration
 Transformations  -  FAQ  -  Developers  -  Credits  -  Translators
 -------------------------------------------------------------------------------
 
-phpMyAdmin 2.8.1 Documentation
+phpMyAdmin 2.8.2 Documentation
 
   * SourceForge phpMyAdmin project page   [ http://www.phpmyadmin.net/ ]
   * Local documents:
       + Version history: ChangeLog
       + General notes: README
       + License: LICENSE
-  * Documentation version: $Id: Documentation.html,v 2.205.2.17.2.1 2006/05/20
-    17:16:47 lem9 Exp $
+  * Documentation version: $Id: Documentation.html,v 2.205.2.21 2006/06/30
+    13:46:50 lem9 Exp $
 
 
 Requirements
@@ -29,7 +29,7 @@ Requirements
     "cookie" authentication method, having the mcrypt PHP extension on your web
     server accelerates not only the login phase but every other action that you
     do in phpMyAdmin.
-  * a web-browser (doh!).
+  * Web browser with cookies enabled.
 
 
 Introduction
@@ -2702,10 +2702,10 @@ proceed?
 The following method is preferred for new developers:
 
  1. fetch the current CVS tree over anonymous CVS:
-    cvs -d:pserver:anonymous@cvs.phpmyadmin.sourceforge.net:/cvsroot/phpmyadmin
+    cvs -d:pserver:anonymous@phpmyadmin.cvs.sourceforge.net:/cvsroot/phpmyadmin
     login
     [Password: simply press the Enter key]
-    cvs -z3 -d:pserver:anonymous@cvs.phpmyadmin.sourceforge.net:/cvsroot/
+    cvs -z3 -d:pserver:anonymous@phpmyadmin.cvs.sourceforge.net:/cvsroot/
     phpmyadmin checkout phpMyAdmin
     [This will create a new sub-directory named phpMyAdmin]
  2. add your stuff

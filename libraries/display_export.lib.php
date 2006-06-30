@@ -1,5 +1,5 @@
 <?php
-/* $Id: display_export.lib.php,v 2.47 2006/01/17 17:02:30 cybot_tm Exp $ */
+/* $Id: display_export.lib.php,v 2.47.2.1 2006/06/15 20:22:56 lem9 Exp $ */
 // vim: expandtab sw=4 ts=4 sts=4:
 
 // Get relations & co. status
@@ -36,7 +36,7 @@ function PMA_exportIsActive($what, $val) {
 <?php
 $hide_structure = false;
 $hide_sql       = false;
-$hide_xml       = (bool) (isset($db) && strlen($db));
+$hide_xml       = (bool) ! (isset($db) && strlen($db));
 if ($export_type == 'server') {
     echo PMA_generate_common_hidden_inputs('', '', 1);
 } elseif ($export_type == 'database') {

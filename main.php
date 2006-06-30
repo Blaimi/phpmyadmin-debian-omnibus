@@ -1,5 +1,5 @@
 <?php
-/* $Id: main.php,v 2.100.2.2 2006/04/24 07:30:14 nijel Exp $ */
+/* $Id: main.php,v 2.100.2.3 2006/05/29 16:09:30 lem9 Exp $ */
 // vim: expandtab sw=4 ts=4 sts=4:
 
 /**
@@ -283,7 +283,7 @@ PMA_printListItem( $strHomepageOfficial, 'li_pma_homepage', 'http://www.phpMyAdm
 ?>
     <li><bdo xml:lang="en" dir="ltr">
         [<a href="changelog.php" target="_blank">ChangeLog</a>]
-        [<a href="http://cvs.sourceforge.net/cgi-bin/viewcvs.cgi/phpmyadmin/phpMyAdmin/"
+        [<a href="http://phpmyadmin.cvs.sourceforge.net/phpmyadmin/"
             target="_blank">CVS</a>]
         [<a href="http://sourceforge.net/mail/?group_id=23067"
             target="_blank">Lists</a>]

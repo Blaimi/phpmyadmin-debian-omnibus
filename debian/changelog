@@ -1,3 +1,11 @@
+phpmyadmin (4:2.8.2-0.1) unstable; urgency=high
+
+  * Non-maintainer upload.
+  * New upstream release.
+    * Fixes cross-site-scripting issues. [CVE-2006-3388] (Closes: #377748)
+
+ -- Steinar H. Gunderson <sesse@debian.org>  Tue, 18 Jul 2006 12:52:19 +0200
+
 phpmyadmin (4:2.8.1-1) unstable; urgency=medium
 
   * New upstream release. Closes: #373204.

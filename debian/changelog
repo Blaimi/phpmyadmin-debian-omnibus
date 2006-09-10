@@ -1,3 +1,16 @@
+phpmyadmin (4:2.8.2-0.2) unstable; urgency=medium
+
+  * Non-maintainer upload.
+  * Fix issue with /var/www pointing to /usr/share/phpmyadmin.
+    (Closes: #385889)
+    * Make sure we install /var/www as a directory, since we make a symlink into
+      it and we can't rely on it being there.
+    * Explicitly link to /var/www/phpmyadmin instead of /var/www, to make sure
+      we don't make a new /var/www even if it should be removed for some
+      reason.
+
+ -- Steinar H. Gunderson <sesse@debian.org>  Mon, 11 Sep 2006 00:14:54 +0200
+
 phpmyadmin (4:2.8.2-0.1) unstable; urgency=high
 
   * Non-maintainer upload.

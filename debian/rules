@@ -163,6 +163,7 @@ debian/tmp-phpmyadmin/DEBIAN/control: debian/build-indep-stamp debian/control
 	echo -E 'yada install -into /usr/share/phpmyadmin debian/src/config.inc.php';\
 	echo -E 'yada install -into /usr/share/phpmyadmin debian/src/config.header.inc.php';\
 	echo -E 'yada install -into /usr/share/phpmyadmin debian/src/config.footer.inc.php';\
+	echo -E 'yada install -dir /var/www';\
 	echo -E '';\
 	echo -E 'perl -pi -e "s/'\''([0-9a-z.]+)'\''/'\''\$$1-Debian-$${VERSION##*-}'\''/ if /set..PMA_VERSION/" $$ROOT/usr/share/phpmyadmin/libraries/Config.class.php';\
 	echo -E '';\

@@ -87,6 +87,7 @@ Install: sh
  yada install -into /usr/share/phpmyadmin debian/src/config.inc.php
  yada install -into /usr/share/phpmyadmin debian/src/config.header.inc.php
  yada install -into /usr/share/phpmyadmin debian/src/config.footer.inc.php
+ yada install -dir /var/www
  .
  perl -pi -e "s/'([0-9a-z.]+)'/'\$1-Debian-${VERSION##*-}'/ if /set..PMA_VERSION/" $ROOT/usr/share/phpmyadmin/libraries/Config.class.php
  .
@@ -240,7 +241,7 @@ Postinst: bash
  .
      if [ -z "$2" ] || dpkg --compare-versions "$2" lt-nl "4:2.8.0.2-1"; then
          if [ ! -e /var/www/phpmyadmin ]; then
-             ln -s /usr/share/phpmyadmin /var/www || true
+             ln -s /usr/share/phpmyadmin /var/www/phpmyadmin || true
          fi
      fi
  .

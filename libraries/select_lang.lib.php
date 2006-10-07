@@ -1,5 +1,5 @@
 <?php
-/* $Id: select_lang.lib.php,v 2.36.2.2 2006/05/02 09:28:57 nijel Exp $ */
+/* $Id: select_lang.lib.php,v 2.42 2006/06/21 10:40:41 lem9 Exp $ */
 // vim: expandtab sw=4 ts=4 sts=4:
 
 /**
@@ -34,12 +34,22 @@ function PMA_langCheck()
         }
     }
 
-    // check user requested language
-    if (! empty($_REQUEST['lang'])) {
-        if (PMA_langSet($_REQUEST['lang'])) {
+    // Don't use REQUEST in following code as it might be confused by cookies with same name
+    // check user requested language (POST)
+    if (! empty($_POST['lang'])) {
+        if (PMA_langSet($_POST['lang'])) {
             return true;
         } else {
-            $GLOBALS['lang_failed_request'] = $_REQUEST['lang'];
+            $GLOBALS['lang_failed_request'] = $_POST['lang'];
+        }
+    }
+
+    // check user requested language (GET)
+    if (! empty($_GET['lang'])) {
+        if (PMA_langSet($_GET['lang'])) {
+            return true;
+        } else {
+            $GLOBALS['lang_failed_request'] = $_GET['lang'];
         }
     }
 
@@ -210,7 +220,6 @@ $available_languages = array(
     'ar-utf-8'          => array('ar|arabic', 'arabic-utf-8', 'ar', '&#1575;&#1604;&#1593;&#1585;&#1576;&#1610;&#1577;'),
     'az-iso-8859-9'     => array('az|azerbaijani', 'azerbaijani-iso-8859-9', 'az', 'Az&#601;rbaycanca'),
     'az-utf-8'          => array('az|azerbaijani', 'azerbaijani-utf-8', 'az', 'Az&#601;rbaycanca'),
-
     'becyr-win1251'     => array('be|belarusian', 'belarusian_cyrillic-windows-1251', 'be', '&#1041;&#1077;&#1083;&#1072;&#1088;&#1091;&#1089;&#1082;&#1072;&#1103;'),
     'becyr-utf-8'       => array('be|belarusian', 'belarusian_cyrillic-utf-8', 'be', '&#1041;&#1077;&#1083;&#1072;&#1088;&#1091;&#1089;&#1082;&#1072;&#1103;'),
     'belat-utf-8'       => array('be[-_]lat|belarusian latin', 'belarusian_latin-utf-8', 'be-lat', 'Byelorussian'),
@@ -314,8 +323,8 @@ $available_languages = array(
     'th-utf-8'          => array('th|thai', 'thai-utf-8', 'th', '&#3616;&#3634;&#3625;&#3634;&#3652;&#3607;&#3618;'),
     'tr-iso-8859-9'     => array('tr|turkish', 'turkish-iso-8859-9', 'tr', 'T&uuml;rk&ccedil;e'),
     'tr-utf-8'          => array('tr|turkish', 'turkish-utf-8', 'tr', 'T&uuml;rk&ccedil;e'),
-    'tt-iso-8859-9'     => array('tt|tatarish', 'tatarish-iso-8859-9', 'tt', 'Tatar'),
-    'tt-utf-8'          => array('tt|tatarish', 'tatarish-utf-8', 'tt', 'Tatar'),
+    'tt-iso-8859-9'     => array('tt|tatarish', 'tatarish-iso-8859-9', 'tt', 'Tatar&ccedil;a'),
+    'tt-utf-8'          => array('tt|tatarish', 'tatarish-utf-8', 'tt', 'Tatar&ccedil;a'),
     'uk-win1251'        => array('uk|ukrainian', 'ukrainian-windows-1251', 'uk', '&#1059;&#1082;&#1088;&#1072;&#1111;&#1085;&#1089;&#1100;&#1082;&#1072;'),
     'uk-utf-8'          => array('uk|ukrainian', 'ukrainian-utf-8', 'uk', '&#1059;&#1082;&#1088;&#1072;&#1111;&#1085;&#1089;&#1100;&#1082;&#1072;'),
     'zhtw-big5'         => array('zh[-_](tw|hk)|chinese traditional', 'chinese_traditional-big5', 'zh-TW', '&#20013;&#25991;'),
@@ -405,7 +414,7 @@ if (! PMA_langCheck()) {
 
 // Defines the associated filename and load the translation
 $lang_file = $lang_path . $available_languages[$GLOBALS['lang']][1] . '.inc.php';
-require_once($lang_file);
+require_once $lang_file;
 
 // now, that we have loaded the language strings we can send the errors
 if ($lang_failed_cfg) {
@@ -418,6 +427,6 @@ if ($lang_failed_request) {
     $GLOBALS['PMA_errors'][] = sprintf($strLanguageUnknown, htmlspecialchars($lang_failed_request));
 }
 
-unset($lang_file, $lang_path, $strLanguageFileNotFound, $line, $fall_back_lang,
+unset($strLanguageFileNotFound, $line, $fall_back_lang,
     $lang_failed_cfg, $lang_failed_cookie, $lang_failed_request, $strLanguageUnknown);
 ?>

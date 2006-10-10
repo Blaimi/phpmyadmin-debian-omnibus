@@ -1,3 +1,18 @@
+phpmyadmin (4:2.9.0.2-0.1) unstable; urgency=high
+
+  * Non-maintainer upload with maintainer consent.
+  * Upgrade to latest upstream version to battle cross-site
+    request forgery (PMASA-2006-5, CVE-2006-5116, CVE-2006-5117,
+    closes: 391090).
+  * New upstream also fixes broken database export functionality
+    (closes: 374918) and database/table copy (closes: 390484).
+  * Update translations:
+    - Danish by Claus Hindsgaul (Closes: 357972).
+    - Italian by Luca Monducci (Closes: 382139).
+    - Spanish by Nacho Barrientos Arias (Closes: 385365).
+
+ -- Thijs Kinkhorst <thijs@debian.org>  Tue, 10 Oct 2006 20:56:25 +0200
+
 phpmyadmin (4:2.8.2-0.2) unstable; urgency=medium
 
   * Non-maintainer upload.

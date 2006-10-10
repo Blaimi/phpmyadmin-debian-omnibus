@@ -5,8 +5,6 @@
 
 $charset = 'iso-8859-2';
 $text_dir = 'ltr'; // ('ltr': balról jobbra, 'rtl': jobbról balra)
-$left_font_family = 'verdana, arial, helvetica, geneva, sans-serif';
-$right_font_family = 'arial, helvetica, geneva, sans-serif';
 $number_thousands_separator = ' ';
 $number_decimal_separator = '.';
 // Byte, Kilo, Mega, Giga, Tera, Peta, Exa rövidítései
@@ -29,20 +27,18 @@ $strAddAutoIncrement = 'AUTO_INCREMENT érték hozzáadása';
 $strAddConstraints = 'Megszorítás hozzáadása';  
 $strAddDeleteColumn = 'Mez&#337; Oszlopokat Hozzáad/Töröl';
 $strAddDeleteRow = 'Kritérium Sort Hozzáad/Töröl';
-$strAddDropDatabase = 'DROP DATABASE hozzáadása';
 $strAddedColumnComment = 'Megjegyzés hozzáf&#369;zve az oszlophoz:';  
 $strAddedColumnRelation = 'Kapcsolat hozzáf&#369;zve az oszlophoz:';  
 $strAddFields = '%s mez&#337; hozzáadása';
 $strAddHeaderComment = 'Egyedi megjegyzés hozzáadása a fejléchez (\\n töri a sorokat)';  
-$strAddIfNotExists = 'IF NOT EXISTS hozzáadása';  
 $strAddIntoComments = 'Hozzáadás a megjegyzéshez';
 $strAddNewField = 'Új mez&#337; hozzáadása';
 $strAddPrivilegesOnDb = 'Privilégiumok hozzáadása a következ&#337; adatbázison:';
 $strAddPrivilegesOnTbl = 'Privilégiumok hozzáadása a következ&#337; táblán:'; 
 $strAddSearchConditions = 'Keresési feltételek megadása (az "ahol" kikötések):';
 $strAddToIndex = 'Adj az indexhez %s oszlopot';
-$strAddUserMessage = 'Az új felhasználót felvettem.';
 $strAddUser = 'Új felhasználó hozzáadása';
+$strAddUserMessage = 'Az új felhasználót felvettem.';
 $strAdministration = 'Adminisztráció'; 
 $strAffectedRows = 'Keresett sorok:';
 $strAfterInsertBack = 'Vissza az el&#337;z&#337; oldalra';
@@ -114,9 +110,9 @@ $strCaseSensitive = 'bet&#369;nagyság-érzékeny';
 $strCentralEuropean = 'Közép-európai';  
 $strChangeCopyModeCopy = '... a régi meg&#337;rzése.';  
 $strChangeCopyModeDeleteAndReload = ' ... a régi törlése a felhasználói táblákból, és utána a privilégiumok újratöltése.';  
+$strChangeCopyMode = 'Új felhasználó hozzáadása ezekkel a privilégiumokkal ...';  
 $strChangeCopyModeJustDelete = ' ... a régi törlése a felhasználói táblákból.';  
 $strChangeCopyModeRevoke = ' ... az összes aktív privilégium visszaállítása a régib&#337;l, és utána törlésük.';  
-$strChangeCopyMode = 'Új felhasználó hozzáadása ezekkel a privilégiumokkal ...';  
 $strChangeCopyUser = 'Belépési információ megváltoztatása / Felhasználó másolása';  
 $strChangeDisplay = 'Válassz mez&#337;t a megjelenítéshez';
 $strChangePassword = 'Jelszó megváltoztatása';
@@ -271,8 +267,8 @@ $strFields = 'Mez&#337;k száma';
 $strFieldsTerminatedBy = 'Mez&#337; vége';
 $strFileAlreadyExists = '%s fájl már létezik a szerveren, változtassa meg a fájlnevet, vagy állítsa be a felülírás opciót!';  
 $strFileCouldNotBeRead = 'A fájl nem olvasható';  
-$strFileNameTemplate = 'Átmeneti fájlnév';
 $strFileNameTemplateRemember = 'emlékezzen az átmeneti névre';
+$strFileNameTemplate = 'Átmeneti fájlnév';
 $strFileToImport = 'Importálandó fájl';
 $strFixed = 'rögzített';
 $strFlushPrivilegesNote = 'Megjegyzés: a phpMyAdmin a felhasználói privilégiumokat közvetlenül a MySQL privilégium táblákból veszi. Ezen táblák tartalma eltérhet a szerver privilégiumoktól, ha ezt kézzel beállítottuk. Ebben az esetben érdemes %sújra betölteni a privilégiumokat%s a folytatás el&#337;tt.'; 
@@ -338,7 +334,6 @@ $strInsertAsNewRow = 'Beszúrás új sorként';
 $strInsert = 'Beszúr';
 $strInsertedRowId = 'A beszúrt rekord id-je:';  
 $strInsertedRows = 'Beszúrt sorok:';
-$strInsertNewRow = 'Új sor beszúrása';
 $strInternalNotNecessary = '* Egy bels&#337; kapcsolat nem szükséges, ha az létezik az InnoDB-ben is.';  
 $strInternalRelations = 'Bels&#337; kapcsolatok';  
 $strInUse = 'használatban';
@@ -399,8 +394,8 @@ $strMIME_MIMEtype = 'MIME-típus';
 $strMIME_nodescription = 'Ehhez az átalakításhoz nem érhet&#337; el leírás.<br />Kérdezze a szerz&#337;t, aki készítette: %s.';
 $strMIME_transformation = 'Böngész&#337; átalakítás';
 $strMIME_transformation_note = 'Az elérhet&#337; átalakítási beállítások listájához és a hozzájuk tartozó MIME-típusokhoz kattintson ide: %stransformation descriptions%s';
-$strMIME_transformation_options = 'Átalakítás beállítások';
 $strMIME_transformation_options_note = 'Az átalakítás beállításokhoz írja be az értékeket a kovetkez&#337; formátumban: \'a\',\'b\',\'c\'...<br />Ha visszapert ("\") vagy idéz&#337;jelet ("\'") akar beszúrni, használjon visszapert (például: \'\\\\xyz\' or \'a\\\'b\').';
+$strMIME_transformation_options = 'Átalakítás beállítások';
 $strMIMETypesForTable = 'Tábla MIME-típusok';  
 $strMIME_without = 'A d&#337;lttel írt MIME-típusok nem választják el az átalakítási funkciókat';
 $strModifications = 'A változásokat elmentettem';
@@ -445,7 +440,6 @@ $strNoRowsSelected = 'Nincs sor kiválasztva';
 $strNoSpace = 'Nincs elég hely elmenteni a fájlt: %s.';  
 $strNoTablesFound = 'Nincs tábla az adatbázisban.';
 $strNoThemeSupport = 'Nincs téma támogatás, ellen&#337;rizd a beállításokat és/vagy a témákat a %s könyvtárban.';
-$strNothingToImport = 'Nem adtál meg importálandó adatot!';
 $strNotNumber = 'Ez nem egy szám!';
 $strNotOK = 'Nincs rendben';
 $strNotSet = '<b>%s</b> táblát nem találtam vagy nincs benne: %s';
@@ -536,6 +530,7 @@ $strPrivDescUpdate = 'Engedélyezi az adatok megváltoztatását.';
 $strPrivDescUsage = 'Nincsenek privilégiumok.'; 
 $strPrivileges = 'Privilégiumok';
 $strPrivilegesReloaded = 'A privilégiumok újratöltése sikeres volt.'; 
+$strProcesses = 'Folyamatok'; 
 $strProcesslist = 'Folyamatlista'; 
 $strPutColNames = 'Tegye a mez&#337;neveket az els&#337; sorhoz';  
 
@@ -562,7 +557,6 @@ $strRelationsForTable = 'Tábla-kapcsolatok';
 $strRelations = 'Kapcsolatok';  
 $strRelationView = 'Reláció nézet';
 $strReloadingThePrivileges = 'Privilégiumok újratöltése'; 
-$strReloadMySQL = 'MySQL újratöltése';
 $strRemoveSelectedUsers = 'A kiválasztott felhasználók törlése'; 
 $strRenameDatabaseOK = '%s adatbázis átneveztem erre: %s';  
 $strRenameTableOK = '%s táblát átneveztem erre: %s';
@@ -619,7 +613,6 @@ $strServerNotResponding = 'A szerver nem válaszol';
 $strServerStatus = 'Futási információk'; 
 $strServerStatusUptime = 'Ez a MySQL szerver fut: %s. Elindítva: %s.'; 
 $strServer = 'Szerver';  
-$strServerTabProcesslist = 'Folyamatok'; 
 $strServerTabVariables = 'Változók'; 
 $strServerTrafficNotes = '<b>Szerver forgalom</b>: Ezek a táblák mutatják a MySQL szerver hálózati forgalom-statisztikáit az indulástól kezdve.';
 $strServerVars = 'Szerver változók és beállítások'; 
@@ -687,7 +680,6 @@ $strSort = 'Sorrendezés';
 $strSpaceUsage = 'Helyfoglalás';
 $strSpanish = 'Spanyol';  
 $strSplitWordsWithSpace = 'A szavak fel vannak osztva szóköz karakter szerint (" ").';
-$strSQLExportCompatibility = 'SQL export kompatibilitás';
 $strSQLExportType = 'Export típus';  
 $strSQLOptions = 'SQL beállítások';
 $strSQLParserBugMessage = 'Esély van rá, hogy egy hibát találhattál az SQL szintaktikai elemz&#337;ben (parser). Vizsgáld meg gondosan a lekérdezésedet, ellen&#337;rizd, hogy az idéz&#337;jelek jók és jól illeszkednek. Más lehetséges hiba oka lehet, hogy binárisan töltöttél fel egy fájlt az idézett szövegmez&#337;n kívül. Kipróbálhatod a lekérésedet a MySQL parancssoros felületén.  A MySQL szerver hibakimenete alul látható, ha van ott valami, az segíthet felderíteni a hiba okát. Ha még mindig gondjaid vannak, vagy a szintaktiaki elemz&#337; (parser) hibát jelez, ahol a parancssoros felületen végrehajtódik, redukáld a problémát okozó SQL lekérdezést egy egyszer&#369; lekérdezéssé, és küldd el egy hibajelzésben (bug report) az alsó Kivágás részben lev&#337; adatokkal együtt:';
@@ -705,7 +697,6 @@ $strStatUpdateTime = 'Utolsó módosítás';
 $strStatus = 'Állapot'; 
 $strStrucCSV = 'CSV adat';
 $strStrucData = 'Szerkezet és adatok';
-$strStrucDrop = '\'Tábla eldobás\' hozzáadása';
 $strStrucExcelCSV = 'MS Excel CSV adat';
 $strStrucNativeExcel = 'Natív MS Excel adat';  
 $strStrucOnly = 'Csak szerkezet';
@@ -730,7 +721,6 @@ $strTableOptions = 'Tábla opciók';
 $strTables = '%s tábla';
 $strTableStructure = 'Tábla szerkezet:';
 $strTable = 'Tábla';
-$strTableType = 'Tábla típusa';
 $strTakeIt = 'csináld';  
 $strTblPrivileges = 'Tábla-specifikus privilégiumok'; 
 $strTempData = 'Ideiglenes adatok';
@@ -820,15 +810,18 @@ $strZeroRemovesTheLimit = 'Megjegyzés: A 0 (nulla) beállítása törli a limitet.';
 $strZip = '"zippel tömörítve"';
 
 // To translate:
+$strAccessDeniedCreateConfig = 'Probably reason of this is that you did not create configuration file. You might want to use %1$ssetup script%2$s to create one.';  //to translate
 $strAllowInterrupt = 'Allow interrupt of import in case script detects it is close to time limit. This might be good way to import large files, however it can break transactions.';  //to translate
 $strAndThen = 'and then';  //to translate
 
+$strBrowseDistinctValues = 'Browse distinct values';  //to translate
 $strBufferReadMissesInPercent = 'Read misses in %';  //to translate
 $strBufferWriteWaitsInPercent = 'Write waits in %';  //to translate
 $strBusyPages = 'Busy pages';  //to translate
 
 $strCanNotLoadImportPlugins = 'Could not load import plugins, please check your installation!';  //to translate
 $strCompressionWillBeDetected = 'Imported file compression will be automatically detected from: %s';  //to translate
+$strConfigDefaultFileError = 'Could not load default configuration from: "%1$s"';  //to translate
 
 $strDefaultEngine = '%s is the default storage engine on this MySQL server.';  //to translate
 
@@ -836,9 +829,15 @@ $strEngines = 'Engines';  //to translate
 $strEngineUnsupported = 'This MySQL server does not support the %s storage engine.';  //to translate
 $strEscapeWildcards = 'Wildcards _ and % should be escaped with a \ to use them literally';  //to translate
 
+$strFileNameTemplateDescriptionDatabase = 'database name';  //to translate
+$strFileNameTemplateDescriptionServer = 'server name';  //to translate
+$strFileNameTemplateDescriptionTable = 'table name';  //to translate
+$strFileNameTemplateDescription = 'This value is interpreted using %1$sstrftime%2$s, so you can use time formatting strings. Additionally the following transformations will happen: %3$s. Other text will be kept as is.';  //to translate
+
 $strHandler = 'Handler';  //to translate
 
 $strIgnoreDuplicates = 'Ignore duplicate rows';  //to translate
+$strImportSuccessfullyFinished = 'Import has been successfully finished, %d queries executed.';  //to translate
 $strIndexWarningMultiple = 'More than one %s key was created for column `%s`';//to translate
 $strIndexWarningPrimary = 'PRIMARY and INDEX keys should not both be set for column `%s`';//to translate
 $strIndexWarningUnique = 'UNIQUE and INDEX keys should not both be set for column `%s`';//to translate
@@ -851,11 +850,19 @@ $strInnoDBDataHomeDirDesc = 'The common part of the directory path for all InnoD
 $strInnoDBPages = 'lapok';  //to translate
 $strInvalidAuthMethod = 'Invalid authentication method set in configuration:';  //to translate
 $strInvalidColumn = 'Invalid column (%s) specified!';  //to translate
+$strInvalidCSVFieldCount = 'Invalid field count in CSV input on line %d.';  //to translate
+$strInvalidCSVFormat = 'Invalid format of CSV input on line %d.';  //to translate
+$strInvalidCSVParameter = 'Invalid parameter for CSV import: %s';  //to translate
 $strInvalidRowNumber = '%d is not valid row number.';  //to translate
+$strInvalidServerHostname = 'Invalid hostname for server %1$s. Please review your configuration.';  //to translate
+$strInvalidServerIndex = 'Invalid server index: "%s"';  //to translate
 
 $strJoins = 'Joins';  //to translate
 
 $strKeyCache = 'Key cache';  //to translate
+
+$strLanguageFileNotFound = 'Language file "%1$s" not found.';  //to translate
+$strLanguageUnknown = 'Unknown language: %1$s.';  //to translate
 
 $strMbExtensionMissing = 'The mbstring PHP extension was not found and you seem to be using multibyte charset. Without mbstring extension phpMyAdmin is unable to split strings correctly and it may result in unexpected results.';  //to translate
 $strMyISAMDataPointerSizeDesc = 'The default pointer size in bytes, to be used by CREATE TABLE for MyISAM tables when no MAX_ROWS option is specified.';  //to translate
@@ -867,11 +874,19 @@ $strMyISAMRepairThreadsDesc = 'If this value is greater than 1, MyISAM table ind
 $strMyISAMRepairThreads = 'Repair threads';  //to translate
 $strMyISAMSortBufferSizeDesc = 'The buffer that is allocated when sorting MyISAM indexes during a REPAIR TABLE or when creating indexes with CREATE INDEX or ALTER TABLE.';  //to translate
 $strMyISAMSortBufferSize = 'Sort buffer size';  //to translate
+$strMysqlClientVersion = 'MySQL client version';  //to translate
 
 $strNoDetailsForEngine = 'There is no detailed status information available for this storage engine.';  //to translate
 
-$strPasswordHashing = 'Password Hashing';  //to translate
+$strOpenNewWindow = 'Open new phpMyAdmin window';  //to translate
 
+$strPasswordHashing = 'Password Hashing';  //to translate
+$strPDFOptions = 'PDF options';  //to translate
+$strPDF = 'PDF';  //to translate
+$strPDFReportTitle = 'Report title';  //to translate
+$strProtocolVersion = 'Protocol version';  //to translate
+
+$strReloadPrivileges = 'Reload privileges';  //to translate
 $strReplication = 'Replication';  //to translate
 
 $strSelectBinaryLog = 'Select binary log to view';  //to translate
@@ -950,48 +965,54 @@ $strShowStatusThreads_cachedDescr = 'The number of threads in the thread cache. 
 $strShowStatusThreads_connectedDescr = 'The number of currently open connections.';  //to translate
 $strShowStatusThreads_createdDescr = 'The number of threads created to handle connections. If Threads_created is big, you may want to increase the thread_cache_size value. (Normally this doesn\'t give a notable performance improvement if you have a good thread implementation.)';  //to translate
 $strSkipQueries = 'Number of records(queries) to skip from start';  //to translate
+$strSQLCompatibility = 'SQL compatibility mode';  //to translate
+$strSQLImportOptions = 'SQL options';  //to translate
+$strStatisticsOverrun = 'On a busy server, the byte counters may overrun, so those statistics as reported by the MySQL server may be incorrect.';  //to translate
 $strStorageEngines = 'Storage Engines';  //to translate
 $strStorageEngine = 'Storage Engine';  //to translate
 
+$strThemeDefaultNotFound = 'Default theme %s not found!';  //to translate
+$strThemeNoPreviewAvailable = 'No preview available.';  //to translate
+$strThemeNotFound = 'Theme %s not found!';  //to translate
+$strThemeNoValidImgPath = 'No valid image path for theme %s found!';  //to translate
+$strThemePathNotFound = 'Theme path not found for theme %s!';  //to translate
 $strTimeoutInfo = 'Previous import timed out, after resubmitting will continue from position %d.';  //to translate
 $strTimeoutNothingParsed = 'However on last run no data has been parsed, this usually means phpMyAdmin won\'t be able to finish this import unless you increase php time limits.';  //to translate
 $strTimeoutPassed = 'Script timeout passed, if you want to finish import, please resubmit same file and import will resume.';  //to translate
 $strTransactionCoordinator = 'Transaction coordinator';  //to translate
-$strTransformation_application_octetstream__hex = 'Displays hexadecimal representation of data.';  //to translate
+$strTransformation_application_octetstream__hex = 'Displays hexadecimal representation of data. Optional first parameter specifies how often space will be added (defaults to 2 nibbles).';  //to translate
 $strTransformation_text_plain__sql = 'Formats text as SQL query with syntax highlighting.';  //to translate
 
 $strUnsupportedCompressionDetected = 'You attempted to load file with unsupported compression (%s). Either support for it is not implemented or disabled by your configuration.';  //to translate
 $strUploadLimit = 'You probably tried to upload too large file. Please refer to %sdocumentation%s for ways to workaround this limit.';  //to translate
-
-
-$strInvalidServerIndex = 'Invalid server index: "%s"';  //to translate
-$strInvalidServerHostname = 'Invalid hostname for server %1$s. Please review your configuration.';  //to translate
-$strFileNameTemplateDescriptionTable = 'table name';  //to translate
-$strFileNameTemplateDescriptionDatabase = 'database name';  //to translate
-$strFileNameTemplateDescriptionServer = 'server name';  //to translate
-$strFileNameTemplateDescription = 'This value is interpreted using %1$sstrftime%2$s, so you can use time formatting strings. Additionally the following transformations will happen: %3$s. Other text will be kept as is.';  //to translate
-$strProtocolVersion = 'Protocol version';  //to translate
-$strMysqlClientVersion = 'MySQL client version';  //to translate
 $strUsedPhpExtensions = 'Used PHP extensions';  //to translate
-$strOpenNewWindow = 'Open new phpMyAdmin window';  //to translate
-$strLanguageUnknown = 'Unknown language: %1$s.';  //to translate
-$strLanguageFileNotFound = 'Language file "%1$s" not found.';  //to translate
-$strThemeNoPreviewAvailable = 'No preview available.';  //to translate
-$strConfigDefaultFileError = 'Could not load default configuration from: "%1$s"';  //to translate
-$strPDF = 'PDF';  //to translate
-$strPDFOptions = 'PDF options';  //to translate
-$strPDFReportTitle = 'Report title';  //to translate
-$strInvalidCSVParameter = 'Invalid parameter for CSV import: %s';  //to translate
-$strInvalidCSVFieldCount = 'Invalid field count in CSV input on line %d.';  //to translate
-$strInvalidCSVFormat = 'Invalid format of CSV input on line %d.';  //to translate
-$strImportSuccessfullyFinished = 'Import has been successfully finished, %d queries executed.';  //to translate
-$strThemeNotFound = 'Theme %s not found!';  //to translate
-$strThemeDefaultNotFound = 'Default theme %s not found!';  //to translate
-$strThemeNoValidImgPath = 'No valid image path for theme %s found!';  //to translate
-$strThemePathNotFound = 'Theme path not found for theme %s!';  //to translate
-$strAccessDeniedCreateConfig = 'Probably reason of this is that you did not create configuration file. You might want to use %1$ssetup script%2$s to create one.';  //to translate
-$strSQLImportOptions = 'SQL options';  //to translate
-$strBrowseDistinctValues = 'Browse distinct values';  //to translate
-$strStatisticsOverrun = 'On a busy server, the byte counters may overrun, so those statistics as reported by the MySQL server may be incorrect.';  //to translate
+
 $strViewMaxExactCount = 'This view has more than %s rows. Please refer to %sdocumentation%s.';  //to translate
+
+$strQueryResultsOperations = 'Query results operations';  //to translate
+$strAddClause = 'Add %s';  //to translate
+$strUploadsNotAllowed = 'File uploads are not allowed on this server.';  //to translate
+$strOpenDocumentSpreadsheet = 'Open Document Spreadsheet';  //to translate
+$strOpenDocumentSpreadsheetOptions = 'Open Document Spreadsheet options';  //to translate
+$strExportMustBeFile = 'Selected export type has to be saved in file!';  //to translate
+$strXMLOptions = 'XML options';  //to translate
+$strStrucNativeExcelOptions = 'Native Excel export options';  //to translate
+$strCreateUserDatabase = 'Database for user';  //to translate
+$strCreateUserDatabaseNone = 'None';  //to translate
+$strCreateUserDatabaseName = 'Create database with same name and grant all privileges';  //to translate
+$strCreateUserDatabaseWildcard = 'Grant all privileges on wildcard name (username_%)';  //to translate
+$strOpenDocumentText = 'Open Document Text';  //to translate
+$strOpenDocumentTextOptions = 'Open Document Text options';  //to translate
+$strNoDataReceived = 'No data was received to import. Either no file name was submitted, or the file size exceeded the maximum size permitted by your PHP configuration. See FAQ 1.16.';  //to translate
+$strCanNotLoadExportPlugins = 'Could not load export plugins, please check your installation!';  //to translate
+$strErrorRenamingTable = 'Error renaming table %1$s to %2$s';  //to translate
+$strInvalidTableName = 'Invalid table name';  //to translate
+$strInvalidDatabase = 'Invalid database';  //to translate
+$strServers = 'Servers';  //to translate
+$strDelimiter = 'Delimiter';  //to translate
+$strFunctions = 'Functions';  //to translate
+$strProcedures = 'Procedures';  //to translate
+$strPDFReportExplanation = '(Generates a report containing the data of a single table)';  //to translate
+$strFontSize = 'Font size';  //to translate
+$strLanguage = 'Language';  //to translate
 ?>

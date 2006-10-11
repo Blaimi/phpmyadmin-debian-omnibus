@@ -2,12 +2,12 @@
 # Copyright (C) 2006 Software in the Public Interest
 # This file is distributed under the same license as the phpmyadmin package.
 # Luca Monducci <luca.mo@tiscali.it>, 2006.
-#
+# 
 msgid ""
 msgstr ""
 "Project-Id-Version: phpmyadmin 2.8.2 italian debconf templates\n"
-"Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-03-31 15:030200\n"
+"Report-Msgid-Bugs-To: thijs@debian.org\n"
+"POT-Creation-Date: 2006-10-11 14:01+0200\n"
 "PO-Revision-Date: 2006-08-08 20:50+0100\n"
 "Last-Translator: Luca Monducci <luca.mo@tiscali.it>\n"
 "Language-Team: Italian <tp@lists.linux.it>\n"
@@ -17,13 +17,13 @@ msgstr ""
 
 #. Type: multiselect
 #. Description
-#: ../templates:5
+#: ../templates:1001
 msgid "Which web server would you like to reconfigure automatically?"
 msgstr "Quale server web si vuole riconfigurare automaticamente?"
 
 #. Type: multiselect
 #. Description
-#: ../templates:5
+#: ../templates:1001
 msgid ""
 "phpMyAdmin supports any web server that PHP does, but this automatic "
 "configuration process only supports Apache."
@@ -33,43 +33,33 @@ msgstr ""
 
 #. Type: boolean
 #. Description
-#: ../templates:12
+#: ../templates:2001
 msgid "Do you want me to restart ${webserver} now?"
 msgstr "Si vuole riavviare ${webserver} adesso?"
 
 #. Type: boolean
 #. Description
-#: ../templates:12
+#: ../templates:2001
 msgid ""
 "Remember that in order to activate the new configuration ${webserver} has to "
-"be restarted. You can also restart ${webserver} manually executing /etc/init."
-"d/${webserver} restart"
+"be restarted. You can also restart ${webserver} by manually executing /etc/"
+"init.d/${webserver} restart"
 msgstr ""
-"Per attivare la nuova configurazione è necessario riavviare ${webserver}. "
-"Si può riavviare ${webserver} anche manualmente eseguendo \"/etc/init.d/"
+"Per attivare la nuova configurazione è necessario riavviare ${webserver}. Si "
+"può riavviare ${webserver} anche manualmente eseguendo \"/etc/init.d/"
 "${webserver} restart\"."
 
 #. Type: string
 #. Description
-#: ../templates:20
+#: ../templates:3001
 msgid "User name for web-based setup system:"
 msgstr "Nome utente per il sistema di configurazione via web:"
 
 #. Type: string
 #. Description
-#: ../templates:20
-msgid "Leave empty if you want to use the default user name 'admin'."
-msgstr "Lasciare vuoto se si vuole usare il nome utente predefinito \"admin\"."
-
 #. Type: password
 #. Description
-#: ../templates:30
-msgid "Password for web-based setup system:"
-msgstr "Password per il sistema di configurazione via web:"
-
-#. Type: password
-#. Description
-#: ../templates:30
+#: ../templates:3001 ../templates:4001
 msgid ""
 "phpMyAdmin comes with a setup script that can help you with creating "
 "configuration. The script is located at http://localhost/phpmyadmin/scripts/"
@@ -80,19 +70,31 @@ msgstr ""
 "phpmyadmin/scripts/setup.php . Per motivi di sicurezza è necessaria "
 "l'autenticazione."
 
+#. Type: string
+#. Description
+#: ../templates:3001
+msgid "Leave empty if you want to use the default user name 'admin'."
+msgstr "Lasciare vuoto se si vuole usare il nome utente predefinito \"admin\"."
+
 #. Type: password
 #. Description
-#: ../templates:30
+#: ../templates:4001
+msgid "Password for web-based setup system:"
+msgstr "Password per il sistema di configurazione via web:"
+
+#. Type: password
+#. Description
+#: ../templates:4001
 msgid ""
 "You can manage the usernames and passwords with `htpasswd' command. They are "
 "stored in /etc/phpmyadmin/htpasswd.setup file."
 msgstr ""
-"Utenti e password sono memorizzati nel file /etc/phpmyadmin/htpasswd.setup "
-"e possono essere gestiti con il comando \"htpasswd\"."
+"Utenti e password sono memorizzati nel file /etc/phpmyadmin/htpasswd.setup e "
+"possono essere gestiti con il comando \"htpasswd\"."
 
 #. Type: password
 #. Description
-#: ../templates:30
+#: ../templates:4001
 msgid "Leave empty if you want to disable access to web-based setup."
 msgstr ""
 "Lasciare vuoto se si vuole usare diabilitare la configurazione via web."

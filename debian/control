@@ -1,5 +1,5 @@
 Source: phpmyadmin
-Maintainer: Piotr Roszatycki <dexter@debian.org>
+Maintainer: Thijs Kinkhorst <thijs@debian.org>
 Section: web
 Priority: extra
 Standards-Version: 3.7.2
@@ -11,7 +11,7 @@ Architecture: all
 Depends: php5-cgi | php5 | php4-cgi | php4, php5-mysql | php5-mysqli | php4-mysql, ${phpmyadmin:Depends}
 Recommends: apache2 | httpd, php5-mcrypt | php4-mcrypt, php5-gd | php4-gd, ${phpmyadmin:Recommends}
 Suggests: mysql-server (>= 3.23.36), ${phpmyadmin:Suggests}
-Description: set of PHP-scripts to administrate MySQL over the WWW
+Description: Administrate MySQL over the WWW
  phpMyAdmin is intended to handle the administration of MySQL over the WWW.
  Currently it can:
    - easily browse through databases and tables
@@ -37,3 +37,5 @@ Description: set of PHP-scripts to administrate MySQL over the WWW
    - support InnoDB tables and foreign keys
    - support mysqli, the improved MySQL extension
    - communicate in 50 different languages
+ .
+ Homepage: http://www.phpmyadmin.net/

@@ -16,8 +16,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: phpmyadmin_4:2.8.0.3-1_ru\n"
-"Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-03-17 14:03+0100\n"
+"Report-Msgid-Bugs-To: thijs@debian.org\n"
+"POT-Creation-Date: 2006-10-11 14:01+0200\n"
 "PO-Revision-Date: 2006-05-14 14:39+1000\n"
 "Last-Translator: Yuriy Talakan' <yt@amur.elektra.ru>\n"
 "Language-Team: Russian <debian-l10n-russian@lists.debian.org>\n"
@@ -28,13 +28,13 @@ msgstr ""
 
 #. Type: multiselect
 #. Description
-#: ../templates:5
+#: ../templates:1001
 msgid "Which web server would you like to reconfigure automatically?"
 msgstr "Какой из веб-серверов Вы хотите перенастроить автоматически?"
 
 #. Type: multiselect
 #. Description
-#: ../templates:5
+#: ../templates:1001
 msgid ""
 "phpMyAdmin supports any web server that PHP does, but this automatic "
 "configuration process only supports Apache."
@@ -44,17 +44,17 @@ msgstr ""
 
 #. Type: boolean
 #. Description
-#: ../templates:12
+#: ../templates:2001
 msgid "Do you want me to restart ${webserver} now?"
 msgstr "Хотите перезапустить ${webserver} прямо сейчас?"
 
 #. Type: boolean
 #. Description
-#: ../templates:12
+#: ../templates:2001
 msgid ""
 "Remember that in order to activate the new configuration ${webserver} has to "
-"be restarted. You can also restart ${webserver} manually executing /etc/init."
-"d/${webserver} restart"
+"be restarted. You can also restart ${webserver} by manually executing /etc/"
+"init.d/${webserver} restart"
 msgstr ""
 "Помните, что для активизации новой настройки ${webserver} должен быть "
 "перезапущен. Вы можете перезапустить ${webserver} вручную командой /etc/init."
@@ -62,44 +62,48 @@ msgstr ""
 
 #. Type: string
 #. Description
-#: ../templates:20
+#: ../templates:3001
 msgid "User name for web-based setup system:"
 msgstr "Имя пользователя для системы web-установки:"
 
 #. Type: string
 #. Description
-#: ../templates:20
+#. Type: password
+#. Description
+#: ../templates:3001 ../templates:4001
+msgid ""
+"phpMyAdmin comes with a setup script that can help you with creating "
+"configuration. The script is located at http://localhost/phpmyadmin/scripts/"
+"setup.php . For security reason it requires authorization."
+msgstr ""
+"phpMyAdmin поставляется со скриптом установки, который поможет вам в "
+"настройке. Скрипт расположен по адресу http://localhost/phpmyadmin/scripts/"
+"setup.php . В целях безопасности, он требует авторизации."
+
+#. Type: string
+#. Description
+#: ../templates:3001
 msgid "Leave empty if you want to use the default user name 'admin'."
 msgstr "Оставьте пустым, если хотите использовать по умолчанию имя 'admin'."
 
 #. Type: password
 #. Description
-#: ../templates:30
+#: ../templates:4001
 msgid "Password for web-based setup system:"
 msgstr "Пароль для системы web-установки:"
 
 #. Type: password
 #. Description
-#: ../templates:30
-msgid ""
-"phpMyAdmin comes with a setup script that can help you with creating "
-"configuration. The script is located at http://localhost/phpmyadmin/scripts/setup.php . "
-"For security reason it requires authorization."
-msgstr ""
-"phpMyAdmin поставляется со скриптом установки, который поможет вам в настройке. Скрипт расположен по адресу http://localhost/phpmyadmin/scripts/setup.php . "
-"В целях безопасности, он требует авторизации."
-
-#. Type: password
-#. Description
-#: ../templates:30
+#: ../templates:4001
 msgid ""
 "You can manage the usernames and passwords with `htpasswd' command. They are "
 "stored in /etc/phpmyadmin/htpasswd.setup file."
-msgstr "Вы можете управлять именами и паролями пользователей с помощью команды `htpasswd'. Они хранятся в файле /etc/phpmyadmin/htpasswd.setup"
+msgstr ""
+"Вы можете управлять именами и паролями пользователей с помощью команды "
+"`htpasswd'. Они хранятся в файле /etc/phpmyadmin/htpasswd.setup"
 
 #. Type: password
 #. Description
-#: ../templates:30
+#: ../templates:4001
 msgid "Leave empty if you want to disable access to web-based setup."
 msgstr "Оставьте пустым, если хотите запретить доступ к web-установке."
-

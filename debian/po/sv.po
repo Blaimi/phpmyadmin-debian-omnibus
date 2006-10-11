@@ -13,8 +13,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: phpmyadmin\n"
-"Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-03-17 14:03+0100\n"
+"Report-Msgid-Bugs-To: thijs@debian.org\n"
+"POT-Creation-Date: 2006-10-11 14:01+0200\n"
 "PO-Revision-Date: 2006-03-28 18:47+0100\n"
 "Last-Translator: Daniel Nylander <po@danielnylander.se>\n"
 "Language-Team: Swedish <tp-sv@listor.tp-sv.se>\n"
@@ -24,61 +24,84 @@ msgstr ""
 
 #. Type: multiselect
 #. Description
-#: ../templates:5
+#: ../templates:1001
 msgid "Which web server would you like to reconfigure automatically?"
 msgstr "Vilken webbserver vill du att jag ska konfigurera automatiskt?"
 
 #. Type: multiselect
 #. Description
-#: ../templates:5
-msgid "phpMyAdmin supports any web server that PHP does, but this automatic configuration process only supports Apache."
-msgstr "phpMyAdmin har stöd för de webbservrar som PHP har men den här automatiska konfigurationsprocessen klarar endast Apache."
+#: ../templates:1001
+msgid ""
+"phpMyAdmin supports any web server that PHP does, but this automatic "
+"configuration process only supports Apache."
+msgstr ""
+"phpMyAdmin har stöd för de webbservrar som PHP har men den här automatiska "
+"konfigurationsprocessen klarar endast Apache."
 
 #. Type: boolean
 #. Description
-#: ../templates:12
+#: ../templates:2001
 msgid "Do you want me to restart ${webserver} now?"
 msgstr "Vill du att jag startar om ${webserver} nu?"
 
 #. Type: boolean
 #. Description
-#: ../templates:12
-msgid "Remember that in order to activate the new configuration ${webserver} has to be restarted. You can also restart ${webserver} manually executing /etc/init.d/${webserver} restart"
-msgstr "Kom ihåg att aktivera den nya konfiguration genom att starta om ${webserver}. Du kan även starta om ${webserver} manuellt genom att köra /etc/init.d/${webserver} restart"
+#: ../templates:2001
+msgid ""
+"Remember that in order to activate the new configuration ${webserver} has to "
+"be restarted. You can also restart ${webserver} by manually executing /etc/"
+"init.d/${webserver} restart"
+msgstr ""
+"Kom ihåg att aktivera den nya konfiguration genom att starta om "
+"${webserver}. Du kan även starta om ${webserver} manuellt genom att köra /"
+"etc/init.d/${webserver} restart"
 
 #. Type: string
 #. Description
-#: ../templates:20
+#: ../templates:3001
 msgid "User name for web-based setup system:"
 msgstr "Användarnamn för det webbaserade konfigurationssystemet:"
 
 #. Type: string
 #. Description
-#: ../templates:20
+#. Type: password
+#. Description
+#: ../templates:3001 ../templates:4001
+msgid ""
+"phpMyAdmin comes with a setup script that can help you with creating "
+"configuration. The script is located at http://localhost/phpmyadmin/scripts/"
+"setup.php . For security reason it requires authorization."
+msgstr ""
+"phpMyAdmin kommer med ett konfigurationsskript som kan hjälpa dig att skapa "
+"en konfiguration. Skriptet kan hittas på http://localhost/phpmyadmin/scripts/"
+"setup.php . Av säkerhetsskäl kräver det auktorisering."
+
+#. Type: string
+#. Description
+#: ../templates:3001
 msgid "Leave empty if you want to use the default user name 'admin'."
 msgstr "Lämna blank om du vill använda standardanvändarnamnet \"admin\"."
 
 #. Type: password
 #. Description
-#: ../templates:30
+#: ../templates:4001
 msgid "Password for web-based setup system:"
 msgstr "Lösenord för det webbaserade konfigurationssystemet:"
 
 #. Type: password
 #. Description
-#: ../templates:30
-msgid "phpMyAdmin comes with a setup script that can help you with creating configuration. The script is located at http://localhost/phpmyadmin/scripts/setup.php . For security reason it requires authorization."
-msgstr "phpMyAdmin kommer med ett konfigurationsskript som kan hjälpa dig att skapa en konfiguration. Skriptet kan hittas på http://localhost/phpmyadmin/scripts/setup.php . Av säkerhetsskäl kräver det auktorisering."
+#: ../templates:4001
+msgid ""
+"You can manage the usernames and passwords with `htpasswd' command. They are "
+"stored in /etc/phpmyadmin/htpasswd.setup file."
+msgstr ""
+"Du kan hantera användarnamnen och lösenorden med kommandot \"htpasswd\". De "
+"lagras i filen /etc/phpmyadmin/htpasswd.setup."
 
 #. Type: password
 #. Description
-#: ../templates:30
-msgid "You can manage the usernames and passwords with `htpasswd' command. They are stored in /etc/phpmyadmin/htpasswd.setup file."
-msgstr "Du kan hantera användarnamnen och lösenorden med kommandot \"htpasswd\". De lagras i filen /etc/phpmyadmin/htpasswd.setup."
-
-#. Type: password
-#. Description
-#: ../templates:30
+#: ../templates:4001
 msgid "Leave empty if you want to disable access to web-based setup."
-msgstr "Lämna blank om du vill inaktivera tillgång till den webbaserade konfigurationen."
-
+msgstr ""
+"Lämna blank om du vill inaktivera tillgång till den webbaserade "
+"konfigurationen."

@@ -14,14 +14,14 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: phpmyadmin 4:2.8.2-0.1\n"
-"Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-07-19 05:02-0600\n"
+"Report-Msgid-Bugs-To: thijs@debian.org\n"
+"POT-Creation-Date: 2006-10-11 14:01+0200\n"
 "PO-Revision-Date: 2006-08-27 16:56+0200\n"
 "Last-Translator: Nacho Barrientos Arias <chipi@criptonita.com>\n"
 "Language-Team: Spanish <debian-l10n-spanish@lists.debian.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=ISO-8859-15\n"
-"Content-Transfer-Encoding: 8bit"
+"Content-Transfer-Encoding: 8bit\n"
 
 #. Type: multiselect
 #. Description
@@ -50,13 +50,12 @@ msgstr "¿Desea reiniciar ${webserver} ahora?"
 #: ../templates:2001
 msgid ""
 "Remember that in order to activate the new configuration ${webserver} has to "
-"be restarted. You can also restart ${webserver} manually executing /etc/init."
-"d/${webserver} restart"
+"be restarted. You can also restart ${webserver} by manually executing /etc/"
+"init.d/${webserver} restart"
 msgstr ""
-"Recuerde que, para activar la nueva configuración, ${webserver} debe ser reiniciado. "
-"También puede reiniciar ${webserver} manualmente ejecutando /etc/init."
-"d/${webserver} restart"
-
+"Recuerde que, para activar la nueva configuración, ${webserver} debe ser "
+"reiniciado. También puede reiniciar ${webserver} manualmente ejecutando /etc/"
+"init.d/${webserver} restart"
 
 #. Type: string
 #. Description
@@ -74,15 +73,17 @@ msgid ""
 "configuration. The script is located at http://localhost/phpmyadmin/scripts/"
 "setup.php . For security reason it requires authorization."
 msgstr ""
-"phpMyAdmin viene acompañado de un script que puede ayudarle a crear la configuración. "
-"Este script se encuentra en http://localhost/phpmyadmin/scripts/setup.php . "
-"Por razones de seguridad, para acceder es necesario estar autorizado."
+"phpMyAdmin viene acompañado de un script que puede ayudarle a crear la "
+"configuración. Este script se encuentra en http://localhost/phpmyadmin/"
+"scripts/setup.php . Por razones de seguridad, para acceder es necesario "
+"estar autorizado."
 
 #. Type: string
 #. Description
 #: ../templates:3001
 msgid "Leave empty if you want to use the default user name 'admin'."
-msgstr "Déjelo vacío si quiere utilizar el nombre de usuario por omisión («admin»)."
+msgstr ""
+"Déjelo vacío si quiere utilizar el nombre de usuario por omisión («admin»)."
 
 #. Type: password
 #. Description
@@ -97,11 +98,14 @@ msgid ""
 "You can manage the usernames and passwords with `htpasswd' command. They are "
 "stored in /etc/phpmyadmin/htpasswd.setup file."
 msgstr ""
-"Puede gestionar los nombres de usuario y contraseñas con la orden «htpasswd». "
-"Estos datos están almacenados en el fichero /etc/phpmyadmin/htpasswd.setup."
+"Puede gestionar los nombres de usuario y contraseñas con la orden "
+"«htpasswd». Estos datos están almacenados en el fichero /etc/phpmyadmin/"
+"htpasswd.setup."
 
 #. Type: password
 #. Description
 #: ../templates:4001
 msgid "Leave empty if you want to disable access to web-based setup."
-msgstr "Déjelo vacío si quiere deshabilitar el acceso al sistema de configuración basado en web."
+msgstr ""
+"Déjelo vacío si quiere deshabilitar el acceso al sistema de configuración "
+"basado en web."

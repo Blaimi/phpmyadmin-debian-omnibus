@@ -1,5 +1,5 @@
 <?php
-/* $Id: croatian-windows-1250.inc.php,v 2.142.2.1 2006/08/29 15:33:12 nijel Exp $ */
+/* $Id: croatian-windows-1250.inc.php 9472 2006-09-29 21:12:52Z  $ */
 
 /**
  *   Croatian language file by

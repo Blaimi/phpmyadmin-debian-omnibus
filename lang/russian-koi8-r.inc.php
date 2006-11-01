@@ -1,5 +1,5 @@
 <?php
-/* $Id: russian-koi8-r.inc.php,v 2.147 2006/08/10 11:41:33 lem9 Exp $ */
+/* $Id: russian-koi8-r.inc.php 9268 2006-08-10 11:41:33Z lem9 $ */
 
 /**
  * Translated by Gosha Sakovich <gt2 at users.sourceforge.net>

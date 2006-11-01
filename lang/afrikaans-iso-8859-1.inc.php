@@ -1,5 +1,5 @@
 <?php
-/* $Id: afrikaans-iso-8859-1.inc.php,v 2.140 2006/08/09 12:55:35 lem9 Exp $ */
+/* $Id: afrikaans-iso-8859-1.inc.php 9261 2006-08-09 12:55:40Z lem9 $ */
 
 /*
      translated by Andreas Pauley <pauley@buitegroep.org.za>

@@ -1,5 +1,5 @@
 <?php
-/* $Id: japanese-euc.inc.php,v 2.151.2.2 2006/08/30 10:43:14 nijel Exp $ */
+/* $Id: japanese-euc.inc.php 9472 2006-09-29 21:12:52Z  $ */
 
 /**
  * Translated by Yukihiro Kawada <kawada at den.fujifilm.co.jp>

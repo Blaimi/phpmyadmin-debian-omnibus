@@ -1,5 +1,5 @@
 <?php
-/* $Id: ukrainian-windows-1251.inc.php,v 2.140 2006/08/09 12:55:40 lem9 Exp $ */
+/* $Id: ukrainian-windows-1251.inc.php 9261 2006-08-09 12:55:40Z lem9 $ */
 
 $charset = 'windows-1251';
 $text_dir = 'ltr';

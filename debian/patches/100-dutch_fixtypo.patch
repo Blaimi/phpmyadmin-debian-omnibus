@@ -1,0 +1,36 @@
+diff -ur phpMyAdmin-2.9.0.3-all-languages.orig/lang/dutch-iso-8859-15.inc.php phpMyAdmin-2.9.0.3-all-languages/lang/dutch-iso-8859-15.inc.php
+--- phpMyAdmin-2.9.0.3-all-languages.orig/lang/dutch-iso-8859-15.inc.php	2006-11-01 14:34:05.000000000 +0100
++++ phpMyAdmin-2.9.0.3-all-languages/lang/dutch-iso-8859-15.inc.php	2006-11-02 13:50:08.000000000 +0100
+@@ -346,7 +346,7 @@
+ $strLogout = 'Uitloggen';
+ $strLogPassword = 'Wachtwoord:';
+ $strLogServer = 'Server';
+-$strLogUsername = 'Gebruikers naam:';
++$strLogUsername = 'Gebruikersnaam:';
+ 
+ $strMaximumSize = 'Maximale grootte: %s%s';
+ $strMbExtensionMissing = 'De mbstring PHP extensie werd niet gevonden en u lijkt een multibyte charset te gebruiken. Zonder de mbstring extensie kan phpMyAdmin strings niet correct splitsen wat tot onverwachte resultaten kan leiden.';
+diff -ur phpMyAdmin-2.9.0.3-all-languages.orig/lang/dutch-iso-8859-1.inc.php phpMyAdmin-2.9.0.3-all-languages/lang/dutch-iso-8859-1.inc.php
+--- phpMyAdmin-2.9.0.3-all-languages.orig/lang/dutch-iso-8859-1.inc.php	2006-11-01 14:34:05.000000000 +0100
++++ phpMyAdmin-2.9.0.3-all-languages/lang/dutch-iso-8859-1.inc.php	2006-11-02 13:50:17.000000000 +0100
+@@ -346,7 +346,7 @@
+ $strLogout = 'Uitloggen';
+ $strLogPassword = 'Wachtwoord:';
+ $strLogServer = 'Server';
+-$strLogUsername = 'Gebruikers naam:';
++$strLogUsername = 'Gebruikersnaam:';
+ 
+ $strMaximumSize = 'Maximale grootte: %s%s';
+ $strMbExtensionMissing = 'De mbstring PHP extensie werd niet gevonden en u lijkt een multibyte charset te gebruiken. Zonder de mbstring extensie kan phpMyAdmin strings niet correct splitsen wat tot onverwachte resultaten kan leiden.';
+diff -ur phpMyAdmin-2.9.0.3-all-languages.orig/lang/dutch-utf-8.inc.php phpMyAdmin-2.9.0.3-all-languages/lang/dutch-utf-8.inc.php
+--- phpMyAdmin-2.9.0.3-all-languages.orig/lang/dutch-utf-8.inc.php	2006-11-01 14:34:05.000000000 +0100
++++ phpMyAdmin-2.9.0.3-all-languages/lang/dutch-utf-8.inc.php	2006-11-02 13:50:24.000000000 +0100
+@@ -347,7 +347,7 @@
+ $strLogout = 'Uitloggen';
+ $strLogPassword = 'Wachtwoord:';
+ $strLogServer = 'Server';
+-$strLogUsername = 'Gebruikers naam:';
++$strLogUsername = 'Gebruikersnaam:';
+ 
+ $strMaximumSize = 'Maximale grootte: %s%s';
+ $strMbExtensionMissing = 'De mbstring PHP extensie werd niet gevonden en u lijkt een multibyte charset te gebruiken. Zonder de mbstring extensie kan phpMyAdmin strings niet correct splitsen wat tot onverwachte resultaten kan leiden.';

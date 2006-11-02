@@ -1,5 +1,5 @@
 <?php
-/* $Id: romanian-iso-8859-1.inc.php,v 2.143 2006/08/09 12:55:39 lem9 Exp $ */
+/* $Id: romanian-iso-8859-1.inc.php 9261 2006-08-09 12:55:40Z lem9 $ */
 
 $charset = 'iso-8859-1';
 $text_dir = 'ltr';

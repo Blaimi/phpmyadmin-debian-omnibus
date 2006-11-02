@@ -11,14 +11,14 @@
 #
 #    Developers do not need to manually edit POT or PO files.
 #
-#, fuzzy
+#
 msgid ""
 msgstr ""
-"Project-Id-Version: PACKAGE VERSION\n"
-"Report-Msgid-Bugs-To: thijs@debian.org\n"
+"Project-Id-Version: phpmyadmin 4:2.9.0.2-1\n"
+"Report-Msgid-Bugs-To:  Thijs Kinkhorst <thijs@debian.org>\n"
 "POT-Creation-Date: 2006-10-11 14:01+0200\n"
-"PO-Revision-Date: 2003-11-20 11:13+0900\n"
-"Last-Translator: Hideki Yamane <henrich@samba.gr.jp>\n"
+"PO-Revision-Date: 2006-10-15 13:52+0900\n"
+"Last-Translator: Hideki Yamane (Debian-JP) <henrich@debian.or.jp>\n"
 "Language-Team: Japanese <debian-japanese@lists.debian.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -62,7 +62,7 @@ msgstr ""
 #. Description
 #: ../templates:3001
 msgid "User name for web-based setup system:"
-msgstr ""
+msgstr "web ベース設定システムのユーザ名:"
 
 #. Type: string
 #. Description
@@ -74,18 +74,22 @@ msgid ""
 "configuration. The script is located at http://localhost/phpmyadmin/scripts/"
 "setup.php . For security reason it requires authorization."
 msgstr ""
+"phpMyAdmin は設定を作成するのに役立つ設定スクリプトを含んでいます。"
+"スクリプトは http://localhost/phpmyadmin/scripts/setup.php に設置されてます。"
+"セキュリティ上の理由によって、これを使うには認証が必要となります。"
 
 #. Type: string
 #. Description
 #: ../templates:3001
 msgid "Leave empty if you want to use the default user name 'admin'."
 msgstr ""
+"デフォルトのユーザ名 'admin' を使いたい場合は空のままにしておいてください。"
 
 #. Type: password
 #. Description
 #: ../templates:4001
 msgid "Password for web-based setup system:"
-msgstr ""
+msgstr "web ベース設定システムのパスワード:"
 
 #. Type: password
 #. Description
@@ -94,9 +98,13 @@ msgid ""
 "You can manage the usernames and passwords with `htpasswd' command. They are "
 "stored in /etc/phpmyadmin/htpasswd.setup file."
 msgstr ""
+" `htpasswd' コマンドを使ってユーザ名とパスワードを管理できます。これは "
+"/etc/phpmyadmin/htpasswd.setup ファイルに保存されます。"
 
 #. Type: password
 #. Description
 #: ../templates:4001
 msgid "Leave empty if you want to disable access to web-based setup."
 msgstr ""
+"web ベースの設定画面へのアクセスを無効にしたい場合、空のままにしておいて"
+"ください。"

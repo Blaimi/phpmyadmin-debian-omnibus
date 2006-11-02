@@ -1,5 +1,5 @@
 <?php
-/* $Id: russian-cp-866.inc.php,v 2.134 2006/08/10 11:41:33 lem9 Exp $ */
+/* $Id: russian-cp-866.inc.php 9268 2006-08-10 11:41:33Z lem9 $ */
 
 /**
  * Translated by Gosha Sakovich <gt2 at users.sourceforge.net>

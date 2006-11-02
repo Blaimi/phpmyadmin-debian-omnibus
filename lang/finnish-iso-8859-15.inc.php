@@ -1,5 +1,5 @@
 <?php
-/* $Id: finnish-iso-8859-15.inc.php,v 2.87.2.1 2006/09/15 11:56:46 lem9 Exp $ */
+/* $Id: finnish-iso-8859-15.inc.php 9472 2006-09-29 21:12:52Z  $ */
 
 /*
  * Translated by Jouni Kähkönen, <address withdrawn>

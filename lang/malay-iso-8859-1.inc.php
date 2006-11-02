@@ -1,5 +1,5 @@
 <?php
-/* $Id: malay-iso-8859-1.inc.php,v 2.141 2006/08/09 12:55:38 lem9 Exp $ */
+/* $Id: malay-iso-8859-1.inc.php 9261 2006-08-09 12:55:40Z lem9 $ */
 
 /*
 Projek Penterjemahan (l10n) phpmyadmin.net boleh diakses di laman http://shapik.johordt.com/l10n

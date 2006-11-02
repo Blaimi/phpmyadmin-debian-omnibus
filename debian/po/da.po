@@ -17,13 +17,13 @@ msgstr ""
 "Project-Id-Version: phpmyadmin_2.5.6-rc2-1_templates\n"
 "Report-Msgid-Bugs-To: thijs@debian.org\n"
 "POT-Creation-Date: 2006-10-11 14:01+0200\n"
-"PO-Revision-Date: 2006-03-20 16:10+0100\n"
+"PO-Revision-Date: 2006-10-18 09:56+0200\n"
 "Last-Translator: Claus Hindsgaul <claus.hindsgaul@gmail.com>\n"
-"Language-Team: Danish <dansk@klid.dk>\n"
+"Language-Team: Danish\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: KBabel 1.11.2\n"
+"X-Generator: KBabel 1.11.4\n"
 
 #. Type: multiselect
 #. Description
@@ -70,15 +70,14 @@ msgstr "Brugernavn på webbaseret opsætningssystem:"
 #. Type: password
 #. Description
 #: ../templates:3001 ../templates:4001
-#, fuzzy
 msgid ""
 "phpMyAdmin comes with a setup script that can help you with creating "
 "configuration. The script is located at http://localhost/phpmyadmin/scripts/"
 "setup.php . For security reason it requires authorization."
 msgstr ""
 "phpMyAdmin har et opsætningsscript, der kan hjælpe dig med at oprette en "
-"opsætning. Scriptet ligger i http://localhost/scripts/setup.php . Af "
-"sikkerhedsårsager kræver det en adgangkode."
+"opsætning. Scriptet ligger i http://localhost/phpmyadmin/scripts/setup.php . "
+"Af sikkerhedsårsager kræver det en adgangkode."
 
 #. Type: string
 #. Description
@@ -105,8 +104,8 @@ msgstr ""
 #. Type: password
 #. Description
 #: ../templates:4001
-#, fuzzy
 msgid "Leave empty if you want to disable access to web-based setup."
 msgstr ""
-"Lad det stå tomt, hvis du vil deaktivere adgangen til den webbaserede "
+"Lad feltet stå tomt, hvis du vil deaktivere adgangen til den webbaserede "
 "opsætning."
+

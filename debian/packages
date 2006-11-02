@@ -33,6 +33,7 @@ Package: phpmyadmin
 Architecture: all
 Depends: php5-cgi | php5 | php4-cgi | php4
 Depends: php5-mysql | php5-mysqli | php4-mysql
+Depends: perl
 Depends: []
 Recommends: apache2 | httpd
 Recommends: php5-mcrypt | php4-mcrypt

@@ -1,3 +1,29 @@
+phpmyadmin (4:2.9.0.3-1) unstable; urgency=medium
+
+  * New upstream bugfix release.
+    - Includes a fix for a XSS security issue (PMASA-2006-6).
+      (Closes: #396638)
+
+  * 100-dutch_fixtypo.patch: Add patch to fix typo in Dutch
+    translation which also caused a layout problem in the login
+    screen.
+  * 021-config.inc.php_no_check_mtime.patch: Add patch to Config
+    class to disable checking for the mtime of config.inc.php.
+    Since we include other files from it, those will otherwise
+    never be read (Closes: #392022).
+  * Add depends on perl since it's used in the maintainer scripts.
+  * Update shipped htaccess to make it compatible with Apache 2.2
+    (Closes: #396560).
+
+  * Updated translations:
+    - Bokmål by Bjørn Steensrud.
+    - Basque by Piarres Beobide.
+    - Dutch by self.
+    - Danish by Claus Hindsgaul (Closes: #393871).
+    - Japanese by Hideki Yamane (Closes: #396548).
+
+ -- Thijs Kinkhorst <thijs@debian.org>  Thu,  2 Nov 2006 15:45:29 +0100
+
 phpmyadmin (4:2.9.0.2-1) unstable; urgency=low
 
   * New maintainer, thanks Piotr for your previous work!

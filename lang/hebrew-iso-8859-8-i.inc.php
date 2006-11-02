@@ -1,5 +1,5 @@
 <?php
-/* $Id: hebrew-iso-8859-8-i.inc.php,v 2.144 2006/08/09 12:55:37 lem9 Exp $ 
+/* $Id: hebrew-iso-8859-8-i.inc.php 9261 2006-08-09 12:55:40Z lem9 $ 
  * Translated by Hadar Porat <hadar at banner.co.il> */
 
 $charset = 'iso-8859-8-i';

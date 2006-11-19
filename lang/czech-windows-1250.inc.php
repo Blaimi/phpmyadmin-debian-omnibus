@@ -1,5 +1,5 @@
 <?php
-/* $Id: czech-windows-1250.inc.php 9472 2006-09-29 21:12:52Z  $ */
+/* $Id: czech-windows-1250.inc.php 9305 2006-08-14 15:28:24Z nijel $ */
 
 /**
  * Czech language file by

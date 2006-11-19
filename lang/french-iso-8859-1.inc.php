@@ -1,5 +1,5 @@
 <?php
-/* $Id: french-iso-8859-1.inc.php 9472 2006-09-29 21:12:52Z  $ */
+/* $Id: french-iso-8859-1.inc.php 9380 2006-08-30 10:43:15Z nijel $ */
 
 $charset = 'iso-8859-1';
 $text_dir = 'ltr';

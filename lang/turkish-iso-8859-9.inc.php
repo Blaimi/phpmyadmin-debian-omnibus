@@ -1,5 +1,5 @@
 <?php
-/* $Id: turkish-iso-8859-9.inc.php 9472 2006-09-29 21:12:52Z  $ */
+/* $Id: turkish-iso-8859-9.inc.php 9386 2006-09-07 16:47:30Z lem9 $ */
 
 // phpMyAdmin Türkçe 01.09.2006 itibariyle önceki çeviriye göre çok daha 
 // iyi bir çeviriyle yeniden yapýlmýþtýr. 

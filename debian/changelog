@@ -1,8 +1,23 @@
+phpmyadmin (4:2.9.1.1-1) unstable; urgency=high
+
+  * New upstream release.
+    - Addresses several security issues (Closes: #399329).
+
+  * In Depends, explicitly prefer the apache2/apache PHP module, to make
+    sure the correct one is selected upon installation.
+  * Drop 100-dutch_fixtypo.patch, integrated upstream.
+
+  * Add note to default config file about adding sensitive data
+    to that file (Closes: #321529).
+  * Update README.Debian with information about register_globals.
+
+ -- Thijs Kinkhorst <thijs@debian.org>  Wed, 22 Nov 2006 22:24:02 +0100
+
 phpmyadmin (4:2.9.0.3-1) unstable; urgency=medium
 
   * New upstream bugfix release.
-    - Includes a fix for a XSS security issue (PMASA-2006-6).
-      (Closes: #396638)
+    - Includes a fix for a XSS security issue.
+      (PMASA-2006-6, CVE-2006-5718, Closes: #396638)
 
   * 100-dutch_fixtypo.patch: Add patch to fix typo in Dutch
     translation which also caused a layout problem in the login
@@ -77,10 +92,12 @@ phpmyadmin (4:2.8.1-1) unstable; urgency=medium
   * Security fix: XSRF vulnerability.
     See: http://www.phpmyadmin.net/home_page/security.php?issue=PMASA-2006-3
     See: http://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2006-1804
+    [CVE-2006-1803, CVE-2006-1804]
   * Security fix: XSS vulnerabilities. It was not a problem for Debian with
     the default settings.
     See: http://www.phpmyadmin.net/home_page/security.php?issue=PMASA-2006-2
     See: http://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2006-2031
+    [CVE-2006-2031, CVE-2006-2417, CVE-2006-2418]
     Closes: #363519, #368082.
   * Updated Portuguese debconf templates translation, thanks Miguel Figueiredo.
     Closes: #363597.
@@ -135,6 +152,7 @@ phpmyadmin (4:2.8.0.2-1) unstable; urgency=low
     - Export of table works if __TABLE__ macro is used. Closes: #217364.
     - Can navigate back to user after changing privileges on database.
       Closes: #338758.
+    - Fixes XSS [CVE-2006-1258]
   * Reedited package description.
   * Tweaked dependencies. Prefer php5-cgi package and does not depend on
     apache2, because the PHP can be started as FastCGI standalone server.

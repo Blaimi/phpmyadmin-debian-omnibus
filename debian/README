@@ -35,7 +35,11 @@ SECURITY
   The default configuration for Debian has enabled cookie based authentication.
   You *shouldn't* put your passwords into /etc/phpmyadmin/config.inc.php file.
   This file has to be readable by www-data user, so it can be readable
-  by anyone who can run its own CGI script!
-  
+  by anyone who can run his own CGI script!
 
- -- Piotr Roszatycki <dexter@debian.org>  Thu, 16 Mar 2006 17:06:24 +0100
+  Register Globals: Debian does not provide security support for installations
+  with the PHP register_globals setting turned On. It's also not required for
+  phpMyAdmin to operate. Make sure it's off. It's trivial to turn it on just for
+  specific legacy sites that may need it.
+
+ -- Thijs Kinkhorst <thijs@debian.org>  Mon, 13 Nov 2006 16:40:38 +0100

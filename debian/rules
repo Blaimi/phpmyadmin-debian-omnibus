@@ -1,6 +1,6 @@
 #!/usr/bin/make -f
 # Generated automatically from debian/packages
-# by yada v0.48, of Wed, 28 Sep 2005
+# by yada v0.51, of Thu, 16 Nov 2006
 
 DEB_HOST_ARCH        := $(shell dpkg-architecture -qDEB_HOST_ARCH 2>/dev/null)
 DEB_HOST_ARCH_OS     := $(shell dpkg-architecture -qDEB_HOST_ARCH_OS 2>/dev/null)
@@ -110,7 +110,7 @@ debian/build-arch-stamp:
 	yada patch "debian/patches/*.patch"
 	touch debian/build-arch-stamp
 
-debian/build-indep-stamp:
+debian/build-indep-stamp: debian/build-arch-stamp
 	@[ -f $(shell which yada) -a -f debian/rules ]
 	yada patch "debian/patches/*.patch"
 	touch debian/build-indep-stamp

@@ -1,5 +1,5 @@
 <?php
-/* $Id: english-iso-8859-15.inc.php 9472 2006-09-29 21:12:52Z  $ */
+/* $Id: english-iso-8859-15.inc.php 9380 2006-08-30 10:43:15Z nijel $ */
 
 $charset = 'iso-8859-15';
 $text_dir = 'ltr'; // ('ltr' for left to right, 'rtl' for right to left)

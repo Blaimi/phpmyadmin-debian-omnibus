@@ -1,5 +1,5 @@
 <?php
-/* $Id: norwegian-iso-8859-1.inc.php 9472 2006-09-29 21:12:52Z  $ */
+/* $Id: norwegian-iso-8859-1.inc.php 9358 2006-08-26 14:00:37Z lem9 $ */
 
 /**
  * Translated by Sven-Erik Andersen <sven DOT erik DOT andersen AT gmail DOT com>

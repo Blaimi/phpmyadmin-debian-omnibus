@@ -6,6 +6,12 @@
  * utility.
  *
  * For example configuration see /usr/share/doc/phpmyadmin/examples/config.default.php.gz
+ *
+ * NOTE: do not add security sensitive data to this file (like passwords)
+ * unless you really know what you're doing. If you do, any user that can
+ * run PHP or CGI on your webserver will be able to read them. If you still
+ * want to do this, make sure to properly secure the access to this file
+ * (also on the filesystem level).
  */
 
 /**

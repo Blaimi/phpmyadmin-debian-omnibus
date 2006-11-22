@@ -31,7 +31,7 @@ Patches: patches/*.patch
 
 Package: phpmyadmin
 Architecture: all
-Depends: php5-cgi | php5 | php4-cgi | php4
+Depends: libapache2-mod-php5 | libapache-mod-php5 | php5-cgi | php5 | libapache2-mod-php4 | libapache-mod-php4 | php4 | php4-cgi
 Depends: php5-mysql | php5-mysqli | php4-mysql
 Depends: perl
 Depends: []

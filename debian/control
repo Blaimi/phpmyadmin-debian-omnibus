@@ -3,12 +3,11 @@ Maintainer: Thijs Kinkhorst <thijs@debian.org>
 Section: web
 Priority: extra
 Standards-Version: 3.7.2
-Build-Depends: yada (>= 0.48), po-debconf
-Build-Depends-Indep: yada (>= 0.48), po-debconf
+Build-Depends: yada (>= 0.51), po-debconf
 
 Package: phpmyadmin
 Architecture: all
-Depends: php5-cgi | php5 | php4-cgi | php4, php5-mysql | php5-mysqli | php4-mysql, perl, ${phpmyadmin:Depends}
+Depends: libapache2-mod-php5 | libapache-mod-php5 | php5-cgi | php5 | libapache2-mod-php4 | libapache-mod-php4 | php4 | php4-cgi, php5-mysql | php5-mysqli | php4-mysql, perl, ${phpmyadmin:Depends}
 Recommends: apache2 | httpd, php5-mcrypt | php4-mcrypt, php5-gd | php4-gd, ${phpmyadmin:Recommends}
 Suggests: mysql-server (>= 3.23.36), ${phpmyadmin:Suggests}
 Description: Administrate MySQL over the WWW

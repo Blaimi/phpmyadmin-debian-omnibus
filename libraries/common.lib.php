@@ -1,5 +1,5 @@
 <?php
-/* $Id: common.lib.php 9618 2006-10-26 15:11:14Z lem9 $ */
+/* $Id: common.lib.php 9728 2006-11-18 19:33:17Z nijel $ */
 // vim: expandtab sw=4 ts=4 sts=4:
 
 /**
@@ -180,11 +180,11 @@ function PMA_getHtmlSelectDb($selected = '')
         }
         foreach ($dbs as $db) {
             $return .= '<option value="' . $db['name'] . '"'
-                .' title="' . $db['comment'] . '"';
+                .' title="' . htmlspecialchars($db['comment']) . '"';
             if ($db['name'] == $selected) {
                 $return .= ' selected="selected"';
             }
-            $return .= '>' . ($cut ? $db['disp_name_cut'] : $db['disp_name'])
+            $return .= '>' . htmlspecialchars($cut ? $db['disp_name_cut'] : $db['disp_name'])
                 .' (' . $db['num_tables'] . ')</option>' . "\n";
         }
         if (count($dbs) > 1) {
@@ -543,7 +543,7 @@ function PMA_arrayWalkRecursive(&$array, $function, $apply_to_keys_also = false)
  */
 function PMA_checkPageValidity(&$page, $whitelist)
 {
-    if (! isset($page)) {
+    if (! isset($page) || !is_string($page)) {
         return false;
     }
 
@@ -1395,19 +1395,20 @@ if (!defined('PMA_MINIMUM_COMMON')) {
     /**
      * escapes a string to be inserted as string a JavaScript block
      * enclosed by <![CDATA[ ... ]]>
-     * this requires only to escape ' with \'
+     * this requires only to escape ' with \' and end of script block
      *
-     * @uses    str_replace()
+     * @uses    strtr()
      * @param   string  $string the string to be escaped
      * @return  string  the escaped string
      */
     function PMA_escapeJsString($string)
     {
-        $string = str_replace('\\', '\\\\', $string);
-        $string = str_replace('\'', '\\\'', $string);
-        $string = str_replace("\012", '\n', $string);
-        $string = str_replace("\015", '\r', $string);
-        return $string;
+        return strtr($string, array(
+                            '\\' => '\\\\',
+                            '\'' => '\\\'',
+                            "\n" => '\n',
+                            "\r" => '\r',
+                            '</script' => '<\' + \'script'));
     }
 
     /**
@@ -1544,7 +1545,15 @@ window.parent.updateTableTitle('<?php echo $uni_tbl; ?>', '<?php echo PMA_jsForm
 
         if ($cfg['ShowSQL'] == true
           && (!empty($GLOBALS['sql_query']) || !empty($GLOBALS['display_query']))) {
-            $local_query = !empty($GLOBALS['display_query']) ? $GLOBALS['display_query'] : (($cfg['SQP']['fmtType'] == 'none' && isset($GLOBALS['unparsed_sql']) && $GLOBALS['unparsed_sql'] != '') ? $GLOBALS['unparsed_sql'] : $GLOBALS['sql_query']);
+            if (!empty($GLOBALS['display_query'])) {
+                $local_query = $GLOBALS['display_query'];
+            } else {
+                if ($cfg['SQP']['fmtType'] == 'none' && !empty($GLOBALS['unparsed_sql'])) {
+                    $local_query = $GLOBALS['unparsed_sql'];
+                } else {
+                    $local_query = $GLOBALS['sql_query'];
+                }
+            }
             // Basic url query part
             $url_qpart = '?' . PMA_generate_common_url(isset($GLOBALS['db']) ? $GLOBALS['db'] : '', isset($GLOBALS['table']) ? $GLOBALS['table'] : '');
 
@@ -1563,7 +1572,7 @@ window.parent.updateTableTitle('<?php echo $uni_tbl; ?>', '<?php echo PMA_jsForm
                  /* SQL-Parser-Analyzer */
                 $query_base = preg_replace("@((\015\012)|(\015)|(\012))+@", $new_line, $query_base);
             } else {
-                $query_base = $local_query;
+                $query_base = htmlspecialchars($local_query);
             }
 
             // Parse SQL if needed
@@ -2690,7 +2699,7 @@ if (isset($_REQUEST['GLOBALS']) || isset($_FILES['GLOBALS'])
 }
 
 /**
- * Check for numeric keys 
+ * Check for numeric keys
  * (if register_globals is on, numeric key can be found in $GLOBALS)
  */
 
@@ -2759,7 +2768,7 @@ if (empty($__redirect) && !defined('PMA_NO_VARIABLES_IMPORT')) {
 }
 
 /**
- * include session handling after the globals, to avoid overwriting 
+ * include session handling after the globals, to avoid overwriting
  */
 require_once './libraries/session.inc.php';
 
@@ -2876,7 +2885,7 @@ if (PMA_checkPageValidity($_REQUEST['back'], $goto_whitelist)) {
  * Check whether user supplied token is valid, if not remove any
  * possibly dangerous stuff from request.
  */
-if (empty($_REQUEST['token']) || $_SESSION[' PMA_token '] != $_REQUEST['token']) {
+if ((isset($_REQUEST['token']) && !is_string($_REQUEST['token'])) || empty($_REQUEST['token']) || $_SESSION[' PMA_token '] != $_REQUEST['token']) {
     /* List of parameters which are allowed from unsafe source */
     $allow_list = array(
         'db', 'table', 'lang', 'server', 'convcharset', 'collation_connection', 'target',
@@ -2888,7 +2897,7 @@ if (empty($_REQUEST['token']) || $_SESSION[' PMA_token '] != $_REQUEST['token'])
         'pma_servername', 'pma_username', 'pma_password',
     );
     // do not check only $_REQUEST because it could have been overwritten
-    // and use type casting because the variables could have become 
+    // and use type casting because the variables could have become
     // strings
     $keys = array_keys(array_merge((array)$_REQUEST, (array)$_GET, (array)$_POST, (array)$_COOKIE));
 
@@ -2900,8 +2909,27 @@ if (empty($_REQUEST['token']) || $_SESSION[' PMA_token '] != $_REQUEST['token'])
             unset($_POST[$key]);
             unset($GLOBALS[$key]);
         } else {
-            // allowed stuff could be compromised so escape it
-            $_REQUEST[$key] = htmlspecialchars($_REQUEST[$key], ENT_QUOTES);
+            // we require it to be a string
+            if (isset($_REQUEST[$key]) && is_string($_REQUEST[$key])) {
+                $_REQUEST[$key] = htmlspecialchars($_REQUEST[$key], ENT_QUOTES);
+            } else {
+                unset($_REQUEST[$key]);
+            }
+            if (isset($_POST[$key]) && is_string($_POST[$key])) {
+                $_POST[$key] = htmlspecialchars($_POST[$key], ENT_QUOTES);
+            } else {
+                unset($_POST[$key]);
+            }
+            if (isset($_COOKIE[$key]) && is_string($_COOKIE[$key])) {
+                $_COOKIE[$key] = htmlspecialchars($_COOKIE[$key], ENT_QUOTES);
+            } else {
+                unset($_COOKIE[$key]);
+            }
+            if (isset($_GET[$key]) && is_string($_GET[$key])) {
+                $_GET[$key] = htmlspecialchars($_GET[$key], ENT_QUOTES);
+            } else {
+                unset($_GET[$key]);
+            }
         }
     }
 }
@@ -3139,7 +3167,7 @@ if (! defined('PMA_MINIMUM_COMMON')) {
      * present a choice of servers in the case that there are multiple servers
      * and '$cfg['ServerDefault'] = 0' is set.
      */
-    if (!empty($_REQUEST['server']) && !empty($cfg['Servers'][$_REQUEST['server']])) {
+    if (isset($_REQUEST['server']) && is_string($_REQUEST['server']) && ! empty($_REQUEST['server']) && ! empty($cfg['Servers'][$_REQUEST['server']])) {
         $GLOBALS['server'] = $_REQUEST['server'];
         $cfg['Server'] = $cfg['Servers'][$GLOBALS['server']];
     } else {

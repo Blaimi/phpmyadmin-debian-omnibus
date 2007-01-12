@@ -1,3 +1,16 @@
+phpmyadmin (4:2.9.1.1-2) unstable; urgency=high
+
+  * Backport security-related changes from 2.9.2-rc1:
+  * CVE-2007-0203: Multiple unspecified vulnerabilities;
+    this turns out to be (1) cross site scripting and
+    (2) the same as CVE-2006-6374. (Closes: #406332, #406486)
+  * CVE-2006-6374: the vulnerability only applies to
+    PHP < 5.1.2 and < 4.4.2, so strictly speaking current
+    Debian is not vulnerable. Include it anyway, to not expose
+    those using older PHP versions. (Closes: #404744)
+
+ -- Thijs Kinkhorst <thijs@debian.org>  Fri, 12 Jan 2007 15:29:28 +0100
+
 phpmyadmin (4:2.9.1.1-1) unstable; urgency=high
 
   * New upstream release.

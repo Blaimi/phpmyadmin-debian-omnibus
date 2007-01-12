@@ -3,7 +3,7 @@ Maintainer: Thijs Kinkhorst <thijs@debian.org>
 Section: web
 Priority: extra
 Standards-Version: 3.7.2
-Build-Depends: yada (>= 0.51), po-debconf
+Build-Depends: yada (>= 0.52), po-debconf
 
 Package: phpmyadmin
 Architecture: all

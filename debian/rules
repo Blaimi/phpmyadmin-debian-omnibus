@@ -173,6 +173,7 @@ debian/tmp-phpmyadmin/DEBIAN/control: debian/build-indep-stamp debian/control
 	echo -E 'yada install -doc -as README.Debian debian/README';\
 	echo -E 'yada install -doc -as NEWS.Debian -gzip debian/NEWS';\
 	echo -E 'yada install -doc -as NEWS debian/NEWS.upstream';\
+	echo -E 'yada install -doc -subdir examples libraries/config.default.php';\
 	echo -E 'yada install -doc -subdir scripts scripts/*';\
 	echo -E 'yada remove -doc -subdir scripts setup.php') | /bin/sh
 	@umask 022 \

@@ -4,6 +4,8 @@ Section: web
 Priority: extra
 Standards-Version: 3.7.2
 Build-Depends: yada (>= 0.52), po-debconf
+Xs-Vcs-Browse: https://aphrodite.kinkhorst.nl/wsvn/debian/phpmyadmin/
+Xs-Vcs-Svn: https://svn.kinkhorst.nl/svn/debian/phpmyadmin/trunk
 
 Package: phpmyadmin
 Architecture: all

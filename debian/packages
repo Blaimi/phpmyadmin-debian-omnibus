@@ -11,6 +11,8 @@ Section: web
 Priority: extra
 Maintainer: Thijs Kinkhorst <thijs@debian.org>
 Standards-Version: 3.7.2
+XS-Vcs-Svn: https://svn.kinkhorst.nl/svn/debian/phpmyadmin/trunk
+XS-Vcs-Browse: https://aphrodite.kinkhorst.nl/wsvn/debian/phpmyadmin/
 Upstream-Source: <USCAN:http://sf.net/phpmyadmin/phpMyAdmin-([0-9.]*(?:-pl[0-9]*)?)\.tar\.gz>
 Home-Page: <URL:http://www.phpmyadmin.net/>
 Description: Administrate MySQL over the WWW
@@ -100,6 +102,7 @@ Install: sh
  yada install -doc -as README.Debian debian/README
  yada install -doc -as NEWS.Debian -gzip debian/NEWS
  yada install -doc -as NEWS debian/NEWS.upstream
+ yada install -doc -subdir examples libraries/config.default.php
  yada install -doc -subdir scripts scripts/*
  yada remove -doc -subdir scripts setup.php
 Templates:

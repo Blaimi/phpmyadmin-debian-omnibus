@@ -1,0 +1,98 @@
+# Galician translation of phpmyadmin's debconf templates
+# This file is distributed under the same license as the phpmyadmin package.
+# Jacobo Tarrio <jtarrio@debian.org>, 2007.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: phpmyadmin\n"
+"Report-Msgid-Bugs-To: thijs@debian.org\n"
+"POT-Creation-Date: 2006-10-11 14:01+0200\n"
+"PO-Revision-Date: 2007-02-24 15:22+0100\n"
+"Last-Translator: Jacobo Tarrio <jtarrio@debian.org>\n"
+"Language-Team: Galician <proxecto@trasno.net>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#. Type: multiselect
+#. Description
+#: ../templates:1001
+msgid "Which web server would you like to reconfigure automatically?"
+msgstr "¿Que servidor web quere reconfigurar automaticamente?"
+
+#. Type: multiselect
+#. Description
+#: ../templates:1001
+msgid ""
+"phpMyAdmin supports any web server that PHP does, but this automatic "
+"configuration process only supports Apache."
+msgstr ""
+"phpMyAdmin soporta os mesmos servidores web que PHP, pero este proceso "
+"automático de configuración só soporta Apache."
+
+#. Type: boolean
+#. Description
+#: ../templates:2001
+msgid "Do you want me to restart ${webserver} now?"
+msgstr "¿Quere que se reinice ${webserver} agora?"
+
+#. Type: boolean
+#. Description
+#: ../templates:2001
+msgid ""
+"Remember that in order to activate the new configuration ${webserver} has to "
+"be restarted. You can also restart ${webserver} by manually executing /etc/"
+"init.d/${webserver} restart"
+msgstr ""
+"Lembre que para activar a nova configuración hai que reiniciar ${webserver}. "
+"Tamén pode reiniciar ${webserver} a man executando /etc/init.d/${webserver} "
+"restart"
+
+#. Type: string
+#. Description
+#: ../templates:3001
+msgid "User name for web-based setup system:"
+msgstr "Nome de usuario para o sistema de configuración en web:"
+
+#. Type: string
+#. Description
+#. Type: password
+#. Description
+#: ../templates:3001 ../templates:4001
+msgid ""
+"phpMyAdmin comes with a setup script that can help you with creating "
+"configuration. The script is located at http://localhost/phpmyadmin/scripts/"
+"setup.php . For security reason it requires authorization."
+msgstr ""
+"phpMyAdmin inclúe un script de configuración que o pode axudar a crear a "
+"configuración. O script reside en http://localhost/phpmyadmin/scripts/setup."
+"php . Por motivos de seguridade, o script precisa de autorización."
+
+#. Type: string
+#. Description
+#: ../templates:3001
+msgid "Leave empty if you want to use the default user name 'admin'."
+msgstr ""
+"Déixeo en branco se quere empregar o nome de usuario por defecto, \"admin\"."
+
+#. Type: password
+#. Description
+#: ../templates:4001
+msgid "Password for web-based setup system:"
+msgstr "Contrasinal para o sistema de configuración en web:"
+
+#. Type: password
+#. Description
+#: ../templates:4001
+msgid ""
+"You can manage the usernames and passwords with `htpasswd' command. They are "
+"stored in /etc/phpmyadmin/htpasswd.setup file."
+msgstr ""
+"Pode xestionar os nomes de usuario e contrasinais coa orde \"htpasswd\". "
+"Están armacenados no ficheiro /etc/phpmyadmin/htpasswd.setup."
+
+#. Type: password
+#. Description
+#: ../templates:4001
+msgid "Leave empty if you want to disable access to web-based setup."
+msgstr "Déixeo en branco se quere desactivar o acceso á configuración en web."

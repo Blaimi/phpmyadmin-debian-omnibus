@@ -1,5 +1,5 @@
 <?php
-/* $Id: Theme_Manager.class.php 9247 2006-08-02 17:15:30Z lem9 $ */
+/* $Id: Theme_Manager.class.php 9839 2007-01-12 18:41:38Z lem9 $ */
 // vim: expandtab sw=4 ts=4 sts=4:
 
 require_once './libraries/Theme.class.php';
@@ -142,9 +142,10 @@ class PMA_Theme_Manager {
         if ( ! $this->checkTheme($theme)) {
             $GLOBALS['PMA_errors'][] = sprintf($GLOBALS['strThemeNotFound'],
                 htmlspecialchars($theme));
-            trigger_error(
+            /* Following code can lead to path disclossure, because headers will be sent later */
+/*          trigger_error(
                 sprintf($GLOBALS['strThemeNotFound'], htmlspecialchars($theme)),
-                E_USER_WARNING);
+                E_USER_WARNING);*/
             return false;
         }
 
@@ -196,6 +197,9 @@ class PMA_Theme_Manager {
     {
         PMA_setCookie($this->getThemeCookieName(), $this->theme->id,
             $this->theme_default);
+        // force a change of a dummy session variable to avoid problems
+        // with the caching of phpmyadmin.css.php
+        $_SESSION['PMA_Config']->set('theme-update', $this->theme->id);
         return true;
     }
 

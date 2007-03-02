@@ -1,5 +1,5 @@
 <?php
-/* $Id: display_tbl.lib.php 9706 2006-11-17 08:49:25Z nijel $ */
+/* $Id: display_tbl.lib.php 9900 2007-02-01 09:55:55Z cybot_tm $ */
 // vim: expandtab sw=4 ts=4 sts=4:
 
 require_once './libraries/Table.class.php';
@@ -107,7 +107,10 @@ function PMA_setDisplayMode(&$the_disp_mode, &$the_total)
         }
         // 2.2 Statement is a "SHOW..."
         elseif ($GLOBALS['is_show']) {
-            // 2.2.1 TODO : defines edit/delete links depending on show statement
+            /**
+             * 2.2.1
+             * @todo defines edit/delete links depending on show statement
+             */
             $tmp = preg_match('@^SHOW[[:space:]]+(VARIABLES|(FULL[[:space:]]+)?PROCESSLIST|STATUS|TABLE|GRANTS|CREATE|LOGS|DATABASES|FIELDS)@i', $GLOBALS['sql_query'], $which);
             if (isset($which[1]) && strpos(' ' . strtoupper($which[1]), 'PROCESSLIST') > 0) {
                 $do_display['edit_lnk'] = 'nn'; // no edit link
@@ -141,8 +144,9 @@ function PMA_setDisplayMode(&$the_disp_mode, &$the_total)
                     && ($fields_meta[$i]->table == '' || $fields_meta[$i]->table != $prev_table)) {
                     $do_display['edit_lnk'] = 'nn'; // don't display links
                     $do_display['del_lnk']  = 'nn';
-                    // TODO: May be problematic with same fields names in
-                    //       two joined table.
+                    /**
+                     * @todo May be problematic with same fields names in two joined table.
+                     */
                     // $do_display['sort_lnk'] = (string) '0';
                     $do_display['ins_row']  = (string) '0';
                     if ($do_display['text_btn'] == '1') {
@@ -222,8 +226,10 @@ function PMA_displayTableNavigation($pos_next, $pos_prev, $encoded_query)
     global $is_innodb;
     global $showtable;
 
-    // FIXME: move this to a central place
-    // FIXME: for other future table types
+    /**
+     * @todo move this to a central place
+     * @todo for other future table types
+     */
     $is_innodb = (isset($showtable['Type']) && $showtable['Type'] == 'InnoDB');
 
     ?>
@@ -482,7 +488,10 @@ function PMA_displayTableHeaders(&$is_display, &$fields_meta, $fields_cnt = 0, $
 
         $sort_expression = trim(str_replace('  ', ' ', $analyzed_sql[0]['order_by_clause']));
 
-        // Get rid of ASC|DESC (TODO: analyzer)
+        /**
+         * Get rid of ASC|DESC
+         * @todo analyzer
+         */
         preg_match('@(.*)([[:space:]]*(ASC|DESC))@si', $sort_expression, $matches);
         $sort_expression_nodir = isset($matches[1]) ? trim($matches[1]) : $sort_expression;
 
@@ -784,17 +793,15 @@ function PMA_displayTableHeaders(&$is_display, &$fields_meta, $fields_cnt = 0, $
             }
 
             // 2.1.4 Do define the sorting url
-            if (!$is_in_sort) {
+            if (! $is_in_sort) {
                 // loic1: patch #455484 ("Smart" order)
-                $GLOBALS['cfg']['Order']  = strtoupper($GLOBALS['cfg']['Order']);
-                if ($GLOBALS['cfg']['Order'] == 'SMART') {
-                    $GLOBALS['cfg']['Order'] = (preg_match('@time|date@i', $fields_meta[$i]->type)) ? 'DESC' : 'ASC';
+                $GLOBALS['cfg']['Order'] = strtoupper($GLOBALS['cfg']['Order']);
+                if ($GLOBALS['cfg']['Order'] === 'SMART') {
+                    $sort_order .= (preg_match('@time|date@i', $fields_meta[$i]->type)) ? 'DESC' : 'ASC';
+                } else {
+                    $sort_order .= $GLOBALS['cfg']['Order'];
                 }
-                $sort_order .= $GLOBALS['cfg']['Order'];
                 $order_img   = '';
-            } elseif (preg_match('@[[:space:]]ASC$@i', $sort_expression)) {
-                $sort_order .= ' DESC';
-                $order_img   = ' <img class="icon" src="' . $GLOBALS['pmaThemeImage'] . 's_asc.png" width="11" height="9" alt="'. $GLOBALS['strAscending'] . '" title="'. $GLOBALS['strAscending'] . '" id="soimg' . $i . '" />';
             } elseif (preg_match('@[[:space:]]DESC$@i', $sort_expression)) {
                 $sort_order .= ' ASC';
                 $order_img   = ' <img class="icon" src="' . $GLOBALS['pmaThemeImage'] . 's_desc.png" width="11" height="9" alt="'. $GLOBALS['strDescending'] . '" title="'. $GLOBALS['strDescending'] . '" id="soimg' . $i . '" />';
@@ -1002,7 +1009,7 @@ function PMA_displayTableBody(&$dt_result, &$is_display, $map, $analyzed_sql) {
     $vertical_display['data']       = array();
     $vertical_display['row_delete'] = array();
 
-    // Correction uva 19991216 in the while below
+    // Correction University of Virginia 19991216 in the while below
     // Previous code assumed that all tables have keys, specifically that
     // the phpMyAdmin GUI should support row delete/edit only for such
     // tables.
@@ -1059,7 +1066,7 @@ function PMA_displayTableBody(&$dt_result, &$is_display, $map, $analyzed_sql) {
         // 1. Prepares the row (gets primary keys to use)
         // 1.1 Results from a "SELECT" statement -> builds the
         //     "primary" key to use in links
-        $uva_condition     = urlencode(PMA_getUvaCondition($dt_result, $fields_cnt, $fields_meta, $row));
+        $unique_condition     = urlencode(PMA_getUniqueCondition($dt_result, $fields_cnt, $fields_meta, $row));
 
         // 1.2 Defines the urls for the modify/delete link(s)
         $url_query  = PMA_generate_common_url($db, $table)
@@ -1084,7 +1091,7 @@ function PMA_displayTableBody(&$dt_result, &$is_display, $map, $analyzed_sql) {
 
                 $edit_url = 'tbl_change.php'
                           . '?' . $url_query
-                          . '&amp;primary_key=' . $uva_condition
+                          . '&amp;primary_key=' . $unique_condition
                           . '&amp;sql_query=' . urlencode($url_sql_query)
                           . '&amp;goto=' . urlencode($lnk_goto);
                 if ($GLOBALS['cfg']['PropertiesIconic'] === false) {
@@ -1097,7 +1104,7 @@ function PMA_displayTableBody(&$dt_result, &$is_display, $map, $analyzed_sql) {
                 }
             } // end if (1.2.1)
 
-            if ($table == $GLOBALS['cfg']['Bookmark']['table'] && $db == $GLOBALS['cfg']['Bookmark']['db'] && isset($row[1]) && isset($row[0])) {
+            if (isset($GLOBALS['cfg']['Bookmark']['table']) && isset($GLOBALS['cfg']['Bookmark']['db']) && $table == $GLOBALS['cfg']['Bookmark']['table'] && $db == $GLOBALS['cfg']['Bookmark']['db'] && isset($row[1]) && isset($row[0])) {
                 $bookmark_go = '<a href="import.php?'
                                 . PMA_generate_common_url($row[1], '')
                                 . '&amp;id_bookmark=' . $row[0]
@@ -1126,15 +1133,15 @@ function PMA_displayTableBody(&$dt_result, &$is_display, $map, $analyzed_sql) {
                           . '?' . str_replace('&amp;', '&', $url_query)
                           . '&sql_query=' . urlencode($url_sql_query)
                           . '&zero_rows=' . urlencode(htmlspecialchars($GLOBALS['strDeleted']))
-                          . '&goto=' . (empty($goto) ? 'tbl_properties.php' : $goto);
-                $del_query = urlencode('DELETE FROM ' . PMA_backquote($table) . ' WHERE') . $uva_condition . '+LIMIT+1';
+                          . '&goto=' . (empty($goto) ? 'tbl_sql.php' : $goto);
+                $del_query = urlencode('DELETE FROM ' . PMA_backquote($table) . ' WHERE') . $unique_condition . '+LIMIT+1';
                 $del_url  = 'sql.php'
                           . '?' . $url_query
                           . '&amp;sql_query=' . $del_query
                           . '&amp;zero_rows=' . urlencode(htmlspecialchars($GLOBALS['strDeleted']))
                           . '&amp;goto=' . urlencode($lnk_goto);
                 $js_conf  = 'DELETE FROM ' . PMA_jsFormat($table)
-                          . ' WHERE ' . trim(PMA_jsFormat(urldecode($uva_condition), false))
+                          . ' WHERE ' . trim(PMA_jsFormat(urldecode($unique_condition), false))
                           . ' LIMIT 1';
                 if ($GLOBALS['cfg']['PropertiesIconic'] === false) {
                     $del_str = $GLOBALS['strDelete'];
@@ -1227,7 +1234,7 @@ function PMA_displayTableBody(&$dt_result, &$is_display, $map, $analyzed_sql) {
 
             $transform_options['wrapper_link'] = '?'
                                                 . (isset($url_query) ? $url_query : '')
-                                                . '&amp;primary_key=' . (isset($uva_condition) ? $uva_condition : '')
+                                                . '&amp;primary_key=' . (isset($unique_condition) ? $unique_condition : '')
                                                 . '&amp;sql_query=' . (isset($sql_query) ? urlencode($url_sql_query) : '')
                                                 . '&amp;goto=' . (isset($sql_goto) ? urlencode($lnk_goto) : '')
                                                 . '&amp;transform_key=' . urlencode($meta->name);
@@ -1476,7 +1483,7 @@ function PMA_displayTableBody(&$dt_result, &$is_display, $map, $analyzed_sql) {
 
         if (!empty($del_url) && $is_display['del_lnk'] != 'kp') {
             $vertical_display['row_delete'][$row_no] .= '    <td align="center" class="' . $class . '" ' . $column_style_vertical . '>' . "\n"
-                                                     .  '        <input type="checkbox" id="id_rows_to_delete' . $row_no . '[%_PMA_CHECKBOX_DIR_%]" name="rows_to_delete[' . $uva_condition . ']"'
+                                                     .  '        <input type="checkbox" id="id_rows_to_delete' . $row_no . '[%_PMA_CHECKBOX_DIR_%]" name="rows_to_delete[' . $unique_condition . ']"'
                                                      .  ' onclick="' . $column_marker_vertical . 'copyCheckboxesRange(\'rowsDeleteForm\', \'id_rows_to_delete' . $row_no . '\',\'[%_PMA_CHECKBOX_DIR_%]\');"'
                                                      .  ' value="' . $del_query . '" ' . (isset($GLOBALS['checkall']) ? 'checked="checked"' : '') . ' />' . "\n"
                                                      .  '    </td>' . "\n";
@@ -2002,7 +2009,7 @@ function PMA_displayResultsOperations($the_disp_mode, $analyzed_sql) {
         echo '    <!-- Export -->' . "\n";
         echo   '    &nbsp;&nbsp;' . "\n";
         echo PMA_linkOrButton(
-            'tbl_properties_export.php' . $url_query . '&amp;unlim_num_rows=' . $unlim_num_rows . $single_table,
+            'tbl_export.php' . $url_query . '&amp;unlim_num_rows=' . $unlim_num_rows . $single_table,
             ($GLOBALS['cfg']['PropertiesIconic'] ? '<img class="icon" src="' . $GLOBALS['pmaThemeImage'] . 'b_tblexport.png" height="16" width="16" alt="' . $GLOBALS['strExport'] . '" />' : '') . $GLOBALS['strExport'],
             '', true, true, '') . "\n";
     }

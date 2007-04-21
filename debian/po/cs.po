@@ -15,7 +15,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: phpmyadmin\n"
 "Report-Msgid-Bugs-To: thijs@debian.org\n"
-"POT-Creation-Date: 2006-10-11 14:01+0200\n"
+"POT-Creation-Date: 2007-04-21 15:44+0200\n"
 "PO-Revision-Date: 2006-03-28 18:57+0200\n"
 "Last-Translator: Miroslav Kure <kurem@debian.cz>\n"
 "Language-Team: Czech <debian-l10n-czech@lists.debian.org>\n"
@@ -39,27 +39,9 @@ msgstr ""
 "phpMyAdmin podporuje libovolný webový server, pod kterým běží PHP, avšak "
 "automatické nastavení umí pouze ve spojení s Apachem."
 
-#. Type: boolean
-#. Description
-#: ../templates:2001
-msgid "Do you want me to restart ${webserver} now?"
-msgstr "Chcete, abych nyní restartoval ${webserver}?"
-
-#. Type: boolean
-#. Description
-#: ../templates:2001
-msgid ""
-"Remember that in order to activate the new configuration ${webserver} has to "
-"be restarted. You can also restart ${webserver} by manually executing /etc/"
-"init.d/${webserver} restart"
-msgstr ""
-"Aby se aktivovalo vaše nové nastavení, musí se ${webserver} restartovat. "
-"${webserver} také můžete restartovat ručně příkazem /etc/init.d/${webserver} "
-"restart."
-
 #. Type: string
 #. Description
-#: ../templates:3001
+#: ../templates:2001
 msgid "User name for web-based setup system:"
 msgstr "Uživatelské jméno pro webové konfigurační rozhraní:"
 
@@ -67,11 +49,11 @@ msgstr "Uživatelské jméno pro webové konfigurační rozhraní:"
 #. Description
 #. Type: password
 #. Description
-#: ../templates:3001 ../templates:4001
+#: ../templates:2001 ../templates:3001
 msgid ""
-"phpMyAdmin comes with a setup script that can help you with creating "
+"phpMyAdmin comes with a setup script that can help you with creating a "
 "configuration. The script is located at http://localhost/phpmyadmin/scripts/"
-"setup.php . For security reason it requires authorization."
+"setup.php . For security reasons it requires authorization."
 msgstr ""
 "Součástí phpMyAdminu je i skript, který vám pomůže s vytvořením konfigurace. "
 "Skript je dostupný na http://localhost/phpmyadmin/scripts/setup.php. Z "
@@ -79,30 +61,42 @@ msgstr ""
 
 #. Type: string
 #. Description
-#: ../templates:3001
+#: ../templates:2001
 msgid "Leave empty if you want to use the default user name 'admin'."
 msgstr "Chcete-li použít výchozí jméno 'admin', můžete ponechat pole prázdné."
 
 #. Type: password
 #. Description
-#: ../templates:4001
+#: ../templates:3001
 msgid "Password for web-based setup system:"
 msgstr "Heslo pro webové konfigurační rozhraní:"
 
 #. Type: password
 #. Description
-#: ../templates:4001
+#: ../templates:3001
 msgid ""
-"You can manage the usernames and passwords with `htpasswd' command. They are "
-"stored in /etc/phpmyadmin/htpasswd.setup file."
+"You can manage the usernames and passwords with the `htpasswd' command. They "
+"are stored in /etc/phpmyadmin/htpasswd.setup file."
 msgstr ""
 "Uživatelská jména a hesla jsou uložena v souboru /etc/phpmyadmin/htpasswd."
 "setup a můžete je spravovat pomocí nástroje `htpasswd'."
 
 #. Type: password
 #. Description
-#: ../templates:4001
-msgid "Leave empty if you want to disable access to web-based setup."
+#: ../templates:3001
+msgid "Leave empty if you want to disable access to the web-based setup."
 msgstr ""
 "Pokud chcete přístup k webovému konfiguračnímu rozhraní zakázat, ponechte "
 "pole prázdné."
+
+#~ msgid "Do you want me to restart ${webserver} now?"
+#~ msgstr "Chcete, abych nyní restartoval ${webserver}?"
+
+#~ msgid ""
+#~ "Remember that in order to activate the new configuration ${webserver} has "
+#~ "to be restarted. You can also restart ${webserver} by manually executing /"
+#~ "etc/init.d/${webserver} restart"
+#~ msgstr ""
+#~ "Aby se aktivovalo vaše nové nastavení, musí se ${webserver} restartovat. "
+#~ "${webserver} také můžete restartovat ručně příkazem /etc/init.d/"
+#~ "${webserver} restart."

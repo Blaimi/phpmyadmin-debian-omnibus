@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: phpmyadmin 4/2.6.2-3\n"
 "Report-Msgid-Bugs-To: thijs@debian.org\n"
-"POT-Creation-Date: 2006-10-11 14:01+0200\n"
+"POT-Creation-Date: 2007-04-21 15:44+0200\n"
 "PO-Revision-Date: 2006-03-29 17:25+1030\n"
 "Last-Translator: Clytie Siddall <clytie@riverland.net.au>\n"
 "Language-Team: Vietnamese <gnomevi-list@lists.sourceforge.net>\n"
@@ -32,27 +32,9 @@ msgstr ""
 "Trình phpMyAdmin có hỗ trợ cùng mọi trình phục vụ Mạng với PHP, nhưng mà "
 "tiến trình cấu hình tự động này hỗ trợ chỉ Apache thôi."
 
-#. Type: boolean
-#. Description
-#: ../templates:2001
-msgid "Do you want me to restart ${webserver} now?"
-msgstr "Bạn có muốn trình này khởi chạy lại «${webserver}» ngay bây giờ không?"
-
-#. Type: boolean
-#. Description
-#: ../templates:2001
-msgid ""
-"Remember that in order to activate the new configuration ${webserver} has to "
-"be restarted. You can also restart ${webserver} by manually executing /etc/"
-"init.d/${webserver} restart"
-msgstr ""
-"Hãy ghi nhớ: để hoạt hóa cấu hình mới, cần phải khởi chạy lại trình phục vụ "
-"Mạng «${webserver}». Cũng có thể tự khởi chạy lại «${webserver}» bằng cách "
-"thực hiện lệnh «/etc/init.d/${webserver} restart»."
-
 #. Type: string
 #. Description
-#: ../templates:3001
+#: ../templates:2001
 msgid "User name for web-based setup system:"
 msgstr "Tên người dùng cho hệ thống thiết lập đựa vào Mạng:"
 
@@ -60,11 +42,11 @@ msgstr "Tên người dùng cho hệ thống thiết lập đựa vào Mạng:"
 #. Description
 #. Type: password
 #. Description
-#: ../templates:3001 ../templates:4001
+#: ../templates:2001 ../templates:3001
 msgid ""
-"phpMyAdmin comes with a setup script that can help you with creating "
+"phpMyAdmin comes with a setup script that can help you with creating a "
 "configuration. The script is located at http://localhost/phpmyadmin/scripts/"
-"setup.php . For security reason it requires authorization."
+"setup.php . For security reasons it requires authorization."
 msgstr ""
 "Phần mềm phpMyAdmin có sẵn một tập lệnh thiết lập để hướng dẫn bạn tạo cấu "
 "hình. Tập lệnh này nằm ở <http://localhost/phpmyadmin/scripts/setup.php>. Vì "
@@ -72,7 +54,7 @@ msgstr ""
 
 #. Type: string
 #. Description
-#: ../templates:3001
+#: ../templates:2001
 msgid "Leave empty if you want to use the default user name 'admin'."
 msgstr ""
 "Hãy bỏ rỗng nếu bạn muốn sử dụng tên người dùng mặc định « admin » (quản "
@@ -80,24 +62,37 @@ msgstr ""
 
 #. Type: password
 #. Description
-#: ../templates:4001
+#: ../templates:3001
 msgid "Password for web-based setup system:"
 msgstr "Mật khẩu cho hệ thống thiết lập đựa vào Mạng:"
 
 #. Type: password
 #. Description
-#: ../templates:4001
+#: ../templates:3001
 msgid ""
-"You can manage the usernames and passwords with `htpasswd' command. They are "
-"stored in /etc/phpmyadmin/htpasswd.setup file."
+"You can manage the usernames and passwords with the `htpasswd' command. They "
+"are stored in /etc/phpmyadmin/htpasswd.setup file."
 msgstr ""
 "Bạn có thể quản lý các tên người dùng và mật khẩu bằng lệnh « htpasswd ». "
 "Chúng được cất giữ trong tập tin </etc/phpmyadmin/htpasswd.setup>."
 
 #. Type: password
 #. Description
-#: ../templates:4001
-msgid "Leave empty if you want to disable access to web-based setup."
+#: ../templates:3001
+msgid "Leave empty if you want to disable access to the web-based setup."
 msgstr ""
 "Hãy bỏ rỗng nếu bạn muốn vô hiệu hoá khả năng truy cập thiết lập đựa vào "
 "Mạng."
+
+#~ msgid "Do you want me to restart ${webserver} now?"
+#~ msgstr ""
+#~ "Bạn có muốn trình này khởi chạy lại «${webserver}» ngay bây giờ không?"
+
+#~ msgid ""
+#~ "Remember that in order to activate the new configuration ${webserver} has "
+#~ "to be restarted. You can also restart ${webserver} by manually executing /"
+#~ "etc/init.d/${webserver} restart"
+#~ msgstr ""
+#~ "Hãy ghi nhớ: để hoạt hóa cấu hình mới, cần phải khởi chạy lại trình phục "
+#~ "vụ Mạng «${webserver}». Cũng có thể tự khởi chạy lại «${webserver}» bằng "
+#~ "cách thực hiện lệnh «/etc/init.d/${webserver} restart»."

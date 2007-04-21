@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: phpmyadmin_2.5.5-pl1-1_templates\n"
 "Report-Msgid-Bugs-To: thijs@debian.org\n"
-"POT-Creation-Date: 2006-10-11 14:01+0200\n"
+"POT-Creation-Date: 2007-04-21 15:44+0200\n"
 "PO-Revision-Date: 2004-01-31 19:57GMT\n"
 "Last-Translator: Aleix Badia i Bosch <abadia@ica.es>\n"
 "Language-Team: Debian L10n Catalan <debian-l10n-catalan@lists.debian.org>\n"
@@ -31,27 +31,9 @@ msgstr ""
 "El phpMyAdmin suporta qualsevol servidor web que suporti PHP, però el procés "
 "de configuració automàtica només suporta l'Apache."
 
-#. Type: boolean
-#. Description
-#: ../templates:2001
-msgid "Do you want me to restart ${webserver} now?"
-msgstr "Voleu que reiniciï el ${webserver}?"
-
-#. Type: boolean
-#. Description
-#: ../templates:2001
-msgid ""
-"Remember that in order to activate the new configuration ${webserver} has to "
-"be restarted. You can also restart ${webserver} by manually executing /etc/"
-"init.d/${webserver} restart"
-msgstr ""
-"Recordeu que per activar la nova configuració s'ha de reiniciar el "
-"${webserver}. També podeu reiniciar el ${webserver} manualment executant /"
-"etc/init.d/${webserver} restart"
-
 #. Type: string
 #. Description
-#: ../templates:3001
+#: ../templates:2001
 msgid "User name for web-based setup system:"
 msgstr ""
 
@@ -59,35 +41,47 @@ msgstr ""
 #. Description
 #. Type: password
 #. Description
-#: ../templates:3001 ../templates:4001
+#: ../templates:2001 ../templates:3001
 msgid ""
-"phpMyAdmin comes with a setup script that can help you with creating "
+"phpMyAdmin comes with a setup script that can help you with creating a "
 "configuration. The script is located at http://localhost/phpmyadmin/scripts/"
-"setup.php . For security reason it requires authorization."
+"setup.php . For security reasons it requires authorization."
 msgstr ""
 
 #. Type: string
 #. Description
-#: ../templates:3001
+#: ../templates:2001
 msgid "Leave empty if you want to use the default user name 'admin'."
 msgstr ""
 
 #. Type: password
 #. Description
-#: ../templates:4001
+#: ../templates:3001
 msgid "Password for web-based setup system:"
 msgstr ""
 
 #. Type: password
 #. Description
-#: ../templates:4001
+#: ../templates:3001
 msgid ""
-"You can manage the usernames and passwords with `htpasswd' command. They are "
-"stored in /etc/phpmyadmin/htpasswd.setup file."
+"You can manage the usernames and passwords with the `htpasswd' command. They "
+"are stored in /etc/phpmyadmin/htpasswd.setup file."
 msgstr ""
 
 #. Type: password
 #. Description
-#: ../templates:4001
-msgid "Leave empty if you want to disable access to web-based setup."
+#: ../templates:3001
+msgid "Leave empty if you want to disable access to the web-based setup."
 msgstr ""
+
+#~ msgid "Do you want me to restart ${webserver} now?"
+#~ msgstr "Voleu que reiniciï el ${webserver}?"
+
+#~ msgid ""
+#~ "Remember that in order to activate the new configuration ${webserver} has "
+#~ "to be restarted. You can also restart ${webserver} by manually executing /"
+#~ "etc/init.d/${webserver} restart"
+#~ msgstr ""
+#~ "Recordeu que per activar la nova configuració s'ha de reiniciar el "
+#~ "${webserver}. També podeu reiniciar el ${webserver} manualment executant /"
+#~ "etc/init.d/${webserver} restart"

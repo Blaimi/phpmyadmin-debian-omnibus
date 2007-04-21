@@ -1,5 +1,5 @@
 <?php
-/* $Id: footer.inc.php 9420 2006-09-19 21:27:40Z lem9 $ */
+/* $Id: footer.inc.php 9995 2007-02-16 18:00:34Z lem9 $ */
 // vim: expandtab sw=4 ts=4 sts=4:
 
 /**
@@ -61,7 +61,7 @@ if (window.parent.refreshNavigation) {
     window.parent.reload_querywindow(
         '<?php echo isset($GLOBALS['db']) ? PMA_escapeJsString($GLOBALS['db']) : '' ?>',
         '<?php echo isset($GLOBALS['table']) ? PMA_escapeJsString($GLOBALS['table']) : '' ?>',
-        '<?php echo isset($GLOBALS['sql_query']) ? PMA_escapeJsString($GLOBALS['sql_query']) : ''; ?>');
+        '<?php echo isset($GLOBALS['sql_query']) && ! defined('PMA_QUERY_TOO_BIG') ? PMA_escapeJsString($GLOBALS['sql_query']) : ''; ?>');
 }
 <?php } ?>
 
@@ -137,7 +137,7 @@ if (file_exists('./config.footer.inc.php')) {
  * Generates profiling data if requested
  */
 
-// profiling deactivated due to licensing issues
+// profiling deactivated due to licensing issues 
 if (! empty($GLOBALS['cfg']['DBG']['enable'])
   && ! empty($GLOBALS['cfg']['DBG']['profile']['enable'])) {
     //run the basic setup code first
@@ -150,6 +150,7 @@ if (! empty($GLOBALS['cfg']['DBG']['enable'])
     }
     */
 }
+
 ?>
 </body>
 </html>

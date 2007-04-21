@@ -1,0 +1,4 @@
+etc/phpmyadmin
+usr/share/phpmyadmin
+usr/share/phpmyadmin/scripts
+var/lib/phpmyadmin

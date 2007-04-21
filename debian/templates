@@ -1,26 +1,18 @@
 Template: phpmyadmin/reconfigure-webserver
 Type: multiselect
-Choices: apache, apache-ssl, apache-perl, apache2
+Choices: apache2, apache, apache-ssl, apache-perl
 Default:
 _Description: Which web server would you like to reconfigure automatically?
  phpMyAdmin supports any web server that PHP does, but this automatic
  configuration process only supports Apache.
-
-Template: phpmyadmin/restart-webserver
-Type: boolean
-Default: false
-_Description: Do you want me to restart ${webserver} now?
- Remember that in order to activate the new configuration
- ${webserver} has to be restarted. You can also restart ${webserver}
- by manually executing /etc/init.d/${webserver} restart
 
 Template: phpmyadmin/setup-username
 Type: string
 Default: admin
 _Description: User name for web-based setup system:
  phpMyAdmin comes with a setup script that can help you with creating
- configuration. The script is located at http://localhost/phpmyadmin/scripts/setup.php .
- For security reason it requires authorization.
+ a configuration. The script is located at http://localhost/phpmyadmin/scripts/setup.php .
+ For security reasons it requires authorization.
  .
  Leave empty if you want to use the default user name 'admin'.
 
@@ -29,11 +21,11 @@ Type: password
 Default:
 _Description: Password for web-based setup system:
  phpMyAdmin comes with a setup script that can help you with creating
- configuration. The script is located at http://localhost/phpmyadmin/scripts/setup.php .
- For security reason it requires authorization.
+ a configuration. The script is located at http://localhost/phpmyadmin/scripts/setup.php .
+ For security reasons it requires authorization.
  .
- You can manage the usernames and passwords with `htpasswd' command.
+ You can manage the usernames and passwords with the `htpasswd' command.
  They are stored in /etc/phpmyadmin/htpasswd.setup file.
  .
- Leave empty if you want to disable access to web-based setup.
+ Leave empty if you want to disable access to the web-based setup.
 

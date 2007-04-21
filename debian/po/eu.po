@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: phpmyadmin-eu\n"
 "Report-Msgid-Bugs-To: thijs@debian.org\n"
-"POT-Creation-Date: 2006-10-11 14:01+0200\n"
+"POT-Creation-Date: 2007-04-21 15:44+0200\n"
 "PO-Revision-Date: 2006-10-11 16:32+0200\n"
 "Last-Translator: Piarres Beobide <pi@beobide.net>\n"
 "Language-Team: librezale <librezale@librezale.org>\n"
@@ -30,30 +30,12 @@ msgid ""
 "phpMyAdmin supports any web server that PHP does, but this automatic "
 "configuration process only supports Apache."
 msgstr ""
-"phpMyAdmin-ek PHP berak onartzen duen edozein zerbitzari erabil dezake , baina "
-"konfigurazio automatiko prozesu honek Apache bakarrik onartzen du."
-
-#. Type: boolean
-#. Description
-#: ../templates:2001
-msgid "Do you want me to restart ${webserver} now?"
-msgstr "${webserver} orain berrabiaraztea nahi al duzu?"
-
-#. Type: boolean
-#. Description
-#: ../templates:2001
-msgid ""
-"Remember that in order to activate the new configuration ${webserver} has to "
-"be restarted. You can also restart ${webserver} by manually executing /etc/"
-"init.d/${webserver} restart"
-msgstr ""
-"Gogoratu konfigurazio berria martxan ipintzeko ${webserver} berrabiarazi behar "
-"duzula. ${webserver}eskuz ere berrabiarazi dezakezu \"/etc/init.d/${webserver} "
-"restart \" eginaz"
+"phpMyAdmin-ek PHP berak onartzen duen edozein zerbitzari erabil dezake , "
+"baina konfigurazio automatiko prozesu honek Apache bakarrik onartzen du."
 
 #. Type: string
 #. Description
-#: ../templates:3001
+#: ../templates:2001
 msgid "User name for web-based setup system:"
 msgstr "Web bidezko konfigurazio sistemaren erabiltzaile izena:"
 
@@ -61,41 +43,52 @@ msgstr "Web bidezko konfigurazio sistemaren erabiltzaile izena:"
 #. Description
 #. Type: password
 #. Description
-#: ../templates:3001 ../templates:4001
+#: ../templates:2001 ../templates:3001
 msgid ""
-"phpMyAdmin comes with a setup script that can help you with creating "
+"phpMyAdmin comes with a setup script that can help you with creating a "
 "configuration. The script is located at http://localhost/phpmyadmin/scripts/"
-"setup.php . For security reason it requires authorization."
+"setup.php . For security reasons it requires authorization."
 msgstr ""
-"phpMyAdmin konfigurazioa sortzen lagun dezaken  script bat dakar. Script "
-"hau http://localhost/phpmyadmin/scripts/setup.php -en kokaturik dago. Segurtasun "
+"phpMyAdmin konfigurazioa sortzen lagun dezaken  script bat dakar. Script hau "
+"http://localhost/phpmyadmin/scripts/setup.php -en kokaturik dago. Segurtasun "
 "arrazoiak medio baimena beharrezkoa da."
 
 #. Type: string
 #. Description
-#: ../templates:3001
+#: ../templates:2001
 msgid "Leave empty if you want to use the default user name 'admin'."
 msgstr "Hutsik utzi lehenetsiriko 'admin' erabiltzaile erabili nahi ezkero."
 
 #. Type: password
 #. Description
-#: ../templates:4001
+#: ../templates:3001
 msgid "Password for web-based setup system:"
 msgstr "Web bidezko konfigurazio sistemaren pasahitza:"
 
 #. Type: password
 #. Description
-#: ../templates:4001
+#: ../templates:3001
 msgid ""
-"You can manage the usernames and passwords with `htpasswd' command. They are "
-"stored in /etc/phpmyadmin/htpasswd.setup file."
+"You can manage the usernames and passwords with the `htpasswd' command. They "
+"are stored in /etc/phpmyadmin/htpasswd.setup file."
 msgstr ""
-"Erabiltzaile izen eta pasahitzak `htpasswd' komandoaz kudea daitezke. "
-"/etc/phpmyadmin/htpasswd.setup fitxategian gordetzen dira."
+"Erabiltzaile izen eta pasahitzak `htpasswd' komandoaz kudea daitezke. /etc/"
+"phpmyadmin/htpasswd.setup fitxategian gordetzen dira."
 
 #. Type: password
 #. Description
-#: ../templates:4001
-msgid "Leave empty if you want to disable access to web-based setup."
+#: ../templates:3001
+msgid "Leave empty if you want to disable access to the web-based setup."
 msgstr "Hutsik utzi web bidezko konfiguraziora sarrera ezgaitu nahi ezkero."
 
+#~ msgid "Do you want me to restart ${webserver} now?"
+#~ msgstr "${webserver} orain berrabiaraztea nahi al duzu?"
+
+#~ msgid ""
+#~ "Remember that in order to activate the new configuration ${webserver} has "
+#~ "to be restarted. You can also restart ${webserver} by manually executing /"
+#~ "etc/init.d/${webserver} restart"
+#~ msgstr ""
+#~ "Gogoratu konfigurazio berria martxan ipintzeko ${webserver} berrabiarazi "
+#~ "behar duzula. ${webserver}eskuz ere berrabiarazi dezakezu \"/etc/init.d/"
+#~ "${webserver} restart \" eginaz"

@@ -16,7 +16,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: phpmyadmin_2.5.6-rc2-1_templates\n"
 "Report-Msgid-Bugs-To: thijs@debian.org\n"
-"POT-Creation-Date: 2006-10-11 14:01+0200\n"
+"POT-Creation-Date: 2007-04-21 15:44+0200\n"
 "PO-Revision-Date: 2006-10-18 09:56+0200\n"
 "Last-Translator: Claus Hindsgaul <claus.hindsgaul@gmail.com>\n"
 "Language-Team: Danish\n"
@@ -41,27 +41,9 @@ msgstr ""
 "phpMyAdmin understøtter enhver webserver, som PHP gør, men denne automatiske "
 "opsætningsproces understøtter kun Apache."
 
-#. Type: boolean
-#. Description
-#: ../templates:2001
-msgid "Do you want me to restart ${webserver} now?"
-msgstr "Skal jeg genstarte ${webserver} nu?"
-
-#. Type: boolean
-#. Description
-#: ../templates:2001
-msgid ""
-"Remember that in order to activate the new configuration ${webserver} has to "
-"be restarted. You can also restart ${webserver} by manually executing /etc/"
-"init.d/${webserver} restart"
-msgstr ""
-"Husk at ${webserver} skal genstartes for at aktivere den nye opsætning. Du "
-"kan også selv genstarte ${webserver} ved at køre '/etc/init.d/${webserver} "
-"restart'."
-
 #. Type: string
 #. Description
-#: ../templates:3001
+#: ../templates:2001
 msgid "User name for web-based setup system:"
 msgstr "Brugernavn på webbaseret opsætningssystem:"
 
@@ -69,11 +51,11 @@ msgstr "Brugernavn på webbaseret opsætningssystem:"
 #. Description
 #. Type: password
 #. Description
-#: ../templates:3001 ../templates:4001
+#: ../templates:2001 ../templates:3001
 msgid ""
-"phpMyAdmin comes with a setup script that can help you with creating "
+"phpMyAdmin comes with a setup script that can help you with creating a "
 "configuration. The script is located at http://localhost/phpmyadmin/scripts/"
-"setup.php . For security reason it requires authorization."
+"setup.php . For security reasons it requires authorization."
 msgstr ""
 "phpMyAdmin har et opsætningsscript, der kan hjælpe dig med at oprette en "
 "opsætning. Scriptet ligger i http://localhost/phpmyadmin/scripts/setup.php . "
@@ -81,31 +63,42 @@ msgstr ""
 
 #. Type: string
 #. Description
-#: ../templates:3001
+#: ../templates:2001
 msgid "Leave empty if you want to use the default user name 'admin'."
 msgstr "Lad det stå tomt, hvis du vil bruge standardnavnet 'admin'."
 
 #. Type: password
 #. Description
-#: ../templates:4001
+#: ../templates:3001
 msgid "Password for web-based setup system:"
 msgstr "Adgangskode til webbaseret opsætningssystem:"
 
 #. Type: password
 #. Description
-#: ../templates:4001
+#: ../templates:3001
 msgid ""
-"You can manage the usernames and passwords with `htpasswd' command. They are "
-"stored in /etc/phpmyadmin/htpasswd.setup file."
+"You can manage the usernames and passwords with the `htpasswd' command. They "
+"are stored in /etc/phpmyadmin/htpasswd.setup file."
 msgstr ""
 "Du kan håndtere brugernavne og adgangskoder med kommandoen 'htpasswd'. De "
 "gemmes i filen /etc/phpmyadmin/htpasswd.setup ."
 
 #. Type: password
 #. Description
-#: ../templates:4001
-msgid "Leave empty if you want to disable access to web-based setup."
+#: ../templates:3001
+msgid "Leave empty if you want to disable access to the web-based setup."
 msgstr ""
 "Lad feltet stå tomt, hvis du vil deaktivere adgangen til den webbaserede "
 "opsætning."
 
+#~ msgid "Do you want me to restart ${webserver} now?"
+#~ msgstr "Skal jeg genstarte ${webserver} nu?"
+
+#~ msgid ""
+#~ "Remember that in order to activate the new configuration ${webserver} has "
+#~ "to be restarted. You can also restart ${webserver} by manually executing /"
+#~ "etc/init.d/${webserver} restart"
+#~ msgstr ""
+#~ "Husk at ${webserver} skal genstartes for at aktivere den nye opsætning. "
+#~ "Du kan også selv genstarte ${webserver} ved at køre '/etc/init.d/"
+#~ "${webserver} restart'."

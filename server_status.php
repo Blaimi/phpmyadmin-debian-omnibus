@@ -1,5 +1,5 @@
 <?php
-/* $Id: server_status.php 8591 2006-02-20 10:07:10Z cybot_tm $ */
+/* $Id: server_status.php 10016 2007-02-25 13:22:53Z lem9 $ */
 // vim: expandtab sw=4 ts=4 sts=4:
 /**
  * displays status variables with descriptions and some hints an optmizing
@@ -117,10 +117,23 @@ if (isset($server_status['Key_blocks_unused'])
         $server_status['Key_blocks_used']
       * 1024
       / $server_variables['key_buffer_size'];
-}
+  }
+
+// Ratio for key read/write
+if (isset($server_status['Key_writes'])
+    && isset($server_status['Key_write_requests'])
+    && $server_status['Key_write_requests'] > 0)
+        $server_status['Key_write_ratio_%'] = 100 * $server_status['Key_writes'] / $server_status['Key_write_requests'];
+
+if (isset($server_status['Key_reads'])
+    && isset($server_status['Key_read_requests'])
+    && $server_status['Key_read_requests'] > 0)
+        $server_status['Key_read_ratio_%'] = 100 * $server_status['Key_reads'] / $server_status['Key_read_requests'];
+
 // Threads_cache_hitrate
 if (isset($server_status['Threads_created'])
-  && isset($server_status['Connections'])) {
+  && isset($server_status['Connections'])
+  && $server_status['Connections'] > 0) {
     $server_status['Threads_cache_hitrate_%'] =
         100
       - $server_status['Threads_created']
@@ -250,7 +263,7 @@ $sections = array(
 $links = array();
 
 $links['table'][$strFlushTables]
-    = $PHP_SELF . '?flush=TABLES&amp;' . PMA_generate_common_url();
+    = $_SERVER['PHP_SELF'] . '?flush=TABLES&amp;' . PMA_generate_common_url();
 $links['table'][$strShowOpenTables]
     = 'sql.php?sql_query=' . urlencode('SHOW OPEN TABLES') .
       '&amp;goto=server_status.php&amp;' . PMA_generate_common_url();
@@ -265,7 +278,7 @@ $links['repl']['MySQL - ' . $strDocu]
     = $cfg['MySQLManualBase'] . '/replication.html';
 
 $links['qcache'][$strFlushQueryCache]
-    = $PHP_SELF . '?flush=' . urlencode('QUERY CACHE') . '&amp;' .
+    = $_SERVER['PHP_SELF'] . '?flush=' . urlencode('QUERY CACHE') . '&amp;' .
       PMA_generate_common_url();
 $links['qcache']['MySQL - ' . $strDocu]
     = $cfg['MySQLManualBase'] . '/query-cache.html';
@@ -324,10 +337,10 @@ $hour_factor    = 3600 / $server_status['Uptime'];
 ?>
 <div id="statuslinks">
     <a href="<?php echo
-        $PHP_SELF . '?' . PMA_generate_common_url(); ?>"
+        $_SERVER['PHP_SELF'] . '?' . PMA_generate_common_url(); ?>"
        ><?php echo $strRefresh; ?></a>
     <a href="<?php echo
-        $PHP_SELF . '?flush=STATUS&amp;' . PMA_generate_common_url(); ?>"
+        $_SERVER['PHP_SELF'] . '?flush=STATUS&amp;' . PMA_generate_common_url(); ?>"
        ><?php echo $strShowStatusReset; ?></a>
     <a href="<?php echo
         $cfg['MySQLManualBase']; ?>/server-status-variables.html"
@@ -346,7 +359,7 @@ echo sprintf($strServerStatusUptime,
 <?php
 foreach ($sections as $section_name => $section) {
     if (! empty($section['vars']) && ! empty($section['title'])) {
-        echo '<a href="' . $PHP_SELF . '?' .
+        echo '<a href="' . $_SERVER['PHP_SELF'] . '?' .
              PMA_generate_common_url() . '#' . $section_name . '">' .
              $section['title'] . '</a>' . "\n";
     }
@@ -565,7 +578,7 @@ foreach ($sections as $section_name => $section) {
     <table class="data" id="serverstatussection<?php echo $section_name; ?>">
     <caption class="tblHeaders">
         <a class="top"
-           href="<?php echo $PHP_SELF . '?' .
+           href="<?php echo $_SERVER['PHP_SELF'] . '?' .
                  PMA_generate_common_url() . '#serverstatus'; ?>"
            name="<?php echo $section_name; ?>"><?php echo $strPos1; ?>
             <?php echo

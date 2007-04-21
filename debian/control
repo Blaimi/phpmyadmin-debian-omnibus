@@ -3,15 +3,15 @@ Maintainer: Thijs Kinkhorst <thijs@debian.org>
 Section: web
 Priority: extra
 Standards-Version: 3.7.2
-Build-Depends: yada (>= 0.52), po-debconf
+Build-Depends: debhelper (>= 5), dpatch, po-debconf, perl
 Xs-Vcs-Browse: https://aphrodite.kinkhorst.nl/wsvn/debian/phpmyadmin/
 Xs-Vcs-Svn: https://svn.kinkhorst.nl/svn/debian/phpmyadmin/trunk
 
 Package: phpmyadmin
 Architecture: all
-Depends: libapache2-mod-php5 | libapache-mod-php5 | php5-cgi | php5 | libapache2-mod-php4 | libapache-mod-php4 | php4 | php4-cgi, php5-mysql | php5-mysqli | php4-mysql, perl, ${phpmyadmin:Depends}
-Recommends: apache2 | httpd, php5-mcrypt | php4-mcrypt, php5-gd | php4-gd, ${phpmyadmin:Recommends}
-Suggests: mysql-server (>= 3.23.36), ${phpmyadmin:Suggests}
+Depends: libapache2-mod-php5 | libapache-mod-php5 | php5-cgi | php5 | libapache2-mod-php4 | libapache-mod-php4 | php4 | php4-cgi, php5-mysql | php5-mysqli | php4-mysql, perl, ${misc:Depends}
+Recommends: apache2 | httpd, php5-mcrypt | php4-mcrypt, php5-gd | php4-gd
+Suggests: mysql-server
 Description: Administrate MySQL over the WWW
  phpMyAdmin is intended to handle the administration of MySQL over the WWW.
  Currently it can:

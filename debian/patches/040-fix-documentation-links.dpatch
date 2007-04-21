@@ -1,0 +1,58 @@
+#! /bin/sh /usr/share/dpatch/dpatch-run
+##
+## All lines beginning with `## DP:' are a description of the patch.
+## DP: Make sure the links in the only documentation still work.
+
+@DPATCH@
+diff -ur phpmyadmin-2.10.0.2.orig/changelog.php phpmyadmin-2.10.0.2/changelog.php
+--- phpmyadmin-2.10.0.2.orig/changelog.php	2007-03-02 18:39:49.000000000 +0100
++++ phpmyadmin-2.10.0.2/changelog.php	2007-04-21 11:57:19.000000000 +0200
+@@ -6,7 +6,7 @@
+  * @id      $Id: changelog.php 9546 2006-10-13 08:03:06Z nijel $
+  */
+ 
+-$changelog = htmlspecialchars(file_get_contents('ChangeLog'));
++/*$changelog = htmlspecialchars(file_get_contents('ChangeLog'));
+ 
+ $replaces = array(
+     '@(http://[./a-zA-Z0-9.-]*[/a-zA-Z0-9])@'
+@@ -63,7 +63,7 @@
+     => '\\1<b>\\2</b>',
+ 
+ );
+-
++*/
+ header('Content-type: text/html; charset=utf-8');
+ echo '<?xml version="1.0" encoding="utf-8"?'.'>';
+ ?>
+@@ -80,7 +80,7 @@
+ <h1>phpMyAdmin - ChangeLog</h1>
+ <?php
+ echo '<pre>';
+-echo preg_replace(array_keys($replaces), $replaces, $changelog);
++readgzfile('/usr/share/doc/phpmyadmin/changelog.gz');
+ echo '</pre>';
+ ?>
+ </body>
+Only in phpmyadmin-2.10.0.2/debian/patches: 040-fix-documentation-links.dpatch
+diff -ur phpmyadmin-2.10.0.2.orig/Documentation.html phpmyadmin-2.10.0.2/Documentation.html
+--- phpmyadmin-2.10.0.2.orig/Documentation.html	2007-03-02 18:39:49.000000000 +0100
++++ phpmyadmin-2.10.0.2/Documentation.html	2007-04-21 11:57:44.000000000 +0200
+@@ -43,7 +43,6 @@
+             Official phpMyAdmin wiki</a></li>
+     <li>Local documents:
+         <ul><li>Version history: <a href="changelog.php">ChangeLog</a></li>
+-            <li>General notes: <a href="readme.php">README</a></li>
+             <li>License: <a href="license.php">LICENSE</a></li>
+         </ul>
+     </li>
+diff -ur phpmyadmin-2.10.0.2.orig/license.php phpmyadmin-2.10.0.2/license.php
+--- phpmyadmin-2.10.0.2.orig/license.php	2007-03-02 18:39:49.000000000 +0100
++++ phpmyadmin-2.10.0.2/license.php	2007-04-21 11:58:06.000000000 +0200
+@@ -6,5 +6,5 @@
+ // that would read any file using a GET parameter, it would open a hole
+ 
+ header('Content-type: text/plain; charset=iso-8859-1');
+-readfile('LICENSE');
++readfile('/usr/share/doc/phpmyadmin/copyright');
+ ?>

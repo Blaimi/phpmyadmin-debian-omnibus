@@ -1,12 +1,12 @@
 <?php
-/* $Id: pdf_pages.php 9201 2006-07-27 13:34:49Z lem9 $ */
+/* $Id: pdf_pages.php 9819 2007-01-02 14:52:51Z lem9 $ */
 // vim: expandtab sw=4 ts=4 sts=4:
 
 /**
  * Gets some core libraries
  */
 require_once('./libraries/common.lib.php');
-require_once('./libraries/db_details_common.inc.php');
+require_once('./libraries/db_common.inc.php');
 
 
 /**
@@ -78,12 +78,11 @@ if ($cfgRelation['pdfwork']) {
                              . ' (db_name, page_descr)'
                              . ' VALUES (\'' . PMA_sqlAddslashes($db) . '\', \'' . PMA_sqlAddslashes($newpage) . '\')';
                 PMA_query_as_cu($ins_query, FALSE, $query_default_option);
+                $pdf_page_number = PMA_DBI_insert_id(isset($controllink) ? $controllink : '');
 
                 // A u t o m a t i c    l a y o u t
                 // ================================
                 if (isset($auto_layout_internal) || isset($auto_layout_innodb)) {
-                    // save the page number
-                    $pdf_page_number = PMA_DBI_insert_id((isset($controllink)?$controllink:''));
                     $all_tables = array();
                 }
               

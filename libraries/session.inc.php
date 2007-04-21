@@ -1,11 +1,11 @@
 <?php
-/* $Id: session.inc.php 9619 2006-10-26 15:25:28Z lem9 $ */
+/* $Id: session.inc.php 9922 2007-02-05 12:37:18Z cybot_tm $ */
 // vim: expandtab sw=4 ts=4 sts=4:
 /**
  * session handling
  *
- * @TODO    add failover or warn if sessions are not configured properly
- * @TODO    add an option to use mm-module for session handler
+ * @todo    add failover or warn if sessions are not configured properly
+ * @todo    add an option to use mm-module for session handler
  * @see     http://www.php.net/session
  * @uses    session_name()
  * @uses    session_start()
@@ -32,7 +32,7 @@ if (!@function_exists('session_name')) {
 } elseif (ini_get('session.auto_start') == true && session_name() != 'phpMyAdmin') {
     $_SESSION = array();
     if (isset($_COOKIE[session_name()])) {
-        setcookie(session_name(), '', time()-42000, '/');
+        PMA_removeCookie(session_name());
     }
     session_unset();
     @session_destroy();
@@ -43,7 +43,7 @@ if (!@function_exists('session_name')) {
 //ini_set('session.auto_start', 0);
 
 // session cookie settings
-session_set_cookie_params(0, PMA_Config::getCookiePath(),
+session_set_cookie_params(0, PMA_Config::getCookiePath() . '; HttpOnly',
     '', PMA_Config::isHttps());
 
 // cookies are safer
@@ -70,16 +70,56 @@ if (version_compare(PHP_VERSION, '5.0.0', 'ge')
     ini_set('session.hash_bits_per_character', 6);
 }
 
+// some pages (e.g. stylesheet) may be cached on clients, but not in shared
+// proxy servers
+session_cache_limiter('private');
+
 // start the session
 // on some servers (for example, sourceforge.net), we get a permission error
 // on the session data directory, so I add some "@"
 
-// [2006-01-25] Nicola Asuni - www.tecnick.com: maybe the PHP directive
-// session.save_handler is set to another value like "user"
-ini_set('session.save_handler', 'files');
+// See bug #1538132. This would block normal behavior on a cluster
+//ini_set('session.save_handler', 'files');
 
-@session_name('phpMyAdmin');
-@session_start();
+$session_name = 'phpMyAdmin';
+@session_name($session_name);
+// strictly, PHP 4 since 4.4.2 would not need a verification 
+if (version_compare(PHP_VERSION, '5.1.2', 'lt') 
+ && isset($_COOKIE[$session_name]) 
+ && eregi("\r|\n", $_COOKIE[$session_name])) {
+    die('attacked'); 
+}
+
+if (! isset($_COOKIE[$session_name])) {
+    // on first start of session we will check for errors
+    // f.e. session dir cannot be accessed - session file not created
+    ob_start();
+    $old_display_errors = ini_get('display_errors');
+    $old_error_reporting = error_reporting(E_ALL);
+    ini_set('display_errors', 1);
+    $r = session_start();
+    ini_set('display_errors', $old_display_errors);
+    error_reporting($old_error_reporting);
+    unset($old_display_errors, $old_error_reporting);
+    $session_error = ob_get_contents();
+    ob_end_clean();
+    if ($r !== true || ! empty($session_error)) {
+        $cfg = array('DefaultLang'           => 'en-iso-8859-1',
+                     'AllowAnywhereRecoding' => false);
+        // Loads the language file
+        require_once './libraries/select_lang.lib.php';
+        // Displays the error message
+        // (do not use &amp; for parameters sent by header)
+        header('Location: error.php'
+                . '?lang='  . urlencode($available_languages[$lang][2])
+                . '&dir='   . urlencode($text_dir)
+                . '&type='  . urlencode($strError)
+                . '&error=' . urlencode($strSessionStartupErrorGeneral));
+        exit();
+    }
+} else {
+    @session_start();
+}
 
 /**
  * Token which is used for authenticating access queries.
@@ -90,7 +130,7 @@ if (!isset($_SESSION[' PMA_token '])) {
 }
 
 /**
- * trys to secure session from hijacking and fixation
+ * tries to secure session from hijacking and fixation
  * should be called before login and after successfull login
  * (only required if sensitive information stored in session)
  *

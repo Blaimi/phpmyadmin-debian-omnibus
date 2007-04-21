@@ -82,7 +82,6 @@ form {
 
 textarea {
     overflow:           visible;
-    height:             8em;
 }
 
 fieldset {
@@ -170,13 +169,16 @@ table tr.even {
     text-align:         <?php echo $left; ?>;
 }
 
-/* marked tbale rows */
+<?php if ($GLOBALS['cfg']['BrowseMarkerEnable']) { ?>
+/* marked table rows */
 table tr.marked th,
 table tr.marked {
     background:   <?php echo $GLOBALS['cfg']['BrowseMarkerBackground']; ?>;
     color:   <?php echo $GLOBALS['cfg']['BrowseMarkerColor']; ?>;
 }
+<?php } ?>
 
+<?php if ($GLOBALS['cfg']['BrowsePointerEnable']) { ?>
 /* hovered items */
 .odd:hover,
 .even:hover,
@@ -192,6 +194,7 @@ table tr.hover th {
     background:   <?php echo $GLOBALS['cfg']['BrowsePointerBackground']; ?>;
     color:   <?php echo $GLOBALS['cfg']['BrowsePointerColor']; ?>;
 }
+<?php } ?>
 
 /**
  * marks table rows/cells if the db field is in a where condition
@@ -620,6 +623,7 @@ a.tab:hover,
 
 /* disabled drop/empty tabs */
 span.tab,
+a.warning,
 span.tabcaution {
     cursor:             url(../<?php echo $_SESSION['PMA_Theme']->getImgPath(); ?>error.ico), default;
 }

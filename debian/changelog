@@ -1,3 +1,17 @@
+phpmyadmin (4:2.10.0.2-1) unstable; urgency=low
+
+  * Repackage using debhelper instead of yada (Closes: #417018).
+  * Does not reconfigure Apache without permission and does not
+    reset debconf variables (Closes: #335568, #377538).
+  * New upstream release.
+    - From now on we use the -utf-8-only tarballs, reducing installed
+      size by 25%.
+    - Fixes sessions for non-file-based handlers (Closes: #419484).
+    - Has configurable signout link (Closes: #257975).
+    - Addresses CVE-2007-1325 (workaround for PHP vulnerability).
+
+ -- Thijs Kinkhorst <thijs@debian.org>  Sat, 21 Apr 2007 14:52:09 +0200
+
 phpmyadmin (4:2.9.1.1-3) unstable; urgency=medium
 
   * Added Galician debconf translation by Jacobo Tarrio (Closes: #412195).

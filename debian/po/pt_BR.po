@@ -15,7 +15,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: phpmyadmin\n"
 "Report-Msgid-Bugs-To: thijs@debian.org\n"
-"POT-Creation-Date: 2006-10-11 14:01+0200\n"
+"POT-Creation-Date: 2007-04-21 15:44+0200\n"
 "PO-Revision-Date: 2006-03-19 17:50-0300\n"
 "Last-Translator: André Luís Lopes <andrelop@debian.org>\n"
 "Language-Team: Debian-BR Project <debian-l10n-portuguese@lists.debian.org>\n"
@@ -39,27 +39,9 @@ msgstr ""
 "O phpMyAdmin suporta qualquer servidor Web suportado pelo PHP, mas este "
 "processo de configuração automático suporta somente o servidor Web Apache."
 
-#. Type: boolean
-#. Description
-#: ../templates:2001
-msgid "Do you want me to restart ${webserver} now?"
-msgstr "Você deseja que o ${webserver} seja reiniciado agora ?"
-
-#. Type: boolean
-#. Description
-#: ../templates:2001
-msgid ""
-"Remember that in order to activate the new configuration ${webserver} has to "
-"be restarted. You can also restart ${webserver} by manually executing /etc/"
-"init.d/${webserver} restart"
-msgstr ""
-"Lembre-se que, para que a nova configuração seja ativada, o ${webserver} "
-"precisa ser reiniciado. Você também pode reiniciar o ${webserver} "
-"manualmente executando '/etc/init.d/${webserver} restart'"
-
 #. Type: string
 #. Description
-#: ../templates:3001
+#: ../templates:2001
 msgid "User name for web-based setup system:"
 msgstr "Nome do usuário para o sistema de configuração baseado na Web :"
 
@@ -67,11 +49,11 @@ msgstr "Nome do usuário para o sistema de configuração baseado na Web :"
 #. Description
 #. Type: password
 #. Description
-#: ../templates:3001 ../templates:4001
+#: ../templates:2001 ../templates:3001
 msgid ""
-"phpMyAdmin comes with a setup script that can help you with creating "
+"phpMyAdmin comes with a setup script that can help you with creating a "
 "configuration. The script is located at http://localhost/phpmyadmin/scripts/"
-"setup.php . For security reason it requires authorization."
+"setup.php . For security reasons it requires authorization."
 msgstr ""
 "O phpMyAdmin é fornecido com um script de configuração que pode auxiliá-lo "
 "em sua configuração. O script está localizado em http://localhost/phpmyadmin/"
@@ -79,7 +61,7 @@ msgstr ""
 
 #. Type: string
 #. Description
-#: ../templates:3001
+#: ../templates:2001
 msgid "Leave empty if you want to use the default user name 'admin'."
 msgstr ""
 "Mantenha em branco caso você deseje utilizar o nome de usuário padrão "
@@ -87,24 +69,36 @@ msgstr ""
 
 #. Type: password
 #. Description
-#: ../templates:4001
+#: ../templates:3001
 msgid "Password for web-based setup system:"
 msgstr "Senha para o sistema de configuração baseado na Web :"
 
 #. Type: password
 #. Description
-#: ../templates:4001
+#: ../templates:3001
 msgid ""
-"You can manage the usernames and passwords with `htpasswd' command. They are "
-"stored in /etc/phpmyadmin/htpasswd.setup file."
+"You can manage the usernames and passwords with the `htpasswd' command. They "
+"are stored in /etc/phpmyadmin/htpasswd.setup file."
 msgstr ""
 "Você pode gerenciar os nomes de usuários e senhas com o comando 'htpasswd'. "
 "Os mesmos estão armazenados no arquivo /etc/phpmyadmin/htpasswd.setup."
 
 #. Type: password
 #. Description
-#: ../templates:4001
-msgid "Leave empty if you want to disable access to web-based setup."
+#: ../templates:3001
+msgid "Leave empty if you want to disable access to the web-based setup."
 msgstr ""
 "Mantenha em branco caso você deseje desabilitar acesso à configuração "
 "baseada na Web."
+
+#~ msgid "Do you want me to restart ${webserver} now?"
+#~ msgstr "Você deseja que o ${webserver} seja reiniciado agora ?"
+
+#~ msgid ""
+#~ "Remember that in order to activate the new configuration ${webserver} has "
+#~ "to be restarted. You can also restart ${webserver} by manually executing /"
+#~ "etc/init.d/${webserver} restart"
+#~ msgstr ""
+#~ "Lembre-se que, para que a nova configuração seja ativada, o ${webserver} "
+#~ "precisa ser reiniciado. Você também pode reiniciar o ${webserver} "
+#~ "manualmente executando '/etc/init.d/${webserver} restart'"

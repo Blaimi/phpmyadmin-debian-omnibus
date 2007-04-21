@@ -15,8 +15,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: phpmyadmin 4:2.9.0.2-1\n"
-"Report-Msgid-Bugs-To:  Thijs Kinkhorst <thijs@debian.org>\n"
-"POT-Creation-Date: 2006-10-11 14:01+0200\n"
+"Report-Msgid-Bugs-To: thijs@debian.org\n"
+"POT-Creation-Date: 2007-04-21 15:44+0200\n"
 "PO-Revision-Date: 2006-10-15 13:52+0900\n"
 "Last-Translator: Hideki Yamane (Debian-JP) <henrich@debian.or.jp>\n"
 "Language-Team: Japanese <debian-japanese@lists.debian.org>\n"
@@ -40,27 +40,9 @@ msgstr ""
 "phpMyAdmin は PHP が動作する web サーバをサポートしていますが、この自動設定プ"
 "ロセスは Apache のみサポートしています。"
 
-#. Type: boolean
-#. Description
-#: ../templates:2001
-msgid "Do you want me to restart ${webserver} now?"
-msgstr "${webserver} をすぐに再起動しますか?"
-
-#. Type: boolean
-#. Description
-#: ../templates:2001
-msgid ""
-"Remember that in order to activate the new configuration ${webserver} has to "
-"be restarted. You can also restart ${webserver} by manually executing /etc/"
-"init.d/${webserver} restart"
-msgstr ""
-"${webserver} の新規設定を有効にするためには再起動が必要なことに留意してくださ"
-"い。手動で /etc/init.d/${webserver} restart を実行することでも再起動ができま"
-"す。"
-
 #. Type: string
 #. Description
-#: ../templates:3001
+#: ../templates:2001
 msgid "User name for web-based setup system:"
 msgstr "web ベース設定システムのユーザ名:"
 
@@ -68,43 +50,55 @@ msgstr "web ベース設定システムのユーザ名:"
 #. Description
 #. Type: password
 #. Description
-#: ../templates:3001 ../templates:4001
+#: ../templates:2001 ../templates:3001
 msgid ""
-"phpMyAdmin comes with a setup script that can help you with creating "
+"phpMyAdmin comes with a setup script that can help you with creating a "
 "configuration. The script is located at http://localhost/phpmyadmin/scripts/"
-"setup.php . For security reason it requires authorization."
+"setup.php . For security reasons it requires authorization."
 msgstr ""
-"phpMyAdmin は設定を作成するのに役立つ設定スクリプトを含んでいます。"
-"スクリプトは http://localhost/phpmyadmin/scripts/setup.php に設置されてます。"
-"セキュリティ上の理由によって、これを使うには認証が必要となります。"
+"phpMyAdmin は設定を作成するのに役立つ設定スクリプトを含んでいます。スクリプト"
+"は http://localhost/phpmyadmin/scripts/setup.php に設置されてます。セキュリ"
+"ティ上の理由によって、これを使うには認証が必要となります。"
 
 #. Type: string
 #. Description
-#: ../templates:3001
+#: ../templates:2001
 msgid "Leave empty if you want to use the default user name 'admin'."
 msgstr ""
 "デフォルトのユーザ名 'admin' を使いたい場合は空のままにしておいてください。"
 
 #. Type: password
 #. Description
-#: ../templates:4001
+#: ../templates:3001
 msgid "Password for web-based setup system:"
 msgstr "web ベース設定システムのパスワード:"
 
 #. Type: password
 #. Description
-#: ../templates:4001
+#: ../templates:3001
 msgid ""
-"You can manage the usernames and passwords with `htpasswd' command. They are "
-"stored in /etc/phpmyadmin/htpasswd.setup file."
+"You can manage the usernames and passwords with the `htpasswd' command. They "
+"are stored in /etc/phpmyadmin/htpasswd.setup file."
 msgstr ""
-" `htpasswd' コマンドを使ってユーザ名とパスワードを管理できます。これは "
-"/etc/phpmyadmin/htpasswd.setup ファイルに保存されます。"
+" `htpasswd' コマンドを使ってユーザ名とパスワードを管理できます。これは /etc/"
+"phpmyadmin/htpasswd.setup ファイルに保存されます。"
 
 #. Type: password
 #. Description
-#: ../templates:4001
-msgid "Leave empty if you want to disable access to web-based setup."
+#: ../templates:3001
+msgid "Leave empty if you want to disable access to the web-based setup."
 msgstr ""
-"web ベースの設定画面へのアクセスを無効にしたい場合、空のままにしておいて"
-"ください。"
+"web ベースの設定画面へのアクセスを無効にしたい場合、空のままにしておいてくだ"
+"さい。"
+
+#~ msgid "Do you want me to restart ${webserver} now?"
+#~ msgstr "${webserver} をすぐに再起動しますか?"
+
+#~ msgid ""
+#~ "Remember that in order to activate the new configuration ${webserver} has "
+#~ "to be restarted. You can also restart ${webserver} by manually executing /"
+#~ "etc/init.d/${webserver} restart"
+#~ msgstr ""
+#~ "${webserver} の新規設定を有効にするためには再起動が必要なことに留意してく"
+#~ "ださい。手動で /etc/init.d/${webserver} restart を実行することでも再起動が"
+#~ "できます。"

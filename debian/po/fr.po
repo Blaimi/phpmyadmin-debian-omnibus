@@ -17,7 +17,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fr\n"
 "Report-Msgid-Bugs-To: thijs@debian.org\n"
-"POT-Creation-Date: 2006-10-11 14:01+0200\n"
+"POT-Creation-Date: 2007-04-21 15:44+0200\n"
 "PO-Revision-Date: 2006-03-19 08:02+0100\n"
 "Last-Translator: Christian Perrier <bubulle@debian.org>\n"
 "Language-Team: French <debian-l10n-french@lists.debian.org>\n"
@@ -42,27 +42,9 @@ msgstr ""
 "Phpmyadmin gère tous les serveurs web supportés par PHP, mais cette "
 "procédure automatique de configuration ne prend en charge qu'Apache."
 
-#. Type: boolean
-#. Description
-#: ../templates:2001
-msgid "Do you want me to restart ${webserver} now?"
-msgstr "Faut-il redémarrer ${webserver} maintenant ?"
-
-#. Type: boolean
-#. Description
-#: ../templates:2001
-msgid ""
-"Remember that in order to activate the new configuration ${webserver} has to "
-"be restarted. You can also restart ${webserver} by manually executing /etc/"
-"init.d/${webserver} restart"
-msgstr ""
-"Veuillez noter que, pour mettre en service la nouvelle configuration, "
-"${webserver} doit être redémarré. Vous pouvez également le redémarrer avec "
-"la commande « /etc/init.d/${webserver} restart »."
-
 #. Type: string
 #. Description
-#: ../templates:3001
+#: ../templates:2001
 msgid "User name for web-based setup system:"
 msgstr "Identifiant pour la configuration par le web :"
 
@@ -70,11 +52,11 @@ msgstr "Identifiant pour la configuration par le web :"
 #. Description
 #. Type: password
 #. Description
-#: ../templates:3001 ../templates:4001
+#: ../templates:2001 ../templates:3001
 msgid ""
-"phpMyAdmin comes with a setup script that can help you with creating "
+"phpMyAdmin comes with a setup script that can help you with creating a "
 "configuration. The script is located at http://localhost/phpmyadmin/scripts/"
-"setup.php . For security reason it requires authorization."
+"setup.php . For security reasons it requires authorization."
 msgstr ""
 "PhpMyAdmin est fourni avec un script d'assistance à la configuration. Ce "
 "script peut être accédé à l'adresse « http://localhost/phpmyadmin/scripts/"
@@ -82,22 +64,22 @@ msgstr ""
 
 #. Type: string
 #. Description
-#: ../templates:3001
+#: ../templates:2001
 msgid "Leave empty if you want to use the default user name 'admin'."
 msgstr "Laissez ce champ vide pour utiliser la valeur par défaut (« admin »)."
 
 #. Type: password
 #. Description
-#: ../templates:4001
+#: ../templates:3001
 msgid "Password for web-based setup system:"
 msgstr "Mot de passe pour la configuration par le web :"
 
 #. Type: password
 #. Description
-#: ../templates:4001
+#: ../templates:3001
 msgid ""
-"You can manage the usernames and passwords with `htpasswd' command. They are "
-"stored in /etc/phpmyadmin/htpasswd.setup file."
+"You can manage the usernames and passwords with the `htpasswd' command. They "
+"are stored in /etc/phpmyadmin/htpasswd.setup file."
 msgstr ""
 "Les identifiants et mots de passe peuvent être gérés avec la commande "
 "« htpasswd ». Ils sont conservés dans le fichier « /etc/phpmyadmin/htpasswd."
@@ -105,7 +87,19 @@ msgstr ""
 
 #. Type: password
 #. Description
-#: ../templates:4001
-msgid "Leave empty if you want to disable access to web-based setup."
+#: ../templates:3001
+msgid "Leave empty if you want to disable access to the web-based setup."
 msgstr ""
 "Si vous laissez ce champ vide, la configuration par le web sera désactivée."
+
+#~ msgid "Do you want me to restart ${webserver} now?"
+#~ msgstr "Faut-il redémarrer ${webserver} maintenant ?"
+
+#~ msgid ""
+#~ "Remember that in order to activate the new configuration ${webserver} has "
+#~ "to be restarted. You can also restart ${webserver} by manually executing /"
+#~ "etc/init.d/${webserver} restart"
+#~ msgstr ""
+#~ "Veuillez noter que, pour mettre en service la nouvelle configuration, "
+#~ "${webserver} doit être redémarré. Vous pouvez également le redémarrer "
+#~ "avec la commande « /etc/init.d/${webserver} restart »."

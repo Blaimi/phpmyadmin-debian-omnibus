@@ -1,0 +1,76 @@
+#!/bin/sh
+# postinst script for phpmyadmin
+
+set -e
+
+if [ "$1" = "configure" ]; then
+
+	# Generate secret for cookie encryption
+	if [ ! -f /var/lib/phpmyadmin/blowfish_secret.inc.php ]; then
+		touch /var/lib/phpmyadmin/blowfish_secret.inc.php
+		chgrp www-data /var/lib/phpmyadmin/blowfish_secret.inc.php
+		chmod 640 /var/lib/phpmyadmin/blowfish_secret.inc.php
+		printf "<?php\n\$cfg['blowfish_secret'] = '%s';\n" \
+		`perl -le 'print map{("a".."z","A".."Z",0..9)[int(rand(62))]}(1..24)'` \
+			>> /var/lib/phpmyadmin/blowfish_secret.inc.php
+	fi
+
+	. /usr/share/debconf/confmodule
+	db_version 2.0
+
+fi
+
+# The following only on a new install
+if [ "$1" = "configure" ] && [ "$2" = "" ]; then
+
+	# Generate an htpasswd file for the web based setup
+	if [ ! -f /etc/phpmyadmin/htpasswd.setup ]; then
+
+		touch /etc/phpmyadmin/htpasswd.setup
+		chgrp www-data /etc/phpmyadmin/htpasswd.setup
+		chmod 0640 /etc/phpmyadmin/htpasswd.setup
+		db_get phpmyadmin/setup-username
+		setup_username=${RET:-admin}
+		db_get phpmyadmin/setup-password
+		if [ -n "$RET" ]; then
+			setup_password=`perl -le 'print crypt($ARGV[0], join("", map{("a".."z","A".."Z",0..9)[int(rand(62))]}(1..2)))' "$RET"`
+		else
+			setup_password="*"
+		fi
+		echo "$setup_username:$setup_password" > /etc/phpmyadmin/htpasswd.setup
+		db_reset phpmyadmin/setup-username || true
+		db_reset phpmyadmin/setup-password || true
+
+		if [ ! -f /var/lib/phpmyadmin/config.inc.php ]; then
+			touch /var/lib/phpmyadmin/config.inc.php
+			chgrp www-data /var/lib/phpmyadmin/config.inc.php
+			chmod 0660 /var/lib/phpmyadmin/config.inc.php
+		fi
+
+	fi
+
+	# Configure Apache
+	db_get phpmyadmin/reconfigure-webserver
+
+	webservers="$RET"
+
+	for webserver in $webservers; do
+		webserver=${webserver%,}
+		if [ -d /etc/$webserver/conf.d ] && [ ! -e /etc/$webserver/conf.d/phpmyadmin.conf ]; then
+			ln -s ../../phpmyadmin/apache.conf /etc/$webserver/conf.d/phpmyadmin.conf
+		fi
+		if [ -x /usr/sbin/invoke-rc.d ]; then
+			invoke-rc.d $webserver reload || true
+		else
+			/etc/init.d/$webserver reload || true
+		fi
+	done
+
+fi
+
+
+#DEBHELPER#
+
+exit 0
+
+

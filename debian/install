@@ -1,0 +1,15 @@
+*.php		usr/share/phpmyadmin
+*.ico		usr/share/phpmyadmin
+
+css		usr/share/phpmyadmin
+js		usr/share/phpmyadmin
+lang		usr/share/phpmyadmin
+libraries	usr/share/phpmyadmin
+pmd		usr/share/phpmyadmin
+themes		usr/share/phpmyadmin
+
+scripts/setup.php	usr/share/phpmyadmin/scripts
+
+debian/conf/*	etc/phpmyadmin
+debian/src/*	usr/share/phpmyadmin
+

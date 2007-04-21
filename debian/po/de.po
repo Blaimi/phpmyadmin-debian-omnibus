@@ -14,7 +14,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: thijs@debian.org\n"
-"POT-Creation-Date: 2006-10-11 14:01+0200\n"
+"POT-Creation-Date: 2007-04-21 15:44+0200\n"
 "PO-Revision-Date: 2006-03-28 19:25+0200\n"
 "Last-Translator: Daniel Knabl <daniel@knabl.com>\n"
 "Language-Team: German <gnome-de@gnome.org>\n"
@@ -38,27 +38,9 @@ msgstr ""
 "phpMyAdmin untersützt jeden Web-Server der PHP unterstützt, diese "
 "automatische Konfiguration unterstützt jedoch nur Apache."
 
-#. Type: boolean
-#. Description
-#: ../templates:2001
-msgid "Do you want me to restart ${webserver} now?"
-msgstr "Möchten Sie, dass ich ${webserver} jetzt neu starte?"
-
-#. Type: boolean
-#. Description
-#: ../templates:2001
-msgid ""
-"Remember that in order to activate the new configuration ${webserver} has to "
-"be restarted. You can also restart ${webserver} by manually executing /etc/"
-"init.d/${webserver} restart"
-msgstr ""
-"Beachten Sie, dass ${webserver} neu gestartet werden muss, um die neue "
-"Konfiguration zu verwenden. Sie können ${webserver} auch mit dem Befehl \"/"
-"etc/init.d/${webserver} restart\" neu starten."
-
 #. Type: string
 #. Description
-#: ../templates:3001
+#: ../templates:2001
 msgid "User name for web-based setup system:"
 msgstr "Benutzername für die webbasierte Installaton:"
 
@@ -66,11 +48,11 @@ msgstr "Benutzername für die webbasierte Installaton:"
 #. Description
 #. Type: password
 #. Description
-#: ../templates:3001 ../templates:4001
+#: ../templates:2001 ../templates:3001
 msgid ""
-"phpMyAdmin comes with a setup script that can help you with creating "
+"phpMyAdmin comes with a setup script that can help you with creating a "
 "configuration. The script is located at http://localhost/phpmyadmin/scripts/"
-"setup.php . For security reason it requires authorization."
+"setup.php . For security reasons it requires authorization."
 msgstr ""
 "phpMyAdmin kommt mit einem Installationsscript, welches Ihnen beim Erstellen "
 "der Konfiguration hilft. Das Script befindet sich unter http://localhost/"
@@ -79,7 +61,7 @@ msgstr ""
 
 #. Type: string
 #. Description
-#: ../templates:3001
+#: ../templates:2001
 msgid "Leave empty if you want to use the default user name 'admin'."
 msgstr ""
 "Lassen Sie das leer, wenn sie den Standardbenutzernamen 'admin' verwenden "
@@ -87,16 +69,16 @@ msgstr ""
 
 #. Type: password
 #. Description
-#: ../templates:4001
+#: ../templates:3001
 msgid "Password for web-based setup system:"
 msgstr "Passwort für die webbasierte Installation:"
 
 #. Type: password
 #. Description
-#: ../templates:4001
+#: ../templates:3001
 msgid ""
-"You can manage the usernames and passwords with `htpasswd' command. They are "
-"stored in /etc/phpmyadmin/htpasswd.setup file."
+"You can manage the usernames and passwords with the `htpasswd' command. They "
+"are stored in /etc/phpmyadmin/htpasswd.setup file."
 msgstr ""
 "Sie können die Benutzernamen und Passwörter mittels dem 'htpasswd' Kommando "
 "verwalten. Sie werden in der Datei /etc/phpmyadmin/htpasswd.setup "
@@ -104,8 +86,20 @@ msgstr ""
 
 #. Type: password
 #. Description
-#: ../templates:4001
-msgid "Leave empty if you want to disable access to web-based setup."
+#: ../templates:3001
+msgid "Leave empty if you want to disable access to the web-based setup."
 msgstr ""
 "Lassen Sie das leer, wenn Sie den Zugriff auf die webbasierte Installation "
 "verbieten möchten."
+
+#~ msgid "Do you want me to restart ${webserver} now?"
+#~ msgstr "Möchten Sie, dass ich ${webserver} jetzt neu starte?"
+
+#~ msgid ""
+#~ "Remember that in order to activate the new configuration ${webserver} has "
+#~ "to be restarted. You can also restart ${webserver} by manually executing /"
+#~ "etc/init.d/${webserver} restart"
+#~ msgstr ""
+#~ "Beachten Sie, dass ${webserver} neu gestartet werden muss, um die neue "
+#~ "Konfiguration zu verwenden. Sie können ${webserver} auch mit dem Befehl "
+#~ "\"/etc/init.d/${webserver} restart\" neu starten."

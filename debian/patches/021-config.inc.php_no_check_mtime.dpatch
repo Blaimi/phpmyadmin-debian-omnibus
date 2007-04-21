@@ -1,0 +1,34 @@
+#! /bin/sh /usr/share/dpatch/dpatch-run
+##
+## All lines beginning with `## DP:' are a description of the patch.
+## DP: in Debian we're including a couple of other files in
+## DP: config.inc.php, and their changes will never be picked up
+## DP: if we leave this check in.
+
+@DPATCH@
+
+diff -ur phpMyAdmin-2.9.0.3-all-languages.orig/libraries/Config.class.php phpMyAdmin-2.9.0.3-all-languages/libraries/Config.class.php
+--- phpMyAdmin-2.9.0.3-all-languages.orig/libraries/Config.class.php	2006-11-01 14:34:05.000000000 +0100
++++ phpMyAdmin-2.9.0.3-all-languages/libraries/Config.class.php	2006-11-02 15:42:38.000000000 +0100
+@@ -293,15 +293,20 @@
+      */
+     function __wakeup()
+     {
++        /* Disable in Debian: we're including a couple of other files
++         * in config.inc.php, and their changes will never be picked up
++         * if we leave this check in.
+         if (! $this->checkConfigSource()
+           || $this->source_mtime !== filemtime($this->getSource())
+           || $this->default_source_mtime !== filemtime($this->default_source)
+           || $this->error_config_file
+           || $this->error_config_default_file) {
++         */
+             $this->settings = array();
+             $this->load();
+             $this->checkSystem();
+-        }
++         /*
++        } */
+ 
+         // check for https needs to be done everytime,
+         // as https and http uses same session so this info can not be stored

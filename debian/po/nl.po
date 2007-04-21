@@ -15,7 +15,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: phpmyadmin 2.5.3-1\n"
 "Report-Msgid-Bugs-To: thijs@debian.org\n"
-"POT-Creation-Date: 2006-10-11 14:01+0200\n"
+"POT-Creation-Date: 2007-04-21 15:44+0200\n"
 "PO-Revision-Date: 2003-09-26 01:51+0100\n"
 "Last-Translator: Thijs Kinkhorst <thijs@debian.org>\n"
 "Language-Team: dutch <debian-l10n-dutch@lists.debian.org>\n"
@@ -39,27 +39,9 @@ msgstr ""
 "phpMyAdmin ondersteunt elke webserver waar PHP aanwezig is, maar dit "
 "automatisch configuratieproces ondersteunt enkel Apache en Apache-SSL."
 
-#. Type: boolean
-#. Description
-#: ../templates:2001
-msgid "Do you want me to restart ${webserver} now?"
-msgstr "Wilt u ${webserver} nu herstarten?"
-
-#. Type: boolean
-#. Description
-#: ../templates:2001
-msgid ""
-"Remember that in order to activate the new configuration ${webserver} has to "
-"be restarted. You can also restart ${webserver} by manually executing /etc/"
-"init.d/${webserver} restart"
-msgstr ""
-"Om de nieuwe configuratie te activeren, is het nodig ${webserver} te "
-"herstarten. U kunt ${webserver} ook handmatig herstarten door "
-"'/etc/init.d/${webserver} restart' uit te voeren."
-
 #. Type: string
 #. Description
-#: ../templates:3001
+#: ../templates:2001
 msgid "User name for web-based setup system:"
 msgstr "Gebruikersnaam voor webgebaseerde configuratie:"
 
@@ -67,40 +49,53 @@ msgstr "Gebruikersnaam voor webgebaseerde configuratie:"
 #. Description
 #. Type: password
 #. Description
-#: ../templates:3001 ../templates:4001
+#: ../templates:2001 ../templates:3001
 msgid ""
-"phpMyAdmin comes with a setup script that can help you with creating "
+"phpMyAdmin comes with a setup script that can help you with creating a "
 "configuration. The script is located at http://localhost/phpmyadmin/scripts/"
-"setup.php . For security reason it requires authorization."
+"setup.php . For security reasons it requires authorization."
 msgstr ""
-"phpMyAdmin heeft een script dat u kan helpen met de configuratie. "
-"Dit script vindt u op http://localhost/phpmyadmin/scripts/setup.php. "
-"Wegens beveiligingsredenen is er autorisatie voor nodig."
+"phpMyAdmin heeft een script dat u kan helpen met de configuratie. Dit script "
+"vindt u op http://localhost/phpmyadmin/scripts/setup.php. Wegens "
+"beveiligingsredenen is er autorisatie voor nodig."
 
 #. Type: string
 #. Description
-#: ../templates:3001
+#: ../templates:2001
 msgid "Leave empty if you want to use the default user name 'admin'."
-msgstr "Laat dit leeg als u de standaard gebruikersnaam 'admin' wilt gebruiken."
+msgstr ""
+"Laat dit leeg als u de standaard gebruikersnaam 'admin' wilt gebruiken."
 
 #. Type: password
 #. Description
-#: ../templates:4001
+#: ../templates:3001
 msgid "Password for web-based setup system:"
 msgstr "Wachtwoord voor webgebaseerde configuratie:"
 
 #. Type: password
 #. Description
-#: ../templates:4001
+#: ../templates:3001
 msgid ""
-"You can manage the usernames and passwords with `htpasswd' command. They are "
-"stored in /etc/phpmyadmin/htpasswd.setup file."
+"You can manage the usernames and passwords with the `htpasswd' command. They "
+"are stored in /etc/phpmyadmin/htpasswd.setup file."
 msgstr ""
-"U kunt gebruikersnamen en wachtwoorden beheren met het 'htpasswd'-"
-"commando. Deze worden opgeslagen in /etc/phpmyadmin/htpasswd.setup."
+"U kunt gebruikersnamen en wachtwoorden beheren met het 'htpasswd'-commando. "
+"Deze worden opgeslagen in /etc/phpmyadmin/htpasswd.setup."
 
 #. Type: password
 #. Description
-#: ../templates:4001
-msgid "Leave empty if you want to disable access to web-based setup."
+#: ../templates:3001
+msgid "Leave empty if you want to disable access to the web-based setup."
 msgstr "Laat dit leeg als u de webgebaseerde configuratie wilt blokkeren."
+
+#~ msgid "Do you want me to restart ${webserver} now?"
+#~ msgstr "Wilt u ${webserver} nu herstarten?"
+
+#~ msgid ""
+#~ "Remember that in order to activate the new configuration ${webserver} has "
+#~ "to be restarted. You can also restart ${webserver} by manually executing /"
+#~ "etc/init.d/${webserver} restart"
+#~ msgstr ""
+#~ "Om de nieuwe configuratie te activeren, is het nodig ${webserver} te "
+#~ "herstarten. U kunt ${webserver} ook handmatig herstarten door '/etc/init."
+#~ "d/${webserver} restart' uit te voeren."

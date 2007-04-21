@@ -1,0 +1,39 @@
+#!/bin/sh
+# postrm script for phpmyadmin
+
+set -e
+
+if [ "$1" = "remove" ] || [ "$1" = "purge" ]; then
+
+	if [ -f /usr/share/debconf/confmodule ]; then
+		. /usr/share/debconf/confmodule
+		db_version 2.0
+
+		db_get phpmyadmin/reconfigure-webserver
+
+		webservers="$RET"
+
+		for webserver in $webservers; do
+			webserver=${webserver%,}
+			if [ -d /etc/$webserver/conf.d ] && [ -L /etc/$webserver/conf.d/phpmyadmin.conf ]; then
+				rm -f /etc/$webserver/conf.d/phpmyadmin.conf
+			fi
+			if [ -x /usr/sbin/invoke-rc.d ]; then
+				invoke-rc.d $webserver reload || true
+			else
+				/etc/init.d/$webserver reload || true
+			fi
+		done
+	fi
+
+	if [ "$1" = "purge" ]; then
+		rm -rf /etc/phpmyadmin /var/lib/phpmyadmin
+	fi
+fi
+
+
+#DEBHELPER#
+
+exit 0
+
+

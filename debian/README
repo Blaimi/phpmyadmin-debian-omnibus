@@ -17,29 +17,25 @@ PROBLEM WITH COOKIES
 
 CONFIGURATION
 
-  The package installs symlink into /var/www directory. You can also add
+  The package installs a default configuration in /etc/phpmyadmin/, including
+  a default apache.conf, which is optionally symlinked from your Apache config.
 
-    Alias /phpmyadmin /usr/share/phpmyadmin
-
-  to the /etc/phpmyadmin/apache.conf file.
-
-  Since 2.8.0 phpMyAdmin provides web-based setup script available at
+  phpMyAdmin also provides a web-based setup script available at
   http://localhost/phpmyadmin/scripts/setup.php
-  
   This setup script requires authorization by default. You can manage usernames
-  and passwords with htpasswd command on /etc/phpmyadmin/htpasswd.setup file.
+  and passwords with htpasswd command in the /etc/phpmyadmin/htpasswd.setup file.
 
 
 SECURITY
 
   The default configuration for Debian has enabled cookie based authentication.
-  You *shouldn't* put your passwords into /etc/phpmyadmin/config.inc.php file.
-  This file has to be readable by www-data user, so it can be readable
-  by anyone who can run his own CGI script!
+  You should *not* put your passwords into /etc/phpmyadmin/config.inc.php file.
+  This file has to be readable by www-data user, so it can be read by anyone
+  who can run his own CGI script!
 
   Register Globals: Debian does not provide security support for installations
   with the PHP register_globals setting turned On. It's also not required for
   phpMyAdmin to operate. Make sure it's off. It's trivial to turn it on just for
   specific legacy sites that may need it.
 
- -- Thijs Kinkhorst <thijs@debian.org>  Mon, 13 Nov 2006 16:40:38 +0100
+ -- Thijs Kinkhorst <thijs@debian.org>  Mon, 21 Apr 2007 12:10:15 +0200

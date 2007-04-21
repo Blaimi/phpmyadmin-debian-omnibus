@@ -1,246 +1,55 @@
 #!/usr/bin/make -f
-# Generated automatically from debian/packages
-# by yada v0.52, of Fri,  8 Dec 2006
+# Uncomment this to turn on verbose mode.
+#export DH_VERBOSE=1
 
-DEB_HOST_ARCH        := $(shell dpkg-architecture -qDEB_HOST_ARCH 2>/dev/null)
-DEB_HOST_ARCH_OS     := $(shell dpkg-architecture -qDEB_HOST_ARCH_OS 2>/dev/null)
-DEB_HOST_ARCH_CPU    := $(shell dpkg-architecture -qDEB_HOST_ARCH_CPU 2>/dev/null)
-DEB_HOST_GNU_CPU     := $(shell dpkg-architecture -qDEB_HOST_GNU_CPU 2>/dev/null)
-DEB_HOST_GNU_TYPE    := $(shell dpkg-architecture -qDEB_HOST_GNU_TYPE 2>/dev/null)
-DEB_HOST_GNU_SYSTEM  := $(shell dpkg-architecture -qDEB_HOST_GNU_SYSTEM 2>/dev/null)
+include /usr/share/dpatch/dpatch.make
 
-DEB_BUILD_ARCH       := $(shell dpkg-architecture -qDEB_BUILD_ARCH 2>/dev/null)
-DEB_BUILD_ARCH_OS    := $(shell dpkg-architecture -qDEB_BUILD_ARCH_OS 2>/dev/null)
-DEB_BUILD_ARCH_CPU   := $(shell dpkg-architecture -qDEB_BUILD_ARCH_CPU 2>/dev/null)
-DEB_BUILD_GNU_CPU    := $(shell dpkg-architecture -qDEB_BUILD_GNU_CPU 2>/dev/null)
-DEB_BUILD_GNU_TYPE   := $(shell dpkg-architecture -qDEB_BUILD_GNU_TYPE 2>/dev/null)
-DEB_BUILD_GNU_SYSTEM := $(shell dpkg-architecture -qDEB_BUILD_GNU_SYSTEM 2>/dev/null)
+REVISION := $(shell head -1 debian/changelog | sed 's/.*(//;s/).*//;s/.*-//')
 
-# Take account of old dpkg-architecture output.
-ifeq ($(DEB_HOST_ARCH_CPU),)
-  DEB_HOST_ARCH_CPU := $(DEB_HOST_GNU_CPU))
-  ifeq ($(DEB_HOST_ARCH_CPU),i486)
-    DEB_HOST_ARCH_OS := i386
-  else
-  ifeq ($(DEB_HOST_ARCH_CPU),x86_64)
-    DEB_HOST_ARCH_OS := amd64
-  endif
-  endif
-endif
-ifeq ($(DEB_HOST_ARCH_OS),)
-  DEB_HOST_ARCH_OS := $(subst -gnu,,$(DEB_HOST_GNU_SYSTEM))
-  ifeq ($(DEB_HOST_ARCH_OS),gnu)
-    DEB_HOST_ARCH_OS := hurd
-  endif
-endif
-ifeq ($(DEB_BUILD_ARCH_CPU),)
-  DEB_BUILD_ARCH_CPU := $(DEB_BUILD_GNU_CPU))
-  ifeq ($(DEB_BUILD_ARCH_CPU),i486)
-    DEB_BUILD_ARCH_OS := i386
-  else
-  ifeq ($(DEB_BUILD_ARCH_CPU),x86_64)
-    DEB_BUILD_ARCH_OS := amd64
-  endif
-  endif
-endif
-ifeq ($(DEB_BUILD_ARCH_OS),)
-  DEB_BUILD_ARCH_OS := $(subst -gnu,,$(DEB_BUILD_GNU_SYSTEM))
-  ifeq ($(DEB_BUILD_ARCH_OS),gnu)
-    DEB_BUILD_ARCH_OS := hurd
-  endif
-endif
+build: patch build-stamp
+build-stamp:
+	dh_testdir
+	touch build-stamp
 
-LEFT_PARENTHESIS:=(
-VERSION:=$(shell head -n1 debian/changelog | sed -e "s/^[0-9a-zA-Z.-]* $(LEFT_PARENTHESIS)//" -e "s/[^0-9a-zA-Z.:+~-].*//")
+clean: clean-patched unpatch
 
-SHELL=/bin/bash
+clean-patched:
+	dh_testdir
+	dh_testroot
+	rm -f build-stamp
+	dh_clean 
+	debconf-updatepo
 
-.PHONY: default
-default:
-	@echo "Specify a target:"; \
-	echo " build              compile the package"; \
-	echo " build-arch         compile the architecture-dependent package"; \
-	echo " build-indep        compile the architecture-independent package"; \
-	echo " binary             make all binary packages"; \
-	echo " binary-arch        make all architecture-dependent binary packages"; \
-	echo " binary-indep       make all architecture-independent binary packages"; \
-	echo " clean              clean up the source package"; \
-	echo; \
-	echo " clean-install-tree clean up only under debian/"; \
-	echo
+install: build
+	dh_testdir
+	dh_testroot
+	dh_clean -k 
+	dh_installdirs
+	dh_install
+	find debian/phpmyadmin -name .svn | xargs -r rm -r
+	rm debian/phpmyadmin/usr/share/phpmyadmin/libraries/tcpdf/font/LICENSE \
+		debian/phpmyadmin/usr/share/phpmyadmin/libraries/tcpdf/LICENSE
+	perl -pi -e "s/'([0-9a-z.]+)'/'\\1deb$(REVISION)'/ if /set..PMA_VERSION/" \
+		debian/phpmyadmin/usr/share/phpmyadmin/libraries/Config.class.php
 
-# Build the package and prepare the install tree
+# Build architecture-independent files here.
+binary-indep: build install
+	dh_testdir
+	dh_testroot
+	dh_installchangelogs ChangeLog
+	dh_installdocs
+	dh_installexamples
+	dh_installdebconf	
+	dh_link
+	dh_compress
+	dh_fixperms
+	dh_installdeb
+	dh_gencontrol
+	dh_md5sums
+	dh_builddeb
 
-.PHONY: build-only build
-build-only: debian/build-stamp
-build: build-only
+# Build architecture-dependent files here.
+binary-arch:
 
-.PHONY: build-arch-only build-arch
-build-arch-only: debian/build-arch-stamp
-build-arch: build-arch-only
-
-.PHONY: build-indep-only build-indep
-build-indep-only: debian/build-indep-stamp
-build-indep: build-indep-only
-
-# Make sure these rules and the control file are up-to-date
-
-.PHONY: rules control templates
-rules: debian/rules
-debian/rules: $(shell which yada) debian/packages-tmp
-	yada rebuild rules
-
-control: debian/control
-debian/control: $(shell which yada) debian/packages-tmp
-	yada rebuild control
-
-templates: debian/templates debian/po/POTFILES.in
-debian/templates: $(shell which yada) debian/packages-tmp
-	yada rebuild templates
-debian/po/POTFILES.in: $(shell which yada) debian/packages-tmp
-	yada rebuild templates
-
-debian/build-stamp: debian/build-arch-stamp debian/build-indep-stamp
-	@[ -f $(shell which yada) -a -f debian/rules ]
-	yada patch "debian/patches/*.patch"
-	touch debian/build-stamp
-
-debian/build-arch-stamp:
-	@[ -f $(shell which yada) -a -f debian/rules ]
-	yada patch "debian/patches/*.patch"
-	touch debian/build-arch-stamp
-
-debian/build-indep-stamp: debian/build-arch-stamp
-	@[ -f $(shell which yada) -a -f debian/rules ]
-	yada patch "debian/patches/*.patch"
-	touch debian/build-indep-stamp
-
-.PHONY: install-tree
-install-tree: install-tree-any
-install-tree-any: \
-	debian/tmp-phpmyadmin/DEBIAN/control
-
-debian/tmp-phpmyadmin/DEBIAN/control: debian/build-indep-stamp debian/control
-	rm -rf debian/tmp-phpmyadmin
-	umask 022 && install -d debian/tmp-phpmyadmin/DEBIAN
-	install -d debian/tmp-phpmyadmin/usr/share/doc/phpmyadmin
-	umask 022; yada generate copyright \
-	  > debian/tmp-phpmyadmin/usr/share/doc/phpmyadmin/copyright
-	install -m 644 -p debian/changelog \
-	  debian/tmp-phpmyadmin/usr/share/doc/phpmyadmin/changelog.Debian
-	@umask 022 \
-	  && export pwd="$$(pwd)" \
-	  && export ROOT="$$(pwd)/debian/tmp-phpmyadmin" \
-	  && export TMPROOT="$$(pwd)/debian/tmp" \
-	  && export CONTROL="$$(pwd)/debian/tmp-phpmyadmin/DEBIAN" \
-	  && export PACKAGE="phpmyadmin" \
-	  && export SOURCE="phpmyadmin" \
-	  && export VERSION="$(VERSION)" \
-	  && export DEB_HOST_GNU_CPU="$(DEB_HOST_GNU_CPU)" \
-	  && export DEB_HOST_GNU_TYPE="$(DEB_HOST_GNU_TYPE)" \
-	  && export DEB_HOST_GNU_SYSTEM="$(DEB_HOST_GNU_SYSTEM)" \
-	  && export DEB_BUILD_GNU_CPU="$(DEB_BUILD_GNU_CPU)" \
-	  && export DEB_BUILD_GNU_TYPE="$(DEB_BUILD_GNU_TYPE)" \
-	  && export DEB_BUILD_GNU_SYSTEM="$(DEB_BUILD_GNU_SYSTEM)" && (\
-	echo -E 'eval "yada () { perl $$(which yada) \"\$$@\"; }"; set -e; set -v';\
-	echo -E 'yada install -data -into /usr/share/phpmyadmin *.php *.css';\
-	echo -E 'yada install -data -into /usr/share/phpmyadmin/scripts scripts/setup.php';\
-	echo -E 'yada copy -data -into /usr/share/phpmyadmin css js lang libraries themes';\
-	echo -E 'yada remove -data -into /usr/share/phpmyadmin/lang *.sh';\
-	echo -E 'yada remove -data -into /usr/share/phpmyadmin/libraries/fpdf README';\
-	echo -E 'yada remove -data -into /usr/share/phpmyadmin/libraries/transformations *.sh README TEMPLATE*';\
-	echo -E 'yada install -data -into /usr/share/phpmyadmin Documentation.html translators.html';\
-	echo -E 'yada install -data -into /usr/share/phpmyadmin ChangeLog INSTALL README';\
-	echo -E 'yada install -dir /var/lib/phpmyadmin';\
-	echo -E 'yada symlink -data -into /usr/share/phpmyadmin/config /var/lib/phpmyadmin/config.inc.php';\
-	echo -E 'yada install -dir /etc/phpmyadmin';\
-	echo -E 'yada install -conf -ucf -subdir phpmyadmin debian/conf/config.inc.php';\
-	echo -E 'yada install -conf -ucf -subdir phpmyadmin debian/conf/config.header.inc.php';\
-	echo -E 'yada install -conf -ucf -subdir phpmyadmin debian/conf/config.footer.inc.php';\
-	echo -E 'yada install -conf -ucf -subdir phpmyadmin debian/conf/htaccess';\
-	echo -E 'yada install -conf -ucf -subdir phpmyadmin debian/conf/apache.conf';\
-	echo -E 'yada symlink -into /usr/share/phpmyadmin -as .htaccess /etc/phpmyadmin/htaccess';\
-	echo -E 'yada install -into /usr/share/phpmyadmin debian/src/config.inc.php';\
-	echo -E 'yada install -into /usr/share/phpmyadmin debian/src/config.header.inc.php';\
-	echo -E 'yada install -into /usr/share/phpmyadmin debian/src/config.footer.inc.php';\
-	echo -E 'yada install -dir /var/www';\
-	echo -E '';\
-	echo -E 'perl -pi -e "s/'\''([0-9a-z.]+)'\''/'\''\$$1-Debian-$${VERSION##*-}'\''/ if /set..PMA_VERSION/" $$ROOT/usr/share/phpmyadmin/libraries/Config.class.php';\
-	echo -E '';\
-	echo -E 'yada install -doc README TODO CREDITS';\
-	echo -E 'yada install -doc Documentation.html translators.html';\
-	echo -E 'yada install -doc -as changelog ChangeLog';\
-	echo -E 'yada install -doc -as README.Debian debian/README';\
-	echo -E 'yada install -doc -as NEWS.Debian -gzip debian/NEWS';\
-	echo -E 'yada install -doc -as NEWS debian/NEWS.upstream';\
-	echo -E 'yada install -doc -subdir examples libraries/config.default.php';\
-	echo -E 'yada install -doc -subdir scripts scripts/*';\
-	echo -E 'yada remove -doc -subdir scripts setup.php') | /bin/sh
-	@umask 022 \
-	  && export pwd="$$(pwd)" \
-	  && export ROOT="$$(pwd)/debian/tmp-phpmyadmin" \
-	  && export TMPROOT="$$(pwd)/debian/tmp" \
-	  && export CONTROL="$$(pwd)/debian/tmp-phpmyadmin/DEBIAN" \
-	  && export PACKAGE="phpmyadmin" \
-	  && export SOURCE="phpmyadmin" \
-	  && export VERSION="$(VERSION)" && (\
-	echo -E 'eval "yada () { perl $$(which yada) \"\$$@\"; }"; set -e; set -v';\
-	echo -E 'yada perl';\
-	echo -E 'yada python';\
-	echo -E 'yada strip';\
-	echo -E 'yada shlibdeps') | /bin/sh
-	yada compress phpmyadmin
-	yada generate maintscripts phpmyadmin
-	find debian/tmp-phpmyadmin -type f -print \
-	  | sed -n 's/^debian\/tmp-phpmyadmin\(\/etc\/.*\)$$/\1/p' \
-	  > debian/tmp-phpmyadmin/DEBIAN/conffiles
-	test -s debian/tmp-phpmyadmin/DEBIAN/conffiles || rm -f debian/tmp-phpmyadmin/DEBIAN/conffiles
-	yada rebuild control
-	yada generate substvars phpmyadmin
-	umask 022 && dpkg-gencontrol -isp -pphpmyadmin -Pdebian/tmp-phpmyadmin
-
-# Build package files
-
-.PHONY: binary binary-arch binary-indep
-binary: binary-arch binary-indep
-binary-arch: binary-arch-any
-
-.PHONY: binary-arch-any
-binary-arch-any:
-binary-indep: \
-	binary-package-phpmyadmin
-
-.PHONY: binary-package-phpmyadmin
-binary-package-phpmyadmin: check-root debian/tmp-phpmyadmin/DEBIAN/control
-	@[ -f $(shell which yada) -a -f debian/rules ]
-	chown -R 0.0 debian/tmp-phpmyadmin
-	chmod -R u=rwX,go=rX debian/tmp-phpmyadmin
-	@if [ -d debian/tmp-phpmyadmin/usr/doc/phpmyadmin ]; then \
-	  echo "*** Yada warning: /usr/doc/phpmyadmin should be /usr/share/doc/phpmyadmin";\
-	fi
-	dpkg-deb --build debian/tmp-phpmyadmin ..
-
-.PHONY: check-root
-check-root:
-	@[ `id -u` = 0 ] || (echo "You must be root to do this!"; false)
-
-debian/packages-tmp: debian/packages 
-	yada rebuild packages
-
-## Clean up afterwards
-
-.PHONY: clean clean-install-tree clean-build
-
-clean: clean-install-tree clean-build debian/control debian/rules
-	rm -f debian/packages-tmp debian/packages-tmp-new debian/packages-tmp-include
-
-clean-build:
-	@[ -f $(shell which yada) -a -f debian/rules ]
-	rm -f debian/build-stamp debian/build-arch-stamp debian/build-indep-stamp
-	yada unpatch
-	rm -rf debian/tmp
-
-clean-install-tree: debian/rules
-	@[ -f $(shell which yada) -a -f debian/rules ]
-	rm -f debian/install-tree-stamp
-	rm -rf debian/tmp-* debian/files* debian/substvars debian/shlibs.local debian/ucf
+binary: binary-indep binary-arch
+.PHONY: build clean binary-indep binary-arch binary install

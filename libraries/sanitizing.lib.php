@@ -1,11 +1,16 @@
 <?php
-/* $Id: sanitizing.lib.php 7802 2005-11-17 13:12:58Z cybot_tm $ */
-// vim: expandtab sw=4 ts=4 sts=4:
+/* vim: set expandtab sw=4 ts=4 sts=4: */
+/**
+ *
+ * @version $Id: sanitizing.lib.php 10300 2007-04-17 17:15:37Z lem9 $
+ */
 
 /**
  * Sanitizes $message, taking into account our special codes
  * for formatting
  *
+ * @uses    preg_replace()
+ * @uses    strtr()
  * @param   string   the message
  *
  * @return  string   the sanitized message
@@ -33,8 +38,33 @@ function PMA_sanitize($message)
         '[/kbd]'    => '</kbd>',
         '[br]'      => '<br />',
         '[/a]'      => '</a>',
+        '[sup]'      => '<sup>',
+        '[/sup]'      => '</sup>',
     );
-    return preg_replace('/\[a@([^"@]*)@([^]"]*)\]/', '<a href="\1" target="\2">', strtr($message, $replace_pairs));
-}
+    $message = strtr($message, $replace_pairs);
 
+    $pattern = '/\[a@([^"@]*)@([^]"]*)\]/';
+
+    if (preg_match_all($pattern, $message, $founds, PREG_SET_ORDER)) {
+        $valid_links = array(
+            'http',  // default http:// links (and https://)
+            './Do',  // ./Documentation
+        );
+
+        foreach ($founds as $found) {
+            // only http... and ./Do... allowed
+            if (! in_array(substr($found[1], 0, 4), $valid_links)) {
+                return $message;
+            }
+            // a-z and _ allowed in target
+            if (! empty($found[2]) && preg_match('/[^a-z_]+/i', $found[2])) {
+                return $message;
+            }
+        }
+
+        $message = preg_replace($pattern, '<a href="\1" target="\2">', $message);
+    }
+
+    return $message;
+}
 ?>

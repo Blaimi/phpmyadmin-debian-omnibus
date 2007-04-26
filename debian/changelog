@@ -1,3 +1,12 @@
+phpmyadmin (4:2.10.1-1) unstable; urgency=high
+
+  * New upstream release.
+    - Security fix: PMASA-2007-4: Cross Site Scripting.
+  * Warn about obsolete /var/www/phpmyadmin symlink.
+  * Install translators.html as documentation for proper crediting.
+
+ -- Thijs Kinkhorst <thijs@debian.org>  Thu, 26 Apr 2007 11:17:13 +0200
+
 phpmyadmin (4:2.10.0.2-1) unstable; urgency=low
 
   * Repackage using debhelper instead of yada (Closes: #417018).
@@ -9,6 +18,7 @@ phpmyadmin (4:2.10.0.2-1) unstable; urgency=low
     - Fixes sessions for non-file-based handlers (Closes: #419484).
     - Has configurable signout link (Closes: #257975).
     - Addresses CVE-2007-1325 (workaround for PHP vulnerability).
+    - Addresses CVE-2007-1395 (incomplete blacklist).
 
  -- Thijs Kinkhorst <thijs@debian.org>  Sat, 21 Apr 2007 14:52:09 +0200
 
@@ -37,6 +47,7 @@ phpmyadmin (4:2.9.1.1-1) unstable; urgency=high
 
   * New upstream release.
     - Addresses several security issues (Closes: #399329).
+      [CVE-2006-6944, CVE-2006-6942]
 
   * In Depends, explicitly prefer the apache2/apache PHP module, to make
     sure the correct one is selected upon installation.
@@ -134,6 +145,7 @@ phpmyadmin (4:2.8.1-1) unstable; urgency=medium
     See: http://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2006-2031
     [CVE-2006-2031, CVE-2006-2417, CVE-2006-2418]
     Closes: #363519, #368082.
+  * Security fix: XSS with IE 6 [CVE-2007-0341].
   * Updated Portuguese debconf templates translation, thanks Miguel Figueiredo.
     Closes: #363597.
   * Updated Russian debconf templates translation, thanks Yuriy Talakan.

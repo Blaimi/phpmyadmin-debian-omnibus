@@ -68,6 +68,18 @@ if [ "$1" = "configure" ] && [ "$2" = "" ]; then
 
 fi
 
+# warn about old pre-lenny symlink. Remove post-lenny.
+if [ "$1" = "configure" ] && dpkg --compare-versions "$2" lt-nl "4:2.10.1-1" \
+	&& [ -L /var/www/phpmyadmin ] \
+	&& [ `readlink -n /var/www/phpmyadmin` = "/usr/share/phpmyadmin" ]; then
+    echo "You have a symlink /var/www/phpmyadmin still present. This was needed "
+    echo "in older versions of the phpMyAdmin package to make it web-accessible. "
+    echo "It can now be removed because the package is configured directly "
+    echo "within the webserver."
+    echo
+fi
+
+
 
 #DEBHELPER#
 

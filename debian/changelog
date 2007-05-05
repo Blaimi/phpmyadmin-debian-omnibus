@@ -1,3 +1,29 @@
+phpmyadmin (4:2.10.1-2) unstable; urgency=low
+
+  * Make sure webserver configuration question is always asked
+    on install and reconfigure (Closes: #421535).
+  * Add example configuration for many identically configured
+    hosts, thanks to Matthew Hawkins (Closes: #285727).
+  * Tweak debconf translations for guidelines.
+
+  [ Translations ]
+  * Dutch by self.
+  * Norwegian by Bjørn Steensrud.
+  * Swedish by Daniel Nylander (Closes: #421083).
+  * Galician by Jacobo Tarrio (Closes: #421086).
+  * Portuguese by Miguel Figueiredo (Closes: #421259).
+  * Basque by Piarres Beobide (Closes: #421223).
+  * Italian by Luca Monducci (Closes: #421475).
+  * Czech by Miroslav Kure (Closes: #421486).
+  * Arabic by Ossama Khayat (Closes: #421754).
+  * Polish by Piotr Roszatycki.
+  * Russian by Yuriy Talakan' (Closes: #422042).
+  * Spanish by Nacho Barrientos Arias (Closes: #422136).
+  * Japanese by Hideki Yamane (Closes: #422268).
+  * Brazilian Portuguese by Eder L. Marques (Closes: #422282).
+
+ -- Thijs Kinkhorst <thijs@debian.org>  Sat, 05 May 2007 17:28:20 +0200
+
 phpmyadmin (4:2.10.1-1) unstable; urgency=high
 
   * New upstream release.

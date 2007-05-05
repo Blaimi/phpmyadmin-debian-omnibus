@@ -1,13 +1,13 @@
 # Portuguese translation of phpMyAdmin's debconf messages.
-# Miguel Figueiredo <elmig@debianpt.org>, 2005, 2006
+# Miguel Figueiredo <elmig@debianpt.org>, 2005, 2006, 2007
 #
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: phpmyadmin 4:2.6.4-pl3-1\n"
 "Report-Msgid-Bugs-To: thijs@debian.org\n"
-"POT-Creation-Date: 2007-04-21 15:44+0200\n"
-"PO-Revision-Date: 2006-04-19 23:35+0000\n"
+"POT-Creation-Date: 2007-04-26 11:48+0200\n"
+"PO-Revision-Date: 2007-04-27 13:45+0100\n"
 "Last-Translator: Miguel Figueiredo <elmig@debianpt.org>\n"
 "Language-Team: Portuguese <traduz.org>\n"
 "MIME-Version: 1.0\n"
@@ -17,8 +17,8 @@ msgstr ""
 #. Type: multiselect
 #. Description
 #: ../templates:1001
-msgid "Which web server would you like to reconfigure automatically?"
-msgstr "Qual o servidor web que deseja reconfigurar automaticamente?"
+msgid "Web server to reconfigure automatically:"
+msgstr "Servidor web a reconfigurar automaticamente:"
 
 #. Type: multiselect
 #. Description
@@ -44,9 +44,9 @@ msgstr "Nome do utilizador para o sistema de configuração web:"
 msgid ""
 "phpMyAdmin comes with a setup script that can help you with creating a "
 "configuration. The script is located at http://localhost/phpmyadmin/scripts/"
-"setup.php . For security reasons it requires authorization."
+"setup.php. For security reasons it requires authorization."
 msgstr ""
-"O phpMyAdmin vem com um script de configuração que pode ajuda-lo com a "
+"O phpMyAdmin vem com um script de configuração que pode ajudá-lo com a "
 "criação da configuração. O script está localizado em http://localhost/"
 "phpmyadmin/scripts/setup.php . Por razões de segurança necessita de "
 "autorização."
@@ -68,7 +68,7 @@ msgstr "Password para o sistema de configuração web:"
 #: ../templates:3001
 msgid ""
 "You can manage the usernames and passwords with the `htpasswd' command. They "
-"are stored in /etc/phpmyadmin/htpasswd.setup file."
+"are stored in the file /etc/phpmyadmin/htpasswd.setup"
 msgstr ""
 "Você pode gerir os utilizadores e passwords com o comando `htpasswd'. Estas "
 "estão guardadas no ficheiro /etc/phpmyadmin/htpasswd.setup."

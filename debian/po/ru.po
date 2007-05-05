@@ -1,4 +1,5 @@
-# translation of phpmyadmin_4:2.8.0.3-1_ru.po to Russian
+# translation of phpmyadmin_ru.po to Russian
+# translation of phpmyadmin to Russian
 #
 #    Translators, if you are not familiar with the PO format, gettext
 #    documentation is worth reading, especially sections dedicated to
@@ -11,26 +12,29 @@
 #         or http://www.debian.org/intl/l10n/po-debconf/README-trans
 #
 #    Developers do not need to manually edit POT or PO files.
+# Sergey Alyoshin, 2007
 # Yuriy Talakan' <yt@amur.elektra.ru>, 2006.
+# Yuriy Talakan' <yt@drsk.ru>, 2007.
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: phpmyadmin_4:2.8.0.3-1_ru\n"
+"Project-Id-Version: phpmyadmin_ru\n"
 "Report-Msgid-Bugs-To: thijs@debian.org\n"
-"POT-Creation-Date: 2007-04-21 15:44+0200\n"
-"PO-Revision-Date: 2006-05-14 14:39+1000\n"
-"Last-Translator: Yuriy Talakan' <yt@amur.elektra.ru>\n"
+"POT-Creation-Date: 2007-04-26 11:48+0200\n"
+"PO-Revision-Date: 2007-05-03 16:37+1000\n"
+"Last-Translator: Yuriy Talakan' <yt@drsk.ru>\n"
 "Language-Team: Russian <debian-l10n-russian@lists.debian.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: KBabel 1.9.1\n"
+"Plural-Forms:  nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
 
 #. Type: multiselect
 #. Description
 #: ../templates:1001
-msgid "Which web server would you like to reconfigure automatically?"
-msgstr "Какой из веб-серверов Вы хотите перенастроить автоматически?"
+msgid "Web server to reconfigure automatically:"
+msgstr "Веб-сервер для автоматической перенастройки:"
 
 #. Type: multiselect
 #. Description
@@ -46,7 +50,7 @@ msgstr ""
 #. Description
 #: ../templates:2001
 msgid "User name for web-based setup system:"
-msgstr "Имя пользователя для системы web-установки:"
+msgstr "Имя пользователя для системы веб-установки:"
 
 #. Type: string
 #. Description
@@ -56,7 +60,7 @@ msgstr "Имя пользователя для системы web-установ
 msgid ""
 "phpMyAdmin comes with a setup script that can help you with creating a "
 "configuration. The script is located at http://localhost/phpmyadmin/scripts/"
-"setup.php . For security reasons it requires authorization."
+"setup.php. For security reasons it requires authorization."
 msgstr ""
 "phpMyAdmin поставляется со скриптом установки, который поможет вам в "
 "настройке. Скрипт расположен по адресу http://localhost/phpmyadmin/scripts/"
@@ -66,20 +70,20 @@ msgstr ""
 #. Description
 #: ../templates:2001
 msgid "Leave empty if you want to use the default user name 'admin'."
-msgstr "Оставьте пустым, если хотите использовать по умолчанию имя 'admin'."
+msgstr "Оставьте пустым, если хотите использовать по умолчанию имя `admin'."
 
 #. Type: password
 #. Description
 #: ../templates:3001
 msgid "Password for web-based setup system:"
-msgstr "Пароль для системы web-установки:"
+msgstr "Пароль для системы веб-установки:"
 
 #. Type: password
 #. Description
 #: ../templates:3001
 msgid ""
 "You can manage the usernames and passwords with the `htpasswd' command. They "
-"are stored in /etc/phpmyadmin/htpasswd.setup file."
+"are stored in the file /etc/phpmyadmin/htpasswd.setup"
 msgstr ""
 "Вы можете управлять именами и паролями пользователей с помощью команды "
 "`htpasswd'. Они хранятся в файле /etc/phpmyadmin/htpasswd.setup"
@@ -88,16 +92,5 @@ msgstr ""
 #. Description
 #: ../templates:3001
 msgid "Leave empty if you want to disable access to the web-based setup."
-msgstr "Оставьте пустым, если хотите запретить доступ к web-установке."
+msgstr "Оставьте пустым, если хотите запретить доступ к веб-установке."
 
-#~ msgid "Do you want me to restart ${webserver} now?"
-#~ msgstr "Хотите перезапустить ${webserver} прямо сейчас?"
-
-#~ msgid ""
-#~ "Remember that in order to activate the new configuration ${webserver} has "
-#~ "to be restarted. You can also restart ${webserver} by manually executing /"
-#~ "etc/init.d/${webserver} restart"
-#~ msgstr ""
-#~ "Помните, что для активизации новой настройки ${webserver} должен быть "
-#~ "перезапущен. Вы можете перезапустить ${webserver} вручную командой /etc/"
-#~ "init.d/${webserver} restart"

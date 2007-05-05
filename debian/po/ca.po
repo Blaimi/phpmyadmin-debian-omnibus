@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: phpmyadmin_2.5.5-pl1-1_templates\n"
 "Report-Msgid-Bugs-To: thijs@debian.org\n"
-"POT-Creation-Date: 2007-04-21 15:44+0200\n"
+"POT-Creation-Date: 2007-04-26 11:48+0200\n"
 "PO-Revision-Date: 2004-01-31 19:57GMT\n"
 "Last-Translator: Aleix Badia i Bosch <abadia@ica.es>\n"
 "Language-Team: Debian L10n Catalan <debian-l10n-catalan@lists.debian.org>\n"
@@ -18,7 +18,8 @@ msgstr ""
 #. Type: multiselect
 #. Description
 #: ../templates:1001
-msgid "Which web server would you like to reconfigure automatically?"
+#, fuzzy
+msgid "Web server to reconfigure automatically:"
 msgstr "Quin servidor de web voldríeu reconfigurar automàticament?"
 
 #. Type: multiselect
@@ -45,7 +46,7 @@ msgstr ""
 msgid ""
 "phpMyAdmin comes with a setup script that can help you with creating a "
 "configuration. The script is located at http://localhost/phpmyadmin/scripts/"
-"setup.php . For security reasons it requires authorization."
+"setup.php. For security reasons it requires authorization."
 msgstr ""
 
 #. Type: string
@@ -65,7 +66,7 @@ msgstr ""
 #: ../templates:3001
 msgid ""
 "You can manage the usernames and passwords with the `htpasswd' command. They "
-"are stored in /etc/phpmyadmin/htpasswd.setup file."
+"are stored in the file /etc/phpmyadmin/htpasswd.setup"
 msgstr ""
 
 #. Type: password

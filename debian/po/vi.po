@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: phpmyadmin 4/2.6.2-3\n"
 "Report-Msgid-Bugs-To: thijs@debian.org\n"
-"POT-Creation-Date: 2007-04-21 15:44+0200\n"
+"POT-Creation-Date: 2007-04-26 11:48+0200\n"
 "PO-Revision-Date: 2006-03-29 17:25+1030\n"
 "Last-Translator: Clytie Siddall <clytie@riverland.net.au>\n"
 "Language-Team: Vietnamese <gnomevi-list@lists.sourceforge.net>\n"
@@ -19,7 +19,8 @@ msgstr ""
 #. Type: multiselect
 #. Description
 #: ../templates:1001
-msgid "Which web server would you like to reconfigure automatically?"
+#, fuzzy
+msgid "Web server to reconfigure automatically:"
 msgstr "Bạn muốn tự động cấu hình lại máy phục vụ Mạng nào?"
 
 #. Type: multiselect
@@ -46,7 +47,7 @@ msgstr "Tên người dùng cho hệ thống thiết lập đựa vào Mạng:"
 msgid ""
 "phpMyAdmin comes with a setup script that can help you with creating a "
 "configuration. The script is located at http://localhost/phpmyadmin/scripts/"
-"setup.php . For security reasons it requires authorization."
+"setup.php. For security reasons it requires authorization."
 msgstr ""
 "Phần mềm phpMyAdmin có sẵn một tập lệnh thiết lập để hướng dẫn bạn tạo cấu "
 "hình. Tập lệnh này nằm ở <http://localhost/phpmyadmin/scripts/setup.php>. Vì "
@@ -71,7 +72,7 @@ msgstr "Mật khẩu cho hệ thống thiết lập đựa vào Mạng:"
 #: ../templates:3001
 msgid ""
 "You can manage the usernames and passwords with the `htpasswd' command. They "
-"are stored in /etc/phpmyadmin/htpasswd.setup file."
+"are stored in the file /etc/phpmyadmin/htpasswd.setup"
 msgstr ""
 "Bạn có thể quản lý các tên người dùng và mật khẩu bằng lệnh « htpasswd ». "
 "Chúng được cất giữ trong tập tin </etc/phpmyadmin/htpasswd.setup>."

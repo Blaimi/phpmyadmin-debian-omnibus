@@ -17,7 +17,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fr\n"
 "Report-Msgid-Bugs-To: thijs@debian.org\n"
-"POT-Creation-Date: 2007-04-21 15:44+0200\n"
+"POT-Creation-Date: 2007-04-26 11:48+0200\n"
 "PO-Revision-Date: 2006-03-19 08:02+0100\n"
 "Last-Translator: Christian Perrier <bubulle@debian.org>\n"
 "Language-Team: French <debian-l10n-french@lists.debian.org>\n"
@@ -29,7 +29,8 @@ msgstr ""
 #. Type: multiselect
 #. Description
 #: ../templates:1001
-msgid "Which web server would you like to reconfigure automatically?"
+#, fuzzy
+msgid "Web server to reconfigure automatically:"
 msgstr "Serveur web à reconfigurer automatiquement :"
 
 #. Type: multiselect
@@ -56,7 +57,7 @@ msgstr "Identifiant pour la configuration par le web :"
 msgid ""
 "phpMyAdmin comes with a setup script that can help you with creating a "
 "configuration. The script is located at http://localhost/phpmyadmin/scripts/"
-"setup.php . For security reasons it requires authorization."
+"setup.php. For security reasons it requires authorization."
 msgstr ""
 "PhpMyAdmin est fourni avec un script d'assistance à la configuration. Ce "
 "script peut être accédé à l'adresse « http://localhost/phpmyadmin/scripts/"
@@ -79,7 +80,7 @@ msgstr "Mot de passe pour la configuration par le web :"
 #: ../templates:3001
 msgid ""
 "You can manage the usernames and passwords with the `htpasswd' command. They "
-"are stored in /etc/phpmyadmin/htpasswd.setup file."
+"are stored in the file /etc/phpmyadmin/htpasswd.setup"
 msgstr ""
 "Les identifiants et mots de passe peuvent être gérés avec la commande "
 "« htpasswd ». Ils sont conservés dans le fichier « /etc/phpmyadmin/htpasswd."

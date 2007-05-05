@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: phpmyadmin-eu\n"
 "Report-Msgid-Bugs-To: thijs@debian.org\n"
-"POT-Creation-Date: 2007-04-21 15:44+0200\n"
+"POT-Creation-Date: 2007-04-26 11:48+0200\n"
 "PO-Revision-Date: 2006-10-11 16:32+0200\n"
 "Last-Translator: Piarres Beobide <pi@beobide.net>\n"
 "Language-Team: librezale <librezale@librezale.org>\n"
@@ -20,8 +20,8 @@ msgstr ""
 #. Type: multiselect
 #. Description
 #: ../templates:1001
-msgid "Which web server would you like to reconfigure automatically?"
-msgstr "Zein web zerbitzari konfiguratu behar da automatikoki?"
+msgid "Web server to reconfigure automatically:"
+msgstr "Automatikoki birkonfigruatu behar den web zerbitzaria:"
 
 #. Type: multiselect
 #. Description
@@ -47,7 +47,7 @@ msgstr "Web bidezko konfigurazio sistemaren erabiltzaile izena:"
 msgid ""
 "phpMyAdmin comes with a setup script that can help you with creating a "
 "configuration. The script is located at http://localhost/phpmyadmin/scripts/"
-"setup.php . For security reasons it requires authorization."
+"setup.php. For security reasons it requires authorization."
 msgstr ""
 "phpMyAdmin konfigurazioa sortzen lagun dezaken  script bat dakar. Script hau "
 "http://localhost/phpmyadmin/scripts/setup.php -en kokaturik dago. Segurtasun "
@@ -70,7 +70,7 @@ msgstr "Web bidezko konfigurazio sistemaren pasahitza:"
 #: ../templates:3001
 msgid ""
 "You can manage the usernames and passwords with the `htpasswd' command. They "
-"are stored in /etc/phpmyadmin/htpasswd.setup file."
+"are stored in the file /etc/phpmyadmin/htpasswd.setup"
 msgstr ""
 "Erabiltzaile izen eta pasahitzak `htpasswd' komandoaz kudea daitezke. /etc/"
 "phpmyadmin/htpasswd.setup fitxategian gordetzen dira."

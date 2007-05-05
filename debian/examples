@@ -1,3 +1,4 @@
 config.sample.inc.php
 scripts/signon.php
 scripts/create_tables.sql
+debian/contrib/config.manyhosts.inc.php

@@ -1,25 +1,25 @@
 # Italian (it) translation of debconf templates for phpmyadmin
 # Copyright (C) 2006 Software in the Public Interest
 # This file is distributed under the same license as the phpmyadmin package.
-# Luca Monducci <luca.mo@tiscali.it>, 2006.
+# Luca Monducci <luca.mo@tiscali.it>, 2006, 2007.
 # 
 msgid ""
 msgstr ""
-"Project-Id-Version: phpmyadmin 2.8.2 italian debconf templates\n"
+"Project-Id-Version: phpmyadmin 2.10.1 italian debconf templates\n"
 "Report-Msgid-Bugs-To: thijs@debian.org\n"
-"POT-Creation-Date: 2007-04-21 15:44+0200\n"
-"PO-Revision-Date: 2006-08-08 20:50+0100\n"
+"POT-Creation-Date: 2007-04-26 11:48+0200\n"
+"PO-Revision-Date: 2007-04-29 10:12+0200\n"
 "Last-Translator: Luca Monducci <luca.mo@tiscali.it>\n"
-"Language-Team: Italian <tp@lists.linux.it>\n"
+"Language-Team: Italian <debian-l10n-italian@lists.debian.org>\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=ISO-8859-1\n"
+"Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
 #. Type: multiselect
 #. Description
 #: ../templates:1001
-msgid "Which web server would you like to reconfigure automatically?"
-msgstr "Quale server web si vuole riconfigurare automaticamente?"
+msgid "Web server to reconfigure automatically:"
+msgstr "Server web da riconfigurare automaticamente:"
 
 #. Type: multiselect
 #. Description
@@ -28,8 +28,8 @@ msgid ""
 "phpMyAdmin supports any web server that PHP does, but this automatic "
 "configuration process only supports Apache."
 msgstr ""
-"phpMyAdmin può essere usare usato con qualsiasi server web che supporta PHP "
-"ma la configurazione automatica funziona solo con Apache."
+"phpMyAdmin puÃ² essere usato con qualsiasi server web che supporta PHP ma "
+"questo processo di configurazione automatica funziona solo con Apache."
 
 #. Type: string
 #. Description
@@ -45,12 +45,11 @@ msgstr "Nome utente per il sistema di configurazione via web:"
 msgid ""
 "phpMyAdmin comes with a setup script that can help you with creating a "
 "configuration. The script is located at http://localhost/phpmyadmin/scripts/"
-"setup.php . For security reasons it requires authorization."
+"setup.php. For security reasons it requires authorization."
 msgstr ""
-"phpMyAdmin viene rilasciato con uno script che aiuta durante la creazione "
-"della configurazione. Lo script è raggiungibile da http://localhost/"
-"phpmyadmin/scripts/setup.php . Per motivi di sicurezza è necessaria "
-"l'autenticazione."
+"phpMyAdmin viene rilasciato con uno script che aiuta nella creazione della "
+"configurazione. Lo script Ã¨ raggiungibile da http://localhost/phpmyadmin/"
+"scripts/setup.php. Per motivi di sicurezza Ã¨ necessaria l'autenticazione."
 
 #. Type: string
 #. Description
@@ -69,26 +68,15 @@ msgstr "Password per il sistema di configurazione via web:"
 #: ../templates:3001
 msgid ""
 "You can manage the usernames and passwords with the `htpasswd' command. They "
-"are stored in /etc/phpmyadmin/htpasswd.setup file."
+"are stored in the file /etc/phpmyadmin/htpasswd.setup"
 msgstr ""
-"Utenti e password sono memorizzati nel file /etc/phpmyadmin/htpasswd.setup e "
-"possono essere gestiti con il comando \"htpasswd\"."
+"Utenti e password possono essere gestiti con il comando \"htpasswd\" e sono "
+"memorizzati nel file /etc/phpmyadmin/htpasswd.setup."
 
 #. Type: password
 #. Description
 #: ../templates:3001
 msgid "Leave empty if you want to disable access to the web-based setup."
 msgstr ""
-"Lasciare vuoto se si vuole usare diabilitare la configurazione via web."
-
-#~ msgid "Do you want me to restart ${webserver} now?"
-#~ msgstr "Si vuole riavviare ${webserver} adesso?"
-
-#~ msgid ""
-#~ "Remember that in order to activate the new configuration ${webserver} has "
-#~ "to be restarted. You can also restart ${webserver} by manually executing /"
-#~ "etc/init.d/${webserver} restart"
-#~ msgstr ""
-#~ "Per attivare la nuova configurazione è necessario riavviare ${webserver}. "
-#~ "Si può riavviare ${webserver} anche manualmente eseguendo \"/etc/init.d/"
-#~ "${webserver} restart\"."
+"Lasciare vuoto se si vuole disabilitare l'accesso alla configurazione via "
+"web."

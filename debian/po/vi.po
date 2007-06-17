@@ -1,27 +1,26 @@
 # Vietnamese translation for phpmyadmin.
-# Copyright © 2005 Free Software Foundation, Inc.
-# Clytie Siddall <clytie@riverland.net.au>, 2005.
+# Copyright © 2007 Free Software Foundation, Inc.
+# Clytie Siddall <clytie@riverland.net.au>, 2005-2007.
 # 
 msgid ""
 msgstr ""
-"Project-Id-Version: phpmyadmin 4/2.6.2-3\n"
+"Project-Id-Version: phpmyadmin 4:2.10.1-2\n"
 "Report-Msgid-Bugs-To: thijs@debian.org\n"
 "POT-Creation-Date: 2007-04-26 11:48+0200\n"
-"PO-Revision-Date: 2006-03-29 17:25+1030\n"
+"PO-Revision-Date: 2007-06-02 20:36+0930\n"
 "Last-Translator: Clytie Siddall <clytie@riverland.net.au>\n"
-"Language-Team: Vietnamese <gnomevi-list@lists.sourceforge.net>\n"
+"Language-Team: Vietnamese <vi-VN@googlegroups.com>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=1; plural=0\n"
-"X-Generator: LocFactoryEditor 1.6b36\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: LocFactoryEditor 1.6.3b1\n"
 
 #. Type: multiselect
 #. Description
 #: ../templates:1001
-#, fuzzy
 msgid "Web server to reconfigure automatically:"
-msgstr "Bạn muốn tự động cấu hình lại máy phục vụ Mạng nào?"
+msgstr "Trình phục vụ Mạng cần tự động cấu hình:"
 
 #. Type: multiselect
 #. Description
@@ -30,14 +29,14 @@ msgid ""
 "phpMyAdmin supports any web server that PHP does, but this automatic "
 "configuration process only supports Apache."
 msgstr ""
-"Trình phpMyAdmin có hỗ trợ cùng mọi trình phục vụ Mạng với PHP, nhưng mà "
-"tiến trình cấu hình tự động này hỗ trợ chỉ Apache thôi."
+"Trình phpMyAdmin có hỗ trợ cùng những trình phục vụ Mạng với PHP, nhưng mà "
+"tiến trình tự động cấu hình này chỉ hỗ trợ Apache."
 
 #. Type: string
 #. Description
 #: ../templates:2001
 msgid "User name for web-based setup system:"
-msgstr "Tên người dùng cho hệ thống thiết lập đựa vào Mạng:"
+msgstr "Tên người dùng cho hệ thống thiết lập dựa vào Mạng:"
 
 #. Type: string
 #. Description
@@ -49,23 +48,22 @@ msgid ""
 "configuration. The script is located at http://localhost/phpmyadmin/scripts/"
 "setup.php. For security reasons it requires authorization."
 msgstr ""
-"Phần mềm phpMyAdmin có sẵn một tập lệnh thiết lập để hướng dẫn bạn tạo cấu "
-"hình. Tập lệnh này nằm ở <http://localhost/phpmyadmin/scripts/setup.php>. Vì "
-"lý do bảo mật, bạn cần quyền quản trị để sử dụng nó."
+"Phần mềm phpMyAdmin có sẵn một văn lệnh thiết lập để hướng dẫn bạn tạo cấu "
+"hình. Văn lệnh này nằm ở <http://localhost/phpmyadmin/scripts/setup.php>. Vì "
+"lý do bảo mật, nó cần thiết xác thực."
 
 #. Type: string
 #. Description
 #: ../templates:2001
 msgid "Leave empty if you want to use the default user name 'admin'."
 msgstr ""
-"Hãy bỏ rỗng nếu bạn muốn sử dụng tên người dùng mặc định « admin » (quản "
-"trị)."
+"Bỏ rỗng nếu bạn muốn sử dụng tên người dùng mặc định « admin » (quản trị)."
 
 #. Type: password
 #. Description
 #: ../templates:3001
 msgid "Password for web-based setup system:"
-msgstr "Mật khẩu cho hệ thống thiết lập đựa vào Mạng:"
+msgstr "Mật khẩu cho hệ thống thiết lập dựa vào Mạng:"
 
 #. Type: password
 #. Description
@@ -74,16 +72,15 @@ msgid ""
 "You can manage the usernames and passwords with the `htpasswd' command. They "
 "are stored in the file /etc/phpmyadmin/htpasswd.setup"
 msgstr ""
-"Bạn có thể quản lý các tên người dùng và mật khẩu bằng lệnh « htpasswd ». "
-"Chúng được cất giữ trong tập tin </etc/phpmyadmin/htpasswd.setup>."
+"Bạn có khả năng quản lý các tên người dùng và mật khẩu bằng lệnh « htpasswd "
+"». Các mục này được cất giữ trong tập tin </etc/phpmyadmin/htpasswd.setup>."
 
 #. Type: password
 #. Description
 #: ../templates:3001
 msgid "Leave empty if you want to disable access to the web-based setup."
 msgstr ""
-"Hãy bỏ rỗng nếu bạn muốn vô hiệu hoá khả năng truy cập thiết lập đựa vào "
-"Mạng."
+"Bỏ rỗng nếu bạn muốn vô hiệu hoá khả năng truy cập thiết lập dựa vào Mạng."
 
 #~ msgid "Do you want me to restart ${webserver} now?"
 #~ msgstr ""

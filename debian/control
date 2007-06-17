@@ -1,5 +1,6 @@
 Source: phpmyadmin
 Maintainer: Thijs Kinkhorst <thijs@debian.org>
+Uploaders: Michal Čihař <nijel@debian.org>
 Section: web
 Priority: extra
 Standards-Version: 3.7.2

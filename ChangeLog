@@ -2,8 +2,22 @@
 phpMyAdmin - ChangeLog
 ----------------------
 
-$Id: ChangeLog 10440 2007-06-15 17:25:23Z lem9 $
-$HeadURL: https://svn.sourceforge.net/svnroot/phpmyadmin/branches/MAINT_2_10_2/phpMyAdmin/ChangeLog $
+$Id: ChangeLog 10510 2007-07-20 13:03:09Z lem9 $
+$HeadURL: https://phpmyadmin.svn.sourceforge.net/svnroot/phpmyadmin/branches/MAINT_2_10_3/phpMyAdmin/ChangeLog $
+
+2.10.3.0 (2007-07-20)
+
+- bug #1734285 Copy database with VIEWs
+- bug #1722502 DROP TABLE in export VIEW
+- bug #1729027 Sorting results of VIEW browsing
+- bug #1733012 Unwanted table alias in delete button
+- bug #1736405 Pretty printer and HTML line breaks
+- bug #1745257 Invalid DB name is still displayed
+- bug #1730367 Calendar "Go" has no effect
+- bug #1748633 Incorrect parameter validation for VIEWs
++ [lang] Russian revision, thanks to Victor Volkov and the users of
+  php-myadmin.ru
+- Do not try to delete an internal relation if we just deleted an InnoDB one
 
 2.10.2.0 (2007-06-15)
 

@@ -1,7 +1,7 @@
 *.php		usr/share/phpmyadmin
 *.ico		usr/share/phpmyadmin
+*.css		usr/share/phpmyadmin
 
-css		usr/share/phpmyadmin
 js		usr/share/phpmyadmin
 lang		usr/share/phpmyadmin
 libraries	usr/share/phpmyadmin

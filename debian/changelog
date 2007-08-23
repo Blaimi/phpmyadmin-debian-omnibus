@@ -1,3 +1,10 @@
+phpmyadmin (4:2.11.0-1) unstable; urgency=low
+
+  * New upstream release (Closes: #409286).
+  * Also install create/update pmadb example SQL files for MySQL 4.1+.
+
+ -- Thijs Kinkhorst <thijs@debian.org>  Thu, 23 Aug 2007 13:01:53 +0200
+
 phpmyadmin (4:2.10.3-1) unstable; urgency=low
 
   * New upstream bugfix release.

@@ -2,8 +2,107 @@
 phpMyAdmin - ChangeLog
 ----------------------
 
-$Id: ChangeLog 10510 2007-07-20 13:03:09Z lem9 $
-$HeadURL: https://phpmyadmin.svn.sourceforge.net/svnroot/phpmyadmin/branches/MAINT_2_10_3/phpMyAdmin/ChangeLog $
+$Id: ChangeLog 10576 2007-08-21 20:44:38Z lem9 $
+$HeadURL: https://phpmyadmin.svn.sourceforge.net/svnroot/phpmyadmin/trunk/phpMyAdmin/ChangeLog $
+
+2.11.0.0 (2007-08-21)
+
++ [import] support handling of DELIMITER to mimic mysql CLI, thanks to fb1
++ improved PHP 6 compatibility
+- bug #1674914 [structure] changing definition of a TIMESTAMP field
+- bug #1615530 [upload] added more specific error message if field upload fails
+- bug #1627210, #1083301, #1482401 [data] warning on duplicate indexes
+- bug #1668724 JavaScript focus login Opera
+- bug #1666657 [auth] Cookie password delete on timeout / inactivity
+- bug #1648802 different mysql library and server version
+- bug #1662976 [auth] Authentication fails when controluser/pass is set
+- bug #1643758 [import] Error #1264 importing NULL values in MySQL 5.0
+- bug #1523747 [innodb] make warning about row count more visible
+- bug #1676012 [auth] strip non-US-ASCII characters (RFC2616)
+- bug #1679440 Added FAQ entry about header errors under IIS caused by
+  an end-of-line character
+- [gui] avoid displaying a wide selector in server selection
+- bug #1614004 [relation] foreign key spanning multiple columns are
+  incorrectly displayed
+- bug #1681598 [interface] Edit next row
+- bug #1688053 [export] Wrong export of binary character fields
+- bug #1498281 [parser] Wrong primary key used for displaying results
+  with subquery
+- bug #1699772 Visual space bug in table name (in browser)
+- bug #1699532 Cause of data manipulation issues: implemented changes
+  as suggested by crisp_; still have to work on updating an ENUM value
++ [core] added PMA_fatalError() and made use of it
+. [core] added PMA_isValid() and PMA_ifSetOr() for variable handling
+. [i18n] use generic $strOptions
+. [core] get rid of $propicon
+. [core] globalized variables to be includable inside function in
+  libraries/select_lang.lib.php
++ [doc] changed all documentation in config.inc.php to phpDocumentor style
++ [data] support for CREATE VIEW from query results
++ [gui] dropped css/ folder and moved into root of PMA
++ [l10n] new: Sinhala, Macedonian
++ [export] YAML export (see yaml.org), thanks to Bryce Thornton
++ [upload] moved file upload functionality into own class
++ [upload] make use of $cfg['TempDir'] for file uploads
++ [server] improved display of binary logs
++ [data] better error handling in tbl_create.php
++ [routines] from Patch #1649881, thanks to Mike Beck
++ [querywindow] store sql history in session
++ [querywindow] sql history now without db too
++ [querywindow] tweaks in sql history view
++ [export] Native Excel (Spreadsheet_Excel_Writer) improvements,
+   thanks to Christian Schmidt
++ [doc] requirement of mcrypt on 64-bit, thanks to Isaac Bennetch
++ [lang] Danish update, thanks to Finn Sorensen
++ RFE #1435922 [gui] navigation frame shows listing of databases when none selected
++ [data] support BIT datatype (under mysqli), thanks to Christian Schmidt
++ [display] automatic confirmation for sort by key, thanks to Juergen Wind
++ [data] can now choose the number of insert rows
++ RFE #1704779 [gui] link documentation from login page
++ RFE #1513345 [setup] check control user connection during setup
++ [structure] TRIGGERS: display/edit/drop/SQL export
++ [browse] store browse state in session per query
++ [lang] Turkish update, thanks to Burak Yavuz
++ [lang] Galician update, thanks to Xosé Calvo
++ [lang] Brazilian-Portuguese update, thanks to Airon Luis Pereira
++ [gui] Insert/Edit: no longer display the Go button each 15 lines 
+  but just at the end of a row
++ [gui] Query window: use verbose server name if any 
++ [auth] patch #1712514 specify host for single signon, thanks to Thierry
++ [gui] Navigator for the db list in the navigation panel 
++ [gui] Navigator for the table list in the content panel 
+- bug #1727138 HTML not encoded (more than 1000 characters)
++ [display] Support for MySQL 5.0.37 profiling 
++ RFE #1743983 [gui] Replace $max_characters by a configurable param:
+  $cfg['MaxCharactersInDisplayedSQL']
+- bug #1746186 LeftLogoLink fails if set to some external site
+. [transformations]: remove "auto-detect" MIME-type that was never implemented
++ [display] patch #1749705, Allow multibyte characters in number formatting,
+  thanks to garas
+- bug #1747215 Export emits blanks at line ends
+- bug #1751172 Do not export data when exporting a single VIEW
++ [lang] Swedish update, thanks to Björn T. Hallberg 
++ [lang] Russian update, thanks to Victor Volkov and the php-myadmin.ru users 
++ [privileges] Support password hashing on the Edit Privileges interface 
+- bug #1755339 Warn about rename dataase actually being copy/delete
+- bug #1746921 Left frame shrinks on db change, thanks to Juergen Wind
++ [gui] Export: Select All/Unselect All over the choices,
+  thanks to Florian Schmitz
++ [lang] Japanese update, thanks to Ishigaki Kenichi 
+- bug #1759528 browse_foreigners fails due to newlines,
+  thanks to Hanno Boeck
++ [lang] Norwegian update, thanks to Sven-Erik Andersen 
++ [lang] Italian update, thanks to Luca Rebellato 
++ [lang] Spanish update, thanks to Daniel Hinostroza 
+. [export] Do not obey $cfg['MaxTableList'] on database export
+- [doc] UploadDir and the Import tab, thanks to Juergen Wind
+- bug #1766975 Parameters lost when editing stored routine
+- [export] patch #1766633 Incorrect export with specified MySQL port,
+  thanks to Juergen Wind
++ [lang] Catalan update, thanks to Xavier Navarro 
+- bug #1751553 Drop-down instead of input when editing
+- [data] foreign key browser: encoding mixups, thanks to Thijs Kinkhorst
+- bug #1771721 Old SVN URLs
 
 2.10.3.0 (2007-07-20)
 
@@ -52,7 +151,7 @@ $HeadURL: https://phpmyadmin.svn.sourceforge.net/svnroot/phpmyadmin/branches/MAI
 - bug [gui] query window icon did not work, thanks to Jürgen Wind - windkiel
 . [general] use PMA_getenv('PHP_SELF')
 - bug #1676033 [core] pow(int,int) causes overflow
-- bug #1680952 [core] undefined function PMA_getUvaCondition() 
+- bug #1680952 [core] undefined function PMA_getUvaCondition()
 - bug #1596328 [export] drop support for POSTGRESQL compatibility mode
 - bug #1609443 [privileges] Grant all priv. on wildcard name (fix message)
 - bug #1567317 [sqp] Syntax highlighter: extra spaces
@@ -68,10 +167,10 @@ $HeadURL: https://phpmyadmin.svn.sourceforge.net/svnroot/phpmyadmin/branches/MAI
 - patch #1681620 [interface] support reordering of $cfg['ColumnTypes'],
   thanks to Leonard den Ottolander
 - bug #1690718 Can't edit if BLOB and no PK
-- bug #1672636 [export] PDF export too wide 
-+ [lang] brazilian-portuguese update, thanks to Airon Luis Pereira  
+- bug #1672636 [export] PDF export too wide
++ [lang] brazilian-portuguese update, thanks to Airon Luis Pereira
 - patch #1698964 javascript typo, thanks to Corey Hollaway
-- bug #1703897 [css] undefined index 'js_frame' 
+- bug #1703897 [css] undefined index 'js_frame'
 - bug #1690561 Blobs being cleared on Edit of row
 - bug #1679801 [core] XSS vulnerability in PMA_sanitize(), thanks to sp3x SecurityReason
 - bug #1704467 XSS vulnerability in browse_foreigners.php, thanks to sp3x SecurityReason
@@ -110,7 +209,7 @@ $HeadURL: https://phpmyadmin.svn.sourceforge.net/svnroot/phpmyadmin/branches/MAI
 
 2007-02-17 Marc Delisle  <lem9@users.sourceforge.net>
     * Documentation.html: patch #1659347, missing doc for some config,
-     thanks to Isaac Bennetch
+      thanks to Isaac Bennetch
     * libraries/export/sql.php: bug #1663336, undefined variable
 
 2007-02-16 Marc Delisle  <lem9@users.sourceforge.net>
@@ -129,17 +228,16 @@ $HeadURL: https://phpmyadmin.svn.sourceforge.net/svnroot/phpmyadmin/branches/MAI
       bug #1657045 Spatial functions not supported
       bug #1657037 Missing column type "geometry"
 
-2007-02-11 Marc Delisle  <lem9@users.sourceforge.net>
+2007-02-09 Marc Delisle  <lem9@users.sourceforge.net>
     * main.php: some links should open a new page
     * Documentation.html, libraries/navigation_header.inc.php,
       libraries/config.default.php: $cfg['LeftLogoLinkWindow'] to decide
       in which window the logo-linked page will appear
-    ### 2.10.0-rc1 released
 
-2007-02-10 Marc Delisle  <lem9@users.sourceforge.net>
-    * lang/spanish update, thanks to Daniel Hinostroza
+2007-02-09 Michal Čihař  <michal@cihar.com>
+    * lang/czech: Fix syntax error (sorry for that).
 
-2007-02-09 Marc Delisle  <lem9@users.sourceforge.net>
+2007-02-08 Marc Delisle  <lem9@users.sourceforge.net>
     * themes/darkblue_orange/img/logo_left.png,
       themes/original/img/logo_left.png: smaller PMA logo for navi
 
@@ -187,7 +285,6 @@ $HeadURL: https://phpmyadmin.svn.sourceforge.net/svnroot/phpmyadmin/branches/MAI
     * lang/catalan update, thanks to Xavier Navarro (xavin)
     * pmd_general.php: possibility of quotes in Designer messages,
       thanks to Ivan Kirillov
-    ### 2.10.0-beta1 released from QA_2_10
 
 2007-01-26 Michal Čihař  <michal@cihar.com>
     * libraries/common.lib.php, libraries/js_escape.lib.php,
@@ -256,7 +353,7 @@ $HeadURL: https://phpmyadmin.svn.sourceforge.net/svnroot/phpmyadmin/branches/MAI
       session.save_handler to 'files'
     * pmd_general.php: patch #1627831,
       English language improvements, thanks to Isaac Bennetch
-    * pmd_general.php, pmd_relation_new.php, lang/*: abstract messages 
+    * pmd_general.php, pmd_relation_new.php, lang/*: abstract messages
 
 2007-01-04 Marc Delisle  <lem9@users.sourceforge.net>
     * pmd/scripts/move.js: avoid text selection when moving a table object

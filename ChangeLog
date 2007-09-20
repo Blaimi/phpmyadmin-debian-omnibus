@@ -2,8 +2,27 @@
 phpMyAdmin - ChangeLog
 ----------------------
 
-$Id: ChangeLog 10576 2007-08-21 20:44:38Z lem9 $
+$Id: ChangeLog 10655 2007-09-20 16:33:07Z lem9 $
 $HeadURL: https://phpmyadmin.svn.sourceforge.net/svnroot/phpmyadmin/trunk/phpMyAdmin/ChangeLog $
+
+2.11.1.0 (2007-09-20)
+
+- bug #1783667 [export] NO_AUTO_VALUE_ON_ZERO and MySQL version 
+- bug #1780098 [GUI] Logout causes CSS loss, thanks to Juergen Wind
+. incorrect field ids, thanks to Michael Keck
+- bug #1787522 [view] wrong choice in algorithm drop-down
+- bug #1777620 [GUI] Table Print preview: missing column header,
+  thanks to Mario Rohkrämer
+- Do not display "Your MySQL library..." if only the Z part of X.Y.Z version
+  is different
+- bugs #1767759, 1216521 [data] Duplicate entry error Browse feature: this minor
+  feature removed due to its complexity
+- bug #1774825 [operations] Rename database loses charset info
+- bug #1791568 [core] Undefined cfg, thanks to Christian Schmidt
+- bug #1782332 [structure] New table form does not overtake data 
+- bug #1793763 [requirements] minimum PHP should be 4.2.0 
+- patch #1787915 Avoid CSS reloading on every click, thanks to Juergen Wind
+- bug #1798627 [GUI] Wrong storage engine displayed
 
 2.11.0.0 (2007-08-21)
 

@@ -3,6 +3,25 @@
 
 set -e
 
+lighttpd_install() {
+	if [ ! -f /etc/lighttpd/conf-available/50-phpmyadmin.conf ] ; then
+		if [ ! -x /usr/sbin/lighty-enable-mod ] ; then
+			echo "Lighttpd not installed, skipping"
+		else
+			ln -s ../../phpmyadmin/lighttpd.conf /etc/lighttpd/conf-available/50-phpmyadmin.conf
+			# We also need auth to protect setup.php
+			/usr/sbin/lighty-enable-mod phpmyadmin auth
+		fi
+	fi
+}
+
+apache_install() {
+	webserver=$1
+	if [ -d /etc/$webserver/conf.d ] && [ ! -e /etc/$webserver/conf.d/phpmyadmin.conf ]; then
+		ln -s ../../phpmyadmin/apache.conf /etc/$webserver/conf.d/phpmyadmin.conf
+	fi
+}
+
 if [ "$1" = "configure" ]; then
 
 	# Generate secret for cookie encryption
@@ -56,9 +75,12 @@ if [ "$1" = "configure" ]; then
 
 	for webserver in $webservers; do
 		webserver=${webserver%,}
-		if [ -d /etc/$webserver/conf.d ] && [ ! -e /etc/$webserver/conf.d/phpmyadmin.conf ]; then
-			ln -s ../../phpmyadmin/apache.conf /etc/$webserver/conf.d/phpmyadmin.conf
+		if [ "$webserver" = "lighttpd" ] ; then
+			lighttpd_install
+		else
+			apache_install $webserver
 		fi
+		# Reload webserver in any case, configuration might have changed
 		if [ -x /usr/sbin/invoke-rc.d ]; then
 			invoke-rc.d $webserver reload || true
 		else

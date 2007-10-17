@@ -12,7 +12,7 @@ Xs-Vcs-Svn: https://svn.kinkhorst.nl/svn/debian/phpmyadmin/trunk
 Package: phpmyadmin
 Architecture: all
 Depends: libapache2-mod-php5 | libapache-mod-php5 | php5-cgi | php5 | libapache2-mod-php4 | libapache-mod-php4 | php4 | php4-cgi, php5-mysql | php5-mysqli | php4-mysql, php5-mcrypt | php4-mcrypt, perl, ${misc:Depends}
-Recommends: apache2 | httpd, php5-gd | php4-gd
+Recommends: apache2 | lighttpd | httpd, php5-gd | php4-gd
 Suggests: mysql-server
 Description: Administrate MySQL over the WWW
  phpMyAdmin is intended to handle the administration of MySQL over the WWW.
@@ -40,5 +40,3 @@ Description: Administrate MySQL over the WWW
    - support InnoDB tables and foreign keys
    - support mysqli, the improved MySQL extension
    - communicate in 50 different languages
- .
- Homepage: http://www.phpmyadmin.net/

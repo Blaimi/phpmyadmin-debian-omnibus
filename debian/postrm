@@ -3,6 +3,23 @@
 
 set -e
 
+lighttpd_remove() {
+	if [ -f /etc/lighttpd/conf-available/50-phpmyadmin.conf ] ; then
+		rm -f /etc/lighttpd/conf-available/50-phpmyadmin.conf
+		if [ ! -x /usr/sbin/lighty-disable-mod ] ; then
+			echo "Lighttpd not installed, skipping"
+		else
+			/usr/sbin/lighty-disable-mod phpmyadmin
+			# We also enabled auth in postinst, but I think it's safer to keep it there
+		fi
+	fi
+}
+
+apache_remove() {
+	if [ -d /etc/$webserver/conf.d ] && [ -L /etc/$webserver/conf.d/phpmyadmin.conf ]; then
+		rm -f /etc/$webserver/conf.d/phpmyadmin.conf
+	fi
+}
 if [ "$1" = "remove" ] || [ "$1" = "purge" ]; then
 
 	if [ -f /usr/share/debconf/confmodule ]; then
@@ -15,8 +32,10 @@ if [ "$1" = "remove" ] || [ "$1" = "purge" ]; then
 
 		for webserver in $webservers; do
 			webserver=${webserver%,}
-			if [ -d /etc/$webserver/conf.d ] && [ -L /etc/$webserver/conf.d/phpmyadmin.conf ]; then
-				rm -f /etc/$webserver/conf.d/phpmyadmin.conf
+			if [ "$webserver" = "lighttpd" ] ; then
+				lighttpd_install
+			else
+				apache_install $webserver
 			fi
 			if [ -x /usr/sbin/invoke-rc.d ]; then
 				invoke-rc.d $webserver reload || true

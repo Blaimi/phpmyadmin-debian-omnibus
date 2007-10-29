@@ -1,9 +1,15 @@
+phpmyadmin (4:2.11.2-1) unstable; urgency=low
+
+  * New upstream release.
+
+ -- Thijs Kinkhorst <thijs@debian.org>  Mon, 29 Oct 2007 22:50:22 +0100
+
 phpmyadmin (4:2.11.1.2-1) unstable; urgency=high
   
   * New upstream release.
   * Addresses two cross site scripting issues:
     PMASA-2007-5, PMASA-2007-6
-    (CVE-2007-5386, closes: #446451)
+    (CVE-2007-5386, CVE-2007-5589, closes: #446451)
 
  -- Thijs Kinkhorst <thijs@debian.org>  Wed, 17 Oct 2007 22:54:41 +0200
 

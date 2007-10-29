@@ -6,8 +6,8 @@ Priority: extra
 Standards-Version: 3.7.2
 Build-Depends: debhelper (>= 5), dpatch, po-debconf, perl
 Homepage: http://www.phpmyadmin.net/
-Xs-Vcs-Browser: https://aphrodite.kinkhorst.nl/wsvn/debian/phpmyadmin/
-Xs-Vcs-Svn: https://svn.kinkhorst.nl/svn/debian/phpmyadmin/trunk
+Vcs-Browser: https://aphrodite.kinkhorst.nl/wsvn/debian/phpmyadmin/
+Vcs-Svn: https://svn.kinkhorst.nl/svn/debian/phpmyadmin/trunk
 
 Package: phpmyadmin
 Architecture: all

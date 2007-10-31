@@ -4,7 +4,7 @@ Uploaders: Michal Čihař <nijel@debian.org>
 Section: web
 Priority: extra
 Standards-Version: 3.7.2
-Build-Depends: debhelper (>= 5), dpatch, po-debconf, perl
+Build-Depends: debhelper (>= 5), dpatch, po-debconf
 Homepage: http://www.phpmyadmin.net/
 Vcs-Browser: https://aphrodite.kinkhorst.nl/wsvn/debian/phpmyadmin/
 Vcs-Svn: https://svn.kinkhorst.nl/svn/debian/phpmyadmin/trunk

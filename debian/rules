@@ -29,8 +29,8 @@ install: build
 	find debian/phpmyadmin -name .svn | xargs -r rm -r
 	rm debian/phpmyadmin/usr/share/phpmyadmin/libraries/tcpdf/font/LICENSE \
 		debian/phpmyadmin/usr/share/phpmyadmin/libraries/tcpdf/LICENSE
-	perl -pi -e "s/'([0-9a-z.]+)'/'\\1deb$(REVISION)'/ if /set..PMA_VERSION/" \
-		debian/phpmyadmin/usr/share/phpmyadmin/libraries/Config.class.php
+	sed -ri "/set..PMA_VERSION/ s/'([0-9a-z.]+)'/'\\1deb$(REVISION)'/" \
+	    debian/phpmyadmin/usr/share/phpmyadmin/libraries/Config.class.php
 
 # Build architecture-independent files here.
 binary-indep: build install

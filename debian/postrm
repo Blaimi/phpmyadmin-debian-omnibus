@@ -12,6 +12,11 @@ lighttpd_remove() {
 			/usr/sbin/lighty-disable-mod phpmyadmin
 			# We also enabled auth in postinst, but I think it's safer to keep it there
 		fi
+		# See bug #448682
+		if [ -h /etc/lighttpd/conf-enabled/50-phpmyadmin.conf ] ; then
+		    echo 'Manually deleting lighttpd/phpMyAdmin configuration link'
+		    rm /etc/lighttpd/conf-enabled/50-phpmyadmin.conf
+		fi
 	fi
 }
 
@@ -33,14 +38,16 @@ if [ "$1" = "remove" ] || [ "$1" = "purge" ]; then
 		for webserver in $webservers; do
 			webserver=${webserver%,}
 			if [ "$webserver" = "lighttpd" ] ; then
-				lighttpd_install
+				lighttpd_remove
 			else
-				apache_install $webserver
+				apache_remove $webserver
 			fi
+			# Redirection of 3 is needed because Debconf uses it and it might 
+			# be inherited by webserver. See bug #446324.
 			if [ -x /usr/sbin/invoke-rc.d ]; then
-				invoke-rc.d $webserver reload || true
+				invoke-rc.d $webserver reload 3>/dev/null || true
 			else
-				/etc/init.d/$webserver reload || true
+				/etc/init.d/$webserver reload 3>/dev/null || true
 			fi
 		done
 	fi

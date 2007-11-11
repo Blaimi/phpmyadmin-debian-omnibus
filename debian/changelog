@@ -1,3 +1,11 @@
+phpmyadmin (4:2.11.2.1-1) unstable; urgency=medium
+
+  * New upstream release.
+  * Fixes unimportant "security" issue: XSS/SQL injection
+    through database names (PMASA-2007-7).
+
+ -- Thijs Kinkhorst <thijs@debian.org>  Sun, 11 Nov 2007 22:21:14 +0100
+
 phpmyadmin (4:2.11.2-2) unstable; urgency=low
 
   * Fixed typo in postrm script which broke removal (Closes: #448653).

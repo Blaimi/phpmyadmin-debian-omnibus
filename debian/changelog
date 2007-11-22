@@ -1,8 +1,16 @@
+phpmyadmin (4:2.11.2.2-1) unstable; urgency=high
+
+  * New upstream release.
+  * Fixes cross site scripting issue (PMASA-2007-8).
+
+ -- Thijs Kinkhorst <thijs@debian.org>  Thu, 22 Nov 2007 07:51:22 +0100
+
 phpmyadmin (4:2.11.2.1-1) unstable; urgency=medium
 
   * New upstream release.
   * Fixes unimportant "security" issue: XSS/SQL injection
-    through database names (PMASA-2007-7).
+    through database names (PMASA-2007-7, CVE-2007-5976,
+    CVE-2007-5977).
 
  -- Thijs Kinkhorst <thijs@debian.org>  Sun, 11 Nov 2007 22:21:14 +0100
 

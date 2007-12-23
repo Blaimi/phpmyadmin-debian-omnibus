@@ -1,8 +1,5 @@
 - Investigate webapps-common. Is it ready yet?
 
-- Rewrite/correct debconf templates. After more is clear about webapps-common,
-  because that might influence the templates aswell.
-
 - Can we use dbconfig-common in some way? We only need a db hostname & port no.
   Is that possible?
 

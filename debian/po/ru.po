@@ -1,5 +1,4 @@
-# translation of phpmyadmin_ru.po to Russian
-# translation of phpmyadmin to Russian
+# translation of ru.po to Russian
 #
 #    Translators, if you are not familiar with the PO format, gettext
 #    documentation is worth reading, especially sections dedicated to
@@ -12,85 +11,97 @@
 #         or http://www.debian.org/intl/l10n/po-debconf/README-trans
 #
 #    Developers do not need to manually edit POT or PO files.
-# Sergey Alyoshin, 2007
+#
+# Sergey Alyoshin, 2007.
 # Yuriy Talakan' <yt@amur.elektra.ru>, 2006.
 # Yuriy Talakan' <yt@drsk.ru>, 2007.
-#
+# Yuri Kozlov <kozlov.y@gmail.com>, 2007.
 msgid ""
 msgstr ""
-"Project-Id-Version: phpmyadmin_ru\n"
-"Report-Msgid-Bugs-To: thijs@debian.org\n"
-"POT-Creation-Date: 2007-04-26 11:48+0200\n"
-"PO-Revision-Date: 2007-05-03 16:37+1000\n"
-"Last-Translator: Yuriy Talakan' <yt@drsk.ru>\n"
+"Project-Id-Version: 4:2.11.2-3\n"
+"Report-Msgid-Bugs-To: Source: phpmyadmin@packages.debian.org\n"
+"POT-Creation-Date: 2007-12-03 11:59+0100\n"
+"PO-Revision-Date: 2007-12-17 20:44+0300\n"
+"Last-Translator: Yuri Kozlov <kozlov.y@gmail.com>\n"
 "Language-Team: Russian <debian-l10n-russian@lists.debian.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: KBabel 1.9.1\n"
-"Plural-Forms:  nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+"X-Generator: KBabel 1.11.4\n"
+"Plural-Forms:  nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%"
+"10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
 
 #. Type: multiselect
 #. Description
-#: ../templates:1001
+#: ../templates:2001
 msgid "Web server to reconfigure automatically:"
 msgstr "Веб-сервер для автоматической перенастройки:"
 
 #. Type: multiselect
 #. Description
-#: ../templates:1001
-msgid ""
-"phpMyAdmin supports any web server that PHP does, but this automatic "
-"configuration process only supports Apache."
-msgstr ""
-"phpMyAdmin поддерживает любой веб-сервер, который работает с PHP, но данный "
-"процесс автоматической настройки поддерживает только Apache."
-
-#. Type: string
-#. Description
 #: ../templates:2001
-msgid "User name for web-based setup system:"
-msgstr "Имя пользователя для системы веб-установки:"
-
-#. Type: string
-#. Description
-#. Type: password
-#. Description
-#: ../templates:2001 ../templates:3001
 msgid ""
-"phpMyAdmin comes with a setup script that can help you with creating a "
-"configuration. The script is located at http://localhost/phpmyadmin/scripts/"
-"setup.php. For security reasons it requires authorization."
+"Please choose the web server that should be automatically configured to run "
+"phpMyAdmin."
 msgstr ""
-"phpMyAdmin поставляется со скриптом установки, который поможет вам в "
-"настройке. Скрипт расположен по адресу http://localhost/phpmyadmin/scripts/"
-"setup.php . В целях безопасности, он требует авторизации."
+"Выберите веб-сервер, который будет автоматически настроен для запуска "
+"phpMyAdmin."
 
 #. Type: string
-#. Description
-#: ../templates:2001
-msgid "Leave empty if you want to use the default user name 'admin'."
-msgstr "Оставьте пустым, если хотите использовать по умолчанию имя `admin'."
-
-#. Type: password
 #. Description
 #: ../templates:3001
+msgid "Username for web-based setup system:"
+msgstr "Имя пользователя для системы настройки через веб:"
+
+#. Type: string
+#. Description
+#. Type: password
+#. Description
+#: ../templates:3001 ../templates:4001
+msgid ""
+"The setup system for phpMyAdmin may be used, after installation, from http://"
+"localhost/phpmyadmin/scripts/setup.php."
+msgstr ""
+"После установки можно использовать систему настройки phpMyAdmin, которая "
+"расположена по адресу http://localhost/phpmyadmin/scripts/setup.php."
+
+#. Type: string
+#. Description
+#. Type: password
+#. Description
+#: ../templates:3001 ../templates:4001
+msgid ""
+"Access to this system requires identification with a username and a password."
+msgstr "Для доступа к этой системе требуется имя и пароль."
+
+#. Type: string
+#. Description
+#: ../templates:3001
+msgid ""
+"If you leave this field empty, the default username ('admin') will be used."
+msgstr ""
+"Оставьте поле пустым, если хотите использовать имя по умолчанию ('admin')."
+
+#. Type: password
+#. Description
+#: ../templates:4001
 msgid "Password for web-based setup system:"
 msgstr "Пароль для системы веб-установки:"
 
 #. Type: password
 #. Description
-#: ../templates:3001
+#: ../templates:4001
 msgid ""
-"You can manage the usernames and passwords with the `htpasswd' command. They "
-"are stored in the file /etc/phpmyadmin/htpasswd.setup"
+"Usernames and passwords may be managed with the `htpasswd' command and are "
+"stored in /etc/phpmyadmin/htpasswd.setup."
 msgstr ""
 "Вы можете управлять именами и паролями пользователей с помощью команды "
-"`htpasswd'. Они хранятся в файле /etc/phpmyadmin/htpasswd.setup"
+"`htpasswd'. Они хранятся в файле /etc/phpmyadmin/htpasswd.setup."
 
 #. Type: password
 #. Description
-#: ../templates:3001
-msgid "Leave empty if you want to disable access to the web-based setup."
-msgstr "Оставьте пустым, если хотите запретить доступ к веб-установке."
-
+#: ../templates:4001
+msgid ""
+"If you leave this field empty, access to the web-based setup will be "
+"disabled."
+msgstr "Оставьте поле пустым, если хотите запретить доступ к веб-установке."

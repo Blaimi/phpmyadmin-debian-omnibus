@@ -1,3 +1,26 @@
+phpmyadmin (4:2.11.3-2) unstable; urgency=low
+
+  * Debconf templates and debian/control reviewed by the
+    debian-l10n-english team as part of the Smith review project.
+    Thanks Christian Perrier and friends. Closes: #453293
+  
+  [ Translations ]
+  * Polish
+  * Galician. Closes: #454182
+  * Norwegian Bokmål. Closes: #454185
+  * Basque. Closes: #454240
+  * German. Closes: #454507
+  * Finnish. Closes: #454606
+  * Italian. Closes: #454646
+  * Portuguese. Closes: #456426
+  * Czech. Closes: #456601
+  * Russian. Closes: #456761
+  * French. Closes: #456767
+  * Vietnamese. Closes: #457313
+  * Dutch.
+
+ -- Thijs Kinkhorst <thijs@debian.org>  Sun, 23 Dec 2007 21:09:59 +0100
+
 phpmyadmin (4:2.11.3-1) unstable; urgency=low
 
   * New upstream release.
@@ -7,7 +30,7 @@ phpmyadmin (4:2.11.3-1) unstable; urgency=low
 phpmyadmin (4:2.11.2.2-1) unstable; urgency=high
 
   * New upstream release.
-  * Fixes cross site scripting issue (PMASA-2007-8).
+  * Fixes cross site scripting issue (PMASA-2007-8, CVE-2007-6100).
 
  -- Thijs Kinkhorst <thijs@debian.org>  Thu, 22 Nov 2007 07:51:22 +0100
 

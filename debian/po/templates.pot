@@ -7,8 +7,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"Report-Msgid-Bugs-To: thijs@debian.org\n"
-"POT-Creation-Date: 2007-04-26 11:48+0200\n"
+"Report-Msgid-Bugs-To: Source: phpmyadmin@packages.debian.org\n"
+"POT-Creation-Date: 2007-12-03 11:59+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,57 +18,68 @@ msgstr ""
 
 #. Type: multiselect
 #. Description
-#: ../templates:1001
+#: ../templates:2001
 msgid "Web server to reconfigure automatically:"
 msgstr ""
 
 #. Type: multiselect
 #. Description
-#: ../templates:1001
-msgid ""
-"phpMyAdmin supports any web server that PHP does, but this automatic "
-"configuration process only supports Apache."
-msgstr ""
-
-#. Type: string
-#. Description
 #: ../templates:2001
-msgid "User name for web-based setup system:"
-msgstr ""
-
-#. Type: string
-#. Description
-#. Type: password
-#. Description
-#: ../templates:2001 ../templates:3001
 msgid ""
-"phpMyAdmin comes with a setup script that can help you with creating a "
-"configuration. The script is located at http://localhost/phpmyadmin/scripts/"
-"setup.php. For security reasons it requires authorization."
+"Please choose the web server that should be automatically configured to run "
+"phpMyAdmin."
 msgstr ""
 
 #. Type: string
-#. Description
-#: ../templates:2001
-msgid "Leave empty if you want to use the default user name 'admin'."
-msgstr ""
-
-#. Type: password
 #. Description
 #: ../templates:3001
+msgid "Username for web-based setup system:"
+msgstr ""
+
+#. Type: string
+#. Description
+#. Type: password
+#. Description
+#: ../templates:3001 ../templates:4001
+msgid ""
+"The setup system for phpMyAdmin may be used, after installation, from http://"
+"localhost/phpmyadmin/scripts/setup.php."
+msgstr ""
+
+#. Type: string
+#. Description
+#. Type: password
+#. Description
+#: ../templates:3001 ../templates:4001
+msgid ""
+"Access to this system requires identification with a username and a password."
+msgstr ""
+
+#. Type: string
+#. Description
+#: ../templates:3001
+msgid ""
+"If you leave this field empty, the default username ('admin') will be used."
+msgstr ""
+
+#. Type: password
+#. Description
+#: ../templates:4001
 msgid "Password for web-based setup system:"
 msgstr ""
 
 #. Type: password
 #. Description
-#: ../templates:3001
+#: ../templates:4001
 msgid ""
-"You can manage the usernames and passwords with the `htpasswd' command. They "
-"are stored in the file /etc/phpmyadmin/htpasswd.setup"
+"Usernames and passwords may be managed with the `htpasswd' command and are "
+"stored in /etc/phpmyadmin/htpasswd.setup."
 msgstr ""
 
 #. Type: password
 #. Description
-#: ../templates:3001
-msgid "Leave empty if you want to disable access to the web-based setup."
+#: ../templates:4001
+msgid ""
+"If you leave this field empty, access to the web-based setup will be "
+"disabled."
 msgstr ""

@@ -1,3 +1,16 @@
+phpmyadmin (4:2.11.5-1) unstable; urgency=medium
+
+
+  [ Thijs Kinkhorst ]
+  * New upstream release.
+    + Fixes low-risk SQL injection: PMASA-2008-1.
+  * Update Japanese translation by Hideki Yamane (Closes: #463169).
+  
+  [ Michal Čihař ]
+  * Actually install README.Debian (Closes: #460991).
+
+ -- Thijs Kinkhorst <thijs@debian.org>  Sat, 01 Mar 2008 18:09:37 +0100
+
 phpmyadmin (4:2.11.4-1) unstable; urgency=low
 
   * New upstream release.

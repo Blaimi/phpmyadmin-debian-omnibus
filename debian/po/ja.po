@@ -14,10 +14,10 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: phpmyadmin 4:2.10.1-2\n"
+"Project-Id-Version: phpmyadmin 4:2.11.4-1\n"
 "Report-Msgid-Bugs-To: Source: phpmyadmin@packages.debian.org\n"
 "POT-Creation-Date: 2007-12-03 11:59+0100\n"
-"PO-Revision-Date: 2007-05-04 22:52+0900\n"
+"PO-Revision-Date: 2008-01-27 21:28+0900\n"
 "Last-Translator: Hideki Yamane (Debian-JP) <henrich@debian.or.jp>\n"
 "Language-Team: Japanese <debian-japanese@lists.debian.org>\n"
 "MIME-Version: 1.0\n"
@@ -28,7 +28,7 @@ msgstr ""
 #. Description
 #: ../templates:2001
 msgid "Web server to reconfigure automatically:"
-msgstr "自動的に再設定する web サーバ:"
+msgstr "自動再設定をする web サーバ:"
 
 #. Type: multiselect
 #. Description
@@ -37,12 +37,11 @@ msgid ""
 "Please choose the web server that should be automatically configured to run "
 "phpMyAdmin."
 msgstr ""
+"phpMyAdmin を動作させるために自動再設定を行う web サーバを選んでください。"
 
 #. Type: string
 #. Description
 #: ../templates:3001
-#, fuzzy
-#| msgid "User name for web-based setup system:"
 msgid "Username for web-based setup system:"
 msgstr "web ベース設定システムのユーザ名:"
 
@@ -55,6 +54,8 @@ msgid ""
 "The setup system for phpMyAdmin may be used, after installation, from http://"
 "localhost/phpmyadmin/scripts/setup.php."
 msgstr ""
+"phpMyAdmin 設定システムは、インストール後に http://localhost/phpmyadmin/scripts/"
+"setup.php から使えるようになります。"
 
 #. Type: string
 #. Description
@@ -64,16 +65,15 @@ msgstr ""
 msgid ""
 "Access to this system requires identification with a username and a password."
 msgstr ""
+"このシステムへのアクセスには、ユーザ名とパスワードでの認証が必要です。"
 
 #. Type: string
 #. Description
 #: ../templates:3001
-#, fuzzy
-#| msgid "Leave empty if you want to use the default user name 'admin'."
 msgid ""
 "If you leave this field empty, the default username ('admin') will be used."
 msgstr ""
-"デフォルトのユーザ名 'admin' を使いたい場合は空のままにしておいてください。"
+"この値を空のままにした場合、デフォルトのユーザ名 'admin' が使われます。"
 
 #. Type: password
 #. Description
@@ -84,10 +84,6 @@ msgstr "web ベース設定システムのパスワード:"
 #. Type: password
 #. Description
 #: ../templates:4001
-#, fuzzy
-#| msgid ""
-#| "You can manage the usernames and passwords with the `htpasswd' command. "
-#| "They are stored in the file /etc/phpmyadmin/htpasswd.setup"
 msgid ""
 "Usernames and passwords may be managed with the `htpasswd' command and are "
 "stored in /etc/phpmyadmin/htpasswd.setup."
@@ -98,39 +94,10 @@ msgstr ""
 #. Type: password
 #. Description
 #: ../templates:4001
-#, fuzzy
-#| msgid "Leave empty if you want to disable access to the web-based setup."
 msgid ""
 "If you leave this field empty, access to the web-based setup will be "
 "disabled."
 msgstr ""
-"web ベースの設定画面へのアクセスを無効にしたい場合、空のままにしておいてくだ"
-"さい。"
+"この値を空のままにした場合、web ベースの設定画面は無効になります。"
 
-#~ msgid ""
-#~ "phpMyAdmin supports any web server that PHP does, but this automatic "
-#~ "configuration process only supports Apache."
-#~ msgstr ""
-#~ "phpMyAdmin は PHP が動作する web サーバをサポートしていますが、この自動設"
-#~ "定プロセスは Apache のみサポートしています。"
 
-#~ msgid ""
-#~ "phpMyAdmin comes with a setup script that can help you with creating a "
-#~ "configuration. The script is located at http://localhost/phpmyadmin/"
-#~ "scripts/setup.php. For security reasons it requires authorization."
-#~ msgstr ""
-#~ "phpMyAdmin は設定を作成するのに役立つ設定スクリプトを含んでいます。スクリ"
-#~ "プトは http://localhost/phpmyadmin/scripts/setup.php に設置されてます。セ"
-#~ "キュリティ上の理由によって、これを使うには認証が必要となります。"
-
-#~ msgid "Do you want me to restart ${webserver} now?"
-#~ msgstr "${webserver} をすぐに再起動しますか?"
-
-#~ msgid ""
-#~ "Remember that in order to activate the new configuration ${webserver} has "
-#~ "to be restarted. You can also restart ${webserver} by manually executing /"
-#~ "etc/init.d/${webserver} restart"
-#~ msgstr ""
-#~ "${webserver} の新規設定を有効にするためには再起動が必要なことに留意してく"
-#~ "ださい。手動で /etc/init.d/${webserver} restart を実行することでも再起動が"
-#~ "できます。"

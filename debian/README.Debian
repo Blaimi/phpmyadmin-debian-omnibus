@@ -10,9 +10,9 @@ USAGE
 
 PROBLEM WITH COOKIES
 
-  After upgrading the phpMyAdmin with cookie based authentication you might
-  notice the problem with logging in.  Remove the cookies from your browser
-  if there is no error message and you are returned to the login prompt.
+  After upgrading phpMyAdmin with cookie based authentication you might
+  notice a problem with logging in. Removing the cookies from your browser
+  may solve this issue.
 
 
 CONFIGURATION

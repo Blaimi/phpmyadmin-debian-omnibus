@@ -1,5 +1,16 @@
-phpmyadmin (4:2.11.5-1) unstable; urgency=medium
+phpmyadmin (4:2.11.5.1-1) unstable; urgency=medium
 
+  * New upstream release.
+    + Fixes a "security bug": saves sensitive data in the PHP session
+      data, which might be unprotected on a shared host. I do not believe
+      that this is a real issue, more a security precaution for situations
+      which are not secure anyway. Still, upload with medium urgency.
+      [PMASA-2008-2]
+  * Update Arabic translation by Ossama Khayat (Closes: #471908).
+
+ -- Thijs Kinkhorst <thijs@debian.org>  Sat, 29 Mar 2008 16:31:06 +0100
+
+phpmyadmin (4:2.11.5-1) unstable; urgency=medium
 
   [ Thijs Kinkhorst ]
   * New upstream release.

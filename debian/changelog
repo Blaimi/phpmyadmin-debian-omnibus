@@ -1,3 +1,11 @@
+phpmyadmin (4:2.11.5.2-1) unstable; urgency=medium
+
+  * New upstream release.
+    + Fixes security issue where user was able to access any files on
+      webserver by using crafted HTTP POST request [PMASA-2008-3].
+
+ -- Michal Čihař <nijel@debian.org>  Wed, 23 Apr 2008 10:42:47 +0200
+
 phpmyadmin (4:2.11.5.1-1) unstable; urgency=medium
 
   * New upstream release.
@@ -5,7 +13,7 @@ phpmyadmin (4:2.11.5.1-1) unstable; urgency=medium
       data, which might be unprotected on a shared host. I do not believe
       that this is a real issue, more a security precaution for situations
       which are not secure anyway. Still, upload with medium urgency.
-      [PMASA-2008-2]
+      [PMASA-2008-2, CVE-2008-1567]
   * Update Arabic translation by Ossama Khayat (Closes: #471908).
 
  -- Thijs Kinkhorst <thijs@debian.org>  Sat, 29 Mar 2008 16:31:06 +0100

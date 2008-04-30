@@ -1,8 +1,15 @@
+phpmyadmin (4:2.11.6-1) unstable; urgency=low
+
+  * New upstream bugfix release.
+
+ -- Thijs Kinkhorst <thijs@debian.org>  Wed, 30 Apr 2008 20:55:57 +0200
+
 phpmyadmin (4:2.11.5.2-1) unstable; urgency=medium
 
   * New upstream release.
     + Fixes security issue where user was able to access any files on
-      webserver by using crafted HTTP POST request [PMASA-2008-3].
+      webserver by using crafted HTTP POST request
+      [PMASA-2008-3, CVE-2008-1924].
 
  -- Michal Čihař <nijel@debian.org>  Wed, 23 Apr 2008 10:42:47 +0200
 

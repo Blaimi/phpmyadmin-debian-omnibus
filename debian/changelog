@@ -1,3 +1,13 @@
+phpmyadmin (4:2.11.7~rc2-1) unstable; urgency=medium
+
+  * New upstream release candidate.
+    - Fixes an undisclosed security issue, which is most probably
+      irrelevant to Debian, but medium urgency just in case.
+    - Fixes session hash_bits override (Closes: #474557).
+  * Checked for policy 3.8.0, add README.source.
+
+ -- Thijs Kinkhorst <thijs@debian.org>  Sat, 14 Jun 2008 15:24:31 +0200
+
 phpmyadmin (4:2.11.6-1) unstable; urgency=low
 
   * New upstream bugfix release.

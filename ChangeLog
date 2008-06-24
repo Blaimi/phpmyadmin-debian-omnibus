@@ -2,10 +2,10 @@
 phpMyAdmin - ChangeLog
 ----------------------
 
-$Id: ChangeLog 11330 2008-06-20 17:53:30Z lem9 $
+$Id: ChangeLog 11338 2008-06-23 16:40:08Z lem9 $
 $HeadURL: https://phpmyadmin.svn.sourceforge.net/svnroot/phpmyadmin/trunk/phpMyAdmin/ChangeLog $
 
-2.11.7.0 (not yet released)
+2.11.7.0 (2008-06-23)
 - bug #1908719 [interface] New field cannot be auto-increment and primary key 
 - [dbi] Incorrect interpretation for some mysqli field flags 
 - bug #1910621 [display] part 1: do not display a TEXT utf8_bin as BLOB
@@ -15,7 +15,7 @@ $HeadURL: https://phpmyadmin.svn.sourceforge.net/svnroot/phpmyadmin/trunk/phpMyA
 - [structure] do not remove the BINARY attribute in drop-down 
 - bug #1955386 [session] Overriding session.hash_bits_per_character 
 - [interface] sanitize the table comments in table print view, 
-  thanks to Norman Hippert
+  db print view and db data dictionary, thanks to Norman Hippert
 - bug #1939031 Auto_Increment selected for TimeStamp by Default
 - patch #1957998 [display] No tilde for InnoDB row counter when we know
   it for sure, thanks to Vladyslav Bakayev - dandy76 

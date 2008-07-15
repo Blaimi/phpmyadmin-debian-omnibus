@@ -15,8 +15,8 @@ Copyright and licence notice:
                               Michal Cihar <michal_at_cihar.com>
                               Garvin Hicking <me_at_supergarv.de>
                               Michael Keck <mkkeck_at_users.sourceforge.net>
-                              Sebastian Mendel <cybot_tm_at_users.sourceforge.net>
-                              [check Documentation.txt/.html file for more details]
+                              Sebastian Mendel <cybot_tm_at_users.sf.net>
+                              [see Documentation.txt/.html file for more]
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License version 2,
@@ -38,7 +38,8 @@ The files under libraries/tcpdf are copyright (c) 2001-2006 Tecnick.com S.r.l.
 Licence: GNU LESSER GENERAL PUBLIC LICENSE v.2.1
 
 On any Debian system, you can find the complete text of the GNU LGPL
-(GNU Lesser General Public License) in the file  /usr/share/common-licenses/LGPL-2.1
+(GNU Lesser General Public License) in the file
+/usr/share/common-licenses/LGPL-2.1
 
 The fonts under libraries/tcpdf/font are Copyright (c) 2003 by Bitstream, Inc..
 DejaVu changes are in public domain. Licence:

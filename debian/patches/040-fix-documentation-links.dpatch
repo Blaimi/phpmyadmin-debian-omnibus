@@ -34,7 +34,6 @@ diff -ur phpmyadmin-2.10.0.2.orig/changelog.php phpmyadmin-2.10.0.2/changelog.ph
  echo '</pre>';
  ?>
  </body>
-Only in phpmyadmin-2.10.0.2/debian/patches: 040-fix-documentation-links.dpatch
 diff -ur phpmyadmin-2.10.0.2.orig/Documentation.html phpmyadmin-2.10.0.2/Documentation.html
 --- phpmyadmin-2.10.0.2.orig/Documentation.html	2007-03-02 18:39:49.000000000 +0100
 +++ phpmyadmin-2.10.0.2/Documentation.html	2007-04-21 11:57:44.000000000 +0200

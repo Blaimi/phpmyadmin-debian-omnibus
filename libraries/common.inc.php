@@ -22,7 +22,7 @@
  * - db connection
  * - authentication work
  *
- * @version $Id: common.inc.php 11426 2008-07-24 18:01:10Z lem9 $
+ * @version $Id: common.inc.php 11445 2008-07-28 19:37:23Z lem9 $
  */
 
 /**
@@ -403,7 +403,7 @@ if (! PMA_isValid($_REQUEST['token']) || $_SESSION[' PMA_token '] != $_REQUEST['
          */
         'server', 'db', 'table', 'target',
         /* to change the language on login screen or main page */
-        lang,
+        'lang',
         /* Session ID */
         'phpMyAdmin',
         /* Cookie preferences */

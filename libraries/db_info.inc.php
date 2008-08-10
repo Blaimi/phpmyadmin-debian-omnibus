@@ -9,7 +9,6 @@
  *
  * staybyte: speedup view on locked tables - 11 June 2001
  *
- * @uses    PMA_MYSQL_INT_VERSION
  * @uses    $cfg['ShowStats']
  * @uses    $cfg['ShowTooltip']
  * @uses    $cfg['ShowTooltipAliasTB']
@@ -32,7 +31,7 @@
  * @uses    strnatcasecmp()
  * @uses    count()
  * @uses    addslashes()
- * @version $Id: db_info.inc.php 11335 2008-06-21 14:01:54Z lem9 $
+ * @version $Id: db_info.inc.php 11336 2008-06-21 15:01:27Z lem9 $
  */
 if (! defined('PHPMYADMIN')) {
     exit;
@@ -111,7 +110,7 @@ $is_show_stats = $cfg['ShowStats'];
  */
 $db_is_information_schema = false;
 
-if (PMA_MYSQL_INT_VERSION >= 50002 && $db == 'information_schema') {
+if ($db == 'information_schema') {
     $is_show_stats = false;
     $db_is_information_schema = true;
 }
@@ -206,11 +205,12 @@ if (! isset($sot_ready)) {
     } else {
         // all tables in db
         // - get the total number of tables
+        //  (needed for proper working of the MaxTableList feature)
         $tables = PMA_DBI_get_tables($db);
         $total_num_tables = count($tables);
         if (isset($sub_part) && $sub_part == '_export') {
             // (don't fetch only a subset if we are coming from db_export.php,
-            // because I think it's too risky to display only a subset of the 
+            // because I think it's too risky to display only a subset of the
             // table names when exporting a db)
             /**
              *
@@ -234,6 +234,7 @@ if (! isset($sot_ready)) {
  * @global int count of tables in db
  */
 $num_tables = count($tables);
+//  (needed for proper working of the MaxTableList feature)
 if (! isset($total_num_tables)) {
     $total_num_tables = $num_tables;
 }

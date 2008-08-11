@@ -1,6 +1,15 @@
+phpmyadmin (4:2.11.8.1-1) unstable; urgency=low
+
+  * New upstream release, only changes:
+    + Updates Norwegian translation.
+    + Fixes PHP notice on every page load.
+
+ -- Thijs Kinkhorst <thijs@debian.org>  Mon, 11 Aug 2008 12:44:44 +0200
+
 phpmyadmin (4:2.11.8~rc1-1) unstable; urgency=high
 
   * New upstream release candidate fixing security issues.
+    [CVE-2008-3456, CVE-2008-3457]
   * Update Swedish debconf translation, thanks
     Martin Ågren (Closes: #492057).
 

@@ -27,9 +27,13 @@ install: build
 	dh_installdirs
 	dh_install
 	find debian/phpmyadmin -name .svn | xargs -r rm -r
+	# don't install README, then also not readme.php
+	rm debian/phpmyadmin/usr/share/phpmyadmin/readme.php
+	# spurious licence files, this is in debian/copyright
 	rm debian/phpmyadmin/usr/share/phpmyadmin/libraries/tcpdf/font/LICENSE \
-		debian/phpmyadmin/usr/share/phpmyadmin/libraries/tcpdf/LICENSE
-	sed -ri "/set..PMA_VERSION/ s/'([0-9a-z.]+)'/'\\1deb$(REVISION)'/" \
+		debian/phpmyadmin/usr/share/phpmyadmin/libraries/tcpdf/LICENSE.TXT
+	# include Debian marker in version string
+	sed -ri "/set..PMA_VERSION/ s/'([-0-9a-z.]+)'/'\\1deb$(REVISION)'/" \
 	    debian/phpmyadmin/usr/share/phpmyadmin/libraries/Config.class.php
 
 # Build architecture-independent files here.

@@ -5,12 +5,12 @@ set -e
 
 lighttpd_install() {
 	if [ ! -f /etc/lighttpd/conf-available/50-phpmyadmin.conf ] ; then
-		if [ ! -x /usr/sbin/lighty-enable-mod ] ; then
-			echo "Lighttpd not installed, skipping"
-		else
+		if which lighty-enable-mod >/dev/null 2>&1 ; then
 			ln -s ../../phpmyadmin/lighttpd.conf /etc/lighttpd/conf-available/50-phpmyadmin.conf
 			# We also need auth to protect setup.php
-			/usr/sbin/lighty-enable-mod phpmyadmin auth
+			lighty-enable-mod phpmyadmin auth
+		else
+			echo "Lighttpd not installed, skipping"
 		fi
 	fi
 }
@@ -89,17 +89,6 @@ if [ "$1" = "configure" ]; then
 			/etc/init.d/$webserver reload 3>/dev/null || true
 		fi
 	done
-
-	# warn about old pre-lenny symlink. Remove post-lenny.
-	if dpkg --compare-versions "$2" lt-nl "4:2.10.1-1" \
-		&& [ -L /var/www/phpmyadmin ] \
-		&& [ `readlink -n /var/www/phpmyadmin` = "/usr/share/phpmyadmin" ]; then
-	    echo "You have a symlink /var/www/phpmyadmin still present. This was needed "
-	    echo "in older versions of the phpMyAdmin package to make it web-accessible. "
-	    echo "It can now be removed because the package is configured directly "
-	    echo "within the webserver."
-	    echo
-	fi
 fi
 
 

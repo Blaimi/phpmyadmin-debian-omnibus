@@ -7,4 +7,4 @@ To add a new patch:
  * add it to debian/patches/00list
 
 
-See /usr/share/doc/dpatch for more information.
+See /usr/share/doc/dpatch/README.source.gz for more information.

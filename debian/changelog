@@ -1,3 +1,14 @@
+phpmyadmin (4:3.0.0~alpha-1) experimental; urgency=low
+
+  * New upstream alpha release: 3.0.0.
+  * Don't install readme.php if we don't install README.
+  * Use debhelper level 7.
+  * Remove dependencies for PHP4 and Apache 1 (Closes: #431885),
+    and legacy upgrading code.
+  * Remove paths from lighty-{en,dis}able-mod.
+
+ -- Thijs Kinkhorst <thijs@debian.org>  Mon, 11 Aug 2008 17:06:26 +0200
+
 phpmyadmin (4:2.11.8.1-1) unstable; urgency=low
 
   * New upstream release, only changes:

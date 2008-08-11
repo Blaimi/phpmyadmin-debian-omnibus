@@ -3,7 +3,7 @@
 /**
  * Set of functions used to build CSV dumps of tables
  *
- * @version $Id: htmlword.php 11335 2008-06-21 14:01:54Z lem9 $
+ * @version $Id: htmlword.php 11336 2008-06-21 15:01:27Z lem9 $
  */
 if (! defined('PHPMYADMIN')) {
     exit;
@@ -247,7 +247,7 @@ function PMA_exportStructure($db, $table, $crlf, $error_url, $do_relation = fals
     if ($do_relation && $have_rel) {
         $schema_insert .= '<td class="print"><b>' . htmlspecialchars($GLOBALS['strLinksTo']) . '</b></td>';
     }
-    if ($do_comments && ($cfgRelation['commwork'] || PMA_MYSQL_INT_VERSION >= 40100)) {
+    if ($do_comments) {
         $schema_insert .= '<td class="print"><b>' . htmlspecialchars($GLOBALS['strComments']) . '</b></td>';
         $comments = PMA_getComments($db, $table);
     }

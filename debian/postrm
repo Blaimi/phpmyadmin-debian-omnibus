@@ -6,11 +6,11 @@ set -e
 lighttpd_remove() {
 	if [ -f /etc/lighttpd/conf-available/50-phpmyadmin.conf ] ; then
 		rm -f /etc/lighttpd/conf-available/50-phpmyadmin.conf
-		if [ ! -x /usr/sbin/lighty-disable-mod ] ; then
-			echo "Lighttpd not installed, skipping"
-		else
-			/usr/sbin/lighty-disable-mod phpmyadmin
+		if which lighty-enable-mod >/dev/null 2>&1 ; then
+			lighty-disable-mod phpmyadmin
 			# We also enabled auth in postinst, but I think it's safer to keep it there
+		else
+			echo "Lighttpd not installed, skipping"
 		fi
 		# See bug #448682
 		if [ -h /etc/lighttpd/conf-enabled/50-phpmyadmin.conf ] ; then

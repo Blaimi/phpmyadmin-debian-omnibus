@@ -131,6 +131,10 @@ Licence:
     from Tavmjong Bah. For further information, contact: tavmjong @ free
     . fr.
 
-The Debian packaging of phpMyAdmin is (c) 2007 Thijs Kinkhorst and licenced
-under the same licence as phpMyAdmin itself.
+Files under js/mooRainbow are copyright Djamil Legato (w00fz)
+< w00fzIT [at] gmail.com > and licenced under a "MIT-style license".
+
+
+The Debian packaging of phpMyAdmin is (c) 2007-2008 Thijs Kinkhorst and
+licenced under the same licence as phpMyAdmin itself.
 

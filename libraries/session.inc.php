@@ -3,15 +3,13 @@
 /**
  * session handling
  *
- * @version $Id: session.inc.php 11335 2008-06-21 14:01:54Z lem9 $
+ * @version $Id: session.inc.php 11450 2008-08-01 19:15:01Z lem9 $
  * @todo    add failover or warn if sessions are not configured properly
  * @todo    add an option to use mm-module for session handler
  * @see     http://www.php.net/session
  * @uses    session_name()
  * @uses    session_start()
  * @uses    ini_set()
- * @uses    version_compare()
- * @uses    PHP_VERSION
  */
 if (! defined('PHPMYADMIN')) {
     exit;
@@ -35,27 +33,25 @@ if (!@function_exists('session_name')) {
 session_set_cookie_params(0, PMA_Config::getCookiePath() . '; HttpOnly',
     '', PMA_Config::isHttps());
 
-// cookies are safer
-ini_set('session.use_cookies', true);
+// cookies are safer (use @ini_set() in case this function is disabled)
+@ini_set('session.use_cookies', true);
 
 // but not all user allow cookies
-ini_set('session.use_only_cookies', false);
-ini_set('session.use_trans_sid', true);
-ini_set('url_rewriter.tags',
+@ini_set('session.use_only_cookies', false);
+@ini_set('session.use_trans_sid', true);
+@ini_set('url_rewriter.tags',
     'a=href,frame=src,input=src,form=fakeentry,fieldset=');
 //ini_set('arg_separator.output', '&amp;');
 
 // delete session/cookies when browser is closed
-ini_set('session.cookie_lifetime', 0);
+@ini_set('session.cookie_lifetime', 0);
 
 // warn but dont work with bug
-ini_set('session.bug_compat_42', false);
-ini_set('session.bug_compat_warn', true);
+@ini_set('session.bug_compat_42', false);
+@ini_set('session.bug_compat_warn', true);
 
-// use more secure session ids (with PHP 5)
-if (version_compare(PHP_VERSION, '5.0.0', 'ge')) {
-    ini_set('session.hash_function', 1);
-}
+// use more secure session ids
+@ini_set('session.hash_function', 1);
 
 // some pages (e.g. stylesheet) may be cached on clients, but not in shared
 // proxy servers
@@ -70,12 +66,6 @@ session_cache_limiter('private');
 
 $session_name = 'phpMyAdmin';
 @session_name($session_name);
-// strictly, PHP 4 since 4.4.2 would not need a verification
-if (version_compare(PHP_VERSION, '5.1.2', 'lt')
- && isset($_COOKIE[$session_name])
- && eregi("\r|\n", $_COOKIE[$session_name])) {
-    die('attacked');
-}
 
 if (! isset($_COOKIE[$session_name])) {
     // on first start of session we will check for errors
@@ -83,9 +73,9 @@ if (! isset($_COOKIE[$session_name])) {
     ob_start();
     $old_display_errors = ini_get('display_errors');
     $old_error_reporting = error_reporting(E_ALL);
-    ini_set('display_errors', 1);
+    @ini_set('display_errors', 1);
     $r = session_start();
-    ini_set('display_errors', $old_display_errors);
+    @ini_set('display_errors', $old_display_errors);
     error_reporting($old_error_reporting);
     unset($old_display_errors, $old_error_reporting);
     $session_error = ob_get_contents();
@@ -112,17 +102,10 @@ if (!isset($_SESSION[' PMA_token '])) {
  * (only required if sensitive information stored in session)
  *
  * @uses    session_regenerate_id() to secure session from fixation
- * @uses    session_id()            to set new session id
- * @uses    strip_tags()            to prevent XSS attacks in SID
- * @uses    function_exists()       for session_regenerate_id()
  */
 function PMA_secureSession()
 {
     // prevent session fixation and XSS
-    if (function_exists('session_regenerate_id')) {
-        session_regenerate_id(true);
-    } else {
-        session_id(strip_tags(session_id()));
-    }
+    session_regenerate_id(true);
 }
 ?>

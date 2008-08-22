@@ -2,7 +2,7 @@
 /* vim: set expandtab sw=4 ts=4 sts=4: */
 /**
  *
- * @version $Id: db_structure.php 11388 2008-07-14 19:52:16Z lem9 $
+ * @version $Id: db_structure.php 11491 2008-08-16 13:04:44Z lem9 $
  */
 
 /**
@@ -273,7 +273,7 @@ foreach ($tables as $keyname => $each_table) {
                 . ' ' . $overhead_unit . '</a>' . "\n";
             unset($formatted_overhead);
             $overhead_check .=
-                "document.getElementById('checkbox_tbl_$i').checked = true;";
+                "document.getElementById('checkbox_tbl_" . ($i + 1) . "').checked = true;";
         } else {
             $overhead = '-';
         }

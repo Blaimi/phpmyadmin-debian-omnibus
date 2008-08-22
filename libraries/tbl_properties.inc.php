@@ -4,7 +4,7 @@
  * Display form for changing/adding table fields/columns
  *
  * included by tbl_addfield.php, -_alter.php, -_create.php
- * @version $Id: tbl_properties.inc.php 11367 2008-07-05 22:01:04Z lem9 $
+ * @version $Id: tbl_properties.inc.php 11493 2008-08-17 11:25:12Z lem9 $
  */
 if (! defined('PHPMYADMIN')) {
     exit;
@@ -124,11 +124,11 @@ if ($cfgRelation['mimework'] && $cfg['BrowseMIME']) {
     $mime_map = PMA_getMIME($db, $table);
     $available_mime = PMA_getAvailableMIMEtypes();
 
-    $hint = '<p>' .
+    $hint = '<br />' .
         sprintf($strMIME_transformation_note,
             '<a href="transformation_overview.php?'
             . PMA_generate_common_url($db, $table) . '" target="_blank">',
-            '</a>') . '</p>';
+            '</a>');
 
 
     $header_cells[] = $strMIME_MIMEtype;

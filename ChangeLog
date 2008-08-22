@@ -2,7 +2,7 @@
 phpMyAdmin - ChangeLog
 ----------------------
 
-$Id: ChangeLog 11472 2008-08-09 17:14:28Z lem9 $
+$Id: ChangeLog 11491 2008-08-16 13:04:44Z lem9 $
 $HeadURL: https://phpmyadmin.svn.sourceforge.net/svnroot/phpmyadmin/trunk/phpMyAdmin/ChangeLog $
 
 3.0.0.0 (not yet released)
@@ -54,12 +54,11 @@ danbarry
 + prevent search indexes from indexing phpMyAdmin installations
 + [engines] PBXT: table options, foreign key (relation view, designer)
 + [lang] New Bangla, thanks to Raquibul Islam and Joy Kumar Nag
-+ [interface] Display options (work in progress); thanks to Dave Grijalva
++ [interface] Display options; thanks to Dave Grijalva
   for the idea about showing the display field while browsing
 - bug #1910621 [display] part 2: do not display a BINARY content as text
 + [auth] support SweKey hardware authentication 
-  see http://store.swekey.com/index.php?promo=pma
-  (todo: Documentation.html, improve code formatting)
+  see http://phpmyadmin.net/auth_key
 + rfe #1962383 [designer] Option to create a PDF page 
 - patch #2007196, Typos in comments, thanks to knittl - knittl
 - bug #1982315 [GUI] Comma and quote in ENUM, thanks to Joshua Hogendorn
@@ -70,6 +69,8 @@ danbarry
 + [doc] Documentation for distributing phpMyAdmin in README.VENDOR.
 + [display] headwords for sorted column 
 - bug #2033962 [import] Cannot import zip file
++ [lang] Swedish update, thanks to Björn T. Hallberg
+- bug #2050068 [gui] "Check tables having overhead" selects wrong tables
 
 2.11.9.0 (not yet released)
 - bug #2031221 [auth] Links to version number on login screen 
@@ -78,6 +79,7 @@ danbarry
   displayed, thanks to Maik Wiege - mswiege
 - bug #2037381 [export] Export type "replace" does not work
 - bug #2037375 [export] DROP PROCEDURE needs IF EXISTS 
+- bug #2045512 [export] Numbers in Excel export
 
 2.11.8.0 (2008-07-28)
 - patch #1987593 [interface] Table list pagination in navi, 

@@ -11,7 +11,7 @@
   * Translators
   * Glossary
 
-phpMyAdmin 3.0.0-alpha Documentation
+phpMyAdmin 3.0.0-beta Documentation
 
   * phpMyAdmin homepage
   * SourceForge phpMyAdmin project page
@@ -20,7 +20,7 @@ phpMyAdmin 3.0.0-alpha Documentation
       + Version history: ChangeLog
       + General notes: README
       + License: LICENSE
-  * Documentation version: $Id: Documentation.html 11472 2008-08-09 17:14:28Z
+  * Documentation version: $Id: Documentation.html 11482 2008-08-10 12:20:11Z
     lem9 $
 
 Requirements

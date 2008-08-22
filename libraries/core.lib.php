@@ -5,7 +5,7 @@
  * This script is distinct from libraries/common.inc.php because this
  * script is called from /test.
  *
- * @version $Id: core.lib.php 11370 2008-07-09 05:53:17Z cybot_tm $
+ * @version $Id: core.lib.php 11499 2008-08-21 16:45:14Z lem9 $
  */
 
 /**
@@ -268,7 +268,7 @@ function PMA_fatalError($error_message, $message_args = null)
         'type'  => $GLOBALS['strError'],
         'error' => $error_message,
     );
-    header('Location: ' . (defined('PMA_SETUP') ? '../' : '') . 'error.php'
+    header('Location: ' . (defined('PMA_SETUP') ? '../' : '') . 'error.php?'
             . http_build_query($query_params, null, '&'));
 
     // on fatal errors it cannot hurt to always delete the current session

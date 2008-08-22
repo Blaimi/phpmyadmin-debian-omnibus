@@ -3,7 +3,7 @@
 /**
  * query by example the whole database
  *
- * @version $Id: db_qbe.php 11378 2008-07-09 15:24:44Z lem9 $
+ * @version $Id: db_qbe.php 11498 2008-08-21 16:32:39Z lem9 $
  */
 
 /**
@@ -50,8 +50,8 @@ $add_col = PMA_ifSetOr($_REQUEST['add_col'], 0, 'numeric');
 $add_row = PMA_ifSetOr($_REQUEST['add_row'], 0, 'numeric');
 
 $rows    = PMA_ifSetOr($_REQUEST['rows'],    0, 'numeric');
-$ins_col = PMA_ifSetOr($_REQUEST['add_col'], null, 'array');
-$del_col = PMA_ifSetOr($_REQUEST['add_row'], null, 'array');
+$ins_col = PMA_ifSetOr($_REQUEST['ins_col'], null, 'array');
+$del_col = PMA_ifSetOr($_REQUEST['del_col'], null, 'array');
 
 $prev_criteria = isset($_REQUEST['prev_criteria'])
     ? $_REQUEST['prev_criteria']
@@ -638,7 +638,7 @@ foreach ($tbl_names as $key => $val) {
         <fieldset>
             <legend><?php echo sprintf($strQueryOnDb, PMA_getDbLink($db)); ?>
                 </legend>
-            <textarea cols="30" name="sql_query" id="textSqlquery"
+            <textarea cols="80" name="sql_query" id="textSqlquery"
                 rows="<?php echo ($numTableListOptions > 30) ? '15' : '7'; ?>"
                 dir="<?php echo $text_dir; ?>">
 <?php
@@ -815,7 +815,8 @@ if (isset($Field) && count($Field) > 0) {
             }
         } // end if (exactly one where clause)
 
-        unset($tab_all[$master]);
+        $tab_left = $tab_all;
+        unset($tab_left[$master]);
         $tab_know[$master] = $master;
 
         $run   = 0;

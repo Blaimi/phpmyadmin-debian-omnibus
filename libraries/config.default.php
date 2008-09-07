@@ -16,7 +16,7 @@
  *
  * All directives are explained in Documentation.html
  *
- * @version $Id: config.default.php 11422 2008-07-24 17:12:32Z lem9 $
+ * @version $Id: config.default.php 11564 2008-09-07 11:43:11Z lem9 $
  */
 
 /**
@@ -160,14 +160,6 @@ $cfg['Servers'][$i]['controlpass'] = '';
  * @global string $cfg['Servers'][$i]['auth_type']
  */
 $cfg['Servers'][$i]['auth_type'] = 'config';
-
-/**
- * File containing Swekey ids and login names (see /contrib);
- * leave empty to deactivate Swekey hardware authentication
- *
- * @global string $cfg['Servers'][$i]['auth_swekey_config']
- */
-$cfg['Servers'][$i]['auth_swekey_config'] = '';
 
 /**
  * MySQL user

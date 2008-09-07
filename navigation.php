@@ -3,7 +3,7 @@
 /**
  * the navigation frame - displays server, db and table selection tree
  *
- * @version $Id: navigation.php 11365 2008-07-01 19:21:28Z lem9 $
+ * @version $Id: navigation.php 11534 2008-09-01 12:39:56Z lem9 $
  * @uses $GLOBALS['pma']->databases
  * @uses $GLOBALS['server']
  * @uses $GLOBALS['db']
@@ -645,7 +645,7 @@ function PMA_displayTableList($tables, $visible = false,
             // link for the table name itself
             $href = $GLOBALS['cfg']['DefaultTabTable'] . '?'
                 .$GLOBALS['common_url_query'] . '&amp;table='
-                .urlencode($table['Name']);
+                .urlencode($table['Name']) . '&amp;pos=0';
             echo '<a href="' . $href
             . '" title="' . htmlspecialchars(PMA_getTitleForTarget($GLOBALS['cfg']['DefaultTabTable']) . ': ' . $table['Comment']
                 .' (' . PMA_formatNumber($table['Rows'], 0) . ' ' . $GLOBALS['strRows']) . ')"'

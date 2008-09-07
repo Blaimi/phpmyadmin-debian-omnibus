@@ -1,5 +1,5 @@
 <?php
-/* $Id: finnish-utf-8.inc.php 11404 2008-07-15 19:28:27Z lem9 $ */
+/* $Id: finnish-utf-8.inc.php 11564 2008-09-07 11:43:11Z lem9 $ */
 
 /*
  * Translated by Jouni Kähkönen, <address withdrawn>
@@ -1044,10 +1044,6 @@ $strInternalAndForeign = 'An internal relation is not necessary when a correspon
 $strViewHasAtLeast = 'This view has at least this number of rows. Please refer to %sdocumentation%s.';  //to translate
 $strRelationalKey = 'Relational key';  //to translate
 $strRelationalDisplayField = 'Relational display field';  //to translate
-$strSwekeyNoKey = 'No valid authentication key plugged';  //to translate
-$strSwekeyNoKeyId = 'File %s does not contain any key id';  //to translate
-$strSwekeyAuthFailed = 'Hardware authentication failed';  //to translate
-$strSwekeyAuthenticating = 'Authenticating...';  //to translate
 $strPBXTIndexCacheSize = 'Index cache size';  //to translate
 $strPBXTRecordCacheSize = 'Record cache size';  //to translate
 $strPBXTLogCacheSize = 'Log cache size';  //to translate

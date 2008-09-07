@@ -1,5 +1,5 @@
 <?php
-/* $Id: english-utf-8.inc.php 11467 2008-08-08 16:04:32Z lem9 $ */
+/* $Id: english-utf-8.inc.php 11564 2008-09-07 11:43:11Z lem9 $ */
 
 $charset = 'utf-8';
 $allow_recoding = TRUE;
@@ -939,10 +939,6 @@ $strSuccess = 'Your SQL query has been executed successfully';
 $strSuhosin = 'Server running with Suhosin. Please refer to %sdocumentation%s for possible issues.';
 $strSum = 'Sum';
 $strSwedish = 'Swedish';
-$strSwekeyAuthenticating = 'Authenticating...';
-$strSwekeyAuthFailed = 'Hardware authentication failed';
-$strSwekeyNoKeyId = 'File %s does not contain any key id';
-$strSwekeyNoKey = 'No valid authentication key plugged';
 $strSwitchToDatabase = 'Switch to copied database';
 $strSwitchToTable = 'Switch to copied table';
 

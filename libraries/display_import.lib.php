@@ -2,7 +2,7 @@
 /* vim: set expandtab sw=4 ts=4 sts=4: */
 /**
  *
- * @version $Id: display_import.lib.php 11472 2008-08-09 17:14:28Z lem9 $
+ * @version $Id: display_import.lib.php 11571 2008-09-07 15:29:00Z lem9 $
  */
 if (! defined('PHPMYADMIN')) {
     exit;
@@ -83,22 +83,17 @@ if (!empty($cfg['UploadDir'])) {
 // charset of file
 echo '<div class="formelementrow">' . "\n";
 if ($cfg['AllowAnywhereRecoding'] && $allow_recoding) {
-    echo '<label for="charset_of_file">' . $strCharsetOfFile . '</label>' . "\n";
-    $temp_charset = reset($cfg['AvailableCharsets']);
-    echo '    <select id="charset_of_file" name="charset_of_file" size="1">' . "\n"
-         . '            <option value="' . htmlentities($temp_charset) . '"';
-    if ($temp_charset == $charset) {
-        echo ' selected="selected"';
-    }
-    echo '>' . htmlentities($temp_charset) . '</option>' . "\n";
-    while ($temp_charset = next($cfg['AvailableCharsets'])) {
-        echo '            <option value="' . htmlentities($temp_charset) . '"';
+    echo '<label for="charset_of_file">' . $strCharsetOfFile . '</label>';
+    reset($cfg['AvailableCharsets']);
+    echo '<select id="charset_of_file" name="charset_of_file" size="1">';
+    foreach ($cfg['AvailableCharsets'] as $temp_charset) {
+        echo '<option value="' . htmlentities($temp_charset) .  '"';
         if ($temp_charset == $charset) {
             echo ' selected="selected"';
         }
-        echo '>' . htmlentities($temp_charset) . '</option>' . "\n";
+        echo '>' . htmlentities($temp_charset) . '</option>';
     }
-    echo '        </select><br />' . "\n" . '    ';
+    echo ' </select><br />';
 } else {
     echo '<label for="charset_of_file">' . $strCharsetOfFile . '</label>' . "\n";
     echo PMA_generateCharsetDropdownBox(PMA_CSDROPDOWN_CHARSET, 'charset_of_file', 'charset_of_file', 'utf8', FALSE);

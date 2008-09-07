@@ -25,10 +25,24 @@ apache_remove() {
 		rm -f /etc/$webserver/conf.d/phpmyadmin.conf
 	fi
 }
+if [ -f /usr/share/debconf/confmodule ]; then
+    . /usr/share/debconf/confmodule
+fi
+if [ -f /usr/share/dbconfig-common/dpkg/postrm.mysql ]; then
+    . /usr/share/dbconfig-common/dpkg/postrm.mysql
+    dbc_go phpmyadmin $@
+fi
+
+if [ "$1" = "purge" ]; then
+    rm -f /etc/phpmyadmin/config-db.php
+    if which ucf >/dev/null 2>&1; then
+	ucf --purge /etc/phpmyadmin/config-db.php
+    fi
+fi
+
 if [ "$1" = "remove" ] || [ "$1" = "purge" ]; then
 
 	if [ -f /usr/share/debconf/confmodule ]; then
-		. /usr/share/debconf/confmodule
 		db_version 2.0
 
 		db_get phpmyadmin/reconfigure-webserver

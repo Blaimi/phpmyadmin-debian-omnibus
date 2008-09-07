@@ -1,4 +1,5 @@
 etc/phpmyadmin
 usr/share/phpmyadmin
 usr/share/phpmyadmin/scripts
+usr/share/dbconfig-common/data/phpmyadmin/install/
 var/lib/phpmyadmin

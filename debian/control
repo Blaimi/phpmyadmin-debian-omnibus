@@ -12,7 +12,7 @@ Vcs-Svn: https://svn.kinkhorst.nl/svn/debian/phpmyadmin/trunk
 Package: phpmyadmin
 Architecture: all
 Depends: libapache2-mod-php5 | php5-cgi | php5,
- php5-mysql | php5-mysqli, php5-mcrypt, perl, ${misc:Depends}
+ php5-mysql | php5-mysqli, php5-mcrypt, perl, ${misc:Depends}, dbconfig-common
 Recommends: apache2 | lighttpd | httpd, php5-gd
 Suggests: mysql-server
 Description: MySQL web administration tool

@@ -20,10 +20,16 @@ CONFIGURATION
   The package installs a default configuration in /etc/phpmyadmin/, including
   a default apache.conf, which is optionally symlinked from your Apache config.
 
+  Since 3.0.0, phpMyAdmin can be configured using dbconfig-common. It
+  creates phpmyadmin database and control user on chosen server and
+  configures phpMyAdmin to use cookie authentication on this server.
+
   phpMyAdmin also provides a web-based setup script available at
   http://localhost/phpmyadmin/scripts/setup.php
   This setup script requires authorization by default. You can manage usernames
   and passwords with htpasswd command in the /etc/phpmyadmin/htpasswd.setup file.
+  Configuration from setup script overrides configuration generated from
+  dbconfig-common.
 
 
 SECURITY

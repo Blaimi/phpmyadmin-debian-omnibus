@@ -3,6 +3,12 @@
 set -e
 
 . /usr/share/debconf/confmodule
+
+if [ -f /usr/share/dbconfig-common/dpkg/config.mysql ]; then
+        . /usr/share/dbconfig-common/dpkg/config.mysql
+        dbc_go phpmyadmin $@
+fi
+
 db_version 2.0
 
 db_input high phpmyadmin/reconfigure-webserver || true

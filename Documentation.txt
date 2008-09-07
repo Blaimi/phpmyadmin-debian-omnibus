@@ -11,7 +11,7 @@
   * Translators
   * Glossary
 
-phpMyAdmin 3.0.0-beta Documentation
+phpMyAdmin 3.0.0-rc1 Documentation
 
   * phpMyAdmin homepage
   * SourceForge phpMyAdmin project page
@@ -20,7 +20,7 @@ phpMyAdmin 3.0.0-beta Documentation
       + Version history: ChangeLog
       + General notes: README
       + License: LICENSE
-  * Documentation version: $Id: Documentation.html 11482 2008-08-10 12:20:11Z
+  * Documentation version: $Id: Documentation.html 11570 2008-09-07 14:55:25Z
     lem9 $
 
 Requirements
@@ -358,26 +358,6 @@ Using authentication modes
     incoming HTTP requests at one?s router or firewall will suffice (both of
     which are beyond the scope of this manual but easily searchable with
     Google).
-
-Swekey authentication
-
-The Swekey is a low cost authentication USB key that can be used in web
-applications.
-
-When Swekey authentication is activated, phpMyAdmin requires the users's Swekey
-to be plugged before entering the login page (currently supported for cookie
-authentication mode only). Swekey Authentication is disabled by default.
-
-To enable it, add the following line to config.inc.php:
-
-$cfg['Servers'][$i]['auth_swekey_config'] = './swekey.conf';
-
-You then have to create the swekey.conf file that will associate each user with
-their Swekey Id. A self documented sample file is provided in the contrib
-directory. Feel free to use it with your own users' information.
-
-If you want to purchase a Swekey please visit http://phpmyadmin.net/auth_key
-since this link provides funding for phpMyAdmin.
 
 Configuration
 
@@ -1062,7 +1042,8 @@ $cfg['AllowAnywhereRecoding'] boolean
     Unicode, just to avoid losing some characters).
 
     Setting this to TRUE also activates a pull-down menu in the Export page, to
-    choose the character set when exporting a file.
+    choose the character set when exporting a file. The default value in this
+    menu comes from $cfg['Export']['charset'].
 $cfg['RecodingEngine'] string
     You can select here which functions will be used for character set
     conversion. Possible values are:
@@ -1249,7 +1230,35 @@ $cfg['SaveDir'] string
 $cfg['TempDir'] string
     The name of the directory where temporary files can be stored.
 
-    This is needed for native MS Excel export, see FAQ 6.23
+    This is needed for native MS Excel export, see FAQ 6.23 and to work around
+    limitations of open_basedir for uploaded files, see FAQ 1.11.
+
+    If the directory where phpMyAdmin is installed is subject to an
+    open_basedir restriction, you need to create a temporary directory in some
+    directory accessible by the web server. However for security reasons, this
+    directory should be outside the tree published by webserver. If you cannot
+    avoid having this directory published by webserver, place at least an empty
+    index.html file there, so that directory listing is not possible.
+
+    This directory should have as strict permissions as possible as the only
+    user required to access this directory is the one who runs the webserver.
+    If you have root privileges, simply make this user owner of this directory
+    and make it accessible only by it:
+
+
+    chown www-data:www-data tmp
+    chmod 700 tmp
+
+    If you cannot change owner of the directory, you can achieve a similar
+    setup using ACL:
+
+    chmod 700 tmp
+    setfacl -m "g:www-data:rwx" tmp
+    setfacl -d -m "g:www-data:rwx" tmp
+
+    If neither of above works for you, you can still make the directory chmod
+    777, but it might impose risk of other users on system reading and writing
+    data in this directory.
 $cfg['Export'] array
     In this array are defined default parameters for export, names of items are
     similar to texts seen on export page, so you can easily identify what they
@@ -1816,11 +1825,9 @@ It seems to clear up many problems between Internet Explorer and SSL.
 box.
 
 Since version 2.2.4, phpMyAdmin supports servers with open_basedir
-restrictions. Assuming that the restriction allows you to open files in the
-current directory ('.'), all you have to do is create a 'tmp' directory under
-the phpMyAdmin install directory, with permissions 777 and the same owner as
-the owner of your phpMyAdmin directory. The uploaded files will be moved there,
-and after execution of your SQL commands, removed.
+restrictions. However you need to create temporary directory and configure it
+as $cfg['TempDir']. The uploaded files will be moved there, and after execution
+of your SQL commands, removed.
 
 1.12 I have lost my MySQL root password, what can I do?
 

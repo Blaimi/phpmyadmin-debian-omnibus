@@ -2,7 +2,7 @@
 /* vim: set expandtab sw=4 ts=4 sts=4: */
 /**
  *
- * @version $Id: main.php 11411 2008-07-20 14:45:58Z lem9 $
+ * @version $Id: main.php 11512 2008-08-27 16:49:50Z lem9 $
  */
 
 /**
@@ -155,7 +155,7 @@ if ($GLOBALS['cfg']['ThemeManager']) {
     <script type="text/javascript">
     //<![CDATA[
     document.write('<li id="li_custom_color">');
-    document.write('<?php echo $strCustomColor . ': '; ?>');
+    document.write('<?php echo PMA_escapeJsString($strCustomColor) . ': '; ?>');
     document.write('<img id="myRainbow" src="js/mooRainbow/images/rainbow.png" alt="[r]" width="16" height="16" />');
     document.write('<form name="rainbowform" id="rainbowform" method="post" action="index.php" target="_parent">');
     document.write('<?php echo PMA_generate_common_hidden_inputs(); ?>');

@@ -1,5 +1,5 @@
 <?php
-/* $Id: swedish-utf-8.inc.php 11483 2008-08-12 16:53:29Z lem9 $ */
+/* $Id: swedish-utf-8.inc.php 11564 2008-09-07 11:43:11Z lem9 $ */
 
 /*
  * Translated by Björn T. Hallberg <bjornth at users dot sourceforge dot net>
@@ -937,10 +937,6 @@ $strSuccess = 'Din SQL-fråga utfördes korrekt';
 $strSuhosin = 'Server körs med Suhosin. Se %sdokumentation%s för möjliga frågor.';
 $strSum = 'Summa';
 $strSwedish = 'Svensk';
-$strSwekeyAuthenticating = 'Autenticiering pågår...';
-$strSwekeyAuthFailed = 'Hårdvaruautenticiering misslyckades';
-$strSwekeyNoKeyId = 'Filen %s innehåller inget nyckelid';
-$strSwekeyNoKey = 'Giltig autenticieringsnyckel saknas';
 $strSwitchToDatabase = 'Byt till kopierad databas';
 $strSwitchToTable = 'Byt till kopierad tabell';
 

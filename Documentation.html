@@ -2,7 +2,7 @@
     "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-US"
     version="-//W3C//DTD XHTML 1.1//EN" dir="ltr">
-<!-- $Id: Documentation.html 11482 2008-08-10 12:20:11Z lem9 $ -->
+<!-- $Id: Documentation.html 11570 2008-09-07 14:55:25Z lem9 $ -->
 <!--
     vim: expandtab ts=4 sw=4 sts=4 tw=78
 -->
@@ -11,7 +11,7 @@
     <link rel="icon" href="./favicon.ico" type="image/x-icon" />
     <link rel="shortcut icon" href="./favicon.ico" type="image/x-icon" />
     <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
-    <title>phpMyAdmin 3.0.0-beta - Documentation</title>
+    <title>phpMyAdmin 3.0.0-rc1 - Documentation</title>
     <link rel="stylesheet" type="text/css" href="docs.css" />
 </head>
 
@@ -33,7 +33,7 @@
     <li><a href="#glossary">Glossary</a></li>
 </ul>
 
-<h1>phpMyAdmin 3.0.0-beta Documentation</h1>
+<h1>phpMyAdmin 3.0.0-rc1 Documentation</h1>
 
 <ul><li><a href="http://www.phpmyadmin.net/">
             phpMyAdmin homepage</a></li>
@@ -48,7 +48,7 @@
         </ul>
     </li>
     <li>Documentation version:
-        <i>$Id: Documentation.html 11482 2008-08-10 12:20:11Z lem9 $</i>
+        <i>$Id: Documentation.html 11570 2008-09-07 14:55:25Z lem9 $</i>
     </li>
 </ul>
 
@@ -507,28 +507,6 @@ GRANT ALL PRIVILEGES ON user_base.* TO 'real_user'@localhost IDENTIFIED BY 'real
         one&#8217;s router or firewall will suffice (both of which
         are beyond the scope of this manual but easily searchable with Google).</li>
 </ul>
-<h4 id="swekey">Swekey authentication</h4>
-<p>
-The Swekey is a low cost authentication USB key that can be used in
-web applications.<br /><br />
-When Swekey authentication is activated, phpMyAdmin requires the
-users's Swekey to be plugged before entering the login page (currently
-supported for cookie authentication mode only). Swekey Authentication is 
-disabled by default.<br /><br />
-To enable it, add the following line to <tt>config.inc.php</tt>:
-</p>
-<pre>
-$cfg['Servers'][$i]['auth_swekey_config'] = './swekey.conf';
-</pre>
-<p>
-You then have to create the <tt>swekey.conf</tt> file that will associate
-each user with their Swekey Id. A self documented sample file is provided 
-in the <tt>contrib</tt> directory. Feel free to use it with your own 
-users' information.<br /><br />
-If you want to purchase a Swekey please visit
-<a href="http://phpmyadmin.net/auth_key">http://phpmyadmin.net/auth_key</a>
-since this link provides funding for phpMyAdmin.
-</p>
 <!-- CONFIGURATION -->
 <h2 id="config">Configuration</h2>
 
@@ -1499,7 +1477,8 @@ ALTER TABLE `pma_column_comments`
         which are in Unicode, just to avoid losing some characters).<br /><br />
 
         Setting this to <tt>TRUE</tt> also activates a pull-down menu
-        in the Export page, to choose the character set when exporting a file.
+	in the Export page, to choose the character set when exporting a file.
+	The default value in this menu comes from <tt>$cfg['Export']['charset']</tt>.
     </dd>
 
     <dt id="cfg_RecodingEngine">$cfg['RecodingEngine'] string</dt>
@@ -1767,13 +1746,51 @@ $cfg['TrustedProxies'] =
 
     <dt id="cfg_TempDir">$cfg['TempDir'] string</dt>
     <dd>
-        The name of the directory where temporary files can be stored.
+        The name of the directory where temporary files can be stored. 
         <br /><br />
+
         This is needed for native MS Excel export, see
         <a href="#faq6_23"><abbr title="Frequently Asked Questions">FAQ</abbr>
-        6.23</a>
-    </dd>
+		6.23</a> and to work around limitations of 
+	<tt>open_basedir</tt> for uploaded
+        files, see <a href="#faq1_11"><abbr title="Frequently Asked Questions">FAQ</abbr>
+        1.11</a>.
+        <br /><br />
 
+	If the directory where phpMyAdmin is installed is subject to an
+	<tt>open_basedir</tt> restriction, you need to create a
+        temporary directory in some directory accessible by the web
+        server. However for security reasons, this directory should be outside
+        the tree published by webserver. If you cannot avoid having this
+        directory published by webserver, place at least an empty
+        <tt>index.html</tt> file there, so that directory listing is not
+        possible.
+        <br /><br />
+
+        This directory should have as strict permissions as possible as the only
+        user required to access this directory is the one who runs the
+        webserver. If you have root privileges, simply make this user owner of
+        this directory and make it accessible only by it:
+        <br /><br />
+
+<pre>
+chown www-data:www-data tmp
+chmod 700 tmp
+</pre>
+
+        If you cannot change owner of the directory, you can achieve a similar
+        setup using <abbr title="Access Control List">ACL</abbr>:
+
+<pre>
+chmod 700 tmp
+setfacl -m "g:www-data:rwx" tmp
+setfacl -d -m "g:www-data:rwx" tmp
+</pre>
+
+        If neither of above works for you, you can still make the directory
+        <code>chmod 777</code>, but it might impose risk of other users on
+        system reading and writing data in this directory.
+    </dd>
     <dt id="cfg_Export">$cfg['Export'] array</dt>
     <dd>
         In this array are defined default parameters for export, names of
@@ -2480,11 +2497,9 @@ $cfg['TrustedProxies'] =
     uploading a file from the query box.</a></h4>
 
 <p> Since version 2.2.4, phpMyAdmin supports servers with open_basedir
-    restrictions. Assuming that the restriction allows you to open files in the
-    current directory ('.'), all you have to do is create a 'tmp' directory
-    under the phpMyAdmin install directory, with permissions 777 and the same
-    owner as the owner of your phpMyAdmin directory. The  uploaded files will
-    be moved there, and after execution of your
+    restrictions. However you need to create temporary directory and 
+    configure it as <a href="#cfg_TempDir" class="configrule">$cfg['TempDir']</a>.
+    The uploaded files will be moved there, and after execution of your
     <abbr title="structured query language">SQL</abbr> commands, removed.</p>
 
 <h4 id="faq1_12">

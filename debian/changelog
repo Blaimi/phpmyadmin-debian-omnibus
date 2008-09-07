@@ -1,3 +1,13 @@
+phpmyadmin (4:3.0.0~rc1-1) experimental; urgency=low
+
+  [ Thijs Kinkhorst ]
+  * New upstream release candidate.
+  
+  [ Michal Čihař ]
+  * Disallow access to libraries when using lighttpd.
+
+ -- Thijs Kinkhorst <thijs@debian.org>  Sun, 07 Sep 2008 18:34:18 +0200
+
 phpmyadmin (4:3.0.0~beta-1) experimental; urgency=low
 
   * New upstream bèta release.

@@ -2,7 +2,7 @@
 /* vim: set expandtab sw=4 ts=4 sts=4: */
 /**
  *
- * @version $Id: db_events.inc.php 11417 2008-07-21 16:41:17Z lem9 $
+ * @version $Id: db_events.inc.php 11582 2008-09-10 16:53:28Z lem9 $
  */
 if (! defined('PHPMYADMIN')) {
     exit;

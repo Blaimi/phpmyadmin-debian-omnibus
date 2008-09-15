@@ -3,7 +3,7 @@
 /**
  * library for displaying table with results from all sort of select queries
  *
- * @version $Id: display_tbl.lib.php 11455 2008-08-04 17:03:34Z lem9 $
+ * @version $Id: display_tbl.lib.php 11583 2008-09-11 17:03:49Z lem9 $
  */
 
 /**
@@ -765,9 +765,9 @@ function PMA_displayTableHeaders(&$is_display, &$fields_meta, $fields_cnt = 0, $
             //       If it contains one, it's probably a function column
             //       like 'COUNT(`field`)'
             if (strpos($name_to_use_in_sort, '(') !== false) {
-                $sort_order = ' ORDER BY ' . $name_to_use_in_sort . ' ';
+                $sort_order = 'ORDER BY ' . $name_to_use_in_sort . ' ';
             } else {
-                $sort_order = ' ORDER BY ' . $sort_tbl . PMA_backquote($name_to_use_in_sort) . ' ';
+                $sort_order = 'ORDER BY ' . $sort_tbl . PMA_backquote($name_to_use_in_sort) . ' ';
             }
             unset($name_to_use_in_sort);
 
@@ -1801,8 +1801,7 @@ function PMA_displayTable(&$dt_result, &$the_disp_mode, $analyzed_sql)
 
         if (PMA_Table::isView($db, $table)
          && $total == $GLOBALS['cfg']['MaxExactCountViews']) {
-            $message = PMA_Message::notice('strViewMaxExactCount');
-            $message->addParam($GLOBALS['cfg']['MaxExactCountViews']);
+            $message = PMA_Message::notice('strViewHasAtLeast');
             $message->addParam('[a@./Documentation.html#cfg_MaxExactCount@_blank]');
             $message->addParam('[/a]');
             $message_view_warning = PMA_showHint($message);

@@ -2,7 +2,7 @@
 /* vim: set expandtab sw=4 ts=4 sts=4: */
 /**
  *
- * @version $Id: tbl_triggers.lib.php 11378 2008-07-09 15:24:44Z lem9 $
+ * @version $Id: tbl_triggers.lib.php 11582 2008-09-10 16:53:28Z lem9 $
  */
 if (! defined('PHPMYADMIN')) {
     exit;

@@ -1,3 +1,13 @@
+phpmyadmin (4:3.0.0~rc2-1) experimental; urgency=high
+
+  * New upstream release candidate.
+    + Fixes code execution by authenticated users
+      [CVE-2008-4096, PMASA-2008-7]
+  * Make config-db.php owned by root:www-data and mode 0640.
+  * Add recommends on mysql-cient for dbconfig-common.
+
+ -- Thijs Kinkhorst <thijs@debian.org>  Tue, 16 Sep 2008 09:00:50 +0200
+
 phpmyadmin (4:3.0.0~rc1-2) experimental; urgency=low
 
   * Create phpmyadmin databases by dbconfig-common.

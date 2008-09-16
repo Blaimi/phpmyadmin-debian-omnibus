@@ -1,5 +1,5 @@
 <?php
-/* $Id: french-utf-8.inc.php 11564 2008-09-07 11:43:11Z lem9 $ */
+/* $Id: french-utf-8.inc.php 11577 2008-09-07 16:40:54Z lem9 $ */
 
 $charset = 'utf-8';
 $allow_recoding = TRUE;
@@ -1042,7 +1042,7 @@ $strValidateSQL = 'Valider SQL';
 $strValidatorError = 'Le validateur SQL n\'a pas pu être initialisé. Vérifiez que les extensions PHP nécessaires ont bien été installées (voir la %sdocumentation%s).';
 $strValue = 'Valeur';
 $strVar = 'Variable';
-$strVersionInformation = 'Information de version';
+$strVersionInformation = 'Version';
 $strViewDump = '<b>Afficher le schéma</b> de la table';
 $strViewDumpDatabases = 'Schéma et/ou contenu des bases de données';
 $strViewDumpDB = 'Schéma et données de la base ';

@@ -1,5 +1,5 @@
 <?php
-/* $Id: bangla-utf-8.inc.php 11564 2008-09-07 11:43:11Z lem9 $ */
+/* $Id: bangla-utf-8.inc.php 11582 2008-09-10 16:53:28Z lem9 $ */
 
 $charset = 'utf-8';
 $allow_recoding = TRUE;

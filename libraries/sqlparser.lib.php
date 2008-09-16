@@ -27,7 +27,7 @@
  * page for it to work, I recommend '<link rel="stylesheet" type="text/css"
  * href="syntax.css.php" />' at the moment.)
  *
- * @version $Id: sqlparser.lib.php 11513 2008-08-28 16:17:53Z lem9 $
+ * @version $Id: sqlparser.lib.php 11583 2008-09-11 17:03:49Z lem9 $
  */
 if (! defined('PHPMYADMIN')) {
     exit;
@@ -151,7 +151,7 @@ if (! defined('PMA_MINIMUM_COMMON')) {
     {
         global $SQP_errorString;
         $debugstr = 'ERROR: ' . $message . "\n";
-        $debugstr .= 'SVN: $Id: sqlparser.lib.php 11513 2008-08-28 16:17:53Z lem9 $' . "\n";
+        $debugstr .= 'SVN: $Id: sqlparser.lib.php 11583 2008-09-11 17:03:49Z lem9 $' . "\n";
         $debugstr .= 'MySQL: '.PMA_MYSQL_STR_VERSION . "\n";
         $debugstr .= 'USR OS, AGENT, VER: ' . PMA_USR_OS . ' ' . PMA_USR_BROWSER_AGENT . ' ' . PMA_USR_BROWSER_VER . "\n";
         $debugstr .= 'PMA: ' . PMA_VERSION . "\n";
@@ -1589,9 +1589,12 @@ if (! defined('PMA_MINIMUM_COMMON')) {
                     }
                     if ($seen_order) {
                         $seen_order_by = TRUE;
-                        // here we assume that the ORDER BY keywords took
-                        // exactly 8 characters
-                        $unsorted_query = substr($arr['raw'], 0, $arr[$i]['pos'] - 8);
+                        // Here we assume that the ORDER BY keywords took
+                        // exactly 8 characters.
+                        // We use PMA_substr() to be charset-safe; otherwise
+                        // if the table name contains accents, the unsorted
+                        // query would be missing some characters.
+                        $unsorted_query = PMA_substr($arr['raw'], 0, $arr[$i]['pos'] - 8);
                         $in_order_by = TRUE;
                         $order_by_clause = '';
                     }

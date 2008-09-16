@@ -2,7 +2,7 @@
 phpMyAdmin - ChangeLog
 ----------------------
 
-$Id: ChangeLog 11571 2008-09-07 15:29:00Z lem9 $
+$Id: ChangeLog 11590 2008-09-15 19:49:59Z lem9 $
 $HeadURL: https://phpmyadmin.svn.sourceforge.net/svnroot/phpmyadmin/trunk/phpMyAdmin/ChangeLog $
 
 3.0.0.0 (not yet released)
@@ -74,7 +74,7 @@ danbarry
 + [lang] Italian update, thanks to Luca Rebellato
 - [core] safer handling of temporary files with open_basedir (thanks to Thijs
   Kinkhorst)
-- [core] do not automatically set and create TempDir, it might lead to secrity
+- [core] do not automatically set and create TempDir, it might lead to security
   issue (thanks to Thijs Kinkhorst)
 + [lang] Czech update
 - bug #2066923 [display] Navi browse icon does not go to page 1 
@@ -82,6 +82,13 @@ danbarry
   thanks to Charles Suh - cws125
 - bug #2080963 [charset] Clarify doc and improved code, thanks to
   Victor Volkov - hanut
+- bug [charset] Cannot sort twice on a column when the table name
+  contains accents
++ [lang] Spanish update, thanks to Daniel Hinostroza
++ [lang] Hungarian update, thanks to Jozsef Tamas Herczeg - dodika 
+
+2.11.9.1 (2008-09-15)
+- [security] Code execution vulnerability, thanks to Norman Hippert
 
 2.11.9.0 (2008-08-28)
 - bug #2031221 [auth] Links to version number on login screen 

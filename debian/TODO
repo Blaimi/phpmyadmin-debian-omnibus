@@ -1,5 +1,1 @@
 - Investigate webapps-common. Is it ready yet?
-
-- Can we use dbconfig-common in some way? We only need a db hostname & port no.
-  Is that possible?
-

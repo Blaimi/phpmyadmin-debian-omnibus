@@ -3,7 +3,7 @@
 /**
  * Library for extracting information about the partitions
  *
- * @version $Id: Partition.class.php 10882 2007-10-26 12:40:23Z lem9 $
+ * @version $Id: Partition.class.php 11582 2008-09-10 16:53:28Z lem9 $
  */
 
 

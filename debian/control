@@ -13,7 +13,7 @@ Package: phpmyadmin
 Architecture: all
 Depends: libapache2-mod-php5 | php5-cgi | php5,
  php5-mysql | php5-mysqli, php5-mcrypt, perl, ${misc:Depends}, dbconfig-common
-Recommends: apache2 | lighttpd | httpd, php5-gd
+Recommends: apache2 | lighttpd | httpd, php5-gd, mysql-client
 Suggests: mysql-server
 Description: MySQL web administration tool
  This package allows administering of MySQL with a web interface.

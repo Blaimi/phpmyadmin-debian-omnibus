@@ -2,7 +2,7 @@
 /* vim: set expandtab sw=4 ts=4 sts=4: */
 /**
  *
- * @version $Id: Table.class.php 11365 2008-07-01 19:21:28Z lem9 $
+ * @version $Id: Table.class.php 11579 2008-09-08 17:10:58Z lem9 $
  */
 
 /**
@@ -466,7 +466,7 @@ class PMA_Table
         echo PMA_formatNumber($row_count, 0);
         if ($is_view) {
             echo '&nbsp;'
-                . sprintf($GLOBALS['strViewMaxExactCount'],
+                . sprintf($GLOBALS['strViewHasAtLeast'],
                     $GLOBALS['cfg']['MaxExactCount'],
                     '[a@./Documentation.html#cfg_MaxExactCount@_blank]', '[/a]');
         }

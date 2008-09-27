@@ -28,7 +28,7 @@
  * - db connection
  * - authentication work
  *
- * @version $Id: common.inc.php 11535 2008-09-02 16:44:02Z lem9 $
+ * @version $Id: common.inc.php 11616 2008-09-26 16:22:42Z lem9 $
  */
 
 /**
@@ -534,7 +534,7 @@ if ($_SESSION['PMA_Config']->get('ForceSSL')
     PMA_sendHeaderLocation(
         preg_replace('/^http/', 'https',
             $_SESSION['PMA_Config']->get('PmaAbsoluteUri'))
-        . PMA_generate_common_url($_GET));
+        . PMA_generate_common_url($_GET, '', '&'));
     exit;
 }
 

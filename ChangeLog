@@ -2,10 +2,10 @@
 phpMyAdmin - ChangeLog
 ----------------------
 
-$Id: ChangeLog 11590 2008-09-15 19:49:59Z lem9 $
+$Id: ChangeLog 11619 2008-09-27 12:46:03Z lem9 $
 $HeadURL: https://phpmyadmin.svn.sourceforge.net/svnroot/phpmyadmin/trunk/phpMyAdmin/ChangeLog $
 
-3.0.0.0 (not yet released)
+3.0.0.0 (2008-09-27)
 + [export] properly handle line breaks for YAML, thanks to Dan Barry -
 danbarry
 + [navi] new parameter $cfg['LeftDefaultTabTable']
@@ -86,6 +86,12 @@ danbarry
   contains accents
 + [lang] Spanish update, thanks to Daniel Hinostroza
 + [lang] Hungarian update, thanks to Jozsef Tamas Herczeg - dodika 
+- bug #2113848 [navi] Page number after database switching 
+- patch #2115966 [GUI] Checkboxes and IE 7, thanks to Martin - maschg 
+- bug #114066 [core] ForceSSL generates incorrectly escaped redirections
+
+2.11.9.2 (2008-09-22)
+- [security] XSS in MSIE using NUL byte, thanks to JPCERT.
 
 2.11.9.1 (2008-09-15)
 - [security] Code execution vulnerability, thanks to Norman Hippert

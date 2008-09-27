@@ -5,7 +5,7 @@
  *
  * register_globals_save (mark this file save for disabling register globals)
  *
- * @version $Id: tbl_change.php 11378 2008-07-09 15:24:44Z lem9 $
+ * @version $Id: tbl_change.php 11615 2008-09-25 17:07:59Z lem9 $
  */
 
 /**
@@ -196,7 +196,7 @@ $foreigners  = PMA_getForeigners($db, $table);
  */
 // loic1: autocomplete feature of IE kills the "onchange" event handler and it
 //        must be replaced by the "onpropertychange" one in this case
-$chg_evt_handler = (PMA_USR_BROWSER_AGENT == 'IE' && PMA_USR_BROWSER_VER >= 5)
+$chg_evt_handler = (PMA_USR_BROWSER_AGENT == 'IE' && PMA_USR_BROWSER_VER >= 5 && PMA_USR_BROWSER_VER < 7)
                  ? 'onpropertychange'
                  : 'onchange';
 // Had to put the URI because when hosted on an https server,

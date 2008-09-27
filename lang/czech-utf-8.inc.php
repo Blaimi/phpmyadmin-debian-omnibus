@@ -1,5 +1,5 @@
 <?php
-/* $Id: czech-utf-8.inc.php 11564 2008-09-07 11:43:11Z lem9 $ */
+/* $Id: czech-utf-8.inc.php 11613 2008-09-25 15:55:22Z nijel $ */
 
 /**
  * Czech language file by
@@ -481,8 +481,8 @@ $strMyISAMMaxSortFileSizeDesc = 'Maximální velikost dočasných souborů, kter
 $strMyISAMMaxSortFileSize = 'Maximální velikost dočasných souborů pro řazení';
 $strMyISAMRecoverOptions = 'Automatický režim obnovy';
 $strMyISAMRecoverOptionsDesc = 'Režim automatické obnovy poškozených MyISAM tabulek. Nastavuje se parametrem --myisam-recover při spouštění serveru.';
-$strMyISAMRepairThreadsDesc = 'Pokud je tato hodnota větší než 1, indexy v MyISAM tabulkách jsou vytvářeny paralelně (každý index vlastním threadem) při obnově nebo řazení.';
-$strMyISAMRepairThreads = 'Threadů pro opravování';
+$strMyISAMRepairThreadsDesc = 'Pokud je tato hodnota větší než 1, indexy v MyISAM tabulkách jsou vytvářeny paralelně (každý index vlastním vláknem) při obnově nebo řazení.';
+$strMyISAMRepairThreads = 'Vláken pro opravování';
 $strMyISAMSortBufferSizeDesc = 'Paměť, která je alokována při řazení MyISAM indexů během jejich vytváření nebo opravování.';
 $strMyISAMSortBufferSize = 'Velikost paměti pro řazení';
 $strMysqlClientVersion = 'Verze MySQL klienta';
@@ -610,7 +610,7 @@ $strPrivDescFile = 'Umožňuje importovat a exportovat data z/do souborů na ser
 $strPrivDescGrant = 'Umožňuje přidávat uživatele a oprávnění bez znovunačítání tabulek s oprávněními.';
 $strPrivDescIndex = 'Umožňuje vytvářet a rušit indexy.';
 $strPrivDescInsert = 'Umožňuje vkládat a přepisovat data.';
-$strPrivDescLockTables = 'Umožňuje zamknout tabulku pro aktuální thread.';
+$strPrivDescLockTables = 'Umožňuje zamknout tabulku pro aktuální vlákno.';
 $strPrivDescMaxConnections = 'Omezuje počet nových připojení, která může uživatel vytvořit za hodinu.';
 $strPrivDescMaxQuestions = 'Omezuje, kolik dotazů může uživatel odeslat serveru za hodinu.';
 $strPrivDescMaxUpdates = 'Omezuje, kolik dotazů měnících nějakou tabulku nebo databázi může uživatel spustit za hodinu.';
@@ -624,7 +624,7 @@ $strPrivDescSelect = 'Umožňuje vybírat data.';
 $strPrivDescShowDb = 'Umožňuje přístup k úplnému seznamu databází.';
 $strPrivDescShowView = 'Umožňuje spuštění dotazu SHOW CREATE VIEW.';
 $strPrivDescShutdown = 'Umožňuje vypnout server.';
-$strPrivDescSuper = 'Umožňuje připojení, i když je dosažen maximální počet připojení. Potřebné pro většinu operací pro správu serveru jako nastavování globálních proměnných a zabíjení threadů jiných uživatelů.';
+$strPrivDescSuper = 'Umožňuje připojení, i když je dosažen maximální počet připojení. Potřebné pro většinu operací pro správu serveru jako nastavování globálních proměnných a zabíjení vláken jiných uživatelů.';
 $strPrivDescTrigger = 'Umožňuje vytváření a mazání spouští';
 $strPrivDescUpdate = 'Umožňuje měnit data.';
 $strPrivDescUsage = 'Žádná oprávnění.';
@@ -767,7 +767,7 @@ $strShowStatusCreated_tmp_disk_tablesDescr = 'Počet dočasných tabulek vytvoř
 $strShowStatusCreated_tmp_filesDescr = 'Počet vytvořených dočasných souborů.';
 $strShowStatusCreated_tmp_tablesDescr = 'Počet dočasných tabulek vytvořených serverem v paměti při provádění dotazů.';
 $strShowStatusDelayed_errorsDescr = 'Počet řádků provedených pomocí INSERT DELAYED, u kterých se vyskytla chyba (pravděpodobně duplicitní klíč).';
-$strShowStatusDelayed_insert_threadsDescr = 'Počet vláken používaných pro INSERT DELAYED. Každá tabulka na které je použit INSERT DEKAYED má jeden thread.';
+$strShowStatusDelayed_insert_threadsDescr = 'Počet vláken používaných pro INSERT DELAYED. Každá tabulka na které je použit INSERT DEKAYED má přiděleno jedno vlákno.';
 $strShowStatusDelayed_writesDescr = 'Počet řádků zapsaných pomocí INSERT DELAYED.';
 $strShowStatusFlush_commandsDescr  = 'Počet provedených příkazů FLUSH.';
 $strShowStatusHandler_commitDescr = 'Počet interních příkazů COMMIT.';
@@ -1064,7 +1064,7 @@ $strPBXTGarbageThreshold = 'Garbage threshold';  //to translate
 $strPBXTCheckpointFrequencyDesc = 'The amount of data written to the transaction log before a checkpoint is performed. The default value is 24MB.';  //to translate
 $strPBXTCheckpointFrequency = 'Checkpoint frequency';  //to translate
 $strPBXTIndexCacheSizeDesc = 'This is the amount of memory allocated to the index cache. Default value is 32MB. The memory allocated here is used only for caching index pages.';  //to translate
-$strPBXTLogBufferSizeDesc = 'The size of the buffer used when writing a data log. The default is 256MB. The engine allocates one buffer pre thread, but only if the thread is required to write a data log.';  //to translate
+$strPBXTLogBufferSizeDesc = 'The size of the buffer used when writing a data log. The default is 256MB. The engine allocates one buffer per thread, but only if the thread is required to write a data log.';  //to translate
 $strPBXTLogBufferSize = 'Log buffer size';  //to translate
 $strPBXTLogCacheSizeDesc = 'The amount of memory allocated to the transaction log cache used to cache on transaction log data. The default is 16MB.';  //to translate
 $strPBXTLogFileCountDesc = 'This is the number of transaction log files (pbxt/system/xlog*.xt) the system will maintain. If the number of logs exceeds this value then old logs will be deleted, otherwise they are renamed and given the next highest number.';  //to translate

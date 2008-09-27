@@ -31,7 +31,7 @@
  * @uses    strnatcasecmp()
  * @uses    count()
  * @uses    addslashes()
- * @version $Id: db_info.inc.php 11336 2008-06-21 15:01:27Z lem9 $
+ * @version $Id: db_info.inc.php 11602 2008-09-21 13:02:41Z lem9 $
  */
 if (! defined('PHPMYADMIN')) {
     exit;
@@ -45,8 +45,9 @@ require_once './libraries/common.inc.php';
 /**
  * limits for table list
  */
-if (! isset($_SESSION['userconf']['table_limit_offset'])) {
+if (! isset($_SESSION['userconf']['table_limit_offset']) || $_SESSION['userconf']['table_limit_offset_db'] != $db) {
     $_SESSION['userconf']['table_limit_offset'] = 0;
+    $_SESSION['userconf']['table_limit_offset_db'] = $db;
 }
 if (isset($_REQUEST['pos'])) {
     $_SESSION['userconf']['table_limit_offset'] = (int) $_REQUEST['pos'];

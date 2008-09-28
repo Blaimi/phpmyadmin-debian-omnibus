@@ -3,7 +3,7 @@
 /**
  * the navigation frame - displays server, db and table selection tree
  *
- * @version $Id: navigation.php 11534 2008-09-01 12:39:56Z lem9 $
+ * @version $Id: navigation.php 11602 2008-09-21 13:02:41Z lem9 $
  * @uses $GLOBALS['pma']->databases
  * @uses $GLOBALS['server']
  * @uses $GLOBALS['db']
@@ -63,8 +63,9 @@ function PMA_exitNavigationFrame()
 if (! isset($_SESSION['userconf']['navi_limit_offset'])) {
     $_SESSION['userconf']['navi_limit_offset'] = 0;
 }
-if (! isset($_SESSION['userconf']['table_limit_offset'])) {
-	$_SESSION['userconf']['table_limit_offset'] = 0;
+if (! isset($_SESSION['userconf']['table_limit_offset']) || $_SESSION['userconf']['table_limit_offset_db'] != $db) {
+    $_SESSION['userconf']['table_limit_offset'] = 0;
+    $_SESSION['userconf']['table_limit_offset_db'] = $db;
 }
 if (isset($_REQUEST['pos'])) {
 	if (isset($_REQUEST['tpos'])) {
@@ -109,23 +110,6 @@ $cfgRelation = PMA_getRelationsParam();
  * It can now be included by libraries/header.inc.php, querywindow.php.
  */
 require_once './libraries/header_http.inc.php';
-
-if (! isset($_SESSION['userconf']['navi_limit_offset'])) {
-    $_SESSION['userconf']['navi_limit_offset'] = 0;
-}
-if (! isset($_SESSION['userconf']['table_limit_offset'])) {
-	$_SESSION['userconf']['table_limit_offset'] = 0;
-}
-if (isset($_REQUEST['pos'])) {
-	if (isset($_REQUEST['tpos'])) {
-		$_SESSION['userconf']['table_limit_offset'] = (int) $_REQUEST['pos'];
-	}
-	else {
-		$_SESSION['userconf']['navi_limit_offset'] = (int) $_REQUEST['pos'];
-	}
-}
-$pos = $_SESSION['userconf']['navi_limit_offset'];
-$tpos = $_SESSION['userconf']['table_limit_offset'];
 
 /*
  * Displays the frame

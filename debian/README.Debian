@@ -44,4 +44,29 @@ SECURITY
   phpMyAdmin to operate. Make sure it's off. It's trivial to turn it on just for
   specific legacy sites that may need it.
 
+
+MULTIPLE COPIES FROM ONE CODEBASE
+
+  The recommended phpMyAdmin way to share an installation between different
+  users is to use cookie or HTTP authentication to support the users, and 
+  perhaps define multiple servers in config.inc.php each with their own
+  hostname and other settings. This should be enough for most cases.
+
+  If you still want to have multiple copies with different configuration,
+  but using the central codebase from the Debian package, the following may
+  be a poor man's solution:
+
+  mkdir phpmyadmin-site1 && cd phpmyadmin-site1
+  ln -s /usr/share/phpmyadmin/* .
+  rm config.inc.php
+  cp /usr/share/phpmyadmin/config.inc.php .
+  sed -i 's#/etc/phpmyadmin/config-site1.inc.php/#/etc/phpmyadmin/config-site1.inc.php#'
+
+  cd /etc/phpmyadmin/
+  cp config.inc.php config-site1.inc.php
+  vi config-site1.inc.php
+
+  Make the dir you chose web-accessible and you're done for site1.
+  Copy the created dir to site2 and make the necessary changes, etc.
+
  -- Thijs Kinkhorst <thijs@debian.org>  Mon, 21 Apr 2007 12:10:15 +0200

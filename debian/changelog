@@ -1,6 +1,14 @@
+phpmyadmin (4:3.0.1-1) experimental; urgency=low
+
+  * New upstream release.
+    - Updates French translation (Closes: #502520).
+
+ -- Thijs Kinkhorst <thijs@debian.org>  Tue, 28 Oct 2008 22:54:03 +0100
+
 phpmyadmin (4:3.0.0-1) experimental; urgency=low
 
   * New upstream release.
+    Includes security fix [PMASA-2008-8, CVE-2008-4326]
 
  -- Thijs Kinkhorst <thijs@debian.org>  Sun, 28 Sep 2008 11:11:04 +0200
 

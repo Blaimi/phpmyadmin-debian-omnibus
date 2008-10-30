@@ -2,8 +2,11 @@
 phpMyAdmin - ChangeLog
 ----------------------
 
-$Id: ChangeLog 11669 2008-10-22 21:03:46Z lem9 $
+$Id: ChangeLog 11683 2008-10-30 12:47:24Z lem9 $
 $HeadURL: https://phpmyadmin.svn.sourceforge.net/svnroot/phpmyadmin/trunk/phpMyAdmin/ChangeLog $
+
+3.0.1.1 (2008-10-30)
+- [security] XSS in a Designer component 
 
 3.0.1.0 (2008-10-22)
 - bug #2134126 [GUI] SQL error after sorting a subset

@@ -1,3 +1,10 @@
+phpmyadmin (4:3.0.1.1-1) experimental; urgency=high
+
+  * New upstream release to fix a security issue.
+    [PMASA-2008-9, CVE-2008-4775]
+
+ -- Thijs Kinkhorst <thijs@debian.org>  Fri, 31 Oct 2008 11:04:02 +0100
+
 phpmyadmin (4:3.0.1-1) experimental; urgency=low
 
   * New upstream release.

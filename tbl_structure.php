@@ -3,7 +3,7 @@
 /**
  * Displays table structure infos like fields/columns, indexes, size, rows
  * and allows manipulation of indexes and columns/fields
- * @version $Id: tbl_structure.php 11417 2008-07-21 16:41:17Z lem9 $
+ * @version $Id: tbl_structure.php 11581 2008-09-09 17:23:59Z lem9 $
  */
 
 /**
@@ -340,6 +340,9 @@ while ($row = PMA_DBI_fetch_assoc($fields_rs)) {
         } else {
             echo $row['Default']; 
         }
+    }
+    else {
+        echo '<i>' . $strNone . '</i>';
     } ?></td>
     <td nowrap="nowrap"><?php echo $row['Extra']; ?></td>
     <td align="center">

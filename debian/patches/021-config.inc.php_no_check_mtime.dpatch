@@ -7,10 +7,10 @@
 
 @DPATCH@
 
-diff -ur phpMyAdmin-2.9.0.3-all-languages.orig/libraries/Config.class.php phpMyAdmin-2.9.0.3-all-languages/libraries/Config.class.php
---- phpMyAdmin-2.9.0.3-all-languages.orig/libraries/Config.class.php	2006-11-01 14:34:05.000000000 +0100
-+++ phpMyAdmin-2.9.0.3-all-languages/libraries/Config.class.php	2006-11-02 15:42:38.000000000 +0100
-@@ -293,15 +293,20 @@
+diff -ur phpMyAdmin-3.1.0-all-languages.orig/libraries/Config.class.php phpMyAdmin-3.1.0-all-languages/libraries/Config.class.php
+--- phpMyAdmin-3.1.0-all-languages.orig/libraries/Config.class.php	2008-11-28 14:21:00.000000000 +0100
++++ phpMyAdmin-3.1.0-all-languages/libraries/Config.class.php	2008-11-30 11:49:37.000000000 +0100
+@@ -298,15 +298,20 @@
       */
      function __wakeup()
      {

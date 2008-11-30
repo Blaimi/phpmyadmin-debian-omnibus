@@ -1,3 +1,20 @@
+phpmyadmin (4:3.1.0-1) experimental; urgency=low
+
+  [ Thijs Kinkhorst ]
+  * New upstream release.
+    - Prevents logging in as root by default (Closes: #496442).
+
+  [ Michal Čihař ]
+  * New setup code in upstream.
+    - Patch for setup.php is obsolete.
+    - New patch for similar changes in new setup code.
+    - Adjusted paths in webserver configs to new setup
+    - Limit access to setup libraries in same way we do it for libraries.
+  * Use upstream code for displaying changelog with links.
+  * Use htpasswd backend for lighttpd.
+
+ -- Michal Čihař <nijel@debian.org>  Sun, 30 Nov 2008 13:44:20 +0100
+
 phpmyadmin (4:3.0.1.1-1) experimental; urgency=high
 
   * New upstream release to fix a security issue.

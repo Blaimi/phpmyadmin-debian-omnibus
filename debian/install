@@ -7,8 +7,7 @@ lang		usr/share/phpmyadmin
 libraries	usr/share/phpmyadmin
 pmd		usr/share/phpmyadmin
 themes		usr/share/phpmyadmin
-
-scripts/setup.php	usr/share/phpmyadmin/scripts
+setup		usr/share/phpmyadmin
 
 debian/conf/*	etc/phpmyadmin
 debian/src/*	usr/share/phpmyadmin

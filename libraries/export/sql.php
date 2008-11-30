@@ -3,7 +3,7 @@
 /**
  * Set of functions used to build SQL dumps of tables
  *
- * @version $Id: sql.php 11471 2008-08-09 13:58:44Z lem9 $
+ * @version $Id: sql.php 11557 2008-09-03 16:08:14Z nijel $
  */
 if (! defined('PHPMYADMIN')) {
     exit;
@@ -26,6 +26,7 @@ if (isset($plugin_list)) {
             'mime_type' => 'text/x-sql',
             'options' => array(
                 array('type' => 'text', 'name' => 'header_comment', 'text' => 'strAddHeaderComment'),
+                array('type' => 'bool', 'name' => 'include_comments', 'text' => 'strComments'),
                 array('type' => 'bool', 'name' => 'use_transaction', 'text' => 'strEncloseInTransaction'),
                 array('type' => 'bool', 'name' => 'disable_fk', 'text' => 'strDisableForeignChecks'),
                 ),
@@ -103,9 +104,9 @@ if (isset($plugin_list)) {
         $plugin_list['sql']['options'][] =
             array('type' => 'bgroup', 'name' => 'data', 'text' => 'strData', 'force' => 'structure');
         $plugin_list['sql']['options'][] =
-            array('type' => 'bool', 'name' => 'columns', 'text' => 'strCompleteInserts');
+            array('type' => 'bool', 'name' => 'columns', 'text' => 'strCompleteInserts', 'doc' => array('programs', 'mysqldump', 'option_mysqldump_complete-insert-option'));
         $plugin_list['sql']['options'][] =
-            array('type' => 'bool', 'name' => 'extended', 'text' => 'strExtendedInserts');
+            array('type' => 'bool', 'name' => 'extended', 'text' => 'strExtendedInserts', 'doc' => array('programs', 'mysqldump', 'option_mysqldump_extended-insert-option'));
         $plugin_list['sql']['options'][] =
             array('type' => 'text', 'name' => 'max_query_size', 'text' => 'strMaximalQueryLength');
         $plugin_list['sql']['options'][] =
@@ -137,8 +138,12 @@ if (! isset($sql_backquotes)) {
  */
 function PMA_exportComment($text = '')
 {
-    // see http://dev.mysql.com/doc/refman/5.0/en/ansi-diff-comments.html
-    return '--' . (empty($text) ? '' : ' ') . $text . $GLOBALS['crlf'];
+    if ($GLOBALS['sql_include_comments']) {
+        // see http://dev.mysql.com/doc/refman/5.0/en/ansi-diff-comments.html
+        return '--' . (empty($text) ? '' : ' ') . $text . $GLOBALS['crlf'];
+    } else {
+        return '';
+    }
 }
 
 /**
@@ -189,8 +194,13 @@ function PMA_exportHeader()
     global $cfg;
     global $mysql_charset_map;
 
-    if (isset($GLOBALS['sql_compatibility']) && $GLOBALS['sql_compatibility'] != 'NONE') {
-        PMA_DBI_try_query('SET SQL_MODE="' . $GLOBALS['sql_compatibility'] . '"');
+    if (isset($GLOBALS['sql_compatibility'])) {
+        $tmp_compat = $GLOBALS['sql_compatibility'];
+        if ($tmp_compat == 'NONE') {
+            $tmp_compat = '';
+        }
+        PMA_DBI_try_query('SET SQL_MODE="' . $tmp_compat . '"');
+        unset($tmp_compat);
     }
     $head  =  PMA_exportComment('phpMyAdmin SQL Dump')
            .  PMA_exportComment('version ' . PMA_VERSION)

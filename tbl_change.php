@@ -5,7 +5,7 @@
  *
  * register_globals_save (mark this file save for disabling register globals)
  *
- * @version $Id: tbl_change.php 11679 2008-10-25 14:40:48Z lem9 $
+ * @version $Id: tbl_change.php 12007 2008-11-27 18:27:01Z lem9 $
  */
 
 /**
@@ -59,7 +59,12 @@ require_once './libraries/file_listing.php';
  * (at this point, $GLOBALS['goto'] will be set but could be empty)
  */
 if (empty($GLOBALS['goto'])) {
-    $GLOBALS['goto'] = 'db_sql.php';
+    if (strlen($table)) {
+        // avoid a problem (see bug #2202709)
+        $GLOBALS['goto'] = 'tbl_sql.php';
+    } else {
+        $GLOBALS['goto'] = 'db_sql.php';
+    }
 }
 /**
  * @todo check if we could replace by "db_|tbl_" - please clarify!?

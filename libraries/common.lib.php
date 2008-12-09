@@ -3,7 +3,7 @@
 /**
  * Misc functions used all over the scripts.
  *
- * @version $Id: common.lib.php 11679 2008-10-25 14:40:48Z lem9 $
+ * @version $Id: common.lib.php 12027 2008-11-28 18:23:56Z lem9 $
  */
 
 /**
@@ -1795,26 +1795,25 @@ function PMA_flipstring($string, $Separator = "<br />\n")
         if ($char == '&') {
             $format_string .= $charbuff;
             $charbuff = $char;
-            $append = true;
-        } elseif (!empty($charbuff)) {
-            $charbuff .= $char;
         } elseif ($char == ';' && !empty($charbuff)) {
-            $format_string .= $charbuff;
+            $format_string .= $charbuff . $char;
             $charbuff = false;
             $append = true;
+        } elseif (! empty($charbuff)) {
+            $charbuff .= $char;
         } else {
             $format_string .= $char;
             $append = true;
         }
 
-        if ($append && ($i != strlen($string))) {
+        // do not add separator after the last character
+        if ($append && ($i != strlen($string)-1)) {
             $format_string .= $Separator;
         }
     }
 
     return $format_string;
 }
-
 
 /**
  * Function added to avoid path disclosures.
@@ -2661,4 +2660,35 @@ function PMA_duplicateFirstNewline($string){
 	return $string;
 }
 
+/**
+ * get the action word corresponding to a script name
+ * in order to display it as a title in navigation panel
+ *
+ * @uses    switch()
+ * @uses    $GLOBALS
+ * @param   string  a valid value for $cfg['LeftDefaultTabTable']
+ *                  or $cfg['DefaultTabTable']
+ */
+function PMA_getTitleForTarget($target) {
+    switch ($target) {
+        case 'tbl_structure.php':
+            $message = 'strStructure';
+            break;
+        case 'tbl_sql.php':
+            $message = 'strSQL';
+            break;
+        case 'tbl_select.php':
+            $message = 'strSearch';
+            break;
+        case 'tbl_change.php':
+            $message = 'strInsert';
+            break;
+        case 'sql.php':
+            $message = 'strBrowse';
+            break;
+        default:
+            $message = '';
+    }
+    return $GLOBALS[$message];
+}
 ?>

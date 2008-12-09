@@ -11,7 +11,7 @@
   * Translators
   * Glossary
 
-phpMyAdmin 3.1.0 Documentation
+phpMyAdmin 3.1.1 Documentation
 
   * phpMyAdmin homepage
   * SourceForge phpMyAdmin project page
@@ -20,7 +20,7 @@ phpMyAdmin 3.1.0 Documentation
       + Version history: ChangeLog
       + General notes: README
       + License: LICENSE
-  * Documentation version: $Id: Documentation.html 12013 2008-11-28 13:18:53Z
+  * Documentation version: $Id: Documentation.html 12110 2008-12-09 17:22:43Z
     lem9 $
 
 Requirements
@@ -29,6 +29,8 @@ Requirements
       + You need PHP 5.2.0 or newer, with session support (see FAQ 1.31) and
         the Standard PHP Library (SPL) extension.
       + To support uploading of ZIP files, you need the PHP zip extension.
+      + For proper support of multibyte strings (eg. UTF-8, which is currently
+        default), you should install mbstring and ctype extensions.
       + You need GD2 support in PHP to display inline thumbnails of JPEGs
         ("image/jpeg: inline") with their original aspect ratio
       + When using the "cookie" authentication method, the mcrypt extension is

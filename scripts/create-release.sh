@@ -1,6 +1,6 @@
 #!/bin/sh
 #
-# $Id: create-release.sh 11913 2008-11-21 08:58:00Z nijel $
+# $Id: create-release.sh 12091 2008-12-06 19:23:55Z lem9 $
 # vim: expandtab sw=4 ts=4 sts=4:
 #
 # 2005-09-13, lem9@users.sourceforge.net
@@ -222,7 +222,7 @@ echo "--------"
 md5sum *.{gz,zip,bz2,7z} | sed "s/\([^ ]*\)[ ]*\([^ ]*\)/md5sum['\2'] = '\1'/"
 
 echo
-echo "Add these to website/data/md5.py in SVN"
+echo "Add these to website/data/md5sums.py in SVN"
 
 cat <<END
 
@@ -238,7 +238,7 @@ Todo now:
  3. add files to SF files page (cut and paste changelog since last release)
  4. add SF news item to phpMyAdmin project
  5. update web page:
-        - add MD5s to website/data/md5.py in SVN
+        - add MD5s to website/data/md5sums.py in SVN
  6. announce release on freshmeat (http://freshmeat.net/projects/phpmyadmin/)
  7. send a short mail (with list of major changes) to
         phpmyadmin-devel@lists.sourceforge.net

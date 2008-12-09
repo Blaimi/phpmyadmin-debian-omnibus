@@ -2,8 +2,27 @@
 phpMyAdmin - ChangeLog
 ----------------------
 
-$Id: ChangeLog 12013 2008-11-28 13:18:53Z lem9 $
+$Id: ChangeLog 12110 2008-12-09 17:22:43Z lem9 $
 $HeadURL: https://phpmyadmin.svn.sourceforge.net/svnroot/phpmyadmin/trunk/phpMyAdmin/ChangeLog $
+
+3.1.1.0 (2008-12-09)
+- patch #2242765 [core] Navi panel server links wrong,
+  thanks to Martin Stricker - martinstricker
+- bug #2186823 [core] bad session.save_path not detected
+- bug #2202709 [core] Re-login causes PMA to forget current table name 
+- bug #2280904 [export] do not include view name in export
+- rfe #1688975 [display] enable copying of auto increment by default
+- bug #2355753 [core] do not bail out creating session on any PHP warning
+- bug #2355925 [display] properly update tooltips in navigation frame
+- bug #2355923 [core] do not use ctype if it is not available
+- bug #2356433 [display] HeaderFlipType "fake" problems,
+  thanks to Michal Biniek
+- bug #2363919 [display] Incorrect size for view
+- bug #2121287 [display] Drop-down menu blinking in FF
++ [lang] Catalan update, thanks to Xavier Navarro
++ [lang] Finnish update, thanks to Jouni Kahkonen
+- [core] Avoid error with BLOBstreaming support requiring SUPER privilege 
+- [security] possible XSRF on several pages
 
 3.1.0.0 (2008-11-28)
 + [auth] Support for Swekey hardware authentication,
@@ -38,7 +57,7 @@ $HeadURL: https://phpmyadmin.svn.sourceforge.net/svnroot/phpmyadmin/trunk/phpMyA
 + [lang] Norwegian update, thanks to Sven-Erik Andersen 
 + [lang] Hungarian update, thanks to Jozsef Tamas Herczeg - dodika 
 + [lang] French update by Marc Delisle - lem9
-- bug #2222344 [display] Query involving a function shown as binary 
+- bug #2222344 [display] Query involving a function shown as binary
 + [lang] Italian update, thanks to fantu - fantu
 + [lang] Swedish update, thanks to Björn T. Hallberg
 - bug #2315549 [import] fclose() error with "Create PHP code"

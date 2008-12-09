@@ -2,7 +2,7 @@
 /* vim: set expandtab sw=4 ts=4 sts=4: */
 /**
  *
- * @version $Id: db_structure.php 11509 2008-08-26 16:50:07Z lem9 $
+ * @version $Id: db_structure.php 12039 2008-11-30 12:28:57Z lem9 $
  */
 
 /**
@@ -214,6 +214,9 @@ foreach ($tables as $keyname => $each_table) {
     $table_encoded = urlencode($each_table['TABLE_NAME']);
     // Sets parameters for links
     $tbl_url_query = $url_query . '&amp;table=' . $table_encoded;
+    // do not list the previous table's size info for a view
+    $formatted_size = '-';
+    $unit = '';
 
     switch ( $each_table['ENGINE']) {
         // MyISAM, ISAM or Heap table: Row count, data size and index size

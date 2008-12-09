@@ -16,7 +16,7 @@
  *
  * All directives are explained in Documentation.html
  *
- * @version $Id: config.default.php 11668 2008-10-22 17:03:22Z lem9 $
+ * @version $Id: config.default.php 12032 2008-11-29 19:28:18Z lem9 $
  */
 
 /**
@@ -563,8 +563,8 @@ $cfg['AllowArbitraryServer'] = false;
 /*******************************************************************************
  * Error handler configuration
  *
- * this configures phpMyAdmins own error handler, it is used to avoid information
- * dislcosure, gather errors for logging, reporting and displaying
+ * this configures phpMyAdmin's own error handler, it is used to avoid information
+ * disclosure, gather errors for logging, reporting and displaying
  *
  * @global array $cfg['Error_Handler']
  */

@@ -5,7 +5,10 @@ phpmyadmin for Debian
 USAGE
 
   The application will be available at http://localhost/phpmyadmin/
-  after install.
+  after install if you use one of supported web servers (Apache and Lighttpd
+  at time of writing this). Please note that you need to have enabled PHP
+  support in your webserver (for Apache you can do this by a2enmod php5, for
+  Lighttpd by lighty-enable-mod fastcgi).
   
 
 PROBLEM WITH COOKIES

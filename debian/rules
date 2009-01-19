@@ -23,7 +23,7 @@ clean-patched:
 install: build
 	dh_testdir
 	dh_testroot
-	dh_clean -k 
+	dh_prep
 	dh_installdirs
 	# Need to rename the file
 	install -m 644 scripts/create_tables.sql debian/phpmyadmin/usr/share/dbconfig-common/data/phpmyadmin/install/mysql

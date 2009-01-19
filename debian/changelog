@@ -1,7 +1,20 @@
+phpmyadmin (4:3.1.2-1) experimental; urgency=low
+  
+  [ Thijs Kinkhorst ]
+  * New upstream release.
+  * Replace dh_clean -k by dh_prep.
+
+  [ Michal Čihař ]
+  * Better describe steps needed to access phpMyAdmin in README.Debian
+    (Closes: #508703).
+
+ -- Thijs Kinkhorst <thijs@debian.org>  Mon, 19 Jan 2009 20:59:17 +0100
+
 phpmyadmin (4:3.1.1-1) experimental; urgency=high
 
   * New upstream release.
     - Fixes security issue PMASA-2008-10 (SQL injection).
+      [CVE-2008-5621, CVE-2008-5622]
 
  -- Thijs Kinkhorst <thijs@debian.org>  Tue, 09 Dec 2008 21:08:00 +0100
 

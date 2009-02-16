@@ -1,137 +1,124 @@
+# phpmyadmin po-debconf translation to Spanish
+# Copyright (C) 2007, 2008, 2009 Software in the Public Interest
+# This file is distributed under the same license as the phpmyadmin package.
 #
-#    Translators, if you are not familiar with the PO format, gettext
-#    documentation is worth reading, especially sections dedicated to
-#    this format, e.g. by running:
-#         info -n '(gettext)PO Files'
-#         info -n '(gettext)Header Entry'
+# Changes:
+#   - Initial translation
+#       Nacho Barrientos Arias <chipi@criptonita.com>, 2007
 #
-#    Some information specific to po-debconf are available at
-#            /usr/share/doc/po-debconf/README-trans
-#         or http://www.debian.org/intl/l10n/po-debconf/README-trans
+#   - Updates
+#       Alberto Rivera <albertux@linuxchillan.cl>, 2008
+#       Francisco Javier Cuadrado <fcocuadrado@gmail.com>, 2009
 #
-#    Developers do not need to manually edit POT or PO files.
+# Traductores, si no conocen el formato PO, merece la pena leer la
+# documentación de gettext, especialmente las secciones dedicadas a este
+# formato, por ejemplo ejecutando:
+#       info -n '(gettext)PO Files'
+#       info -n '(gettext)Header Entry'
+#
+# Equipo de traducción al español, por favor lean antes de traducir
+# los siguientes documentos:
+#
+#   - El proyecto de traducción de Debian al español
+#     http://www.debian.org/intl/spanish/
+#     especialmente las notas de traducción en
+#     http://www.debian.org/intl/spanish/notas
+#
+#   - La guía de traducción de po's de debconf:
+#     /usr/share/doc/po-debconf/README-trans
+#     o http://www.debian.org/intl/l10n/po-debconf/README-trans
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: phpmyadmin 4:2.8.2-0.1\n"
+"Project-Id-Version: phpmyadmin 4:2.11.8.1-5\n"
 "Report-Msgid-Bugs-To: Source: phpmyadmin@packages.debian.org\n"
 "POT-Creation-Date: 2007-12-03 11:59+0100\n"
-"PO-Revision-Date: 2007-05-03 20:25+0200\n"
-"Last-Translator: Nacho Barrientos Arias <chipi@criptonita.com>\n"
-"Language-Team: Spanish <debian-l10n-spanish@lists.debian.org>\n"
+"PO-Revision-Date: 2008-01-28 10:00+0100\n"
+"Last-Translator: Francisco Javier Cuadrado <fcocuadrado@gmail.com>\n"
+"Language-Team: Debian l10n Spanish <debian-l10n-spanish@lists.debian.org>\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=ISO-8859-15\n"
+"Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
 #. Type: multiselect
 #. Description
 #: ../templates:2001
 msgid "Web server to reconfigure automatically:"
-msgstr "Servidor web que desea reconfigurar autom�ticamente:"
+msgstr "Servidor web que desea reconfigurar automáticamente:"
 
 #. Type: multiselect
 #. Description
 #: ../templates:2001
-msgid ""
-"Please choose the web server that should be automatically configured to run "
-"phpMyAdmin."
-msgstr ""
+msgid "Please choose the web server that should be automatically configured to run phpMyAdmin."
+msgstr "Por favor, elija el servidor web que se debería configurar automáticamente para que ejecute phpMyAdmin."
 
 #. Type: string
 #. Description
 #: ../templates:3001
-#, fuzzy
-#| msgid "User name for web-based setup system:"
 msgid "Username for web-based setup system:"
-msgstr "Usuario para el sistema de configuraci�n basado en web:"
+msgstr "Usuario del sistema de configuración basado en web:"
 
 #. Type: string
 #. Description
 #. Type: password
 #. Description
-#: ../templates:3001 ../templates:4001
-msgid ""
-"The setup system for phpMyAdmin may be used, after installation, from http://"
-"localhost/phpmyadmin/scripts/setup.php."
-msgstr ""
+#: ../templates:3001
+#: ../templates:4001
+msgid "The setup system for phpMyAdmin may be used, after installation, from http://localhost/phpmyadmin/scripts/setup.php."
+msgstr "Después de la instalación, se puede usar el sistema de configuración de phpMyAdmin, para ello debe acceder a «http://localhost/phpmyadmin/scripts/setup.php»."
 
 #. Type: string
 #. Description
 #. Type: password
 #. Description
-#: ../templates:3001 ../templates:4001
-msgid ""
-"Access to this system requires identification with a username and a password."
-msgstr ""
+#: ../templates:3001
+#: ../templates:4001
+msgid "Access to this system requires identification with a username and a password."
+msgstr "Para acceder a este sistema necesita identificarse con un nombre de usuario y una contraseña."
 
 #. Type: string
 #. Description
 #: ../templates:3001
-#, fuzzy
-#| msgid "Leave empty if you want to use the default user name 'admin'."
-msgid ""
-"If you leave this field empty, the default username ('admin') will be used."
-msgstr ""
-"D�jelo vac�o si quiere utilizar el nombre de usuario por omisi�n (�admin�)."
+msgid "If you leave this field empty, the default username ('admin') will be used."
+msgstr "Si deja este campo vacío, se utilizará el nombre de usuario predeterminado («admin»)."
 
 #. Type: password
 #. Description
 #: ../templates:4001
 msgid "Password for web-based setup system:"
-msgstr "Contrase�a para el sistema de configuraci�n basado en web:"
+msgstr "Contraseña del sistema de configuración basado en web:"
 
 #. Type: password
 #. Description
 #: ../templates:4001
-#, fuzzy
-#| msgid ""
-#| "You can manage the usernames and passwords with the `htpasswd' command. "
-#| "They are stored in the file /etc/phpmyadmin/htpasswd.setup"
-msgid ""
-"Usernames and passwords may be managed with the `htpasswd' command and are "
-"stored in /etc/phpmyadmin/htpasswd.setup."
-msgstr ""
-"Puede gestionar los nombres de usuario y contrase�as con la orden "
-"�htpasswd�. Estos datos est�n almacenados en el fichero /etc/phpmyadmin/"
-"htpasswd.setup."
+msgid "Usernames and passwords may be managed with the `htpasswd' command and are stored in /etc/phpmyadmin/htpasswd.setup."
+msgstr "Puede administrar los nombres de usuario y las contraseñas con la orden «htpasswd». Estos datos se guardan en el archivo «/etc/phpmyadmin/htpasswd.setup»."
 
 #. Type: password
 #. Description
 #: ../templates:4001
-#, fuzzy
-#| msgid "Leave empty if you want to disable access to the web-based setup."
-msgid ""
-"If you leave this field empty, access to the web-based setup will be "
-"disabled."
-msgstr ""
-"D�jelo vac�o si quiere deshabilitar el acceso al sistema de configuraci�n "
-"basado en web."
+msgid "If you leave this field empty, access to the web-based setup will be disabled."
+msgstr "El acceso al sistema de configuración basado en web se deshabilitará, si deja este campo vacío."
 
 #~ msgid ""
 #~ "phpMyAdmin supports any web server that PHP does, but this automatic "
 #~ "configuration process only supports Apache."
 #~ msgstr ""
 #~ "phpMyAdmin funciona con cualquier servidor web que tenga soporte para "
-#~ "PHP, pero el proceso de configuraci�n autom�tica s�lo soporta Apache."
-
+#~ "PHP, pero el proceso de configuraciÃ³n automÃ¡tica sÃ³lo funciona con "
+#~ "Apache."
 #~ msgid ""
 #~ "phpMyAdmin comes with a setup script that can help you with creating a "
-#~ "configuration. The script is located at http://localhost/phpmyadmin/"
-#~ "scripts/setup.php. For security reasons it requires authorization."
 #~ msgstr ""
-#~ "phpMyAdmin viene acompa�ado de un script que puede ayudarle a crear la "
-#~ "configuraci�n. Este script se encuentra en http://localhost/phpmyadmin/"
-#~ "scripts/setup.php . Por razones de seguridad, para acceder es necesario "
-#~ "estar autorizado."
-
+#~ "phpMyAdmin viene acompaÃ±ado de un programa que puede ayudarle a crear la "
 #~ msgid "Do you want me to restart ${webserver} now?"
-#~ msgstr "�Desea reiniciar ${webserver} ahora?"
-
+#~ msgstr "Â¿Desea reiniciar ${webserver} ahora?"
 #~ msgid ""
 #~ "Remember that in order to activate the new configuration ${webserver} has "
 #~ "to be restarted. You can also restart ${webserver} by manually executing /"
 #~ "etc/init.d/${webserver} restart"
 #~ msgstr ""
-#~ "Recuerde que, para activar la nueva configuraci�n, ${webserver} debe ser "
-#~ "reiniciado. Tambi�n puede reiniciar ${webserver} manualmente ejecutando /"
-#~ "etc/init.d/${webserver} restart"
+#~ "No olvide que para activar la nueva configuraciÃ³n de ${webserver} debe "
+#~ "reiniciarse. Otra manera de reiniciar ${webserver} de forma manual, es "
+#~ "mediante  la orden Â«/etc/init.d/${webserver} restartÂ»"
+

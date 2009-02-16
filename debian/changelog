@@ -1,3 +1,10 @@
+phpmyadmin (4:3.1.2-2) unstable; urgency=low
+
+  * Upload to unstable.
+  * [INTL:es] Spanish debconf template update (Closes: #513690).
+
+ -- Thijs Kinkhorst <thijs@debian.org>  Mon, 16 Feb 2009 17:58:28 +0100
+
 phpmyadmin (4:3.1.2-1) experimental; urgency=low
   
   [ Thijs Kinkhorst ]

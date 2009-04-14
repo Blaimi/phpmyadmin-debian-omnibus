@@ -2,8 +2,11 @@
 phpMyAdmin - ChangeLog
 ----------------------
 
-$Id: ChangeLog 12312 2009-03-24 20:32:19Z lem9 $
+$Id: ChangeLog 12351 2009-04-14 16:32:06Z lem9 $
 $HeadURL: https://phpmyadmin.svn.sourceforge.net/svnroot/phpmyadmin/trunk/phpMyAdmin/ChangeLog $
+
+3.1.3.2 (2009-04-14)
+- [security] Insufficient output sanitizing when generating configuration file
 
 3.1.3.1 (2009-03-24)
 - [security] HTTP Response Splitting and file inclusion vulnerabilities 
@@ -239,6 +242,10 @@ danbarry
 - bug #2113848 [navi] Page number after database switching 
 - patch #2115966 [GUI] Checkboxes and IE 7, thanks to Martin - maschg 
 - bug #1914066 [core] ForceSSL generates incorrectly escaped redirections 
+
+2.11.9.5 (2009-03-24)
+- [security] XSS vulnerability on export page
+- [security] Insufficient output sanitizing when generating configuration file
 
 2.11.9.4 (2008-12-09)
 - [security] possible XSRF on several pages

@@ -3,8 +3,8 @@ Maintainer: Thijs Kinkhorst <thijs@debian.org>
 Uploaders: Michal Čihař <nijel@debian.org>
 Section: web
 Priority: extra
-Standards-Version: 3.8.1
-Build-Depends: debhelper (>= 7), dpatch, po-debconf
+Standards-Version: 3.8.2
+Build-Depends: debhelper (>= 7), quilt (>= 0.40), po-debconf
 Homepage: http://www.phpmyadmin.net/
 Vcs-Browser: https://aphrodite.kinkhorst.nl/wsvn/debian/phpmyadmin/
 Vcs-Svn: https://svn.kinkhorst.nl/svn/debian/phpmyadmin/trunk

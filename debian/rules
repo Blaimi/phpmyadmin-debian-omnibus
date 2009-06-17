@@ -2,12 +2,12 @@
 # Uncomment this to turn on verbose mode.
 #export DH_VERBOSE=1
 
-include /usr/share/dpatch/dpatch.make
+include /usr/share/quilt/quilt.make
 
 REVISION := $(shell head -1 debian/changelog | sed 's/.*(//;s/).*//;s/.*-//')
 
-build: patch build-stamp
-build-stamp:
+build: build-stamp
+build-stamp: $(QUILT_STAMPFN)
 	dh_testdir
 	touch build-stamp
 
@@ -32,8 +32,6 @@ install: build
 	sed -i '/CREATE DATABASE/,/USE phpmyadmin/D'  debian/phpmyadmin/usr/share/dbconfig-common/data/phpmyadmin/install/mysql
 	dh_install
 	find debian/phpmyadmin -name .svn | xargs -r rm -r
-	# don't install README, then also not readme.php
-	rm debian/phpmyadmin/usr/share/phpmyadmin/readme.php
 	# spurious licence files, this is in debian/copyright
 	rm debian/phpmyadmin/usr/share/phpmyadmin/libraries/tcpdf/font/LICENSE \
 		debian/phpmyadmin/usr/share/phpmyadmin/libraries/tcpdf/LICENSE.TXT

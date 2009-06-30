@@ -36,7 +36,7 @@ fi
 if [ "$1" = "purge" ]; then
     rm -f /etc/phpmyadmin/config-db.php
     if which ucf >/dev/null 2>&1; then
-	ucf --purge /etc/phpmyadmin/config-db.php
+	ucf --debconf-ok --purge /etc/phpmyadmin/config-db.php
     fi
 fi
 

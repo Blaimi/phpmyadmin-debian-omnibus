@@ -42,6 +42,13 @@ SECURITY
   This file has to be readable by www-data user, so it can be read by anyone
   who can run his own CGI script!
 
+  The default configuration also does not allow you to log in with empty
+  passwords, to enable it, set directive AllowNoPassword to true.
+
+  If you do not use provided configuration snippets for webserver, please do
+  not forget to protect setup directory, otherwise unauthenticated users might
+  be able to modify your configuration.
+
   Register Globals: Debian does not provide security support for installations
   with the PHP register_globals setting turned On. It's also not required for
   phpMyAdmin to operate. Make sure it's off. It's trivial to turn it on just for
@@ -73,3 +80,4 @@ MULTIPLE COPIES FROM ONE CODEBASE
   Copy the created dir to site2 and make the necessary changes, etc.
 
  -- Thijs Kinkhorst <thijs@debian.org>  Mon, 21 Apr 2007 12:10:15 +0200
+ -- Michal Čihař <nijel@debian.org>  Wed, 24 Jun 2009 16:04:03 +0200

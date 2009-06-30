@@ -54,6 +54,10 @@ if (!empty($dbname)) {
     $cfg['Servers'][$i]['history'] = 'pma_history';
     $cfg['Servers'][$i]['designer_coords'] = 'pma_designer_coords';
 
+    /* Uncomment the following to enable logging in to passwordless accounts,
+     * after taking note of the associated security risks. */
+    // $cfg['Servers'][$i]['AllowNoPassword'] = TRUE;
+
     /* Advance to next server for rest of config */
     $i++;
 }
@@ -79,6 +83,9 @@ if (!empty($dbname)) {
 // $cfg['Servers'][$i]['column_info'] = 'pma_column_info';
 // $cfg['Servers'][$i]['history'] = 'pma_history';
 // $cfg['Servers'][$i]['designer_coords'] = 'pma_designer_coords';
+/* Uncomment the following to enable logging in to passwordless accounts,
+ * after taking note of the associated security risks. */
+// $cfg['Servers'][$i]['AllowNoPassword'] = TRUE;
 
 /*
  * End of servers configuration

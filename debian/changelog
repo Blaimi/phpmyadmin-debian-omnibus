@@ -1,3 +1,16 @@
+phpmyadmin (4:3.2.0.1-1) unstable; urgency=high
+
+  * New upstream version fixing XSS (PMASA-2009-5).
+  * Document no empty password in README.Debian and the shipped sample
+    configuration file (LP: #388703).
+  * Install service file for avahi (if web service enabled and if avahi is
+    installed) (LP: #369244).
+  * Mention protecting of setup if not using provided configuration snippets
+    for webservers.
+  * Call ucf with --debconf-ok in postrm (Closes: #534894).
+
+ -- Michal Čihař <nijel@debian.org>  Tue, 30 Jun 2009 14:05:13 +0200
+
 phpmyadmin (4:3.2.0-1) unstable; urgency=low
 
   [ Thijs Kinkhorst ]

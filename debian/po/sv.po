@@ -53,10 +53,10 @@ msgstr "Användarnamn för det webbaserade konfigurationssystemet:"
 #: ../templates:3001 ../templates:4001
 msgid ""
 "The setup system for phpMyAdmin may be used, after installation, from http://"
-"localhost/phpmyadmin/scripts/setup.php."
+"localhost/phpmyadmin/setup/index.php."
 msgstr ""
 "Efter installationen kan inställningssystemet för phpMyAdmin användas "
-"från http://localhost/phpmyadmin/scripts/setup.php."
+"från http://localhost/phpmyadmin/setup/index.php."
 
 #. Type: string
 #. Description

@@ -41,10 +41,10 @@ msgstr "Verkkopohjaisen asetusjärjestelmän käyttäjätunnus:"
 #: ../templates:3001 ../templates:4001
 msgid ""
 "The setup system for phpMyAdmin may be used, after installation, from http://"
-"localhost/phpmyadmin/scripts/setup.php."
+"localhost/phpmyadmin/setup/index.php."
 msgstr ""
 "Asennuksen jälkeen phpMyAdminin asetusjärjestelmä on käytettävissä "
-"osoitteessa http://localhost/phpmyadmin/scripts/setup.php."
+"osoitteessa http://localhost/phpmyadmin/setup/index.php."
 
 #. Type: string
 #. Description

@@ -28,7 +28,7 @@ CONFIGURATION
   configures phpMyAdmin to use cookie authentication on this server.
 
   phpMyAdmin also provides a web-based setup script available at
-  http://localhost/phpmyadmin/scripts/setup.php
+  http://localhost/phpmyadmin/setup/index.php
   This setup script requires authorization by default. You can manage usernames
   and passwords with htpasswd command in the /etc/phpmyadmin/htpasswd.setup file.
   Configuration from setup script overrides configuration generated from

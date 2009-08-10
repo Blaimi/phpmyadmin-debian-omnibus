@@ -52,7 +52,7 @@ msgstr "web ベース設定システムのユーザ名:"
 #: ../templates:3001 ../templates:4001
 msgid ""
 "The setup system for phpMyAdmin may be used, after installation, from http://"
-"localhost/phpmyadmin/scripts/setup.php."
+"localhost/phpmyadmin/setup/index.php."
 msgstr ""
 "phpMyAdmin 設定システムは、インストール後に http://localhost/phpmyadmin/scripts/"
 "setup.php から使えるようになります。"

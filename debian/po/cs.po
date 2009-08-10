@@ -52,10 +52,10 @@ msgstr "Uživatelské jméno pro webové konfigurační rozhraní:"
 #: ../templates:3001 ../templates:4001
 msgid ""
 "The setup system for phpMyAdmin may be used, after installation, from http://"
-"localhost/phpmyadmin/scripts/setup.php."
+"localhost/phpmyadmin/setup/index.php."
 msgstr ""
 "Konfigurační rozhraní phpMyAdminu bude po instalaci dostupné na adrese "
-"http://localhost/phpmyadmin/scripts/setup.php."
+"http://localhost/phpmyadmin/setup/index.php."
 
 #. Type: string
 #. Description
@@ -110,7 +110,7 @@ msgstr ""
 #~ msgid ""
 #~ "phpMyAdmin comes with a setup script that can help you with creating a "
 #~ "configuration. The script is located at http://localhost/phpmyadmin/"
-#~ "scripts/setup.php. For security reasons it requires authorization."
+#~ "setup/index.php. For security reasons it requires authorization."
 #~ msgstr ""
 #~ "Součástí phpMyAdminu je i skript, který vám pomůže s vytvořením "
 #~ "konfigurace. Skript je dostupný na http://localhost/phpmyadmin/scripts/"

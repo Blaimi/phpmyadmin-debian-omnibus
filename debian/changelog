@@ -1,6 +1,18 @@
+phpmyadmin (4:3.2.1-1) unstable; urgency=high
+  
+  [ Thijs Kinkhorst ]
+  * New upstream release. Fixes a (rather unimportant) security
+    issue, bump urgency just to be sure.
+
+  [ Michal Čihař ]
+  * Fix path to setup script in README.Debian and debconf templates
+    (Closes: #539518).
+
+ -- Thijs Kinkhorst <thijs@debian.org>  Mon, 10 Aug 2009 21:14:19 +0200
+
 phpmyadmin (4:3.2.0.1-1) unstable; urgency=high
 
-  * New upstream version fixing XSS (PMASA-2009-5).
+  * New upstream version fixing XSS (PMASA-2009-5, CVE-2009-2284).
   * Document no empty password in README.Debian and the shipped sample
     configuration file (LP: #388703).
   * Install service file for avahi (if web service enabled and if avahi is

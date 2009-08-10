@@ -45,9 +45,9 @@ msgstr "Tên người dùng cho hệ thống thiết lập dựa vào Web:"
 #: ../templates:4001
 msgid ""
 "The setup system for phpMyAdmin may be used, after installation, from http://"
-"localhost/phpmyadmin/scripts/setup.php."
+"localhost/phpmyadmin/setup/index.php."
 msgstr "Hệ thống thiết lập cho phpMyAdmin có thể được dùng, sau khi cài đặt, từ địa chỉ « http://"
-"localhost/phpmyadmin/scripts/setup.php »."
+"localhost/phpmyadmin/setup/index.php »."
 
 #.Type: string
 #.Description
@@ -102,9 +102,9 @@ msgstr "Bỏ trường này rỗng thì khả năng truy cập đến thiết l�
 #~ msgid ""
 #~ "phpMyAdmin comes with a setup script that can help you with creating a "
 #~ "configuration. The script is located at http://localhost/phpmyadmin/"
-#~ "scripts/setup.php. For security reasons it requires authorization."
+#~ "setup/index.php. For security reasons it requires authorization."
 #~ msgstr "Phần mềm phpMyAdmin có sẵn một văn lệnh thiết lập để hướng dẫn bạn tạo "
-#~ "cấu hình. Văn lệnh này nằm ở <http://localhost/phpmyadmin/scripts/setup."
+#~ "cấu hình. Văn lệnh này nằm ở <http://localhost/phpmyadmin/setup/index."
 #~ "php>. Vì lý do bảo mật, nó cần thiết xác thực."
 
 #~ msgid "Do you want me to restart ${webserver} now?"

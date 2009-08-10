@@ -64,8 +64,8 @@ msgstr "Usuario del sistema de configuración basado en web:"
 #. Description
 #: ../templates:3001
 #: ../templates:4001
-msgid "The setup system for phpMyAdmin may be used, after installation, from http://localhost/phpmyadmin/scripts/setup.php."
-msgstr "Después de la instalación, se puede usar el sistema de configuración de phpMyAdmin, para ello debe acceder a «http://localhost/phpmyadmin/scripts/setup.php»."
+msgid "The setup system for phpMyAdmin may be used, after installation, from http://localhost/phpmyadmin/setup/index.php."
+msgstr "Después de la instalación, se puede usar el sistema de configuración de phpMyAdmin, para ello debe acceder a «http://localhost/phpmyadmin/setup/index.php»."
 
 #. Type: string
 #. Description

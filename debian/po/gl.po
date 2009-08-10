@@ -43,10 +43,10 @@ msgstr "Nome de usuario para o sistema de configuración en web:"
 #: ../templates:3001 ../templates:4001
 msgid ""
 "The setup system for phpMyAdmin may be used, after installation, from http://"
-"localhost/phpmyadmin/scripts/setup.php."
+"localhost/phpmyadmin/setup/index.php."
 msgstr ""
 "Pódese empregar o sistema de configuración de phpMyAdmin, trala execución, "
-"accedendo a http://localhost/phpmyadmin/scripts/setup.php."
+"accedendo a http://localhost/phpmyadmin/setup/index.php."
 
 #. Type: string
 #. Description
@@ -101,7 +101,7 @@ msgstr ""
 #~ msgid ""
 #~ "phpMyAdmin comes with a setup script that can help you with creating a "
 #~ "configuration. The script is located at http://localhost/phpmyadmin/"
-#~ "scripts/setup.php. For security reasons it requires authorization."
+#~ "setup/index.php. For security reasons it requires authorization."
 #~ msgstr ""
 #~ "phpMyAdmin inclúe un script de configuración que o pode axudar a crear a "
 #~ "configuración. O script reside en http://localhost/phpmyadmin/scripts/"

@@ -45,10 +45,10 @@ msgstr "Identifiant pour la configuration par le web :"
 #: ../templates:3001 ../templates:4001
 msgid ""
 "The setup system for phpMyAdmin may be used, after installation, from http://"
-"localhost/phpmyadmin/scripts/setup.php."
+"localhost/phpmyadmin/setup/index.php."
 msgstr ""
 "Le système de configuration de phpMyAdmin peut être utilisé, après "
-"l'installation, depuis l'adresse http://localhost/phpmyadmin/scripts/setup."
+"l'installation, depuis l'adresse http://localhost/phpmyadmin/setup/index."
 "php."
 
 #. Type: string

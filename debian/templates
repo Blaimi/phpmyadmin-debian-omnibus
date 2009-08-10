@@ -19,7 +19,7 @@ Type: string
 Default: admin
 _Description: Username for web-based setup system:
  The setup system for phpMyAdmin may be used, after installation, from
- http://localhost/phpmyadmin/scripts/setup.php.
+ http://localhost/phpmyadmin/setup/index.php.
  .
  Access to this system requires identification with a username and a
  password.
@@ -31,7 +31,7 @@ Type: password
 Default:
 _Description: Password for web-based setup system:
  The setup system for phpMyAdmin may be used, after installation, from
- http://localhost/phpmyadmin/scripts/setup.php.
+ http://localhost/phpmyadmin/setup/index.php.
  .
  Access to this system requires identification with a username and a
  password.

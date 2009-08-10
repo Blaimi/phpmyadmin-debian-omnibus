@@ -45,10 +45,10 @@ msgstr "Brukernavn for nettbasert oppsettssystem:"
 #: ../templates:3001 ../templates:4001
 msgid ""
 "The setup system for phpMyAdmin may be used, after installation, from http://"
-"localhost/phpmyadmin/scripts/setup.php."
+"localhost/phpmyadmin/setup/index.php."
 msgstr ""
 "Etter installasjonen kan oppsettssystemet for phpMyAdmin brukes fra adressen "
-"http://localhost/phpmyadmin/scripts/setup.php."
+"http://localhost/phpmyadmin/setup/index.php."
 
 #. Type: string
 #. Description

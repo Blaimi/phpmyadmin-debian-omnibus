@@ -41,10 +41,10 @@ msgstr "Nazwa użytkownika dla konfiguratora z poziomu przeglądarki:"
 #: ../templates:3001 ../templates:4001
 msgid ""
 "The setup system for phpMyAdmin may be used, after installation, from http://"
-"localhost/phpmyadmin/scripts/setup.php."
+"localhost/phpmyadmin/setup/index.php."
 msgstr ""
 "Konfigurator dla phpMyAdmin jest dostępny pod adresem http://localhost/"
-"phpmyadmin/scripts/setup.php"
+"phpmyadmin/setup/index.php"
 
 #. Type: string
 #. Description

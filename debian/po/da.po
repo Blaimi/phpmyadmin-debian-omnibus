@@ -54,7 +54,7 @@ msgstr "Brugernavn på webbaseret opsætningssystem:"
 #: ../templates:3001 ../templates:4001
 msgid ""
 "The setup system for phpMyAdmin may be used, after installation, from http://"
-"localhost/phpmyadmin/scripts/setup.php."
+"localhost/phpmyadmin/setup/index.php."
 msgstr ""
 
 #. Type: string
@@ -117,10 +117,10 @@ msgstr ""
 #~ msgid ""
 #~ "phpMyAdmin comes with a setup script that can help you with creating a "
 #~ "configuration. The script is located at http://localhost/phpmyadmin/"
-#~ "scripts/setup.php. For security reasons it requires authorization."
+#~ "setup/index.php. For security reasons it requires authorization."
 #~ msgstr ""
 #~ "phpMyAdmin har et opsætningsscript, der kan hjælpe dig med at oprette en "
-#~ "opsætning. Scriptet ligger i http://localhost/phpmyadmin/scripts/setup."
+#~ "opsætning. Scriptet ligger i http://localhost/phpmyadmin/setup/index."
 #~ "php . Af sikkerhedsårsager kræver det en adgangkode."
 
 #~ msgid "Do you want me to restart ${webserver} now?"

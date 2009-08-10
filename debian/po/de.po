@@ -44,10 +44,10 @@ msgstr "Benutzername für die webbasierte Installation:"
 #: ../templates:3001 ../templates:4001
 msgid ""
 "The setup system for phpMyAdmin may be used, after installation, from http://"
-"localhost/phpmyadmin/scripts/setup.php."
+"localhost/phpmyadmin/setup/index.php."
 msgstr ""
 "Nach der Installation kann das Einrichtungssystem von phpMyAdmin unter "
-"http://localhost/phpmyadmin/scripts/setup.php verwendet werden."
+"http://localhost/phpmyadmin/setup/index.php verwendet werden."
 
 #. Type: string
 #. Description
@@ -105,11 +105,11 @@ msgstr ""
 #~ msgid ""
 #~ "phpMyAdmin comes with a setup script that can help you with creating a "
 #~ "configuration. The script is located at http://localhost/phpmyadmin/"
-#~ "scripts/setup.php. For security reasons it requires authorization."
+#~ "setup/index.php. For security reasons it requires authorization."
 #~ msgstr ""
 #~ "phpMyAdmin kommt mit einem Installationsskript, welches Ihnen beim "
 #~ "Erstellen der Konfiguration hilft. Das Skript befindet sich unter http://"
-#~ "localhost/phpmyadmin/scripts/setup.php. Aus Sicherheitsgründen erfordert "
+#~ "localhost/phpmyadmin/setup/index.php. Aus Sicherheitsgründen erfordert "
 #~ "es Autorisierung."
 
 #~ msgid "Do you want me to restart ${webserver} now?"

@@ -44,10 +44,10 @@ msgstr "Nome utente per il sistema di configurazione via web:"
 #: ../templates:3001 ../templates:4001
 msgid ""
 "The setup system for phpMyAdmin may be used, after installation, from http://"
-"localhost/phpmyadmin/scripts/setup.php."
+"localhost/phpmyadmin/setup/index.php."
 msgstr ""
 "Al termine dell'installazione sarà possibile utilizzare il sistema di "
-"configurazione per phpMyAdmin da http://localhost/phpmyadmin/scripts/setup."
+"configurazione per phpMyAdmin da http://localhost/phpmyadmin/setup/index."
 "php."
 
 #. Type: string

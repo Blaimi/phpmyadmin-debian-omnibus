@@ -19,7 +19,8 @@ Depends: libapache2-mod-php5 | php5-cgi | php5,
     perl, 
     ${misc:Depends}, 
     dbconfig-common,
-    ucf (>= 0.28)
+    ucf (>= 0.28),
+    libjs-mootools
 Recommends: apache2 | lighttpd | httpd, php5-gd, mysql-client
 Suggests: mysql-server
 Description: MySQL web administration tool

@@ -38,6 +38,8 @@ install: build
 	# include Debian marker in version string
 	sed -ri "/set..PMA_VERSION/ s/'([-0-9a-z.]+)'/'\\1deb$(REVISION)'/" \
 	    debian/phpmyadmin/usr/share/phpmyadmin/libraries/Config.class.php
+	# use mootools from the package instead
+	rm debian/phpmyadmin/usr/share/phpmyadmin/js/mootools.js
 
 # Build architecture-independent files here.
 binary-indep: build install
@@ -47,6 +49,7 @@ binary-indep: build install
 	dh_installdocs
 	dh_installexamples
 	dh_installdebconf	
+	dh_installman
 	dh_link
 	dh_compress
 	dh_fixperms

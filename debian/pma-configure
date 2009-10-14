@@ -1,0 +1,7 @@
+#!/bin/sh
+echo "Unsecuring phpMyAdmin installation..."
+echo "Setup script is to write configuration."
+echo 
+echo "Do not forget to run /usr/share/phpmyadmin/pma-secure after configuring,"
+echo "otherwise your installation might be in risk of attack."
+chmod 0660 /var/lib/phpmyadmin/config.inc.php

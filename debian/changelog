@@ -1,3 +1,14 @@
+phpmyadmin (4:3.2.2.1-1) unstable; urgency=low
+
+  * New upstream version.
+    - Fixes XSS (PMASA-2009-6, CVE-2009-3696, CVE-2009-3697).
+  * Register documentation on doc-base.
+  * Use mootools from Debian package rather than own copy.
+  * Allow saving of configuration from setup script only after explicit action
+    from administrator (Closes: #535044, #543460).
+
+ -- Michal Čihař <nijel@debian.org>  Wed, 14 Oct 2009 10:58:28 +0200
+
 phpmyadmin (4:3.2.2-1) unstable; urgency=low
 
   * New upstream version.

@@ -76,12 +76,15 @@ if [ "$1" = "configure" ]; then
 			if [ ! -f /var/lib/phpmyadmin/config.inc.php ]; then
 				touch /var/lib/phpmyadmin/config.inc.php
 				chgrp www-data /var/lib/phpmyadmin/config.inc.php
-				chmod 0660 /var/lib/phpmyadmin/config.inc.php
+				chmod 0640 /var/lib/phpmyadmin/config.inc.php
 			fi
 
 		fi
 
 	fi
+
+    # Fixup permissions
+    chmod 0640 /var/lib/phpmyadmin/config.inc.php
 
 	# Configure Apache
 	db_get phpmyadmin/reconfigure-webserver

@@ -12,3 +12,5 @@ setup		usr/share/phpmyadmin
 debian/conf/*	etc/phpmyadmin
 debian/src/*	usr/share/phpmyadmin
 
+debian/pma-configure usr/sbin
+debian/pma-secure usr/sbin

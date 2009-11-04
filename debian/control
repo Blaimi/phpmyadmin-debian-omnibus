@@ -47,6 +47,5 @@ Description: MySQL web administration tool
   - search globally in a database or a subset of it;
   - transform stored data into any format using a set of predefined
     functions, such as displaying BLOB-data as image or download-link;
-  - support InnoDB tables and foreign keys;
-  - support mysqli, the improved MySQL extension;
+  - manage InnoDB tables and foreign keys;
  and is fully internationalized and localized in dozens of languages.

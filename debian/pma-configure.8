@@ -4,16 +4,12 @@ pma\-configure \- enables configuration of phpMyAdmin installation
 .SH SYNOPSIS
 .B pma\-configure
 .SH DESCRIPTION
-This manual page documents briefly the
-.B pma\-configure
-command.
+pma\-configure changes permissions on the configuration file of phpMyAdmin,
+so that the setup script (usually installed as
+<http://localhost/phpmyadmin/setup/index.php>) can write to it.
 .PP
-It changes permissions on configuration file of phpMyAdmin, so that setup
-script (usually installed as <http://localhost/phpmyadmin/setup/index.php>)
-can write to it.
-.PP
-.B Please note that having system in this state is insecure.
-Do not remember to run pma\-secure(8), after you are done with configuration.
+.B Please note that having the system in this state may be insecure.
+Remember to run pma\-secure(8) after you are done with configuration.
 .SH OPTIONS
 This program does not accept any command line parameters.
 .SH SEE ALSO
@@ -23,6 +19,3 @@ pma\-secure(8)
 .SH AUTHOR
 This manual page and the script were written by Michal Cihar
 <nijel@debian.org>.
-
-
-

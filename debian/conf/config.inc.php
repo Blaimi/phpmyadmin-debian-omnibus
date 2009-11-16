@@ -26,7 +26,9 @@ $i++;
  * Read configuration from dbconfig-common
  * You can regenerate it using: dpkg-reconfigure -plow phpmyadmin
  */
-require('/etc/phpmyadmin/config-db.php');
+if (is_readable('/etc/phpmyadmin/config-db.php')) {
+    require('/etc/phpmyadmin/config-db.php');
+}
 
 /* Configure according to dbconfig-common if enabled */
 if (!empty($dbname)) {

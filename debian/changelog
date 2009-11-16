@@ -1,3 +1,11 @@
+phpmyadmin (4:3.2.3-3) unstable; urgency=low
+
+  * Add DEP-3 patch headers.
+  * Split documentation patch as it really should be separate.
+  * Use dbconfig configuration only if it exists (LP: #416183).
+
+ -- Michal Čihař <nijel@debian.org>  Mon, 16 Nov 2009 15:37:13 +0100
+
 phpmyadmin (4:3.2.3-2) unstable; urgency=low
 
   * Do not hard fail if dbconfig configuration fails (LP: #456674).

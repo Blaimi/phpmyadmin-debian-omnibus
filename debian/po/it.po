@@ -2,12 +2,12 @@
 # Copyright (C) 2006 Software in the Public Interest
 # This file is distributed under the same license as the phpmyadmin package.
 # Luca Monducci <luca.mo@tiscali.it>, 2006, 2007.
-# 
+#
 msgid ""
 msgstr ""
 "Project-Id-Version: phpmyadmin 2.11.2 italian debconf templates\n"
-"Report-Msgid-Bugs-To: Source: phpmyadmin@packages.debian.org\n"
-"POT-Creation-Date: 2007-12-03 11:59+0100\n"
+"Report-Msgid-Bugs-To: phpmyadmin@packages.debian.org\n"
+"POT-Creation-Date: 2009-11-16 14:57+0100\n"
 "PO-Revision-Date: 2007-12-05 21:12+0100\n"
 "Last-Translator: Luca Monducci <luca.mo@tiscali.it>\n"
 "Language-Team: Italian <debian-l10n-italian@lists.debian.org>\n"
@@ -47,8 +47,7 @@ msgid ""
 "localhost/phpmyadmin/setup/index.php."
 msgstr ""
 "Al termine dell'installazione sarà possibile utilizzare il sistema di "
-"configurazione per phpMyAdmin da http://localhost/phpmyadmin/setup/index."
-"php."
+"configurazione per phpMyAdmin da http://localhost/phpmyadmin/setup/index.php."
 
 #. Type: string
 #. Description

@@ -15,30 +15,30 @@
  * Path to changelog file, can be gzip compressed. Useful when you want to
  * have documentation somewhere else, eg. /usr/share/doc.
  */
-define('CHANGELOG_FILE', '/usr/share/doc/phpmyadmin/changelog.gz');
+define('CHANGELOG_FILE', './ChangeLog');
 
 /**
  * Path to license file. Useful when you want to have documentation somewhere
  * else, eg. /usr/share/doc.
  */
-define('LICENSE_FILE', '/usr/share/doc/phpmyadmin/copyright');
+define('LICENSE_FILE', './LICENSE');
 
 /**
  * Path to config file generated using setup script.
  */
-define('SETUP_CONFIG_FILE', '/var/lib/phpmyadmin/config.inc.php');
+define('SETUP_CONFIG_FILE', './config/config.inc.php');
 
 /**
  * Whether setup requires writable directory where config
  * file will be generated.
  */
-define('SETUP_DIR_WRITABLE', false);
+define('SETUP_DIR_WRITABLE', true);
 
 /**
  * Whether to skip mtime check on config file and load it on every request.
  * This has slight performance drawback, but it is the only way to handle
  * inclusions of other php scripts from config.
  */
-define('SKIP_MTIME_CONFIG_CHECK', true);
+define('SKIP_MTIME_CONFIG_CHECK', false);
 
 ?>

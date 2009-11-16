@@ -31,8 +31,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: phpmyadmin 4:2.11.8.1-5\n"
-"Report-Msgid-Bugs-To: Source: phpmyadmin@packages.debian.org\n"
-"POT-Creation-Date: 2007-12-03 11:59+0100\n"
+"Report-Msgid-Bugs-To: phpmyadmin@packages.debian.org\n"
+"POT-Creation-Date: 2009-11-16 14:57+0100\n"
 "PO-Revision-Date: 2008-01-28 10:00+0100\n"
 "Last-Translator: Francisco Javier Cuadrado <fcocuadrado@gmail.com>\n"
 "Language-Team: Debian l10n Spanish <debian-l10n-spanish@lists.debian.org>\n"
@@ -49,8 +49,12 @@ msgstr "Servidor web que desea reconfigurar automáticamente:"
 #. Type: multiselect
 #. Description
 #: ../templates:2001
-msgid "Please choose the web server that should be automatically configured to run phpMyAdmin."
-msgstr "Por favor, elija el servidor web que se debería configurar automáticamente para que ejecute phpMyAdmin."
+msgid ""
+"Please choose the web server that should be automatically configured to run "
+"phpMyAdmin."
+msgstr ""
+"Por favor, elija el servidor web que se debería configurar automáticamente "
+"para que ejecute phpMyAdmin."
 
 #. Type: string
 #. Description
@@ -62,25 +66,34 @@ msgstr "Usuario del sistema de configuración basado en web:"
 #. Description
 #. Type: password
 #. Description
-#: ../templates:3001
-#: ../templates:4001
-msgid "The setup system for phpMyAdmin may be used, after installation, from http://localhost/phpmyadmin/setup/index.php."
-msgstr "Después de la instalación, se puede usar el sistema de configuración de phpMyAdmin, para ello debe acceder a «http://localhost/phpmyadmin/setup/index.php»."
+#: ../templates:3001 ../templates:4001
+msgid ""
+"The setup system for phpMyAdmin may be used, after installation, from http://"
+"localhost/phpmyadmin/setup/index.php."
+msgstr ""
+"Después de la instalación, se puede usar el sistema de configuración de "
+"phpMyAdmin, para ello debe acceder a «http://localhost/phpmyadmin/setup/index."
+"php»."
 
 #. Type: string
 #. Description
 #. Type: password
 #. Description
-#: ../templates:3001
-#: ../templates:4001
-msgid "Access to this system requires identification with a username and a password."
-msgstr "Para acceder a este sistema necesita identificarse con un nombre de usuario y una contraseña."
+#: ../templates:3001 ../templates:4001
+msgid ""
+"Access to this system requires identification with a username and a password."
+msgstr ""
+"Para acceder a este sistema necesita identificarse con un nombre de usuario "
+"y una contraseña."
 
 #. Type: string
 #. Description
 #: ../templates:3001
-msgid "If you leave this field empty, the default username ('admin') will be used."
-msgstr "Si deja este campo vacío, se utilizará el nombre de usuario predeterminado («admin»)."
+msgid ""
+"If you leave this field empty, the default username ('admin') will be used."
+msgstr ""
+"Si deja este campo vacío, se utilizará el nombre de usuario predeterminado "
+"(«admin»)."
 
 #. Type: password
 #. Description
@@ -91,14 +104,23 @@ msgstr "Contraseña del sistema de configuración basado en web:"
 #. Type: password
 #. Description
 #: ../templates:4001
-msgid "Usernames and passwords may be managed with the `htpasswd' command and are stored in /etc/phpmyadmin/htpasswd.setup."
-msgstr "Puede administrar los nombres de usuario y las contraseñas con la orden «htpasswd». Estos datos se guardan en el archivo «/etc/phpmyadmin/htpasswd.setup»."
+msgid ""
+"Usernames and passwords may be managed with the `htpasswd' command and are "
+"stored in /etc/phpmyadmin/htpasswd.setup."
+msgstr ""
+"Puede administrar los nombres de usuario y las contraseñas con la orden "
+"«htpasswd». Estos datos se guardan en el archivo «/etc/phpmyadmin/htpasswd."
+"setup»."
 
 #. Type: password
 #. Description
 #: ../templates:4001
-msgid "If you leave this field empty, access to the web-based setup will be disabled."
-msgstr "El acceso al sistema de configuración basado en web se deshabilitará, si deja este campo vacío."
+msgid ""
+"If you leave this field empty, access to the web-based setup will be "
+"disabled."
+msgstr ""
+"El acceso al sistema de configuración basado en web se deshabilitará, si "
+"deja este campo vacío."
 
 #~ msgid ""
 #~ "phpMyAdmin supports any web server that PHP does, but this automatic "
@@ -107,12 +129,15 @@ msgstr "El acceso al sistema de configuración basado en web se deshabilitará, 
 #~ "phpMyAdmin funciona con cualquier servidor web que tenga soporte para "
 #~ "PHP, pero el proceso de configuraciÃ³n automÃ¡tica sÃ³lo funciona con "
 #~ "Apache."
+
 #~ msgid ""
 #~ "phpMyAdmin comes with a setup script that can help you with creating a "
 #~ msgstr ""
 #~ "phpMyAdmin viene acompaÃ±ado de un programa que puede ayudarle a crear la "
+
 #~ msgid "Do you want me to restart ${webserver} now?"
 #~ msgstr "Â¿Desea reiniciar ${webserver} ahora?"
+
 #~ msgid ""
 #~ "Remember that in order to activate the new configuration ${webserver} has "
 #~ "to be restarted. You can also restart ${webserver} by manually executing /"
@@ -121,4 +146,3 @@ msgstr "El acceso al sistema de configuración basado en web se deshabilitará, 
 #~ "No olvide que para activar la nueva configuraciÃ³n de ${webserver} debe "
 #~ "reiniciarse. Otra manera de reiniciar ${webserver} de forma manual, es "
 #~ "mediante  la orden Â«/etc/init.d/${webserver} restartÂ»"
-

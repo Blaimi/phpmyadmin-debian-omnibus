@@ -1,3 +1,13 @@
+phpmyadmin (4:3.2.3-2) unstable; urgency=low
+
+  * Do not hard fail if dbconfig configuration fails (LP: #456674).
+  * Document that migration from pre dbconfig version might need configuration
+    merge (Closes: #535058).
+  * Document order of processing configuration files (Closes: #532960).
+  * Convert to 3.0 (quilt) source format.
+
+ -- Michal Čihař <nijel@debian.org>  Mon, 16 Nov 2009 15:18:59 +0100
+
 phpmyadmin (4:3.2.3-1) unstable; urgency=low
 
   * New upstream release.

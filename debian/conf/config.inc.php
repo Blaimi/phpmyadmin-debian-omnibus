@@ -22,7 +22,10 @@ $i = 0;
 // You can disable a server config entry by setting host to ''.
 $i++;
 
-/* Read configuration from dbconfig-common */
+/**
+ * Read configuration from dbconfig-common
+ * You can regenerate it using: dpkg-reconfigure -plow phpmyadmin
+ */
 require('/etc/phpmyadmin/config-db.php');
 
 /* Configure according to dbconfig-common if enabled */

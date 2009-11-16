@@ -7,8 +7,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: nb.po_[4suryb]\n"
-"Report-Msgid-Bugs-To: Source: phpmyadmin@packages.debian.org\n"
-"POT-Creation-Date: 2007-12-03 11:59+0100\n"
+"Report-Msgid-Bugs-To: phpmyadmin@packages.debian.org\n"
+"POT-Creation-Date: 2009-11-16 14:57+0100\n"
 "PO-Revision-Date: 2007-12-03 20:32+0100\n"
 "Last-Translator: Bjørn Steensrud <bjornst@skogkatt.homelinux.org>\n"
 "Language-Team: Norwegian Bokmål <i18n-nb@lister.ping.uio.no>\n"
@@ -79,8 +79,8 @@ msgid ""
 "Usernames and passwords may be managed with the `htpasswd' command and are "
 "stored in /etc/phpmyadmin/htpasswd.setup."
 msgstr ""
-"Du kan styre brukernavnene og passordene med kommandoen «htpasswd». De "
-"lagres i fila /etc/phpmyadmin/htpasswd.setup."
+"Du kan styre brukernavnene og passordene med kommandoen «htpasswd». De lagres "
+"i fila /etc/phpmyadmin/htpasswd.setup."
 
 #. Type: password
 #. Description

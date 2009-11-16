@@ -15,8 +15,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: phpmyadmin 4:2.11.4-1\n"
-"Report-Msgid-Bugs-To: Source: phpmyadmin@packages.debian.org\n"
-"POT-Creation-Date: 2007-12-03 11:59+0100\n"
+"Report-Msgid-Bugs-To: phpmyadmin@packages.debian.org\n"
+"POT-Creation-Date: 2009-11-16 14:57+0100\n"
 "PO-Revision-Date: 2008-01-27 21:28+0900\n"
 "Last-Translator: Hideki Yamane (Debian-JP) <henrich@debian.or.jp>\n"
 "Language-Team: Japanese <debian-japanese@lists.debian.org>\n"
@@ -54,8 +54,8 @@ msgid ""
 "The setup system for phpMyAdmin may be used, after installation, from http://"
 "localhost/phpmyadmin/setup/index.php."
 msgstr ""
-"phpMyAdmin 設定システムは、インストール後に http://localhost/phpmyadmin/scripts/"
-"setup.php から使えるようになります。"
+"phpMyAdmin 設定システムは、インストール後に http://localhost/phpmyadmin/"
+"scripts/setup.php から使えるようになります。"
 
 #. Type: string
 #. Description
@@ -64,8 +64,7 @@ msgstr ""
 #: ../templates:3001 ../templates:4001
 msgid ""
 "Access to this system requires identification with a username and a password."
-msgstr ""
-"このシステムへのアクセスには、ユーザ名とパスワードでの認証が必要です。"
+msgstr "このシステムへのアクセスには、ユーザ名とパスワードでの認証が必要です。"
 
 #. Type: string
 #. Description
@@ -97,7 +96,4 @@ msgstr ""
 msgid ""
 "If you leave this field empty, access to the web-based setup will be "
 "disabled."
-msgstr ""
-"この値を空のままにした場合、web ベースの設定画面は無効になります。"
-
-
+msgstr "この値を空のままにした場合、web ベースの設定画面は無効になります。"

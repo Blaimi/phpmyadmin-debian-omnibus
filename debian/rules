@@ -2,18 +2,14 @@
 # Uncomment this to turn on verbose mode.
 #export DH_VERBOSE=1
 
-include /usr/share/quilt/quilt.make
-
 REVISION := $(shell head -1 debian/changelog | sed 's/.*(//;s/).*//;s/.*-//')
 
 build: build-stamp
-build-stamp: $(QUILT_STAMPFN)
+build-stamp:
 	dh_testdir
 	touch build-stamp
 
-clean: clean-patched unpatch
-
-clean-patched:
+clean: 
 	dh_testdir
 	dh_testroot
 	rm -f build-stamp

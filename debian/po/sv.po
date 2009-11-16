@@ -13,8 +13,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: phpmyadmin_4:2.11.7.1-1_sv\n"
-"Report-Msgid-Bugs-To: Source: phpmyadmin@packages.debian.org\n"
-"POT-Creation-Date: 2007-12-03 11:59+0100\n"
+"Report-Msgid-Bugs-To: phpmyadmin@packages.debian.org\n"
+"POT-Creation-Date: 2009-11-16 14:57+0100\n"
 "PO-Revision-Date: 2008-07-23 17:23+0200\n"
 "Last-Translator: Martin Ågren <martin.agren@gmail.com>\n"
 "Language-Team: Swedish <debian-l10n-swedish@lists.debian.org>\n"
@@ -37,8 +37,7 @@ msgid ""
 "Please choose the web server that should be automatically configured to run "
 "phpMyAdmin."
 msgstr ""
-"Välj den webbserver som ska konfigureras automatiskt för att köra "
-"phpMyAdmin."
+"Välj den webbserver som ska konfigureras automatiskt för att köra phpMyAdmin."
 
 #. Type: string
 #. Description
@@ -55,22 +54,28 @@ msgid ""
 "The setup system for phpMyAdmin may be used, after installation, from http://"
 "localhost/phpmyadmin/setup/index.php."
 msgstr ""
-"Efter installationen kan inställningssystemet för phpMyAdmin användas "
-"från http://localhost/phpmyadmin/setup/index.php."
+"Efter installationen kan inställningssystemet för phpMyAdmin användas från "
+"http://localhost/phpmyadmin/setup/index.php."
 
 #. Type: string
 #. Description
 #. Type: password
 #. Description
 #: ../templates:3001 ../templates:4001
-msgid "Access to this system requires identification with a username and a password."
-msgstr "Åtkomst till detta system kräver identifiering med ett användarnamn och ett lösenord."
+msgid ""
+"Access to this system requires identification with a username and a password."
+msgstr ""
+"Åtkomst till detta system kräver identifiering med ett användarnamn och ett "
+"lösenord."
 
 #. Type: string
 #. Description
 #: ../templates:3001
-msgid "If you leave this field empty, the default username ('admin') will be used."
-msgstr "Om du lämnar detta fält blankt, kommer standardanvändarnamnet (\"admin\") att användas."
+msgid ""
+"If you leave this field empty, the default username ('admin') will be used."
+msgstr ""
+"Om du lämnar detta fält blankt, kommer standardanvändarnamnet (\"admin\") "
+"att användas."
 
 #. Type: password
 #. Description
@@ -85,8 +90,8 @@ msgid ""
 "Usernames and passwords may be managed with the `htpasswd' command and are "
 "stored in /etc/phpmyadmin/htpasswd.setup."
 msgstr ""
-"Användarnamn och lösenord kan hanteras med kommandot \"htpasswd\" och "
-"lagras i /etc/phpmyadmin/htpasswd.setup."
+"Användarnamn och lösenord kan hanteras med kommandot \"htpasswd\" och lagras "
+"i /etc/phpmyadmin/htpasswd.setup."
 
 #. Type: password
 #. Description
@@ -97,4 +102,3 @@ msgid ""
 msgstr ""
 "Om du lämnar detta fält blankt, kommer åtkomst till den webbaserade "
 "konfigurationen att avaktiveras."
-

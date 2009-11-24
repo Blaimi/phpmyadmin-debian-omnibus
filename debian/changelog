@@ -1,3 +1,10 @@
+phpmyadmin (4:3.2.3-4) unstable; urgency=low
+
+  * Add missing symlink to mootools (LP: #487241).
+  * Fix inverted logic of detecting dbconfig-common failure.
+
+ -- Michal Čihař <nijel@debian.org>  Tue, 24 Nov 2009 14:33:09 +0100
+
 phpmyadmin (4:3.2.3-3) unstable; urgency=low
 
   * Add DEP-3 patch headers.

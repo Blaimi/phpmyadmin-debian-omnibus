@@ -1,3 +1,9 @@
+phpmyadmin (4:3.2.4-1) unstable; urgency=low
+
+  * New upstream release.
+
+ -- Thijs Kinkhorst <thijs@debian.org>  Tue, 08 Dec 2009 18:35:56 +0100
+
 phpmyadmin (4:3.2.3-4) unstable; urgency=low
 
   * Add missing symlink to mootools (LP: #487241).

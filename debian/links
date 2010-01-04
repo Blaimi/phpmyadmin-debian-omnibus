@@ -2,3 +2,4 @@
 /usr/share/doc/phpmyadmin/translators.html	usr/share/phpmyadmin/translators.html
 /usr/share/doc/phpmyadmin/docs.css		usr/share/phpmyadmin/docs.css
 /usr/share/javascript/mootools/mootools-core-yc.js usr/share/phpmyadmin/js/mootools.js
+/usr/share/javascript/mootools/mootools-more-yc.js usr/share/phpmyadmin/js/mootools-more.js

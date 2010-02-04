@@ -4,7 +4,7 @@
 set -e
 
 avahi_install() {
-	if [ -d /etc/avahi/services/ -a ! -e /etc/avahi/services/phpmyadmin.service ] ; then
+	if [ -d /etc/avahi/services/ -a ! -e /etc/avahi/services/phpmyadmin.service -a ! -L /etc/avahi/services/phpmyadmin.service ] ; then
 		ln -s ../../phpmyadmin/phpmyadmin.service /etc/avahi/services/
 	fi
 }
@@ -14,7 +14,7 @@ lighttpd_install() {
 		if which lighty-enable-mod >/dev/null 2>&1 ; then
 			ln -s ../../phpmyadmin/lighttpd.conf /etc/lighttpd/conf-available/50-phpmyadmin.conf
 			# We also need auth to protect setup.php
-			lighty-enable-mod phpmyadmin auth
+			lighty-enable-mod phpmyadmin auth fastcgi
 			avahi_install
 		else
 			echo "Lighttpd not installed, skipping"
@@ -87,7 +87,9 @@ if [ "$1" = "configure" ]; then
 	fi
 
     # Fixup permissions
-    chmod 0640 /var/lib/phpmyadmin/config.inc.php
+    if [ -f /var/lib/phpmyadmin/config.inc.php ]; then
+        chmod 0640 /var/lib/phpmyadmin/config.inc.php
+    fi
 
 	# Configure Apache
 	db_get phpmyadmin/reconfigure-webserver

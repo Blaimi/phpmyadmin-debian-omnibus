@@ -1,3 +1,15 @@
+phpmyadmin (4:3.2.5-2) unstable; urgency=low
+
+  * Add conflict with broken mootools versions (Closes: #566601).
+  * Fixup permissions only if file exists (LP: #481786).
+  * Enable fastcgi module in lighttpd on install (Closes: #567336) 
+    (LP: #283801).
+  * Do not try to create Avahi service symlink if it already exists 
+    (LP: #512246).
+  * Bump standards to 3.8.4.
+
+ -- Michal Čihař <nijel@debian.org>  Thu, 04 Feb 2010 13:21:28 +0100
+
 phpmyadmin (4:3.2.5-1) unstable; urgency=low
 
   * New upstream release.

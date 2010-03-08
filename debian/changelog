@@ -1,3 +1,11 @@
+phpmyadmin (4:3.3.0-1) unstable; urgency=low
+
+  * New upstream version.
+  * Rediff debian/patches.
+  * Fix permissions on mediawiki export extension.
+
+ -- Michal Čihař <nijel@debian.org>  Mon, 08 Mar 2010 15:25:00 +0100
+
 phpmyadmin (4:3.2.5-2) unstable; urgency=low
 
   * Add conflict with broken mootools versions (Closes: #566601).

@@ -4,7 +4,7 @@ From: Michal Čihař <nijel@debian.org>
 Forwarded: not-needed
 --- a/Documentation.html
 +++ b/Documentation.html
-@@ -245,20 +245,10 @@
+@@ -253,20 +253,10 @@
                  <a href="setup/">Setup Script</a>. First you must
                  manually create a folder <tt>config</tt> in the phpMyAdmin
                  directory. This is a security measure. On a Linux/Unix system you
@@ -14,20 +14,20 @@ Forwarded: not-needed
 -cd phpMyAdmin
 -mkdir config                        # create directory for saving
 -chmod o+rw config                   # give it world writable permissions
--</pre>
++/usr/sbin/pma-configure
+ </pre>
 -                And to edit an existing configuration, copy it over first:
 -<pre>
 -cp config.inc.php config/           # copy current configuration for editing
 -chmod o+w config/config.inc.php     # give it world writable permissions
-+/usr/sbin/pma-configure
- </pre>
+-</pre>
 -                On other platforms, simply create the folder and ensure that your
 -                web server has read and write access to it. <a href="#faq1_26">FAQ
 -                1.26</a> can help with this.<br /><br />
  
                  Next, open <tt><a href="setup/">setup/</a>
                  </tt>in your browser. Note that <strong>changes are not saved to
-@@ -271,13 +261,10 @@
+@@ -279,13 +269,10 @@
                  or use the <tt>Download</tt> link to save the config file locally
                  and upload (via FTP or some similar means) to the proper location.<br /><br />
  

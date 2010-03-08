@@ -43,7 +43,7 @@ Subject: Include both mootools and mootools-more
   * Defines the url to return to in case of error in a sql statement
 --- a/tbl_replace.php
 +++ b/tbl_replace.php
-@@ -419,6 +419,7 @@
+@@ -415,6 +415,7 @@
  $GLOBALS['js_include'][] = 'functions.js';
  // in case we call sql.php which needs those:
  $GLOBALS['js_include'][] = 'mootools.js';

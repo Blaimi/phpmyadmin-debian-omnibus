@@ -4,7 +4,7 @@
  *
  *
  * @package phpMyAdmin-Export-XLSX
- * @version $Id: xlsx.php 12848 2009-08-21 07:38:43Z nijel $
+ * @version $Id$
  */
 if (! defined('PHPMYADMIN')) {
     exit;

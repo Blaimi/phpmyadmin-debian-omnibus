@@ -9,7 +9,7 @@
  *  - adding tables
  *  - viewing PDF schemas
  *
- * @version $Id: db_operations.php 13260 2010-01-20 08:00:47Z helmo $
+ * @version $Id$
  * @package phpMyAdmin
  */
 

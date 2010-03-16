@@ -1,3 +1,9 @@
+phpmyadmin (4:3.3.1-1) unstable; urgency=low
+
+  * New upstream release.
+
+ -- Thijs Kinkhorst <thijs@debian.org>  Tue, 16 Mar 2010 21:52:33 +0100
+
 phpmyadmin (4:3.3.0-1) unstable; urgency=low
 
   * New upstream version.

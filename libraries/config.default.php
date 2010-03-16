@@ -16,7 +16,7 @@
  *
  * All directives are explained in Documentation.html
  *
- * @version $Id: config.default.php 13257 2010-01-19 12:49:06Z lem9 $
+ * @version $Id$
  * @package phpMyAdmin
  */
 

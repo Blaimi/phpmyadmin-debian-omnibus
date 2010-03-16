@@ -2,8 +2,21 @@
 phpMyAdmin - ChangeLog
 ----------------------
 
-$Id: ChangeLog 13448 2010-03-07 23:41:30Z lem9 $
+$Id$
 $HeadURL: https://phpmyadmin.svn.sourceforge.net/svnroot/phpmyadmin/trunk/phpMyAdmin/ChangeLog $
+
+3.3.1.0 (2010-03-16)
+- bug #2941037 [core] Database structure not sorted by table correctly 
+- bug #2948492 [interface] Slide effect masks some fields on search page
+- bug #2959746 [interface] Unknown table status: TABLE_TYPE 
+- bug #2953050 [export] export VIEW as SQL includes INSERT statement 
+- bug #2942032 [core] Cannot detect PmaAbsoluteUri correctly on Windows 
+- bug #2961609 [auth] Potential information disclosure at login page
+- patch #2961540 [export] Do not export data of MERGE table,
+  thanks to Dieter Adriaenssens - ruleant
+- bug #2961198 [parser] Querying a table named "data"
+- bug #2931429 [structure] Editing long triggers
+- bug #2970769 [structure] Incorrect reference to mootools-more.js 
 
 3.3.0.0 (2010-03-07)
 + rfe #2308632 [edit] Use hex for (var)binary fields,
@@ -83,7 +96,7 @@ $HeadURL: https://phpmyadmin.svn.sourceforge.net/svnroot/phpmyadmin/trunk/phpMyA
 - bug #869006 [structure] Ignore number of records for MRG_MyISAM tables
 - bug [browse] "Show BLOB contents" should display HTML code that is present
   in a BLOB, thanks to Vincent van der Tuin
-- [privileges] Improve Proper escaping of hostname
+- [privileges] Improve escaping of hostname
 
 3.2.4.0 (2009-12-02)
 - bug [engines] Innodb_buffer_pool_pages_latched no longer returned in status

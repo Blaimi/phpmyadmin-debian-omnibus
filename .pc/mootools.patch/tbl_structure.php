@@ -3,7 +3,7 @@
 /**
  * Displays table structure infos like fields/columns, indexes, size, rows
  * and allows manipulation of indexes and columns/fields
- * @version $Id: tbl_structure.php 13096 2009-11-01 13:12:10Z lem9 $
+ * @version $Id$
  * @package phpMyAdmin
  */
 

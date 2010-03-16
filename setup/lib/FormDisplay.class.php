@@ -11,7 +11,7 @@
  * @package    phpMyAdmin-setup
  * @author     Piotr Przybylski <piotrprz@gmail.com>
  * @license    http://www.gnu.org/licenses/gpl.html GNU GPL 2.0
- * @version    $Id: FormDisplay.class.php 12304 2009-03-24 12:56:58Z nijel $
+ * @version    $Id$
  */
 
 /**

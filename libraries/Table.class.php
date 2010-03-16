@@ -2,7 +2,7 @@
 /* vim: set expandtab sw=4 ts=4 sts=4: */
 /**
  *
- * @version $Id: Table.class.php 13107 2009-11-08 10:35:00Z lem9 $
+ * @version $Id$
  * @package phpMyAdmin
  */
 
@@ -423,7 +423,8 @@ class PMA_Table
 
             if (! $force_exact) {
                 if (! isset(PMA_Table::$cache[$db][$table]['Rows']) && ! $is_view) {
-                    PMA_Table::$cache[$db][$table] = PMA_DBI_fetch_single_row('SHOW TABLE STATUS FROM ' . PMA_backquote($db) . ' LIKE \'' . PMA_sqlAddslashes($table, true) . '\'');
+                    $tmp_tables = PMA_DBI_get_tables_full($db, $table);
+                    PMA_Table::$cache[$db][$table] = $tmp_tables[$table];
                 }
                 $row_count = PMA_Table::$cache[$db][$table]['Rows'];
             }

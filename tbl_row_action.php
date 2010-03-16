@@ -3,7 +3,7 @@
 /**
  * handle row specifc actions like edit, delete, export
  *
- * @version $Id: tbl_row_action.php 13195 2009-12-30 15:27:27Z lem9 $
+ * @version $Id$
  * @package phpMyAdmin
  */
 

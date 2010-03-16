@@ -3,7 +3,7 @@
 /**
  * library for displaying table with results from all sort of select queries
  *
- * @version $Id: display_tbl.lib.php 13221 2010-01-05 23:46:39Z lem9 $
+ * @version $Id$
  * @package phpMyAdmin
  */
 

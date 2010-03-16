@@ -3,7 +3,7 @@
 /**
  * Contributed by Maxime Delorme and merged by lem9
  *
- * @version $Id: pdf_schema.php 12596 2009-06-24 11:34:56Z lem9 $
+ * @version $Id$
  * @package phpMyAdmin
  */
 

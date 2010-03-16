@@ -5,7 +5,7 @@
  *
  * register_globals_save (mark this file save for disabling register globals)
  *
- * @version $Id: tbl_change.php 13195 2009-12-30 15:27:27Z lem9 $
+ * @version $Id$
  * @package phpMyAdmin
  */
 

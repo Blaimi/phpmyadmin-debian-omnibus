@@ -1,4 +1,4 @@
-phpMyAdmin 3.3.0 Documentation
+phpMyAdmin 3.3.1 Documentation
 
   * Top
   * Requirements
@@ -21,7 +21,7 @@ phpMyAdmin 3.3.0 Documentation
       + Version history: ChangeLog
       + License: LICENSE
   * Documentation version:
-    $Id: Documentation.html 13448 2010-03-07 23:41:30Z lem9 $
+    $Id$
 
 Requirements
 

@@ -4,7 +4,7 @@
  * displays status variables with descriptions and some hints an optmizing
  *  + reset status variables
  *
- * @version $Id: server_status.php 13259 2010-01-19 19:40:20Z lem9 $
+ * @version $Id$
  * @package phpMyAdmin
  */
 

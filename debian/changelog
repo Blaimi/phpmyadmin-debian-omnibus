@@ -1,3 +1,11 @@
+phpmyadmin (4:3.3.2-1) unstable; urgency=medium
+
+  * New upstream release (closes: #577753).
+  * Drop unneeded Indexes option from shipped apache.conf.
+  * Anchor regexp to prevent truncation of schema (closes: #577395).
+
+ -- Thijs Kinkhorst <thijs@debian.org>  Wed, 14 Apr 2010 10:55:42 +0200
+
 phpmyadmin (4:3.3.1-1) unstable; urgency=low
 
   * New upstream release.

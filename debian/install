@@ -14,3 +14,6 @@ debian/src/*	usr/share/phpmyadmin
 
 debian/pma-configure usr/sbin
 debian/pma-secure usr/sbin
+
+debian/sql/upgrade/*    usr/share/dbconfig-common/data/phpmyadmin/upgrade/mysql
+debian/sql/install/*    usr/share/dbconfig-common/data/phpmyadmin/install

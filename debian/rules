@@ -21,11 +21,6 @@ install: build
 	dh_testroot
 	dh_prep
 	dh_installdirs
-	# Need to rename the file
-	install -m 644 scripts/create_tables.sql debian/phpmyadmin/usr/share/dbconfig-common/data/phpmyadmin/install/mysql
-	# No creating or selecting of a database wanted (user might have 
-	# chosen different one and dbconfig-common created it already).
-	sed -i '/^CREATE DATABASE/,/^USE phpmyadmin/D'  debian/phpmyadmin/usr/share/dbconfig-common/data/phpmyadmin/install/mysql
 	dh_install
 	find debian/phpmyadmin -name .svn | xargs -r rm -r
 	# spurious licence files, this is in debian/copyright

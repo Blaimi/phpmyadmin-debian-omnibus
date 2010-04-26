@@ -1,3 +1,10 @@
+phpmyadmin (4:3.3.2-2) unstable; urgency=low
+
+  * Add SQL to create tracking table on upgrade (LP:  #565627).
+  * Include SQL script to create table with fixed SQL comments (LP: #563256).
+
+ -- Michal Čihař <nijel@debian.org>  Mon, 26 Apr 2010 14:23:37 +0200
+
 phpmyadmin (4:3.3.2-1) unstable; urgency=medium
 
   * New upstream release (closes: #577753).

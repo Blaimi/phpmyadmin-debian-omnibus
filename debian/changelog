@@ -1,3 +1,9 @@
+phpmyadmin (4:3.3.3-1) unstable; urgency=low
+
+  * New upstream version (Closes: #581585).
+
+ -- Michal Čihař <nijel@debian.org>  Fri, 14 May 2010 13:57:37 +0200
+
 phpmyadmin (4:3.3.2-2) unstable; urgency=low
 
   * Add SQL to create tracking table on upgrade (LP:  #565627).

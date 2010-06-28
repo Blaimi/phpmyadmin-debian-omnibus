@@ -58,10 +58,12 @@ if [ "$1" = "remove" ] || [ "$1" = "purge" ]; then
 			fi
 			# Redirection of 3 is needed because Debconf uses it and it might 
 			# be inherited by webserver. See bug #446324.
-			if [ -x /usr/sbin/invoke-rc.d ]; then
-				invoke-rc.d $webserver reload 3>/dev/null || true
-			else
-				/etc/init.d/$webserver reload 3>/dev/null || true
+			if [ -f /etc/init.d/$webserver ] ; then
+				if [ -x /usr/sbin/invoke-rc.d ]; then
+					invoke-rc.d $webserver reload 3>/dev/null || true
+				else
+					/etc/init.d/$webserver reload 3>/dev/null || true
+				fi
 			fi
 		done
 	fi

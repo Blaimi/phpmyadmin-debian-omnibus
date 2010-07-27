@@ -3,7 +3,7 @@ Maintainer: Thijs Kinkhorst <thijs@debian.org>
 Uploaders: Michal Čihař <nijel@debian.org>
 Section: web
 Priority: extra
-Standards-Version: 3.9.0
+Standards-Version: 3.9.1
 Build-Depends: debhelper (>= 7), 
     po-debconf
 Homepage: http://www.phpmyadmin.net/

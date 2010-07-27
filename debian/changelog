@@ -1,3 +1,10 @@
+phpmyadmin (4:3.3.5-1) unstable; urgency=low
+
+  * New upstream version.
+  * Bump standards to 3.9.1.
+
+ -- Michal Čihař <nijel@debian.org>  Tue, 27 Jul 2010 10:05:24 +0200
+
 phpmyadmin (4:3.3.4-1) unstable; urgency=low
 
   * New upstream version.

@@ -1,3 +1,9 @@
+phpmyadmin (4:3.3.5.1-1) unstable; urgency=low
+
+  * New upstream security release (CVE-2010-3055, CVE-2010-3056).
+
+ -- Michal Čihař <nijel@debian.org>  Fri, 20 Aug 2010 14:24:31 +0200
+
 phpmyadmin (4:3.3.5-1) unstable; urgency=low
 
   * New upstream version.

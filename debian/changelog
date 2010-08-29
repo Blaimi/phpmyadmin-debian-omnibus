@@ -1,6 +1,16 @@
+phpmyadmin (4:3.3.6-1) unstable; urgency=low
+  
+  [ Thijs Kinkhorst ]
+  * New upstream bugfix release (Closes: #594755).
+
+  [ Michal Čihař ]
+  * Include configuration for tracking (Closes: #594188).
+
+ -- Thijs Kinkhorst <thijs@debian.org>  Sun, 29 Aug 2010 10:48:09 +0200
+
 phpmyadmin (4:3.3.5.1-1) unstable; urgency=low
 
-  * New upstream security release (CVE-2010-3055, CVE-2010-3056).
+  * New upstream security release (CVE-2010-3056).
 
  -- Michal Čihař <nijel@debian.org>  Fri, 20 Aug 2010 14:24:31 +0200
 

@@ -1,3 +1,10 @@
+phpmyadmin (4:3.3.7-1) unstable; urgency=low
+
+  * New upstream release (Closes: #595974).
+    - Fixes XSS in setup script (PMASA-2010-7, CVE-2010-3263).
+
+ -- Michal Čihař <nijel@debian.org>  Thu, 09 Sep 2010 08:31:57 +0200
+
 phpmyadmin (4:3.3.6-1) unstable; urgency=low
   
   [ Thijs Kinkhorst ]

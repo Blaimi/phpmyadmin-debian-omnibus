@@ -1,3 +1,16 @@
+phpmyadmin (4:3.3.8-1) experimental; urgency=low
+
+  * New upstream release.
+  * Upload to experimental for now due to excessive changes in packaging.
+  * Ignore errors from dbconfig in config script (LP: #618852).
+  * Ignore errors from dbconfig in {pre,post}rm scripts (LP: #621569).
+  * Set allow_url_fopen to Off and limit some function execution for
+    phpMyAdmin under Apache (Closes: #598903).
+  * Change default upload path to /var/lib/phpmyadmin/tmp and set open_basedir
+    to limit using anything else than phpMyAdmin code and this folder.
+
+ -- Michal Čihař <nijel@debian.org>  Tue, 26 Oct 2010 16:39:45 +0200
+
 phpmyadmin (4:3.3.7-1) unstable; urgency=low
 
   * New upstream release (Closes: #595974).

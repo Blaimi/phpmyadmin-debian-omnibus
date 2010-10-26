@@ -90,6 +90,9 @@ if [ "$1" = "configure" ]; then
     if [ -f /var/lib/phpmyadmin/config.inc.php ]; then
         chmod 0640 /var/lib/phpmyadmin/config.inc.php
     fi
+	if ! dpkg-statoverride --list /var/lib/pyicqt >/dev/null; then
+		chown -R www-data:www-data    /var/lib/phpmyadmin/tmp
+	fi
 
 	# Configure Apache
 	db_get phpmyadmin/reconfigure-webserver

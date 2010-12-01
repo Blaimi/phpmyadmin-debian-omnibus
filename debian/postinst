@@ -9,6 +9,12 @@ avahi_install() {
 	fi
 }
 
+desktop_install() {
+	if [ -d /usr/share/applications/ -a ! -e /usr/share/applications/phpmyadmin.desktop -a ! -L /usr/share/applications/phpmyadmin.desktop ] ; then
+		ln -s /etc/phpmyadmin/phpmyadmin.desktop /usr/share/applications/
+	fi
+}
+
 lighttpd_install() {
 	if [ ! -f /etc/lighttpd/conf-available/50-phpmyadmin.conf ] ; then
 		if which lighty-enable-mod >/dev/null 2>&1 ; then
@@ -16,6 +22,7 @@ lighttpd_install() {
 			# We also need auth to protect setup.php
 			lighty-enable-mod phpmyadmin auth fastcgi
 			avahi_install
+            desktop_install
 		else
 			echo "Lighttpd not installed, skipping"
 		fi
@@ -27,6 +34,7 @@ apache_install() {
 	if [ -d /etc/$webserver/conf.d ] && [ ! -e /etc/$webserver/conf.d/phpmyadmin.conf ]; then
 		ln -s ../../phpmyadmin/apache.conf /etc/$webserver/conf.d/phpmyadmin.conf
 		avahi_install
+        desktop_install
 	fi
 }
 

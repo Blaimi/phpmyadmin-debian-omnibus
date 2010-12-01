@@ -70,7 +70,15 @@ if [ "$1" = "remove" ] || [ "$1" = "purge" ]; then
 		done
 	fi
 
+
 	if [ "$1" = "purge" ]; then
+        # Possibly installed desktop file
+        if [ -h /usr/share/applications/phpmyadmin.desktop ] ; then
+            rm -f /usr/share/applications/phpmyadmin.desktop
+        fi
+        if [ -h /etc/avahi/services/phpmyadmin.service ] ; then
+            rm -f /etc/avahi/services/phpmyadmin.service
+        fi
 		rm -rf /etc/phpmyadmin /var/lib/phpmyadmin
 	fi
 fi

@@ -21,7 +21,7 @@ Depends: libapache2-mod-php5 | php5-cgi | php5,
     ucf (>= 0.28),
     libjs-mootools (>= 1.2.4.0~debian1-1)
 Recommends: apache2 | lighttpd | httpd, php5-gd, mysql-client
-Suggests: mysql-server
+Suggests: mysql-server, www-browser
 Description: MySQL web administration tool
  This package allows administering of MySQL with a web interface.
  .

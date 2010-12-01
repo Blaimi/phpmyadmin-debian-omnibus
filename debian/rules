@@ -31,8 +31,6 @@ install: build
 	    debian/phpmyadmin/usr/share/phpmyadmin/libraries/Config.class.php
 	# use mootools from the package instead
 	rm debian/phpmyadmin/usr/share/phpmyadmin/js/mootools.js
-	# fix permissions
-	chmod 644 debian/phpmyadmin/usr/share/phpmyadmin/libraries/export/mediawiki.php
 
 # Build architecture-independent files here.
 binary-indep: build install

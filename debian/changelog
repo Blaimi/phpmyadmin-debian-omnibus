@@ -1,3 +1,13 @@
+phpmyadmin (4:3.3.8.1-1) experimental; urgency=low
+
+  * New upstream security release (PMASA-2010-8, CVE-2010-4329).
+  * Install desktop file for phpMyAdmin if web server was configured 
+    (LP: #667172).
+  * Remove avahi service symlink on purge.
+  * Suggest www-browser.
+
+ -- Michal Čihař <nijel@debian.org>  Wed, 01 Dec 2010 14:56:15 +0100
+
 phpmyadmin (4:3.3.8-1) experimental; urgency=low
 
   * New upstream release.

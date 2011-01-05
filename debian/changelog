@@ -1,3 +1,13 @@
+phpmyadmin (4:3.3.9-1) experimental; urgency=low
+
+  * New upstream release.
+  * Fix connection settings when using dbconfig with remote MySQL server.
+  * Log when dbconfig generated settings are not accessible. 
+  * Add Slovak debconf translation (Closes: #608702).
+  * Update Danish debconf translation (Closes: #608941).
+
+ -- Michal Čihař <nijel@debian.org>  Wed, 05 Jan 2011 10:18:41 +0100
+
 phpmyadmin (4:3.3.8.1-1) experimental; urgency=low
 
   * New upstream security release (PMASA-2010-8, CVE-2010-4329).

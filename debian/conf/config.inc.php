@@ -28,6 +28,9 @@ $i++;
  */
 if (is_readable('/etc/phpmyadmin/config-db.php')) {
     require('/etc/phpmyadmin/config-db.php');
+} else {
+    error_log('phpmyadmin: Failed to load /etc/phpmyadmin/config-db.php.'
+        . ' Check group www-data has read access.');
 }
 
 /* Configure according to dbconfig-common if enabled */
@@ -38,7 +41,7 @@ if (!empty($dbname)) {
     if (empty($dbserver)) $dbserver = 'localhost';
     $cfg['Servers'][$i]['host'] = $dbserver;
 
-    if (!empty($dbport)) {
+    if (!empty($dbport) || $dbserver != 'localhost') {
         $cfg['Servers'][$i]['connect_type'] = 'tcp';
         $cfg['Servers'][$i]['port'] = $dbport;
     }

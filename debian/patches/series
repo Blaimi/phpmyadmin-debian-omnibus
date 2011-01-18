@@ -1,3 +1,5 @@
 mootools.patch
 debian.patch
 doc.patch
+CVE-2010-4480.patch
+CVE-2010-4481.patch

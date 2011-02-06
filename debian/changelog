@@ -1,3 +1,9 @@
+phpmyadmin (4:3.3.9-3) unstable; urgency=low
+
+  * Upload to unstable.
+
+ -- Michal Čihař <nijel@debian.org>  Sun, 06 Feb 2011 12:41:31 +0100
+
 phpmyadmin (4:3.3.9-2) experimental; urgency=low
 
   * Add php5-fpm to list of PHP SAPIs (Closes: #609808, LP: #701997).

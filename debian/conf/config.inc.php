@@ -5,7 +5,10 @@
  * This file overrides the settings made by phpMyAdmin interactive setup
  * utility.
  *
- * For example configuration see /usr/share/doc/phpmyadmin/examples/config.default.php.gz
+ * For example configuration see
+ *   /usr/share/doc/phpmyadmin/examples/config.sample.inc.php
+ * or
+ *   /usr/share/doc/phpmyadmin/examples/config.manyhosts.inc.php
  *
  * NOTE: do not add security sensitive data to this file (like passwords)
  * unless you really know what you're doing. If you do, any user that can

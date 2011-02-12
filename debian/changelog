@@ -1,3 +1,12 @@
+phpmyadmin (4:3.3.9.2-1) unstable; urgency=high
+
+  * New upstream security release.
+    - Fixes path disclossure (PMASA-2011-1, CVE-2011-0986).
+    - Fixes SQL injection (PMASA-2011-2, CVE-2011-0987).
+  * Fix path to example config files (Closes: #611311).
+
+ -- Michal Čihař <nijel@debian.org>  Sat, 12 Feb 2011 08:35:43 +0100
+
 phpmyadmin (4:3.3.9-3) unstable; urgency=low
 
   * Upload to unstable.

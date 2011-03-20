@@ -1,3 +1,10 @@
+phpmyadmin (4:3.3.10-1) unstable; urgency=low
+
+  * New upstream release.
+    - Remove patches integrated upstream. 
+
+ -- Michal Čihař <nijel@debian.org>  Sun, 20 Mar 2011 09:29:59 +0100
+
 phpmyadmin (4:3.3.9.2-1) unstable; urgency=high
 
   * New upstream security release.

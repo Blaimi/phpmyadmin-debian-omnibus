@@ -4,7 +4,7 @@ From: Michal Čihař <nijel@debian.org>
 Forwarded: not-needed
 --- a/Documentation.html
 +++ b/Documentation.html
-@@ -250,20 +250,10 @@
+@@ -251,20 +251,10 @@
                  <a href="setup/">Setup Script</a>. First you must
                  manually create a folder <tt>config</tt> in the phpMyAdmin
                  directory. This is a security measure. On a Linux/Unix system you
@@ -27,7 +27,7 @@ Forwarded: not-needed
  
                  Next, open <tt><a href="setup/">setup/</a>
                  </tt>in your browser. Note that <strong>changes are not saved to
-@@ -276,13 +266,10 @@
+@@ -277,13 +267,10 @@
                  or use the <tt>Download</tt> link to save the config file locally
                  and upload (via FTP or some similar means) to the proper location.<br /><br />
  

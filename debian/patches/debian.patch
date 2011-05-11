@@ -6,7 +6,7 @@ From: Michal Čihař <nijel@debian.org>
 Forwarded: not-needed
 --- a/libraries/vendor_config.php
 +++ b/libraries/vendor_config.php
-@@ -15,30 +15,30 @@
+@@ -14,31 +14,31 @@
   * Path to changelog file, can be gzip compressed. Useful when you want to
   * have documentation somewhere else, eg. /usr/share/doc.
   */
@@ -34,11 +34,19 @@ Forwarded: not-needed
 +define('SETUP_DIR_WRITABLE', false);
  
  /**
-  * Whether to skip mtime check on config file and load it on every request.
-  * This has slight performance drawback, but it is the only way to handle
-  * inclusions of other php scripts from config.
+  * Directory where configuration files are stored.
+  * It is not used directly in code, just a convenient
+  * define used further in this file.
   */
--define('SKIP_MTIME_CONFIG_CHECK', false);
-+define('SKIP_MTIME_CONFIG_CHECK', true);
+-define('CONFIG_DIR', './');
++define('CONFIG_DIR', '/etc/phpmyadmin/');
  
+ /**
+  * Filename of a configuration file.
+@@ -58,5 +58,5 @@
+ /**
+  * Default value for check for version upgrades.
+  */
+-define('VERSION_CHECK_DEFAULT', true);
++define('VERSION_CHECK_DEFAULT', false);
  ?>

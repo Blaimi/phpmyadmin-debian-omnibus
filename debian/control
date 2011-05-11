@@ -3,7 +3,7 @@ Maintainer: Thijs Kinkhorst <thijs@debian.org>
 Uploaders: Michal Čihař <nijel@debian.org>
 Section: web
 Priority: extra
-Standards-Version: 3.9.1
+Standards-Version: 3.9.2
 Build-Depends: debhelper (>= 7), 
     po-debconf
 Homepage: http://www.phpmyadmin.net/
@@ -18,8 +18,8 @@ Depends: libapache2-mod-php5 | php5-cgi | php5-fpm | php5,
     perl, 
     ${misc:Depends}, 
     dbconfig-common,
-    ucf (>= 0.28),
-    libjs-mootools (>= 1.2.4.0~debian1-1)
+    ttf-dejavu-core,
+    ucf (>= 0.28)
 Recommends: apache2 | lighttpd | httpd, php5-gd, mysql-client
 Suggests: mysql-server, www-browser
 Description: MySQL web administration tool

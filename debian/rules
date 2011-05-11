@@ -24,13 +24,19 @@ install: build
 	dh_install
 	find debian/phpmyadmin -name .svn | xargs -r rm -r
 	# spurious licence files, this is in debian/copyright
-	rm debian/phpmyadmin/usr/share/phpmyadmin/libraries/tcpdf/font/LICENSE \
-		debian/phpmyadmin/usr/share/phpmyadmin/libraries/tcpdf/LICENSE.TXT
+	rm debian/phpmyadmin/usr/share/phpmyadmin/libraries/tcpdf/LICENSE.TXT \
+		debian/phpmyadmin/usr/share/phpmyadmin/libraries/tcpdf/fonts/dejavu-fonts-ttf-2.32/LICENSE \
+		debian/phpmyadmin/usr/share/phpmyadmin/libraries/chart/pChart/fonts/LICENSE
 	# include Debian marker in version string
 	sed -ri "/set..PMA_VERSION/ s/'([-0-9a-z.]+)'/'\\1deb$(REVISION)'/" \
 	    debian/phpmyadmin/usr/share/phpmyadmin/libraries/Config.class.php
-	# use mootools from the package instead
-	rm debian/phpmyadmin/usr/share/phpmyadmin/js/mootools.js
+	# delete empty translation dirs (can be removed for 3.4.1)
+	find debian/phpmyadmin/usr/share/phpmyadmin/locale -type d -empty -delete
+	# fix permissions (can be removed for 3.4.1)
+	chmod +x debian/phpmyadmin/usr/share/phpmyadmin/libraries/transformations/generator.sh
+	chmod +x debian/phpmyadmin/usr/share/phpmyadmin/libraries/transformations/template_generator.sh
+	chmod +x debian/phpmyadmin/usr/share/phpmyadmin/libraries/transformations/template_generator_mimetype.sh
+	chmod -x debian/phpmyadmin/usr/share/phpmyadmin/libraries/php-gettext/gettext.php
 
 # Build architecture-independent files here.
 binary-indep: build install
@@ -41,6 +47,7 @@ binary-indep: build install
 	dh_installexamples
 	dh_installdebconf	
 	dh_installman
+	dh_lintian
 	dh_link
 	dh_compress
 	dh_fixperms

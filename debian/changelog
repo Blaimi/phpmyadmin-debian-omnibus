@@ -1,3 +1,10 @@
+phpmyadmin (4:3.4.0-2) unstable; urgency=low
+
+  * Add upgrade SQL script to add userconfig table.
+  * Reinclude blowfish secret.
+
+ -- Michal Čihař <nijel@debian.org>  Fri, 13 May 2011 09:13:17 +0200
+
 phpmyadmin (4:3.4.0-1) unstable; urgency=low
 
   * New upstream release.

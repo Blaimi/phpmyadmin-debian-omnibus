@@ -17,6 +17,12 @@
  * (also on the filesystem level).
  */
 
+// Load secret generated on postinst
+include('/var/lib/phpmyadmin/blowfish_secret.inc.php');
+
+// Load autoconf local config
+include('/var/lib/phpmyadmin/config.inc.php');
+
 /**
  * Server(s) configuration
  */
@@ -65,6 +71,7 @@ if (!empty($dbname)) {
     $cfg['Servers'][$i]['history'] = 'pma_history';
     $cfg['Servers'][$i]['designer_coords'] = 'pma_designer_coords';
     $cfg['Servers'][$i]['tracking'] = 'pma_tracking';
+    $cfg['Servers'][$i]['userconfig'] = 'pma_userconfig';
 
     /* Uncomment the following to enable logging in to passwordless accounts,
      * after taking note of the associated security risks. */

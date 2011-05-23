@@ -30,13 +30,6 @@ install: build
 	# include Debian marker in version string
 	sed -ri "/set..PMA_VERSION/ s/'([-0-9a-z.]+)'/'\\1deb$(REVISION)'/" \
 	    debian/phpmyadmin/usr/share/phpmyadmin/libraries/Config.class.php
-	# delete empty translation dirs (can be removed for 3.4.1)
-	find debian/phpmyadmin/usr/share/phpmyadmin/locale -type d -empty -delete
-	# fix permissions (can be removed for 3.4.1)
-	chmod +x debian/phpmyadmin/usr/share/phpmyadmin/libraries/transformations/generator.sh
-	chmod +x debian/phpmyadmin/usr/share/phpmyadmin/libraries/transformations/template_generator.sh
-	chmod +x debian/phpmyadmin/usr/share/phpmyadmin/libraries/transformations/template_generator_mimetype.sh
-	chmod -x debian/phpmyadmin/usr/share/phpmyadmin/libraries/php-gettext/gettext.php
 
 # Build architecture-independent files here.
 binary-indep: build install

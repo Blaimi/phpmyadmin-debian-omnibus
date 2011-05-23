@@ -1,3 +1,12 @@
+phpmyadmin (4:3.4.1-1) unstable; urgency=low
+
+  * New upstream release.
+    - Fixes XSS in tracking (PMASA-2011-3).
+    - Fixes URL redirection (PMASA-2011-4).
+  * Drop debian/rules hacks no longer needed.
+
+ -- Michal Čihař <nijel@debian.org>  Mon, 23 May 2011 13:34:36 +0200
+
 phpmyadmin (4:3.4.0-2) unstable; urgency=low
 
   * Add upgrade SQL script to add userconfig table.

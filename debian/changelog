@@ -1,3 +1,10 @@
+phpmyadmin (4:3.4.3-1) unstable; urgency=low
+
+  * New upstream release.
+  * Add missing build-arch/indep targets in debian/rules.
+
+ -- Michal Čihař <nijel@debian.org>  Tue, 28 Jun 2011 11:11:37 +0200
+
 phpmyadmin (4:3.4.2-1) unstable; urgency=low
 
   * New upstream release.

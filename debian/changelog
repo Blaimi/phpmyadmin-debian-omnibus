@@ -1,3 +1,17 @@
+phpmyadmin (4:3.4.3.1-1) unstable; urgency=high
+
+  * New upstream security release:
+  * Fixed possible session manipulation in swekey authentication, see
+    PMASA-2011-5 (CVE-2011-2505).
+  * Fixed possible code injection incase session variables are compromised,
+    see PMASA-2011-6 (CVE-2011-2506).
+  * Fixed regexp quoting issue in Synchronize code, see PMASA-2011-7
+    (CVE-2011-2507).
+  * Fixed filtering of a file path, which allowed for directory traversal, see
+    PMASA-2011-8 (CVE-2011-2508).
+
+ -- Michal Čihař <nijel@debian.org>  Thu, 07 Jul 2011 08:53:41 +0200
+
 phpmyadmin (4:3.4.3-1) unstable; urgency=low
 
   * New upstream release.

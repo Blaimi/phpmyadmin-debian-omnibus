@@ -1,3 +1,11 @@
+phpmyadmin (4:3.4.3.2-1) unstable; urgency=high
+
+  * New upstream security release.
+    [PMASA-2011-9 PMASA-2011-10 PMASA-2011-11 PMASA-2011-12]
+  * Add alternate dependency to libapache2-mod-php5filter (LP: #774980).
+
+ -- Thijs Kinkhorst <thijs@debian.org>  Sat, 23 Jul 2011 14:24:57 +0000
+
 phpmyadmin (4:3.4.3.1-1) unstable; urgency=high
 
   * New upstream security release:

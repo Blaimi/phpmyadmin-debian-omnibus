@@ -1,7 +1,15 @@
+phpmyadmin (4:3.4.4-1) unstable; urgency=high
+
+  * New upstream release.
+  * Fixes XSS in Tracking [PMASA-2011-13, CVE-2011-3181].
+
+ -- Thijs Kinkhorst <thijs@debian.org>  Sat, 27 Aug 2011 09:53:11 +0000
+
 phpmyadmin (4:3.4.3.2-1) unstable; urgency=high
 
   * New upstream security release.
     [PMASA-2011-9 PMASA-2011-10 PMASA-2011-11 PMASA-2011-12]
+    [CVE-2011-2642 CVE-2011-2643]
   * Add alternate dependency to libapache2-mod-php5filter (LP: #774980).
 
  -- Thijs Kinkhorst <thijs@debian.org>  Sat, 23 Jul 2011 14:24:57 +0000

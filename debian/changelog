@@ -1,3 +1,10 @@
+phpmyadmin (4:3.4.5-1) unstable; urgency=high
+
+  * New upstream release.
+  * Fixes XSS when in-place editing rows [PMASA-2011-14].
+
+ -- Thijs Kinkhorst <thijs@debian.org>  Wed, 14 Sep 2011 14:59:46 +0000
+
 phpmyadmin (4:3.4.4-1) unstable; urgency=high
 
   * New upstream release.

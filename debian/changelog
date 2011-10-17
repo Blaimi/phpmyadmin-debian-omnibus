@@ -1,3 +1,11 @@
+phpmyadmin (4:3.4.6-1) unstable; urgency=low
+
+  * New upstream security release.
+    + Addresses non-issues (for Debian): CVE-2011-3646 CVE-2011-4064
+  * Cleanup leftover mootools symlinks (closes: #642212).
+
+ -- Thijs Kinkhorst <thijs@debian.org>  Mon, 17 Oct 2011 11:40:19 +0000
+
 phpmyadmin (4:3.4.5-1) unstable; urgency=high
 
   * New upstream release.

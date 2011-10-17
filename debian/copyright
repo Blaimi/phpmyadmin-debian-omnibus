@@ -8,7 +8,7 @@ http://www.phpmyadmin.net/
 Copyright and licence notice:
 
       Copyright (C) 1998-2000 Tobias Ratschiller <tobias_at_ratschiller.com>
-      Copyright (C) 2001-2007 Marc Delisle <DelislMa_at_cegepsherbrooke.qc.ca>
+      Copyright (C) 2001-2011 Marc Delisle <DelislMa_at_cegepsherbrooke.qc.ca>
                               Olivier Mller <om_at_omnis.ch>
                               Robin Johnson <robbat2_at_users.sourceforge.net>
                               Alexander M. Turek <me_at_derrabus.de>
@@ -131,10 +131,6 @@ Licence:
     from Tavmjong Bah. For further information, contact: tavmjong @ free
     . fr.
 
-Files under js/mooRainbow are copyright Djamil Legato (w00fz)
-< w00fzIT [at] gmail.com > and licenced under a "MIT-style license".
-
-
-The Debian packaging of phpMyAdmin is (c) 2007-2009 Thijs Kinkhorst and
+The Debian packaging of phpMyAdmin is (c) 2007-2011 Thijs Kinkhorst and
 Michal Čihař licenced under the same licence as phpMyAdmin itself.
 

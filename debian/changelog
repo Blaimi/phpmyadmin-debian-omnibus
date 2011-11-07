@@ -1,3 +1,9 @@
+phpmyadmin (4:3.4.7-1) unstable; urgency=low
+
+  * New upstream release.
+
+ -- Michal Čihař <nijel@debian.org>  Mon, 07 Nov 2011 13:29:30 +0100
+
 phpmyadmin (4:3.4.6-1) unstable; urgency=low
 
   * New upstream security release.

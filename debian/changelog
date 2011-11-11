@@ -1,3 +1,10 @@
+phpmyadmin (4:3.4.7.1-1) unstable; urgency=high
+
+  * New upstream security release.
+    + Fixes local file retrieval: CVE-2011-4107, PMASA-2011-17
+
+ -- Michal Čihař <nijel@debian.org>  Fri, 11 Nov 2011 10:20:04 +0100
+
 phpmyadmin (4:3.4.7-1) unstable; urgency=low
 
   * New upstream release.

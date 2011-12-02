@@ -1,3 +1,10 @@
+phpmyadmin (4:3.4.8-1) unstable; urgency=high
+
+  * New upstream release.
+    + Fixes XSS: CVE-2011-4634, PMASA-2011-18.
+
+ -- Michal Čihař <nijel@debian.org>  Fri, 02 Dec 2011 09:55:44 +0100
+
 phpmyadmin (4:3.4.7.1-1) unstable; urgency=high
 
   * New upstream security release.

@@ -43,10 +43,12 @@ Forwarded: not-needed
  
  /**
   * Filename of a configuration file.
-@@ -58,5 +58,5 @@
+@@ -58,7 +58,7 @@
  /**
   * Default value for check for version upgrades.
   */
 -define('VERSION_CHECK_DEFAULT', true);
 +define('VERSION_CHECK_DEFAULT', false);
- ?>
+ 
+ /**
+  * Path to gettext.inc file. Useful when you want php-gettext somewhere else,

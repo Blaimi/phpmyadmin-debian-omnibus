@@ -1,3 +1,11 @@
+phpmyadmin (4:3.4.9-1) unstable; urgency=high
+
+  * New upstream release.
+    + Fixes XSS: PMASA-2011-19/CVE-2011-4782, PMASA-2011-20/CVE-2011-4780.
+  * Enable fastcgi-php when installing with lighttpd (LP #852337).
+
+ -- Michal Čihař <nijel@debian.org>  Thu, 22 Dec 2011 10:17:16 +0100
+
 phpmyadmin (4:3.4.8-1) unstable; urgency=high
 
   * New upstream release.

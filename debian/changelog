@@ -1,3 +1,11 @@
+phpmyadmin (4:3.4.10-1) unstable; urgency=low
+
+  * New upstream release.
+    + Fixes ODS import (closes: #593621)
+  * Update reference to compressed README.Debian (closes: #656664)
+
+ -- Thijs Kinkhorst <thijs@debian.org>  Tue, 14 Feb 2012 19:25:33 +0000
+
 phpmyadmin (4:3.4.9-1) unstable; urgency=high
 
   * New upstream release.

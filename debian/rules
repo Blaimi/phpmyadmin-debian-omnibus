@@ -28,8 +28,9 @@ install: build
 	find debian/phpmyadmin -name .svn | xargs -r rm -r
 	# spurious licence files, this is in debian/copyright
 	rm debian/phpmyadmin/usr/share/phpmyadmin/libraries/tcpdf/LICENSE.TXT \
-		debian/phpmyadmin/usr/share/phpmyadmin/libraries/tcpdf/fonts/dejavu-fonts-ttf-2.32/LICENSE \
+		debian/phpmyadmin/usr/share/phpmyadmin/libraries/tcpdf/fonts/dejavu-fonts-ttf-*/LICENSE \
 		debian/phpmyadmin/usr/share/phpmyadmin/libraries/chart/pChart/fonts/LICENSE
+	rmdir debian/phpmyadmin/usr/share/phpmyadmin/libraries/tcpdf/fonts/dejavu-fonts-ttf-*
 	# include Debian marker in version string
 	sed -ri "/set..PMA_VERSION/ s/'([-0-9a-z.]+)'/'\\1deb$(REVISION)'/" \
 	    debian/phpmyadmin/usr/share/phpmyadmin/libraries/Config.class.php

@@ -3,7 +3,7 @@ Maintainer: Thijs Kinkhorst <thijs@debian.org>
 Uploaders: Michal Čihař <nijel@debian.org>
 Section: web
 Priority: extra
-Standards-Version: 3.9.2
+Standards-Version: 3.9.3
 Build-Depends: debhelper (>= 7), 
     po-debconf
 Homepage: http://www.phpmyadmin.net/
@@ -13,7 +13,7 @@ Vcs-Svn: https://svn.kinkhorst.nl/svn/debian/phpmyadmin/trunk
 Package: phpmyadmin
 Architecture: all
 Depends: libapache2-mod-php5 | libapache2-mod-php5filter | php5-cgi | php5-fpm | php5,
-    php5-mysql | php5-mysqli, 
+    php5-mysql | php5-mysqli | php5-mysqlnd, 
     php5-mcrypt, 
     perl, 
     ${misc:Depends}, 

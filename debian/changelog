@@ -1,3 +1,15 @@
+phpmyadmin (4:3.4.10.2-1) unstable; urgency=low
+
+  [ Michal Čihař ]
+  * Add alternative dependency to php5-mysqlnd (closes: #665812).
+
+  [ Thijs Kinkhorst ]
+  * New upstream release.
+    - Addresses unimportant issue CVE-2012-1902.
+  * Checked for policy 3.9.3, no changes.
+
+ -- Thijs Kinkhorst <thijs@debian.org>  Wed, 28 Mar 2012 20:45:50 +0200
+
 phpmyadmin (4:3.4.10.1-1) unstable; urgency=low
 
   * New upstream release.

@@ -1,4 +1,4 @@
-phpMyAdmin 3.4.10.2 Documentation
+phpMyAdmin 3.4.11 Documentation
 
   * Top
   * Requirements
@@ -3226,8 +3226,7 @@ proceed?
 The following method is preferred for new developers:
 
  1. fetch the current git repository over anonymous git:
-    git clone git://phpmyadmin.git.sourceforge.net/gitroot/phpmyadmin/
-    phpmyadmin
+    git clone git://github.com/phpmyadmin/phpmyadmin.git
  2. add your stuff
  3. generate patch with your changes: git diff > xxx.diff
  4. submit your patch via the patch tracker of the phpMyAdmin project.

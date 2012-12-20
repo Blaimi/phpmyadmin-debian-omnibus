@@ -2,7 +2,7 @@
 /* vim: set expandtab sw=4 ts=4 sts=4: */
 /**
  *
- * @package phpMyAdmin
+ * @package PhpMyAdmin
  */
 if (! defined('PHPMYADMIN')) {
     exit;
@@ -52,7 +52,7 @@ if ($is_select) {
         $db = $prev_db;
     }
     // Nijel: don't change reload, if we already decided to reload in import
-    if (empty($reload)) {
+    if (empty($reload) && empty($GLOBALS['is_ajax_request'])) {
         $reload  = ($db == $prev_db) ? 0 : 1;
     }
 }

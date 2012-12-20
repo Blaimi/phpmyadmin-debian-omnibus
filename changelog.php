@@ -3,7 +3,7 @@
 /**
  * Simple script to set correct charset for changelog
  *
- * @package phpMyAdmin
+ * @package PhpMyAdmin
  */
 
 /**
@@ -75,12 +75,16 @@ $replaces = array(
     => '<a href="https://sourceforge.net/support/tracker.php?aid=\\1">bug #\\1</a>',
 
     // all other 6+ digit numbers are treated as bugs
-    '/(?<!BUG|RFE|patch) #?([0-9]{6,})/i'
+    '/(?<!bug|RFE|patch) #?([0-9]{6,})/i'
     => ' <a href="https://sourceforge.net/support/tracker.php?aid=\\1">bug #\\1</a>',
 
     // CVE/CAN entries
     '/((CAN|CVE)-[0-9]+-[0-9]+)/'
     => '<a href="http://cve.mitre.org/cgi-bin/cvename.cgi?name=\\1">\\1</a>',
+
+    // PMASAentries
+    '/(PMASA-[0-9]+-[0-9]+)/'
+    => '<a href="http://www.phpmyadmin.net/home_page/security/\\1.php">\\1</a>',
 
     // Highlight releases (with links)
     '/([0-9]+)\.([0-9]+)\.([0-9]+)\.0 (\([0-9-]+\))/'

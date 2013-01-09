@@ -5,7 +5,6 @@
 js		usr/share/phpmyadmin
 locale		usr/share/phpmyadmin
 libraries	usr/share/phpmyadmin
-pmd		usr/share/phpmyadmin
 themes		usr/share/phpmyadmin
 setup		usr/share/phpmyadmin
 

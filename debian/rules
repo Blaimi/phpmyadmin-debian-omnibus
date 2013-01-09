@@ -25,11 +25,12 @@ install: build
 	dh_prep
 	dh_installdirs
 	dh_install
-	find debian/phpmyadmin -name .svn | xargs -r rm -r
 	# spurious licence files, this is in debian/copyright
-	rm debian/phpmyadmin/usr/share/phpmyadmin/libraries/tcpdf/LICENSE.TXT \
+	rm \
 		debian/phpmyadmin/usr/share/phpmyadmin/libraries/tcpdf/fonts/dejavu-fonts-ttf-*/LICENSE \
-		debian/phpmyadmin/usr/share/phpmyadmin/libraries/chart/pChart/fonts/LICENSE
+		debian/phpmyadmin/usr/share/phpmyadmin/libraries/tcpdf/LICENSE.TXT \
+		debian/phpmyadmin/usr/share/phpmyadmin/js/canvg/MIT-LICENSE.txt \
+		debian/phpmyadmin/usr/share/phpmyadmin/js/codemirror/LICENSE
 	rmdir debian/phpmyadmin/usr/share/phpmyadmin/libraries/tcpdf/fonts/dejavu-fonts-ttf-*
 	# include Debian marker in version string
 	sed -ri "/set..PMA_VERSION/ s/'([-0-9a-z.]+)'/'\\1deb$(REVISION)'/" \

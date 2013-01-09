@@ -17,11 +17,28 @@
  * (also on the filesystem level).
  */
 
+function check_file_access($path)
+{
+    if (is_readable($path)) {
+        return true;
+    } else {
+        error_log(
+            'phpmyadmin: Failed to load ' . $path
+            . ' Check group www-data has read access and open_basedir restrictions.'
+        );
+        return false;
+    }
+}
+
 // Load secret generated on postinst
-include('/var/lib/phpmyadmin/blowfish_secret.inc.php');
+if (check_file_access('/var/lib/phpmyadmin/blowfish_secret.inc.php')) {
+    require('/var/lib/phpmyadmin/blowfish_secret.inc.php');
+}
 
 // Load autoconf local config
-include('/var/lib/phpmyadmin/config.inc.php');
+if (check_file_access('/var/lib/phpmyadmin/config.inc.php')) {
+    require('/var/lib/phpmyadmin/config.inc.php');
+}
 
 /**
  * Server(s) configuration
@@ -35,11 +52,8 @@ $i++;
  * Read configuration from dbconfig-common
  * You can regenerate it using: dpkg-reconfigure -plow phpmyadmin
  */
-if (is_readable('/etc/phpmyadmin/config-db.php')) {
+if (check_file_access('/etc/phpmyadmin/config-db.php')) {
     require('/etc/phpmyadmin/config-db.php');
-} else {
-    error_log('phpmyadmin: Failed to load /etc/phpmyadmin/config-db.php.'
-        . ' Check group www-data has read access.');
 }
 
 /* Configure according to dbconfig-common if enabled */
@@ -115,5 +129,11 @@ if (!empty($dbname)) {
  */
 $cfg['UploadDir'] = '';
 $cfg['SaveDir'] = '';
+
+/* Support additional configurations */
+foreach (glob('/etc/phpmyadmin/conf.d/*.php') as $filename)
+{
+    include($filename);
+}
 
 

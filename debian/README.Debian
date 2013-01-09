@@ -57,7 +57,8 @@ CONFIGURATION
     2. /etc/phpmyadmin/config.inc.php which can override any changes (and by
        default overrides first server configuration by data from
        dbconfig-common)
-    3. phpMyAdmin defaults are being applied
+    3. possible snippets placed in /etc/phpmyadmin/conf.d/
+    4. phpMyAdmin defaults are being applied
 
 SECURITY
 

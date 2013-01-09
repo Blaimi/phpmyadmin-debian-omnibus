@@ -1,7 +1,22 @@
+phpmyadmin (4:3.5.5-1) experimental; urgency=low
+
+  * New upstream release.
+    - Fixes message display in setup (Closes: #656667).
+    - Improves handlign of Show all button (Closes: #658402).
+  * Uploaded to experimental.
+  * Depend on various javascript packages available in Debian.
+  * Use php-gettext instead of copy.
+  * Check config parts readability and properly report errors 
+    (Closes: #690258).
+  * Allow configuration changes by placing snippets into
+    /etc/phpmyadmin/conf.d (Closes: #673172).
+
+ -- Michal Čihař <nijel@debian.org>  Wed, 09 Jan 2013 11:56:19 +0100
+
 phpmyadmin (4:3.4.11.1-1) unstable; urgency=high
 
   * New upstream security release.
-    - Fixes cross site scripting [PMASA-2012-4].
+    - Fixes cross site scripting [PMASA-2012-4, CVE-2012-4345].
 
  -- Thijs Kinkhorst <thijs@debian.org>  Mon, 13 Aug 2012 13:24:09 +0000
 

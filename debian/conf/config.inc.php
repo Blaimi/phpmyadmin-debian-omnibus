@@ -83,9 +83,11 @@ if (!empty($dbname)) {
     $cfg['Servers'][$i]['pdf_pages'] = 'pma_pdf_pages';
     $cfg['Servers'][$i]['column_info'] = 'pma_column_info';
     $cfg['Servers'][$i]['history'] = 'pma_history';
+    $cfg['Servers'][$i]['table_uiprefs'] = 'pma_table_uiprefs';
     $cfg['Servers'][$i]['designer_coords'] = 'pma_designer_coords';
     $cfg['Servers'][$i]['tracking'] = 'pma_tracking';
     $cfg['Servers'][$i]['userconfig'] = 'pma_userconfig';
+    $cfg['Servers'][$i]['recent'] = 'pma_recent';
 
     /* Uncomment the following to enable logging in to passwordless accounts,
      * after taking note of the associated security risks. */
@@ -106,7 +108,8 @@ if (!empty($dbname)) {
 /* Optional: User for advanced features */
 // $cfg['Servers'][$i]['controluser'] = 'pma';
 // $cfg['Servers'][$i]['controlpass'] = 'pmapass';
-/* Optional: Advanced phpMyAdmin features */
+
+/* Storage database and tables */
 // $cfg['Servers'][$i]['pmadb'] = 'phpmyadmin';
 // $cfg['Servers'][$i]['bookmarktable'] = 'pma_bookmark';
 // $cfg['Servers'][$i]['relation'] = 'pma_relation';
@@ -115,7 +118,11 @@ if (!empty($dbname)) {
 // $cfg['Servers'][$i]['pdf_pages'] = 'pma_pdf_pages';
 // $cfg['Servers'][$i]['column_info'] = 'pma_column_info';
 // $cfg['Servers'][$i]['history'] = 'pma_history';
+// $cfg['Servers'][$i]['table_uiprefs'] = 'pma_table_uiprefs';
+// $cfg['Servers'][$i]['tracking'] = 'pma_tracking';
 // $cfg['Servers'][$i]['designer_coords'] = 'pma_designer_coords';
+// $cfg['Servers'][$i]['userconfig'] = 'pma_userconfig';
+// $cfg['Servers'][$i]['recent'] = 'pma_recent';
 /* Uncomment the following to enable logging in to passwordless accounts,
  * after taking note of the associated security risks. */
 // $cfg['Servers'][$i]['AllowNoPassword'] = TRUE;

@@ -1,3 +1,9 @@
+phpmyadmin (4:3.5.7-1) experimental; urgency=low
+
+  * New upstream release.
+
+ -- Michal Čihař <nijel@debian.org>  Mon, 11 Mar 2013 14:11:09 +0100
+
 phpmyadmin (4:3.5.6-1) experimental; urgency=low
 
   * New upstream release.

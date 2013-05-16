@@ -3,8 +3,8 @@ Maintainer: Thijs Kinkhorst <thijs@debian.org>
 Uploaders: Michal Čihař <nijel@debian.org>
 Section: web
 Priority: extra
-Standards-Version: 3.9.3
-Build-Depends: debhelper (>= 7), 
+Standards-Version: 3.9.4
+Build-Depends: debhelper (>= 9), 
     po-debconf
 Homepage: http://www.phpmyadmin.net/
 Vcs-Browser: https://aphrodite.kinkhorst.nl/wsvn/debian/phpmyadmin/
@@ -27,6 +27,7 @@ Depends: libapache2-mod-php5 | libapache2-mod-php5filter | php5-cgi | php5-fpm |
     libjs-jquery-event-drag,
     libjs-jquery-tablesorter,
     libjs-codemirror,
+    libjs-underscore,
     ucf (>= 0.28)
 Recommends: apache2 | lighttpd | httpd, php5-gd, mysql-client
 Suggests: mysql-server, www-browser

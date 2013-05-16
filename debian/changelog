@@ -1,7 +1,15 @@
+phpmyadmin (4:4.0.1-1) unstable; urgency=low
+
+  * New upstream release.
+  * Update to debhelper 9, policy 3.9.4. 
+
+ -- Thijs Kinkhorst <thijs@debian.org>  Thu, 16 May 2013 20:53:50 +0200
+
 phpmyadmin (4:3.5.8.1-1) experimental; urgency=low
 
   * New upstream release.
     - Fixes security issues PMASA-2013-2, PMASA-2013-3.
+      [CVE-2013-3238, CVE-2013-3239]
 
  -- Thijs Kinkhorst <thijs@debian.org>  Wed, 24 Apr 2013 16:26:16 +0200
 

@@ -46,6 +46,8 @@ binary-indep: build install
 	dh_installdebconf	
 	dh_installman
 	dh_lintian
+	rm debian/phpmyadmin/usr/share/doc/phpmyadmin/html/_static/jquery.js \
+	   debian/phpmyadmin/usr/share/doc/phpmyadmin/html/_static/underscore.js
 	dh_link
 	dh_compress
 	dh_fixperms

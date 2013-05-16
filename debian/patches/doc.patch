@@ -2,44 +2,41 @@ Subject: Adjust phpMyAdmin documentation to match our changes
  Document how to enable setup script. 
 From: Michal Čihař <nijel@debian.org>
 Forwarded: not-needed
---- a/Documentation.html
-+++ b/Documentation.html
-@@ -254,20 +254,10 @@
-                 <a href="setup/">Setup Script</a>. First you must
-                 manually create a folder <tt>config</tt> in the phpMyAdmin
-                 directory. This is a security measure. On a Linux/Unix system you
--                can use the following commands:
-+                can use the following command:
- <pre>
--cd phpMyAdmin
--mkdir config                        # create directory for saving
--chmod o+rw config                   # give it world writable permissions
+
+--- a/doc/html/setup.html	2013-05-16 21:07:00.000000000 +0200
++++ b/doc/html/setup.html	2013-05-16 21:09:03.000000000 +0200
+@@ -129,15 +129,9 @@
+ <p>Instead of manually editing <tt class="file docutils literal"><span class="pre">config.inc.php</span></tt>, you can use the <a class="reference external" href="setup/">Setup
+ Script</a>. First you must manually create a folder <tt class="docutils literal"><span class="pre">config</span></tt>
+ in the phpMyAdmin directory. This is a security measure. On a
+-Linux/Unix system you can use the following commands:</p>
+-<div class="highlight-sh"><div class="highlight"><pre><span class="nb">cd </span>phpMyAdmin
+-mkdir config                        <span class="c"># create directory for saving</span>
+-chmod o+rw config                   <span class="c"># give it world writable permissions</span>
+-</pre></div>
+-</div>
+-<p>And to edit an existing configuration, copy it over first:</p>
+-<div class="highlight-sh"><div class="highlight"><pre>cp config.inc.php config/           <span class="c"># copy current configuration for editing</span>
+-chmod o+w config/config.inc.php     <span class="c"># give it world writable permissions</span>
++Linux/Unix system you can use the following command:</p>
++<div class="highlight-sh">
 +/usr/sbin/pma-configure
- </pre>
--                And to edit an existing configuration, copy it over first:
--<pre>
--cp config.inc.php config/           # copy current configuration for editing
--chmod o+w config/config.inc.php     # give it world writable permissions
--</pre>
--                On other platforms, simply create the folder and ensure that your
--                web server has read and write access to it. <a href="#faq1_26">FAQ
--                1.26</a> can help with this.<br /><br />
- 
-                 Next, open <tt><a href="setup/">setup/</a>
-                 </tt>in your browser. Note that <strong>changes are not saved to
-@@ -280,13 +270,10 @@
-                 or use the <tt>Download</tt> link to save the config file locally
-                 and upload (via FTP or some similar means) to the proper location.<br /><br />
- 
--                Once the file has been saved, it must be moved out of the <tt>
--                config/</tt> directory and the permissions must be reset, again
-+                Once the file has been saved, the permissions must be reset, again
-                 as a security measure:
- <pre>
--mv config/config.inc.php .         # move file to current directory
--chmod o-rw config.inc.php          # remove world read and write permissions
--rm -rf config                      # remove not needed directory
+ </pre></div>
+ </div>
+ <p>On other platforms, simply create the folder and ensure that your web
+@@ -152,12 +146,10 @@
+ has the proper permissions - or use the <tt class="docutils literal"><span class="pre">Download</span></tt> link to save the
+ config file locally and upload (via FTP or some similar means) to the
+ proper location.</p>
+-<p>Once the file has been saved, it must be moved out of the <tt class="docutils literal"><span class="pre">config/</span></tt>
+-directory and the permissions must be reset, again as a security
++<p>Once the file has been saved, the permissions must be reset, again as a security
+ measure:</p>
+-<div class="highlight-sh"><div class="highlight"><pre>mv config/config.inc.php .         <span class="c"># move file to current directory</span>
+-chmod o-rw config.inc.php          <span class="c"># remove world read and write permissions</span>
+-rm -rf config                      <span class="c"># remove not needed directory</span>
++<div class="highlight-sh">
 +/usr/sbin/pma-secure
- </pre>
-                 Now the file is ready to be used. You can choose to review or edit
-                 the file with your favorite editor, if you prefer to set some
+ </pre></div>
+ </div>
+ <p>Now the file is ready to be used. You can choose to review or edit the

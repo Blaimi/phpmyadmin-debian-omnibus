@@ -6,7 +6,7 @@ From: Michal Čihař <nijel@debian.org>
 Forwarded: not-needed
 --- a/libraries/vendor_config.php
 +++ b/libraries/vendor_config.php
-@@ -14,31 +14,31 @@
+@@ -17,31 +17,31 @@
   * Path to changelog file, can be gzip compressed. Useful when you want to
   * have documentation somewhere else, eg. /usr/share/doc.
   */
@@ -43,7 +43,7 @@ Forwarded: not-needed
  
  /**
   * Filename of a configuration file.
-@@ -58,7 +58,7 @@
+@@ -61,7 +61,7 @@
  /**
   * Default value for check for version upgrades.
   */

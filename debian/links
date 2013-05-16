@@ -1,13 +1,13 @@
-/usr/share/doc/phpmyadmin/Documentation.html	usr/share/phpmyadmin/Documentation.html
-/usr/share/doc/phpmyadmin/docs.css		usr/share/phpmyadmin/docs.css
 /usr/share/fonts/truetype/ttf-dejavu/DejaVuSans.ttf usr/share/phpmyadmin/libraries/chart/pChart/fonts/DejaVuSans.ttf
 /usr/share/javascript/jquery-ui/jquery-ui.min.js usr/share/phpmyadmin/js/jquery/jquery-ui-1.8.16.custom.js
 /usr/share/javascript/jquery-cookie/jquery.cookie.min.js usr/share/phpmyadmin/js/jquery/jquery.cookie.js
 /usr/share/javascript/jquery-mousewheel/jquery.mousewheel.min.js usr/share/phpmyadmin/js/jquery/jquery.mousewheel.js
 /usr/share/javascript/jquery/jquery.min.js usr/share/phpmyadmin/js/jquery/jquery-1.6.2.js
+/usr/share/javascript/jquery/jquery.min.js usr/share/doc/phpmyadmin/html/_static/jquery.js
 /usr/share/javascript/jquery-event-drag/jquery.event.drag.min.js usr/share/phpmyadmin/js/jquery/jquery.event.drag-2.0.js
 /usr/share/javascript/jquery-tablesorter/jquery.tablesorter.min.js usr/share/phpmyadmin/js/jquery/jquery.tablesorter.js
 /usr/share/javascript/codemirror/codemirror.js usr/share/phpmyadmin/js/codemirror/lib/codemirror.js
+/usr/share/javascript/underscore/underscore.min.js usr/share/doc/phpmyadmin/html/_static/underscore.js
 /usr/share/php/php-gettext/gettext.php usr/share/phpmyadmin/libraries/php-gettext/gettext.php
 /usr/share/php/php-gettext/streams.php usr/share/phpmyadmin/libraries/php-gettext/streams.php
 /usr/share/php/php-gettext/gettext.inc usr/share/phpmyadmin/libraries/php-gettext/gettext.inc

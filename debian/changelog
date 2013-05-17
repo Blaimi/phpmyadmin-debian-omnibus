@@ -1,3 +1,12 @@
+phpmyadmin (4:4.0.1-2) unstable; urgency=low
+
+  * Add /usr/share/javascript to open_basedir config (closes: #708611).
+  * Wrap check_file_access() function in config.inc.php in a
+    function_exists block, because this file sometimes gets included
+    twice (LP: #1175142).
+
+ -- Thijs Kinkhorst <thijs@debian.org>  Fri, 17 May 2013 12:50:57 +0200
+
 phpmyadmin (4:4.0.1-1) unstable; urgency=low
 
   * New upstream release.

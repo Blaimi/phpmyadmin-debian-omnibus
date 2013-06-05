@@ -927,8 +927,9 @@ class PMA_NavigationTree
                     if ($GLOBALS['cfg']['ShowTooltip']) {
                         $title = $node->getComment();
                         if ($title) {
-                            $title = " title='"
-                                . htmlentities($title, ENT_QUOTES) . "'";
+                            $title = ' title="'
+                                . htmlentities($title, ENT_QUOTES, 'UTF-8') 
+                                . '"';
                         }
                     } else {
                         $title = '';
@@ -1138,9 +1139,9 @@ class PMA_NavigationTree
             return 1;
         }
         if ($GLOBALS['cfg']['NaturalOrder']) {
-            return strnatcmp($a->name, $b->name);
+            return strnatcasecmp($a->name, $b->name);
         } else {
-            return strcmp($a->name, $b->name);
+            return strcasecmp($a->name, $b->name);
         }
     }
 }

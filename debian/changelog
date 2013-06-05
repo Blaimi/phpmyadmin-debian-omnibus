@@ -1,3 +1,15 @@
+phpmyadmin (4:4.0.3-1) unstable; urgency=low
+
+  [ Thijs Kinkhorst ]
+  * Explicitly depend on php5-json (closes: #711027).
+
+  [ Michal Čihař ]
+  * Fixed wrong path in postinst script (Closes: #710087).
+  * New upstream release.
+    - Fixes XSS issue PMASA-2013-6.
+
+ -- Michal Čihař <nijel@debian.org>  Wed, 05 Jun 2013 13:20:57 +0200
+
 phpmyadmin (4:4.0.1-2) unstable; urgency=low
 
   * Add /usr/share/javascript to open_basedir config (closes: #708611).

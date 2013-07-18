@@ -1,3 +1,14 @@
+phpmyadmin (4:4.0.4.1-1) unstable; urgency=medium
+
+  * New upstream release.
+    - Fixes CVE-2013-4729: setting globals through import.
+  * Make use of xz for deb compression and upstream tarball.
+  * Make webserver configuration compatible with Apache 2.4
+    (closes: #669843). We don't use dh_apache2 yet because it
+    would tie this package to the Apache transition.
+
+ -- Thijs Kinkhorst <thijs@debian.org>  Thu, 18 Jul 2013 11:09:09 +0200
+
 phpmyadmin (4:4.0.3-1) unstable; urgency=low
 
   [ Thijs Kinkhorst ]
@@ -6,7 +17,7 @@ phpmyadmin (4:4.0.3-1) unstable; urgency=low
   [ Michal Čihař ]
   * Fixed wrong path in postinst script (Closes: #710087).
   * New upstream release.
-    - Fixes XSS issue PMASA-2013-6.
+    - Fixes XSS issue PMASA-2013-6 (CVE-2013-3742).
 
  -- Michal Čihař <nijel@debian.org>  Wed, 05 Jun 2013 13:20:57 +0200
 

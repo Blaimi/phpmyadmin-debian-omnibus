@@ -31,11 +31,21 @@ lighttpd_install() {
 
 apache_install() {
 	webserver=$1
-	if [ -d /etc/$webserver/conf.d ] && [ ! -e /etc/$webserver/conf.d/phpmyadmin.conf ]; then
-		ln -s ../../phpmyadmin/apache.conf /etc/$webserver/conf.d/phpmyadmin.conf
-		avahi_install
-        desktop_install
+
+	mkdir -p /etc/$webserver/conf-available
+	ln -sf ../../phpmyadmin/apache.conf /etc/$webserver/conf-available/phpmyadmin.conf
+	
+	COMMON_STATE=$(dpkg-query -f '${Status}' -W 'apache2.2-common' 2>/dev/null | awk '{print $3}' || true)
+
+	if [ -e /usr/share/apache2/apache2-maintscript-helper ] ; then
+		. /usr/share/apache2/apache2-maintscript-helper
+		apache2_invoke enconf phpmyadmin
+	elif [ "$COMMON_STATE" = "installed" ] || [ "$COMMON_STATE" = "unpacked" ] ; then
+		[ -d /etc/apache2/conf.d/ ] && [ ! -L /etc/apache2/conf.d/phpmyadmin.conf ] && ln -s ../conf-available/phpmyadmin.conf /etc/apache2/conf.d/phpmyadmin.conf
 	fi
+
+	avahi_install
+	desktop_install
 }
 
 . /usr/share/debconf/confmodule

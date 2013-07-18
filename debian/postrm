@@ -21,9 +21,16 @@ lighttpd_remove() {
 }
 
 apache_remove() {
-	if [ -d /etc/$webserver/conf.d ] && [ -L /etc/$webserver/conf.d/phpmyadmin.conf ]; then
-		rm -f /etc/$webserver/conf.d/phpmyadmin.conf
-	fi
+        COMMON_STATE=$(dpkg-query -f '${Status}' -W 'apache2.2-common' 2>/dev/null | awk '{print $3}' || true)
+
+        if [ -e /usr/share/apache2/apache2-maintscript-helper ] ; then
+                . /usr/share/apache2/apache2-maintscript-helper
+                apache2_invoke disconf phpmyadmin
+        elif [ "$COMMON_STATE" = "installed" ] || [ "$COMMON_STATE" = "unpacked" ] ; then
+                rm -f /etc/apache2/conf.d/phpmyadmin.conf
+        fi
+
+	rm -f /etc/$webserver/conf-available/phpmyadmin.conf
 }
 if [ -f /usr/share/debconf/confmodule ]; then
     . /usr/share/debconf/confmodule

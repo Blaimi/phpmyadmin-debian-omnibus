@@ -1,3 +1,12 @@
+phpmyadmin (4:4.0.4.1-2) unstable; urgency=medium
+
+  * post{inst,rm}: drop first argument to install_apache(), because that
+    confuses apache2-maintscript-helper and it isn't used anymore anyway.
+    (closes: #717713).
+  * Drop xz compression for deb again, it's now the dpkg default.
+
+ -- Thijs Kinkhorst <thijs@debian.org>  Sun, 28 Jul 2013 10:56:04 +0200
+
 phpmyadmin (4:4.0.4.1-1) unstable; urgency=medium
 
   * New upstream release.

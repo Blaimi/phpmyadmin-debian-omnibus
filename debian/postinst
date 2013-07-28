@@ -22,7 +22,7 @@ lighttpd_install() {
 			# We also need auth to protect setup.php
 			lighty-enable-mod phpmyadmin auth fastcgi fastcgi-php
 			avahi_install
-            desktop_install
+			desktop_install
 		else
 			echo "Lighttpd not installed, skipping"
 		fi
@@ -30,10 +30,8 @@ lighttpd_install() {
 }
 
 apache_install() {
-	webserver=$1
-
-	mkdir -p /etc/$webserver/conf-available
-	ln -sf ../../phpmyadmin/apache.conf /etc/$webserver/conf-available/phpmyadmin.conf
+	mkdir -p /etc/apache2/conf-available
+	ln -sf ../../phpmyadmin/apache.conf /etc/apache2/conf-available/phpmyadmin.conf
 	
 	COMMON_STATE=$(dpkg-query -f '${Status}' -W 'apache2.2-common' 2>/dev/null | awk '{print $3}' || true)
 
@@ -122,7 +120,7 @@ if [ "$1" = "configure" ]; then
 		if [ "$webserver" = "lighttpd" ] ; then
 			lighttpd_install
 		else
-			apache_install $webserver
+			apache_install $1
 		fi
 		# Reload webserver in any case, configuration might have changed
 		# Redirection of 3 is needed because Debconf uses it and it might 

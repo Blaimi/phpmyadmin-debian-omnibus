@@ -63,7 +63,7 @@ if [ "$1" = "remove" ] || [ "$1" = "purge" ]; then
 			if [ "$webserver" = "lighttpd" ] ; then
 				lighttpd_remove
 			else
-				apache_remove $webserver
+				apache_remove $1
 			fi
 			# Redirection of 3 is needed because Debconf uses it and it might 
 			# be inherited by webserver. See bug #446324.

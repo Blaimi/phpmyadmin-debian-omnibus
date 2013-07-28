@@ -1,3 +1,11 @@
+phpmyadmin (4:4.0.4.2-1) unstable; urgency=high
+
+  * New upstream release.
+    - Fixes security issues PMASA-2013-9, PMASA-2013-11, PMASA-2013-12,
+      PMASA-2013-13, PMASA-2013-14, PMASA-2013-15.
+
+ -- Thijs Kinkhorst <thijs@debian.org>  Sun, 28 Jul 2013 15:20:58 +0200
+
 phpmyadmin (4:4.0.4.1-2) unstable; urgency=medium
 
   * post{inst,rm}: drop first argument to install_apache(), because that

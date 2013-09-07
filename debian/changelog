@@ -1,15 +1,26 @@
+phpmyadmin (4:4.0.6-1) unstable; urgency=low
+
+  * New upstream release.
+
+ -- Thijs Kinkhorst <thijs@debian.org>  Sat, 07 Sep 2013 09:16:38 +0200
+
 phpmyadmin (4:4.0.5-1) unstable; urgency=high
 
   * New upstream release.
-    - Fixes security issue PMASA-2013-10.
+    - Fixes security issue PMASA-2013-10 (CVE-2013-5029).
 
  -- Thijs Kinkhorst <thijs@debian.org>  Sun, 04 Aug 2013 13:24:37 +0200
 
 phpmyadmin (4:4.0.4.2-1) unstable; urgency=high
 
   * New upstream release.
-    - Fixes security issues PMASA-2013-9, PMASA-2013-11, PMASA-2013-12,
-      PMASA-2013-13, PMASA-2013-14, PMASA-2013-15.
+    - Fixes security issues
+      PMASA-2013-9  (CVE-2013-4996 CVE-2013-4997),
+      PMASA-2013-11 (CVE-2013-4996),
+      PMASA-2013-12 (CVE-2013-4998 CVE-2013-4999 CVE-2013-5000),
+      PMASA-2013-13 (CVE-2013-5001),
+      PMASA-2013-14 (CVE-2013-5002),
+      PMASA-2013-15 (CVE-2013-5003).
 
  -- Thijs Kinkhorst <thijs@debian.org>  Sun, 28 Jul 2013 15:20:58 +0200
 

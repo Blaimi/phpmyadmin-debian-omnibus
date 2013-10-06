@@ -1434,7 +1434,7 @@ function PMA_getHtmlForAddUser($dbname)
        . PMA_Util::getIcon('b_usradd.png') . __('Add user') . "\n"
        . '</h2>' . "\n"
        . '<form name="usersForm" class="ajax" id="addUsersForm"'
-       . ' action="server_privileges.php" method="post">' . "\n"
+       . ' action="server_privileges.php" method="post" autocomplete="off" >' . "\n"
        . PMA_generate_common_hidden_inputs('', '')
        . PMA_getHtmlForDisplayLoginInformationFields('new');
 
@@ -3182,7 +3182,7 @@ function PMA_getDbSpecificPrivsQueriesForChangeOrCopyUser(
     $user_host_condition = ' WHERE `User`'
         .' = \'' . PMA_Util::sqlAddSlashes($_REQUEST['old_username']) . "'"
         .' AND `Host`'
-        .' = \'' . PMA_Util::sqlAddSlashes($_REQUEST['old_username']) . '\';';
+        .' = \'' . PMA_Util::sqlAddSlashes($_REQUEST['old_hostname']) . '\';';
 
     $res = PMA_DBI_query('SELECT * FROM `mysql`.`db`' . $user_host_condition);
 

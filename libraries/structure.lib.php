@@ -1131,6 +1131,8 @@ function PMA_getValuesForAriaTable($db_is_information_schema, $current_table,
  */
 function PMA_getValuesForPbmsTable($current_table, $is_show_stats, $sum_size)
 {
+    $formatted_size = $unit = '';
+
     if (($current_table['ENGINE'] == 'InnoDB'
         && $current_table['TABLE_ROWS'] < $GLOBALS['cfg']['MaxExactCount'])
         || !isset($current_table['TABLE_ROWS'])
@@ -2458,7 +2460,9 @@ function PMA_moveColumns($db, $table)
             unset($data['Extra']);
         }
         $current_timestamp = false;
-        if ($data['Type'] == 'timestamp' && $data['Default'] == 'CURRENT_TIMESTAMP') {
+        if (($data['Type'] == 'timestamp' || $data['Type'] == 'datetime')
+            && $data['Default'] == 'CURRENT_TIMESTAMP'
+        ) {
             $current_timestamp = true;
         }
         $default_type
@@ -2466,7 +2470,7 @@ function PMA_moveColumns($db, $table)
                 ? 'NULL'
                 : ($current_timestamp
                     ? 'CURRENT_TIMESTAMP'
-                    : ($data['Default'] == ''
+                    : ($data['Default'] === null
                         ? 'NONE'
                         : 'USER_DEFINED'));
 

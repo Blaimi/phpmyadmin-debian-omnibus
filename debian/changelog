@@ -1,8 +1,14 @@
+phpmyadmin (4:4.0.10-1) unstable; urgency=medium
+
+  * New upstream release.
+
+ -- Thijs Kinkhorst <thijs@debian.org>  Wed, 11 Dec 2013 17:32:19 +0100
+
 phpmyadmin (4:4.0.9-1) unstable; urgency=low
 
   * New upstream release.
   * Prefer renamed fonts-dejavu-core as alternative for
-    ttf-dejavu-core. (closes: #726238
+    ttf-dejavu-core. (closes: #726238)
 
  -- Thijs Kinkhorst <thijs@debian.org>  Wed, 06 Nov 2013 19:46:38 +0100
 

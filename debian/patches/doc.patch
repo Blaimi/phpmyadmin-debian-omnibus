@@ -3,8 +3,8 @@ Subject: Adjust phpMyAdmin documentation to match our changes
 From: Michal Čihař <nijel@debian.org>
 Forwarded: not-needed
 
---- a/doc/html/setup.html	2013-05-16 21:07:00.000000000 +0200
-+++ b/doc/html/setup.html	2013-05-16 21:09:03.000000000 +0200
+--- a/doc/html/setup.html
++++ b/doc/html/setup.html
 @@ -129,15 +129,9 @@
  <p>Instead of manually editing <tt class="file docutils literal"><span class="pre">config.inc.php</span></tt>, you can use the <a class="reference external" href="setup/">Setup
  Script</a>. First you must manually create a folder <tt class="docutils literal"><span class="pre">config</span></tt>
@@ -24,9 +24,9 @@ Forwarded: not-needed
  </pre></div>
  </div>
  <p>On other platforms, simply create the folder and ensure that your web
-@@ -152,12 +146,10 @@
+@@ -153,12 +147,10 @@
  has the proper permissions - or use the <tt class="docutils literal"><span class="pre">Download</span></tt> link to save the
- config file locally and upload (via FTP or some similar means) to the
+ config file locally and upload it (via FTP or some similar means) to the
  proper location.</p>
 -<p>Once the file has been saved, it must be moved out of the <tt class="docutils literal"><span class="pre">config/</span></tt>
 -directory and the permissions must be reset, again as a security

@@ -5,6 +5,7 @@ phpmyadmin (4:4.1.7-1) UNRELEASED; urgency=medium
     - Improved messages in setup script (Closes: #712011).
     - Fixes security issue PMASA-2014-1 (CVE-2014-1879).
     - Upgrade table structure. 
+  * Move packaging to Git, adjust Vcs-* fields (Closes: #734362).
 
  -- Michal Čihař <nijel@debian.org>  Wed, 19 Feb 2014 10:20:50 +0100
 

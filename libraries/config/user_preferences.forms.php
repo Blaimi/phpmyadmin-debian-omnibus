@@ -33,7 +33,8 @@ $forms['Features']['General'] = array(
     'MaxDbList',
     'MaxTableList',
     'NumRecentTables',
-    'ShowHint');
+    'ShowHint',
+    'SendErrorReports');
 $forms['Features']['Text_fields'] = array(
     'CharEditing',
     'MinSizeForInputField',
@@ -58,7 +59,6 @@ $forms['Features']['Warnings'] = array(
 // see prefs_forms.php and user_preferences.lib.php
 $forms['Features']['Developer'] = array(
     'Error_Handler/display',
-    'Error_Handler/gather',
     'DBG/sql');
 $forms['Sql_queries']['Sql_queries'] = array(
     'ShowSQL',
@@ -133,6 +133,9 @@ $forms['Main_panel']['Tabs'] = array(
     'DefaultTabServer',
     'DefaultTabDatabase',
     'DefaultTabTable');
+$forms['Main_panel']['DisplayRelationalSchema'] = array(
+    'PDFDefaultPageSize');
+
 $forms['Import']['Import_defaults'] = array(
     'Import/format',
     'Import/charset',
@@ -188,6 +191,7 @@ $forms['Export']['Sql'] = array(
         ':group:end',
     'Export/sql_use_transaction',
     'Export/sql_disable_fk',
+    'Export/sql_views_as_tables',
     'Export/sql_compatibility',
     ':group:' . __('Database export options'),
         'Export/sql_drop_database',

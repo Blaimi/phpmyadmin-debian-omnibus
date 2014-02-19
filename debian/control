@@ -32,8 +32,8 @@ Depends: libapache2-mod-php5 | libapache2-mod-php5filter | php5-cgi | php5-fpm |
     libjs-codemirror,
     libjs-underscore,
     ucf (>= 0.28)
-Recommends: apache2 | lighttpd | httpd, php5-gd, mysql-client
-Suggests: mysql-server, www-browser
+Recommends: apache2 | lighttpd | httpd, php5-gd, mysql-client | virtual-mysql-client
+Suggests: mysql-server | virtual-mysql-server, www-browser
 Description: MySQL web administration tool
  This package allows administering of MySQL with a web interface.
  .

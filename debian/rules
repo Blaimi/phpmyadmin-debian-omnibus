@@ -10,6 +10,7 @@ build: build-indep
 build-indep: build-stamp
 build-stamp:
 	dh_testdir
+	make -C doc/ html
 	touch build-stamp
 
 clean: 
@@ -42,13 +43,12 @@ binary-indep: build install
 	dh_testroot
 	dh_installchangelogs ChangeLog
 	dh_installdocs
+	dh_sphinxdoc
 	dh_installexamples
 	dh_installdebconf	
 	dh_installman
 	dh_lintian
-	rm -r debian/phpmyadmin/usr/share/doc/phpmyadmin/html/_static/jquery.js \
-	   debian/phpmyadmin/usr/share/doc/phpmyadmin/html/_static/underscore.js \
-	   debian/phpmyadmin/usr/share/phpmyadmin/js/jquery/src
+	rm -r debian/phpmyadmin/usr/share/phpmyadmin/js/jquery/src
 	dh_link
 	dh_compress
 	dh_fixperms

@@ -5,6 +5,7 @@ Section: web
 Priority: extra
 Standards-Version: 3.9.5
 Build-Depends: debhelper (>= 9), 
+    python-sphinx,
     po-debconf
 Homepage: http://www.phpmyadmin.net/
 Vcs-Browser: http://anonscm.debian.org/gitweb/?p=collab-maint/phpmyadmin.git
@@ -19,6 +20,7 @@ Depends: libapache2-mod-php5 | libapache2-mod-php5filter | php5-cgi | php5-fpm |
     php5-json,
     perl, 
     ${misc:Depends}, 
+    ${sphinxdoc:Depends},
     dbconfig-common,
     php-gettext,
     php-tcpdf,
@@ -29,7 +31,6 @@ Depends: libapache2-mod-php5 | libapache2-mod-php5filter | php5-cgi | php5-fpm |
     libjs-jquery-event-drag,
     libjs-jquery-tablesorter,
     libjs-codemirror,
-    libjs-underscore,
     ucf (>= 0.28)
 Recommends: apache2 | lighttpd | httpd, php5-gd, mysql-client | virtual-mysql-client
 Suggests: mysql-server | virtual-mysql-server, www-browser

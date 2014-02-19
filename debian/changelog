@@ -9,7 +9,7 @@ phpmyadmin (4:4.1.7-1) unstable; urgency=medium
     - Upgrade table structure. 
   * Move packaging to Git, adjust Vcs-* fields (Closes: #734362).
   * Bump standards to 3.9.5.
-  * Depend on php-tcpdf.
+  * Depend on php-tcpdf which was previously bundled.
 
  -- Michal Čihař <nijel@debian.org>  Wed, 19 Feb 2014 10:53:18 +0100
 

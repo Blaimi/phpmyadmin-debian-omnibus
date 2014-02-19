@@ -27,8 +27,6 @@ install: build
 	dh_install
 	# spurious licence files, this is in debian/copyright
 	rm \
-		debian/phpmyadmin/usr/share/phpmyadmin/libraries/tcpdf/fonts/dejavu-fonts-ttf-*/LICENSE \
-		debian/phpmyadmin/usr/share/phpmyadmin/libraries/tcpdf/LICENSE.TXT \
 		debian/phpmyadmin/usr/share/phpmyadmin/js/canvg/MIT-LICENSE.txt \
 		debian/phpmyadmin/usr/share/phpmyadmin/js/codemirror/LICENSE
 	# Use system tcpdf/gettext

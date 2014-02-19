@@ -1,4 +1,4 @@
-phpmyadmin (4:4.1.7-1) UNRELEASED; urgency=medium
+phpmyadmin (4:4.1.7-1) unstable; urgency=medium
 
   * New upstream release.
     - Removed sourceless flash file (Closes: #737432).
@@ -10,7 +10,7 @@ phpmyadmin (4:4.1.7-1) UNRELEASED; urgency=medium
   * Move packaging to Git, adjust Vcs-* fields (Closes: #734362).
   * Bump standards to 3.9.5.
 
- -- Michal Čihař <nijel@debian.org>  Wed, 19 Feb 2014 10:20:50 +0100
+ -- Michal Čihař <nijel@debian.org>  Wed, 19 Feb 2014 10:38:35 +0100
 
 phpmyadmin (4:4.0.10-1) unstable; urgency=medium
 

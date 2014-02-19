@@ -4,6 +4,7 @@ phpmyadmin (4:4.1.7-1) UNRELEASED; urgency=medium
     - Removed sourceless flash file (Closes: #737432).
     - Improved messages in setup script (Closes: #712011).
     - Fixes security issue PMASA-2014-1 (CVE-2014-1879).
+    - Upgrade table structure. 
 
  -- Michal Čihař <nijel@debian.org>  Wed, 19 Feb 2014 10:20:50 +0100
 

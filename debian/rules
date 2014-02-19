@@ -31,7 +31,9 @@ install: build
 		debian/phpmyadmin/usr/share/phpmyadmin/libraries/tcpdf/LICENSE.TXT \
 		debian/phpmyadmin/usr/share/phpmyadmin/js/canvg/MIT-LICENSE.txt \
 		debian/phpmyadmin/usr/share/phpmyadmin/js/codemirror/LICENSE
-	rmdir debian/phpmyadmin/usr/share/phpmyadmin/libraries/tcpdf/fonts/dejavu-fonts-ttf-*
+	# Use system tcpdf/gettext
+	rm -rf debian/phpmyadmin/usr/share/phpmyadmin/libraries/tcpdf
+	rm -rf debian/phpmyadmin/usr/share/phpmyadmin/libraries/php-gettext
 	# include Debian marker in version string
 	sed -ri "/set..PMA_VERSION/ s/'([-0-9a-z.]+)'/'\\1deb$(REVISION)'/" \
 	    debian/phpmyadmin/usr/share/phpmyadmin/libraries/Config.class.php

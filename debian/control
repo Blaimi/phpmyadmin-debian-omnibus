@@ -12,6 +12,7 @@ Vcs-Git: git://anonscm.debian.org/collab-maint/phpmyadmin.git
 
 Package: phpmyadmin
 Architecture: all
+Pre-Depends: dpkg (>= 1.17.5)
 Depends: libapache2-mod-php5 | libapache2-mod-php5filter | php5-cgi | php5-fpm | php5,
     php5-mysql | php5-mysqli | php5-mysqlnd, 
     php5-mcrypt, 
@@ -21,6 +22,7 @@ Depends: libapache2-mod-php5 | libapache2-mod-php5filter | php5-cgi | php5-fpm |
     dbconfig-common,
     fonts-dejavu-core | ttf-dejavu-core,
     php-gettext,
+    php-tcpdf,
     libjs-jquery,
     libjs-jquery-ui,
     libjs-jquery-cookie,

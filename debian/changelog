@@ -1,7 +1,14 @@
 phpmyadmin (4:4.1.7-2) UNRELEASED; urgency=medium
 
+  [ Michal Čihař ]
   * Remove not needed dependency on fonts-dejavu-core.
   * Build Sphinx documentation during build and use dh_sphinxdoc.
+
+  [ Thijs Kinkhorst ]
+  * Move database upgrade snippet that renames tables to
+    the correct version number (Closes: #739643).
+  * Add snippet to apache.conf to support suphp. Thanks
+    Thomas Hochstein for the patch (Closes: #734364).
 
  -- Michal Čihař <nijel@debian.org>  Wed, 19 Feb 2014 20:06:13 +0100
 

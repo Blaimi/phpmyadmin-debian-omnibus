@@ -17,31 +17,31 @@ if (! defined('PHPMYADMIN')) {
  * Path to changelog file, can be gzip compressed. Useful when you want to
  * have documentation somewhere else, eg. /usr/share/doc.
  */
-define('CHANGELOG_FILE', '/usr/share/doc/phpmyadmin/changelog.gz');
+define('CHANGELOG_FILE', './ChangeLog');
 
 /**
  * Path to license file. Useful when you want to have documentation somewhere
  * else, eg. /usr/share/doc.
  */
-define('LICENSE_FILE', '/usr/share/doc/phpmyadmin/copyright');
+define('LICENSE_FILE', './LICENSE');
 
 /**
  * Path to config file generated using setup script.
  */
-define('SETUP_CONFIG_FILE', '/var/lib/phpmyadmin/config.inc.php');
+define('SETUP_CONFIG_FILE', './config/config.inc.php');
 
 /**
  * Whether setup requires writable directory where config
  * file will be generated.
  */
-define('SETUP_DIR_WRITABLE', false);
+define('SETUP_DIR_WRITABLE', true);
 
 /**
  * Directory where configuration files are stored.
  * It is not used directly in code, just a convenient
  * define used further in this file.
  */
-define('CONFIG_DIR', '/etc/phpmyadmin/');
+define('CONFIG_DIR', './');
 
 /**
  * Filename of a configuration file.
@@ -61,7 +61,7 @@ define('CUSTOM_FOOTER_FILE', CONFIG_DIR . 'config.footer.inc.php');
 /**
  * Default value for check for version upgrades.
  */
-define('VERSION_CHECK_DEFAULT', false);
+define('VERSION_CHECK_DEFAULT', true);
 
 /**
  * Path to gettext.inc file. Useful when you want php-gettext somewhere else,

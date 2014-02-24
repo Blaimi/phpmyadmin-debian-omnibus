@@ -187,9 +187,15 @@ simple configuration may look like this:</p>
 <p>Instead of manually editing <tt class="file docutils literal"><span class="pre">config.inc.php</span></tt>, you can use the <a class="reference external" href="setup/">Setup
 Script</a>. First you must manually create a folder <tt class="docutils literal"><span class="pre">config</span></tt>
 in the phpMyAdmin directory. This is a security measure. On a
-Linux/Unix system you can use the following command:</p>
-<div class="highlight-sh">
-/usr/sbin/pma-configure
+Linux/Unix system you can use the following commands:</p>
+<div class="highlight-sh"><div class="highlight"><pre><span class="nb">cd </span>phpMyAdmin
+mkdir config                        <span class="c"># create directory for saving</span>
+chmod o+rw config                   <span class="c"># give it world writable permissions</span>
+</pre></div>
+</div>
+<p>And to edit an existing configuration, copy it over first:</p>
+<div class="highlight-sh"><div class="highlight"><pre>cp config.inc.php config/           <span class="c"># copy current configuration for editing</span>
+chmod o+w config/config.inc.php     <span class="c"># give it world writable permissions</span>
 </pre></div>
 </div>
 <p>On other platforms, simply create the folder and ensure that your web
@@ -205,10 +211,12 @@ save configuration.&#8221; Ensure that the <tt class="docutils literal"><span cl
 has the proper permissions - or use the <tt class="docutils literal"><span class="pre">Download</span></tt> link to save the
 config file locally and upload it (via FTP or some similar means) to the
 proper location.</p>
-<p>Once the file has been saved, the permissions must be reset, again as a security
+<p>Once the file has been saved, it must be moved out of the <tt class="docutils literal"><span class="pre">config/</span></tt>
+directory and the permissions must be reset, again as a security
 measure:</p>
-<div class="highlight-sh">
-/usr/sbin/pma-secure
+<div class="highlight-sh"><div class="highlight"><pre>mv config/config.inc.php .         <span class="c"># move file to current directory</span>
+chmod o-rw config.inc.php          <span class="c"># remove world read and write permissions</span>
+rm -rf config                      <span class="c"># remove not needed directory</span>
 </pre></div>
 </div>
 <p>Now the file is ready to be used. You can choose to review or edit the

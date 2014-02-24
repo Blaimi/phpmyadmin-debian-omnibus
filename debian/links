@@ -5,5 +5,3 @@
 /usr/share/javascript/jquery-event-drag/jquery.event.drag.min.js usr/share/phpmyadmin/js/jquery/jquery.event.drag-2.2.js
 /usr/share/javascript/jquery-tablesorter/jquery.tablesorter.min.js usr/share/phpmyadmin/js/jquery/jquery.tablesorter.js
 /usr/share/javascript/codemirror/codemirror.js usr/share/phpmyadmin/js/codemirror/lib/codemirror.js
-/usr/share/php/php-gettext usr/share/phpmyadmin/libraries/php-gettext
-/usr/share/php/tcpdf usr/share/phpmyadmin/libraries/tcpdf

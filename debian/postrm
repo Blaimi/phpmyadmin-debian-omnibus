@@ -90,16 +90,6 @@ if [ "$1" = "remove" ] || [ "$1" = "purge" ]; then
 	fi
 fi
 
-# Dirs changed to symlinks
-dpkg-maintscript-helper dir_to_symlink \
-    /usr/share/phpmyadmin/libraries/php-gettext ../../php/php-gettext \
-    4:4.0.10-1 phpmyadmin \
-    -- "$@"
-dpkg-maintscript-helper dir_to_symlink \
-    /usr/share/phpmyadmin/libraries/tcpdf ../../php/tcpdf \
-    4:4.0.10-1 phpmyadmin \
-    -- "$@"
-
 #DEBHELPER#
 
 exit 0

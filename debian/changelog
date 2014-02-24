@@ -4,6 +4,8 @@ phpmyadmin (4:4.1.8-1) UNRELEASED; urgency=medium
   * New upstream release.
   * Remove not needed dependency on fonts-dejavu-core.
   * Build Sphinx documentation during build and use dh_sphinxdoc.
+  * Use phpMyAdmin overrides rather than symlinks for external PHP libraries
+    (Closes: #739624).
 
   [ Thijs Kinkhorst ]
   * Move database upgrade snippet that renames tables to

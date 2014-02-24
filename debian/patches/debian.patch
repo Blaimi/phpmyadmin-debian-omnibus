@@ -43,7 +43,7 @@ Forwarded: not-needed
  
  /**
   * Filename of a configuration file.
-@@ -61,7 +61,7 @@
+@@ -61,18 +61,18 @@
  /**
   * Default value for check for version upgrades.
   */
@@ -52,3 +52,16 @@ Forwarded: not-needed
  
  /**
   * Path to gettext.inc file. Useful when you want php-gettext somewhere else,
+  * eg. /usr/share/php/gettext/gettext.inc.
+  */
+-define('GETTEXT_INC', './libraries/php-gettext/gettext.inc');
++define('GETTEXT_INC', '/usr/share/php/php-gettext/gettext.inc');
+ /**
+  * Path to tcpdf.php file. Useful when you want to use system tcpdf,
+  * eg. /usr/share/php/tcpdf/tcpdf.php.
+  */
+-define('TCPDF_INC', './libraries/tcpdf/tcpdf.php');
++define('TCPDF_INC', '/usr/share/php/tcpdf/tcpdf.php');
+ 
+ /**
+  * Avoid referring to nonexistent files (causes warnings when open_basedir

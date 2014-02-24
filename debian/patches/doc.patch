@@ -3,40 +3,50 @@ Subject: Adjust phpMyAdmin documentation to match our changes
 From: Michal Čihař <nijel@debian.org>
 Forwarded: not-needed
 
---- a/doc/html/setup.html
-+++ b/doc/html/setup.html
-@@ -129,15 +129,9 @@
- <p>Instead of manually editing <tt class="file docutils literal"><span class="pre">config.inc.php</span></tt>, you can use the <a class="reference external" href="setup/">Setup
- Script</a>. First you must manually create a folder <tt class="docutils literal"><span class="pre">config</span></tt>
+--- a/doc/setup.rst
++++ b/doc/setup.rst
+@@ -165,22 +165,11 @@
+ Instead of manually editing :file:`config.inc.php`, you can use the `Setup
+ Script <setup/>`_. First you must manually create a folder ``config``
  in the phpMyAdmin directory. This is a security measure. On a
--Linux/Unix system you can use the following commands:</p>
--<div class="highlight-sh"><div class="highlight"><pre><span class="nb">cd </span>phpMyAdmin
--mkdir config                        <span class="c"># create directory for saving</span>
--chmod o+rw config                   <span class="c"># give it world writable permissions</span>
--</pre></div>
--</div>
--<p>And to edit an existing configuration, copy it over first:</p>
--<div class="highlight-sh"><div class="highlight"><pre>cp config.inc.php config/           <span class="c"># copy current configuration for editing</span>
--chmod o+w config/config.inc.php     <span class="c"># give it world writable permissions</span>
-+Linux/Unix system you can use the following command:</p>
-+<div class="highlight-sh">
-+/usr/sbin/pma-configure
- </pre></div>
- </div>
- <p>On other platforms, simply create the folder and ensure that your web
-@@ -153,12 +147,10 @@
- has the proper permissions - or use the <tt class="docutils literal"><span class="pre">Download</span></tt> link to save the
+-Linux/Unix system you can use the following commands:
++Debian system you can use the following commands:
+ 
+ .. code-block:: sh
+ 
+-    
+-    cd phpMyAdmin
+-    mkdir config                        # create directory for saving
+-    chmod o+rw config                   # give it world writable permissions
+-
+-And to edit an existing configuration, copy it over first:
+-
+-.. code-block:: sh
+-
+-    
+-    cp config.inc.php config/           # copy current configuration for editing
+-    chmod o+w config/config.inc.php     # give it world writable permissions
++    /usr/sbin/pma-configure
+ 
+ On other platforms, simply create the folder and ensure that your web
+ server has read and write access to it. :ref:`faq1_26` can help with
+@@ -197,16 +186,13 @@
  config file locally and upload it (via FTP or some similar means) to the
- proper location.</p>
--<p>Once the file has been saved, it must be moved out of the <tt class="docutils literal"><span class="pre">config/</span></tt>
+ proper location.
+ 
+-Once the file has been saved, it must be moved out of the ``config/``
 -directory and the permissions must be reset, again as a security
-+<p>Once the file has been saved, the permissions must be reset, again as a security
- measure:</p>
--<div class="highlight-sh"><div class="highlight"><pre>mv config/config.inc.php .         <span class="c"># move file to current directory</span>
--chmod o-rw config.inc.php          <span class="c"># remove world read and write permissions</span>
--rm -rf config                      <span class="c"># remove not needed directory</span>
-+<div class="highlight-sh">
-+/usr/sbin/pma-secure
- </pre></div>
- </div>
- <p>Now the file is ready to be used. You can choose to review or edit the
++Once the file has been saved, 
++the permissions must be reset, again as a security
+ measure:
+ 
+ .. code-block:: sh
+ 
+-    
+-    mv config/config.inc.php .         # move file to current directory
+-    chmod o-rw config.inc.php          # remove world read and write permissions
+-    rm -rf config                      # remove not needed directory
++    /usr/sbin/pma-secure    
+ 
+ Now the file is ready to be used. You can choose to review or edit the
+ file with your favorite editor, if you prefer to set some advanced

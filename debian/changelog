@@ -1,4 +1,4 @@
-phpmyadmin (4:4.1.8-1) UNRELEASED; urgency=medium
+phpmyadmin (4:4.1.8-1) unstable; urgency=medium
 
   [ Michal Čihař ]
   * New upstream release.
@@ -13,7 +13,7 @@ phpmyadmin (4:4.1.8-1) UNRELEASED; urgency=medium
   * Add snippet to apache.conf to support suphp. Thanks
     Thomas Hochstein for the patch (Closes: #734364).
 
- -- Michal Čihař <nijel@debian.org>  Mon, 24 Feb 2014 10:19:49 +0100
+ -- Michal Čihař <nijel@debian.org>  Mon, 24 Feb 2014 10:40:44 +0100
 
 phpmyadmin (4:4.1.7-1) unstable; urgency=medium
 

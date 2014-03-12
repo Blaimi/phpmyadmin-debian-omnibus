@@ -3,6 +3,7 @@ phpmyadmin (4:4.1.9-1) UNRELEASED; urgency=medium
   * New upstream release.
   * Adjust message when saving configuration from setup script
     (Closes: #712012, LP: #1190405).
+  * Add TCPDF path to open_basedir settings (Closes: #741341).
 
  -- Michal Čihař <nijel@debian.org>  Wed, 12 Mar 2014 12:53:41 +0100
 

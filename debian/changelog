@@ -1,9 +1,10 @@
-phpmyadmin (4:4.1.8-2) UNRELEASED; urgency=medium
+phpmyadmin (4:4.1.9-1) UNRELEASED; urgency=medium
 
+  * New upstream release.
   * Adjust message when saving configuration from setup script
     (Closes: #712012, LP: #1190405).
 
- -- Michal Čihař <nijel@debian.org>  Tue, 25 Feb 2014 15:08:42 +0100
+ -- Michal Čihař <nijel@debian.org>  Wed, 12 Mar 2014 12:53:41 +0100
 
 phpmyadmin (4:4.1.8-1) unstable; urgency=medium
 

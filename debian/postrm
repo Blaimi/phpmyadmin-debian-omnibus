@@ -30,7 +30,7 @@ apache_remove() {
                 rm -f /etc/apache2/conf.d/phpmyadmin.conf
         fi
 
-	rm -f /etc/$webserver/conf-available/phpmyadmin.conf
+	rm -f /etc/apache2/conf-available/phpmyadmin.conf
 }
 if [ -f /usr/share/debconf/confmodule ]; then
     . /usr/share/debconf/confmodule

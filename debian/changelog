@@ -1,3 +1,9 @@
+phpmyadmin (4:4.1.11-2) UNRELEASED; urgency=medium
+
+  * Use Apache 2.4 syntax for denying access (Closes: #742097).
+
+ -- Michal Čihař <nijel@debian.org>  Wed, 26 Mar 2014 10:05:50 +0100
+
 phpmyadmin (4:4.1.11-1) unstable; urgency=low
 
   * New upstream release.

@@ -29,7 +29,6 @@ Depends: libapache2-mod-php5 | libapache2-mod-php5filter | php5-cgi | php5-fpm |
     libjs-jquery-mousewheel,
     libjs-jquery-event-drag,
     libjs-jquery-tablesorter,
-    libjs-codemirror,
     ucf (>= 0.28)
 Recommends: apache2 | lighttpd | httpd, php5-gd, mysql-client | virtual-mysql-client
 Suggests: mysql-server | virtual-mysql-server, www-browser

@@ -1,3 +1,9 @@
+phpmyadmin (4:4.1.11-3) UNRELEASED; urgency=medium
+
+  * Use xz compressed upstream tarball.
+
+ -- Michal Čihař <nijel@debian.org>  Thu, 27 Mar 2014 13:26:23 +0100
+
 phpmyadmin (4:4.1.11-2) unstable; urgency=medium
 
   * Use Apache 2.4 syntax for denying access (Closes: #742097).

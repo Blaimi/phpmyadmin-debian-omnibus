@@ -1,9 +1,10 @@
-phpmyadmin (4:4.1.12-1) UNRELEASED; urgency=low
+phpmyadmin (4:4.1.12-1) unstable; urgency=low
 
   * New upstream release.
   * Use xz compressed upstream tarball.
+  * Lower tcpdf dependency to recommends (Closes: #739521).
 
- -- Michal Čihař <nijel@debian.org>  Thu, 27 Mar 2014 13:27:27 +0100
+ -- Michal Čihař <nijel@debian.org>  Thu, 27 Mar 2014 13:28:42 +0100
 
 phpmyadmin (4:4.1.11-2) unstable; urgency=medium
 

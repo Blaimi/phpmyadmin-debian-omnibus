@@ -1,8 +1,9 @@
-phpmyadmin (4:4.1.11-3) UNRELEASED; urgency=medium
+phpmyadmin (4:4.1.12-1) UNRELEASED; urgency=low
 
+  * New upstream release.
   * Use xz compressed upstream tarball.
 
- -- Michal Čihař <nijel@debian.org>  Thu, 27 Mar 2014 13:26:23 +0100
+ -- Michal Čihař <nijel@debian.org>  Thu, 27 Mar 2014 13:27:27 +0100
 
 phpmyadmin (4:4.1.11-2) unstable; urgency=medium
 

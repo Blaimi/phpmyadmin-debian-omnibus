@@ -18,18 +18,18 @@
  */
 
 if (!function_exists('check_file_access')) {
-	function check_file_access($path)
-	{
-	    if (is_readable($path)) {
-		return true;
-	    } else {
-		error_log(
-		    'phpmyadmin: Failed to load ' . $path
-		    . ' Check group www-data has read access and open_basedir restrictions.'
-		);
-		return false;
-	    }
-	}
+    function check_file_access($path)
+    {
+        if (is_readable($path)) {
+            return true;
+        } else {
+            error_log(
+                'phpmyadmin: Failed to load ' . $path
+                . ' Check group www-data has read access and open_basedir restrictions.'
+            );
+            return false;
+        }
+    }
 }
 
 // Load secret generated on postinst

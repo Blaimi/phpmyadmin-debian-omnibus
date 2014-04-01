@@ -1,0 +1,6 @@
+# Version difference with shipped libraries causes too much troubles
+phpmyadmin: embedded-javascript-library usr/share/phpmyadmin/js/jquery/jquery.cookie.js
+# Version difference with shipped libraries causes too much troubles
+phpmyadmin: embedded-javascript-library usr/share/phpmyadmin/js/jquery/jquery.mousewheel.js
+# Version difference with shipped libraries causes too much troubles
+phpmyadmin: embedded-javascript-library usr/share/phpmyadmin/js/jquery/jquery.tablesorter.js

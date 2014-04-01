@@ -2,6 +2,7 @@ phpmyadmin (4:4.1.12-2) unstable; urgency=medium
 
   * Stop depending on system jQuery, as version differences lead to
     different bugs inside phpMyAdmin (Closes: #742801).
+  * Include lintian override for builtin JS libraries.
 
  -- Michal Čihař <nijel@debian.org>  Tue, 01 Apr 2014 11:28:20 +0200
 

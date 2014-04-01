@@ -1,0 +1,28 @@
+# Sphinx index, source included
+phpmyadmin source: source-contains-prebuilt-javascript-object doc/html/searchindex.js mean line length is about 16184 characters
+# Sphinx index, source included
+phpmyadmin source: source-is-missing doc/html/searchindex.js
+# Sphinx docs
+phpmyadmin source: source-contains-prebuilt-javascript-object doc/html/_static/jquery.js mean line length is about 510 characters
+# Sphinx docs
+phpmyadmin source: source-is-missing doc/html/_static/jquery.js
+# Sphinx docs
+phpmyadmin source: source-contains-prebuilt-javascript-object doc/html/_static/underscore.js mean line length is about 512 characters
+# Sphinx docs
+phpmyadmin source: source-is-missing doc/html/_static/underscore.js
+
+
+# Source included in js/jquery/src/
+phpmyadmin source: source-contains-prebuilt-javascript-object js/jquery/jquery-1.8.3.min.js
+# Source included in js/jquery/src/
+phpmyadmin source: source-is-missing js/jquery/jquery-1.8.3.min.js
+
+# Source included in js/jquery/src/
+phpmyadmin source: source-contains-prebuilt-javascript-object js/jquery/jquery-ui-1.9.2.custom.min.js
+# Source included in js/jquery/src/
+phpmyadmin source: source-is-missing js/jquery/jquery-ui-1.9.2.custom.min.js
+
+# Not really a composer package
+phpmyadmin source: composer-package-without-pkg-php-tools-builddep
+# No upstream signatures
+phpmyadmin source: debian-watch-may-check-gpg-signature

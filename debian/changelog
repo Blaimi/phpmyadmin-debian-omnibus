@@ -1,6 +1,8 @@
 phpmyadmin (4:4.1.14-1) UNRELEASED; urgency=medium
 
   * New upstream release.
+  * Correct conditions for using modules features in Apache configuration
+    (Closes: #719754).
 
  -- Michal Čihař <nijel@debian.org>  Tue, 29 Apr 2014 10:13:17 +0200
 

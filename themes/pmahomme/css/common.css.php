@@ -796,6 +796,12 @@ form.login label {
     font-weight: bolder;
 }
 
+form.login input[type=text],
+form.login input[type=password],
+form.login select {
+    width: 14em;
+}
+
 .commented_column {
     border-bottom: 1px dashed #000;
 }
@@ -1760,7 +1766,8 @@ textarea#partitiondefinition {
 }
 
 #list_server {
-    list-style-image: none;
+    list-style-type: none;
+    padding: 0;
 }
 
 /**

@@ -176,7 +176,7 @@ class Advisor
     {
         $string = _gettext(Advisor::escapePercent($str));
         if ( ! is_null($param)) {
-            $params = $this->ruleExprEvaluate('array('. $param . ')');
+            $params = $this->ruleExprEvaluate('array(' . $param . ')');
         } else {
             $params = array();
         }
@@ -513,7 +513,7 @@ function ADVISOR_timespanFormat($seconds)
  */
 function ADVISOR_formatByteDown($value, $limes = 6, $comma = 0)
 {
-    return PMA_Util::formatByteDown($value, $limes, $comma);
+    return implode(' ', PMA_Util::formatByteDown($value, $limes, $comma));
 }
 
 ?>

@@ -82,7 +82,7 @@ function PMA_GIS_modifyQuery($sql_query, $visualizationSettings)
         if (isset($visualizationSettings['labelColumn'])
             && $visualizationSettings['labelColumn'] != ''
         ) {
-            $modified_query .= '`' . $visualizationSettings['labelColumn'] .'`, ';
+            $modified_query .= '`' . $visualizationSettings['labelColumn'] . '`, ';
         }
 
         // Wrap the spatial column with 'ASTEXT()' function and add it
@@ -136,8 +136,8 @@ function sanitize($select)
  */
 function PMA_GIS_visualizationResults($data, &$visualizationSettings, $format)
 {
-    include_once './libraries/gis/pma_gis_visualization.php';
-    include_once './libraries/gis/pma_gis_factory.php';
+    include_once './libraries/gis/GIS_Visualization.class.php';
+    include_once './libraries/gis/GIS_Factory.class.php';
 
     if (! isset($data[0])) {
         // empty data
@@ -173,8 +173,8 @@ function PMA_GIS_visualizationResults($data, &$visualizationSettings, $format)
  */
 function PMA_GIS_saveToFile($data, $visualizationSettings, $format, $fileName)
 {
-    include_once './libraries/gis/pma_gis_visualization.php';
-    include_once './libraries/gis/pma_gis_factory.php';
+    include_once './libraries/gis/GIS_Visualization.class.php';
+    include_once './libraries/gis/GIS_Factory.class.php';
 
     if (isset($data[0])) {
         $visualization = new PMA_GIS_Visualization($data, $visualizationSettings);

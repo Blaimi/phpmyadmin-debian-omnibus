@@ -114,7 +114,7 @@ class PMA_Config
      */
     function checkSystem()
     {
-        $this->set('PMA_VERSION', '4.1.14');
+        $this->set('PMA_VERSION', '4.2.0');
         /**
          * @deprecated
          */
@@ -515,8 +515,10 @@ class PMA_Config
                     // File missing. May be we can look in the .git/object/pack
                     // directory for all the .pack files and use that list of
                     // files instead
-                    $it = new DirectoryIterator($git_folder . '/objects/pack');
-                    foreach ($it as $file_info) {
+                    $dirIterator = new DirectoryIterator(
+                        $git_folder . '/objects/pack'
+                    );
+                    foreach ($dirIterator as $file_info) {
                         $file_name = $file_info->getFilename();
                         // if this is a .pack file
                         if ($file_info->isFile()
@@ -1593,7 +1595,8 @@ class PMA_Config
                 $url['scheme'] = 'https';
                 // A10 Networks load balancer:
             } elseif (PMA_getenv('HTTP_HTTPS_FROM_LB')
-                && strtolower(PMA_getenv('HTTP_HTTPS_FROM_LB')) == 'on') {
+                && strtolower(PMA_getenv('HTTP_HTTPS_FROM_LB')) == 'on'
+            ) {
                 $url['scheme'] = 'https';
             } elseif (PMA_getenv('HTTP_X_FORWARDED_PROTO')) {
                 $url['scheme'] = strtolower(PMA_getenv('HTTP_X_FORWARDED_PROTO'));

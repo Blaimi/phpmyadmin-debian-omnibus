@@ -5,7 +5,7 @@ Forwarded: not-needed
 
 --- a/doc/setup.rst
 +++ b/doc/setup.rst
-@@ -165,22 +165,11 @@
+@@ -165,22 +165,12 @@
  Instead of manually editing :file:`config.inc.php`, you can use the `Setup
  Script <setup/>`_. First you must manually create a folder ``config``
  in the phpMyAdmin directory. This is a security measure. On a
@@ -14,7 +14,7 @@ Forwarded: not-needed
  
  .. code-block:: sh
  
--    
+ 
 -    cd phpMyAdmin
 -    mkdir config                        # create directory for saving
 -    chmod o+rw config                   # give it world writable permissions
@@ -23,14 +23,14 @@ Forwarded: not-needed
 -
 -.. code-block:: sh
 -
--    
+-
 -    cp config.inc.php config/           # copy current configuration for editing
 -    chmod o+w config/config.inc.php     # give it world writable permissions
 +    /usr/sbin/pma-configure
  
  On other platforms, simply create the folder and ensure that your web
  server has read and write access to it. :ref:`faq1_26` can help with
-@@ -197,16 +186,13 @@
+@@ -197,16 +187,14 @@
  config file locally and upload it (via FTP or some similar means) to the
  proper location.
  
@@ -42,7 +42,7 @@ Forwarded: not-needed
  
  .. code-block:: sh
  
--    
+ 
 -    mv config/config.inc.php .         # move file to current directory
 -    chmod o-rw config.inc.php          # remove world read and write permissions
 -    rm -rf config                      # remove not needed directory

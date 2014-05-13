@@ -25,12 +25,12 @@ Depends: libapache2-mod-php5 | libapache2-mod-php5filter | php5-cgi | php5-fpm |
     ucf (>= 0.28)
 Recommends: apache2 | lighttpd | httpd, 
     php5-gd, 
-    mysql-client | virtual-mysql-client,
+    mysql-client | mariadb-client | virtual-mysql-client,
     php-tcpdf
-Suggests: mysql-server | virtual-mysql-server, 
+Suggests: mysql-server | maridadb-server | virtual-mysql-server,
     www-browser
 Description: MySQL web administration tool
- This package allows administering of MySQL with a web interface.
+ This package allows administering of MySQL or MariaDB with a web interface.
  .
  It allows administrators to:
   - browse through databases and tables;

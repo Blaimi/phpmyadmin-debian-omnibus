@@ -716,8 +716,7 @@ function PMA_getHtmlForResourceLimits($row)
         . 'MAX QUERIES PER HOUR'
         . '</dfn></code></label>' . "\n"
         . '<input type="number" name="max_questions" id="text_max_questions" '
-        . 'value="' . $row['max_questions'] . '" '
-        . 'size="6" maxlength="11" min="0" '
+        . 'value="' . $row['max_questions'] . '" min="0" '
         . 'title="'
         . __(
             'Limits the number of queries the user may send to the server per hour.'
@@ -735,7 +734,7 @@ function PMA_getHtmlForResourceLimits($row)
         . 'MAX UPDATES PER HOUR'
         . '</dfn></code></label>' . "\n"
         . '<input type="number" name="max_updates" id="text_max_updates" '
-        . 'value="' . $row['max_updates'] . '" size="6" maxlength="11" min="0" '
+        . 'value="' . $row['max_updates'] . '" min="0" '
         . 'title="'
         . __(
             'Limits the number of commands that change any table '
@@ -753,7 +752,7 @@ function PMA_getHtmlForResourceLimits($row)
         . 'MAX CONNECTIONS PER HOUR'
         . '</dfn></code></label>' . "\n"
         . '<input type="number" name="max_connections" id="text_max_connections" '
-        . 'value="' . $row['max_connections'] . '" size="6" maxlength="11" min="0" '
+        . 'value="' . $row['max_connections'] . '" min="0" '
         . 'title="' . __(
             'Limits the number of new connections the user may open per hour.'
         )
@@ -769,7 +768,7 @@ function PMA_getHtmlForResourceLimits($row)
         . '</dfn></code></label>' . "\n"
         . '<input type="number" name="max_user_connections" '
         . 'id="text_max_user_connections" '
-        . 'value="' . $row['max_user_connections'] . '" size="6" maxlength="11" '
+        . 'value="' . $row['max_user_connections'] . '" '
         . 'title="'
         . __('Limits the number of simultaneous connections the user may have.')
         . '" />' . "\n"
@@ -1513,22 +1512,22 @@ function PMA_getHtmlForLoginInformationFields($mode = 'new')
  */
 function PMA_getUsernameAndHostnameLength()
 {
-    $fields_info = $GLOBALS['dbi']->getColumns('mysql', 'user', null, true);
+    /* Fallback values */
     $username_length = 16;
     $hostname_length = 41;
+
+    /* Try to get real lengths from the database */
+    $fields_info = $GLOBALS['dbi']->fetchResult(
+        'SELECT COLUMN_NAME, CHARACTER_MAXIMUM_LENGTH '
+        . 'FROM information_schema.columns '
+        . "WHERE table_schema = 'mysql' AND table_name = 'user' "
+        . "AND COLUMN_NAME IN ('User', 'Host')"
+    );
     foreach ($fields_info as $val) {
-        if ($val['Field'] == 'User') {
-            strtok($val['Type'], '()');
-            $value = strtok('()');
-            if (is_int($value)) {
-                $username_length = $value;
-            }
-        } elseif ($val['Field'] == 'Host') {
-            strtok($val['Type'], '()');
-            $value = strtok('()');
-            if (is_int($value)) {
-                $hostname_length = $value;
-            }
+        if ($val['COLUMN_NAME'] == 'User') {
+            $username_length = $val['CHARACTER_MAXIMUM_LENGTH'];
+        } elseif ($val['COLUMN_NAME'] == 'Host') {
+            $hostname_length = $val['CHARACTER_MAXIMUM_LENGTH'];
         }
     }
     return array($username_length, $hostname_length);

@@ -1,6 +1,20 @@
 phpMyAdmin - ChangeLog
 ======================
 
+4.2.1.0 (2014-05-13)
+- bug #4380 Cannot display table structure with enums containing special characters 
+- bug #4381 Cannot remove the last remembered sorted column
+- bug       Correctly fetch length of user and host fields in MySQL tables
+- bug #4364 examples/signon.php does not support the SessionSavePath directive
+- bug #4382 Missing source for OpenLayers library
+- bug       Incorrect attributes for number fields
+- bug #4383 Cannot update values in Zoom search
+- bug #4313 GIS Visualization Extension does not work with PointFromText() function
+- bug #4384 Incorrect "Rows" total shown when truncating or dropping a table on DB Structure page
+- bug #4385 Grid edit on sorted columns fails
+- bug #4389 Null checkbox covering data input when editing
+- bug #4390 Data type changing by itself (no size but attribute present)
+
 4.2.0.0 (2014-05-08)
 + rfe #1403 Export only triggers
 + rfe #1483 Export Server/Database/Table without triggers

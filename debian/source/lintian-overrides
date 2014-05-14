@@ -11,6 +11,8 @@ phpmyadmin source: source-contains-prebuilt-javascript-object doc/html/_static/u
 # Sphinx docs
 phpmyadmin source: source-is-missing doc/html/_static/underscore.js
 
+# Source include in js/openlayers/src/
+phpmyadmin source: source-is-missing js/openlayers/OpenLayers.js
 
 # Source included in js/jquery/src/
 phpmyadmin source: source-contains-prebuilt-javascript-object js/jquery/jquery-1.8.3.min.js

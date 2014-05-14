@@ -1,9 +1,10 @@
-phpmyadmin (4:4.2.1-1) UNRELEASED; urgency=medium
+phpmyadmin (4:4.2.1-1) unstable; urgency=medium
 
   * New upstream release.
+    - Now includes corresponding OpenLayers source.
   * Explicitly mention MariaDB as supported (LP: #1312268).
 
- -- Michal Čihař <nijel@debian.org>  Wed, 14 May 2014 09:27:36 +0200
+ -- Michal Čihař <nijel@debian.org>  Wed, 14 May 2014 09:31:21 +0200
 
 phpmyadmin (4:4.2.0-1) unstable; urgency=medium
 

@@ -29,6 +29,7 @@ install: build
 	# spurious licence files, this is in debian/copyright
 	rm \
 		debian/phpmyadmin/usr/share/phpmyadmin/js/canvg/MIT-LICENSE.txt \
+		debian/phpmyadmin/usr/share/phpmyadmin/js/openlayers/src/openlayers/lib/Firebug/license.txt \
 		debian/phpmyadmin/usr/share/phpmyadmin/js/codemirror/LICENSE
 	# Use system tcpdf/gettext
 	rm -rf debian/phpmyadmin/usr/share/phpmyadmin/libraries/tcpdf

@@ -926,8 +926,10 @@ EOT;
             ? $_POST['criteriaColumnOperators'][$search_index] : '');
         $entered_value = (isset($_POST['criteriaValues'])
             ? $_POST['criteriaValues'] : '');
-        $titles['Browse'] = PMA_Util::getIcon(
-            'b_browse.png', __('Browse foreign values')
+        $titles = array(
+            'Browse' => PMA_Util::getIcon(
+                'b_browse.png', __('Browse foreign values')
+            )
         );
         //Gets column's type and collation
         $type = $this->_columnTypes[$column_index];
@@ -986,7 +988,9 @@ EOT;
             $html_output .= '<td>' . $properties['type'] . '</td>';
             $html_output .= '<td>' . $properties['collation'] . '</td>';
             $html_output .= '<td>' . $properties['func'] . '</td>';
-            $html_output .= '<td>' . $properties['value'] . '</td>';
+            // here, the data-type attribute is needed for a date/time picker
+            $html_output .= '<td data-type="' . $properties['type'] . '"'
+                . '>' . $properties['value'] . '</td>';
             $html_output .= '</tr>';
             //Displays hidden fields
             $html_output .= '<tr><td>';
@@ -1014,8 +1018,12 @@ EOT;
      */
     private function _getRowsZoom()
     {
-        $odd_row = true;
+        $odd_row     = true;
         $html_output = '';
+        $type        = array();
+        $collation   = array();
+        $func        = array();
+        $value       = array();
         /**
          * Get already set search criteria (if any)
          */
@@ -1244,9 +1252,11 @@ EOT;
     public function getZoomResultsForm($goto, $data)
     {
         $html_output = '';
-        $titles['Browse'] = PMA_Util::getIcon(
-            'b_browse.png',
-            __('Browse foreign values')
+        $titles = array(
+            'Browse' => PMA_Util::getIcon(
+                'b_browse.png',
+                __('Browse foreign values')
+            )
         );
         $html_output .= '<form method="post" action="tbl_zoom_select.php"'
             . ' name="displayResultForm" id="zoom_display_form"'

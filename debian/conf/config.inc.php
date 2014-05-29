@@ -94,6 +94,7 @@ if (!empty($dbname)) {
     $cfg['Servers'][$i]['users'] = 'pma__users';
     $cfg['Servers'][$i]['usergroups'] = 'pma__usergroups';
     $cfg['Servers'][$i]['navigationhiding'] = 'pma__navigationhiding';
+    $cfg['Servers'][$i]['savedsearches'] = 'pma__savedsearches';
 
     /* Uncomment the following to enable logging in to passwordless accounts,
      * after taking note of the associated security risks. */
@@ -133,6 +134,7 @@ if (!empty($dbname)) {
 // $cfg['Servers'][$i]['users'] = 'pma__users';
 // $cfg['Servers'][$i]['usergroups'] = 'pma__usergroups';
 // $cfg['Servers'][$i]['navigationhiding'] = 'pma__navigationhiding';
+// $cfg['Servers'][$i]['savedsearches'] = 'pma__savedsearches';
 /* Uncomment the following to enable logging in to passwordless accounts,
  * after taking note of the associated security risks. */
 // $cfg['Servers'][$i]['AllowNoPassword'] = TRUE;

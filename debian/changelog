@@ -217,7 +217,7 @@ phpmyadmin (4:3.5.6-1) experimental; urgency=low
 
   * New upstream release.
     - Fixes LaTeX export (Closes: #670734).
-  * Create new tables on upgrade using dbconfig.
+  * Create new tables on upgrade using dbconfig (LP: #1175137).
 
  -- Michal Čihař <nijel@debian.org>  Tue, 29 Jan 2013 09:02:37 +0100
 

@@ -1,8 +1,8 @@
-phpmyadmin (4:4.2.2-2) UNRELEASED; urgency=medium
+phpmyadmin (4:4.2.2-2) unstable; urgency=medium
 
   * Add configuration for saved searches (Closes: #749720).
 
- -- Michal Čihař <nijel@debian.org>  Thu, 29 May 2014 14:51:16 +0200
+ -- Michal Čihař <nijel@debian.org>  Thu, 29 May 2014 15:05:06 +0200
 
 phpmyadmin (4:4.2.2-1) unstable; urgency=medium
 

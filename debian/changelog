@@ -1,3 +1,9 @@
+phpmyadmin (4:4.2.3-1) unstable; urgency=medium
+
+  * New upstream release.
+
+ -- Michal Čihař <nijel@debian.org>  Tue, 17 Jun 2014 09:34:09 +0200
+
 phpmyadmin (4:4.2.2-2) unstable; urgency=medium
 
   * Add configuration for saved searches (Closes: #749720).

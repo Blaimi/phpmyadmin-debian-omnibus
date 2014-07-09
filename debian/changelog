@@ -1,3 +1,10 @@
+phpmyadmin (4:4.2.5-1) unstable; urgency=medium
+
+  * New upstream release.
+    - Fixes minor security issues CVE-2014-4348, CVE-2014-4349 
+
+ -- Thijs Kinkhorst <thijs@debian.org>  Wed, 09 Jul 2014 17:59:59 +0200
+
 phpmyadmin (4:4.2.3-1) unstable; urgency=medium
 
   * New upstream release.

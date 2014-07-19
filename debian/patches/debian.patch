@@ -64,4 +64,4 @@ Forwarded: not-needed
 +define('TCPDF_INC', '/usr/share/php/tcpdf/tcpdf.php');
  
  /**
-  * Avoid referring to nonexistent files (causes warnings when open_basedir
+  * Path to the phpseclib. Useful when you want to use system phpseclib.

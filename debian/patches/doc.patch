@@ -28,9 +28,9 @@ Forwarded: not-needed
 -    chmod o+w config/config.inc.php     # give it world writable permissions
 +    /usr/sbin/pma-configure
  
- On other platforms, simply create the folder and ensure that your web
- server has read and write access to it. :ref:`faq1_26` can help with
-@@ -197,16 +187,14 @@
+ .. note::
+ 
+@@ -202,16 +192,14 @@
  config file locally and upload it (via FTP or some similar means) to the
  proper location.
  
@@ -48,5 +48,5 @@ Forwarded: not-needed
 -    rm -rf config                      # remove not needed directory
 +    /usr/sbin/pma-secure    
  
- Now the file is ready to be used. You can choose to review or edit the
- file with your favorite editor, if you prefer to set some advanced
+ .. note::
+ 

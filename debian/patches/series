@@ -1,4 +1,3 @@
 debian.patch
 doc.patch
 setup-message.patch
-0001-fix-gettext-include-path.patch

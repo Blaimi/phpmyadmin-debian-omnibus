@@ -1,3 +1,10 @@
+phpmyadmin (4:4.2.10.1-1) unstable; urgency=medium
+
+  * New upstream release.
+    - Fixes security issue CVE-2014-8326.
+
+ -- Michal Čihař <nijel@debian.org>  Tue, 21 Oct 2014 16:58:52 +0200
+
 phpmyadmin (4:4.2.10-1) unstable; urgency=medium
 
   * New upstream release.

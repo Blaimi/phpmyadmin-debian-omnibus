@@ -1,3 +1,11 @@
+phpmyadmin (4:4.2.12-2) unstable; urgency=high
+
+  * Fix security issues (Closes: #774194).
+    - CVE-2014-9219 / PMASA-2014-18 - XSS vulnerability in redirection.
+    - CVE-2014-9218 / PMASA-2014-17 - DoS vulnerability with long passwords.
+
+ -- Michal Čihař <nijel@debian.org>  Tue, 30 Dec 2014 10:54:32 +0100
+
 phpmyadmin (4:4.2.12-1) unstable; urgency=medium
 
   * New upstrem release.

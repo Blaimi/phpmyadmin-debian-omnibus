@@ -16,13 +16,16 @@ msgstr ""
 "Project-Id-Version: phpmyadmin 2.5.3-1\n"
 "Report-Msgid-Bugs-To: phpmyadmin@packages.debian.org\n"
 "POT-Creation-Date: 2009-11-16 14:57+0100\n"
-"PO-Revision-Date: 2007-12-28 12:14+0100\n"
-"Last-Translator: Thijs Kinkhorst <thijs@debian.org>\n"
-"Language-Team: dutch <debian-l10n-dutch@lists.debian.org>\n"
+"PO-Revision-Date: 2015-01-16 15:22+0200\n"
+"Last-Translator: Dieter Adriaenssens <ruleant@users.sourceforge.net>\n"
+"Language-Team: Dutch "
+"<https://hosted.weblate.org/projects/phpmyadmin/debian/nl/>\n"
 "Language: nl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 2.2-dev\n"
 
 #. Type: multiselect
 #. Description
@@ -36,7 +39,9 @@ msgstr "Automatisch te configureren webserver:"
 msgid ""
 "Please choose the web server that should be automatically configured to run "
 "phpMyAdmin."
-msgstr "Welke webserver wilt u automatisch voor phpMyAdmin laten configureren?"
+msgstr ""
+"Gelieve een webserver op te geven die automatische ingesteld moet worden om "
+"phpMyAdmin aan te bieden."
 
 #. Type: string
 #. Description

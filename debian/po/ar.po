@@ -92,7 +92,7 @@ msgid ""
 "stored in /etc/phpmyadmin/htpasswd.setup."
 msgstr ""
 "يمكنك إدارة أسماء المستخدمين وكلمات المرور باستخدام الأمر 'htpasswd' ويتم "
-"حفظها في الملف etc/phpmyadmin/htpasswd.setup/."
+"حفظها في الملف /etc/phpmyadmin/htpasswd.setup."
 
 #. Type: password
 #. Description

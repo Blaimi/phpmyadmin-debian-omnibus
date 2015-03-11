@@ -8,20 +8,22 @@ msgstr ""
 "Project-Id-Version: phpmyadmin_2.5.5-pl1-1_templates\n"
 "Report-Msgid-Bugs-To: phpmyadmin@packages.debian.org\n"
 "POT-Creation-Date: 2009-11-16 14:57+0100\n"
-"PO-Revision-Date: 2004-01-31 19:57GMT\n"
-"Last-Translator: Aleix Badia i Bosch <abadia@ica.es>\n"
-"Language-Team: Debian L10n Catalan <debian-l10n-catalan@lists.debian.org>\n"
+"PO-Revision-Date: 2015-03-11 16:10+0200\n"
+"Last-Translator: Xavier Navarro <xvnavarro@gmail.com>\n"
+"Language-Team: Catalan "
+"<https://hosted.weblate.org/projects/phpmyadmin/debian/ca/>\n"
 "Language: ca\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 2.3-dev\n"
 
 #. Type: multiselect
 #. Description
 #: ../templates:2001
-#, fuzzy
 msgid "Web server to reconfigure automatically:"
-msgstr "Quin servidor de web voldríeu reconfigurar automàticament?"
+msgstr "Servidor web que vols reconfigurar automàticament:"
 
 #. Type: multiselect
 #. Description
@@ -30,12 +32,14 @@ msgid ""
 "Please choose the web server that should be automatically configured to run "
 "phpMyAdmin."
 msgstr ""
+"Si us plau, tria el servidor web que s'hauria de configurar automàticament "
+"per a executar phpMyAdmin."
 
 #. Type: string
 #. Description
 #: ../templates:3001
 msgid "Username for web-based setup system:"
-msgstr ""
+msgstr "Nom d'usuari pel sistema de configuració basat en web:"
 
 #. Type: string
 #. Description
@@ -46,6 +50,8 @@ msgid ""
 "The setup system for phpMyAdmin may be used, after installation, from http://"
 "localhost/phpmyadmin/setup/index.php."
 msgstr ""
+"Es pot usar el sistema de configuració per a phpMyAdmin, després de "
+"l'instal.lació, des de http://localhost/phpmyadmin/setup/index.php."
 
 #. Type: string
 #. Description
@@ -55,6 +61,8 @@ msgstr ""
 msgid ""
 "Access to this system requires identification with a username and a password."
 msgstr ""
+"Per a accedir a aquest sistema es necessita un nom d'usuari i una "
+"contrasenya."
 
 #. Type: string
 #. Description
@@ -62,12 +70,14 @@ msgstr ""
 msgid ""
 "If you leave this field empty, the default username ('admin') will be used."
 msgstr ""
+"Si deixes aquiest camp en blanc, es farà servir el nom d'usuari per defecte "
+"('admin')."
 
 #. Type: password
 #. Description
 #: ../templates:4001
 msgid "Password for web-based setup system:"
-msgstr ""
+msgstr "Contrasenya per al sistema de configuració basat en web:"
 
 #. Type: password
 #. Description
@@ -76,6 +86,8 @@ msgid ""
 "Usernames and passwords may be managed with the `htpasswd' command and are "
 "stored in /etc/phpmyadmin/htpasswd.setup."
 msgstr ""
+"Es poden gestionar els noms d'usuari i contrasenyes amb l'ordre 'htpasswd' i "
+"es desaràn a l'arxiu /etc/phpmyadmin/htpasswd.setup."
 
 #. Type: password
 #. Description
@@ -84,6 +96,8 @@ msgid ""
 "If you leave this field empty, access to the web-based setup will be "
 "disabled."
 msgstr ""
+"Si deixes aquest camp en blanc, es desactivarà l'accés al sistema de "
+"configuració basat en web."
 
 #~ msgid ""
 #~ "phpMyAdmin supports any web server that PHP does, but this automatic "

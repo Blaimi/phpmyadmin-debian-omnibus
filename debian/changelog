@@ -5,6 +5,7 @@ phpmyadmin (4:4.4.4-1) UNRELEASED; urgency=medium
   * Add Estonian debconf translation.
   * Add Turkish debconf translation.
   * Simplify debian/rules.
+  * Fix typo in documentation symlink.
 
  -- Michal Čihař <nijel@debian.org>  Tue, 28 Apr 2015 09:52:04 +0200
 

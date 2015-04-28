@@ -1,4 +1,4 @@
-phpmyadmin (4:4.4.4-1) UNRELEASED; urgency=medium
+phpmyadmin (4:4.4.4-1) unstable; urgency=medium
 
   * New upstream release.
     - Remove patches applied upstream.
@@ -7,7 +7,7 @@ phpmyadmin (4:4.4.4-1) UNRELEASED; urgency=medium
   * Simplify debian/rules.
   * Fix typo in documentation symlink.
 
- -- Michal Čihař <nijel@debian.org>  Tue, 28 Apr 2015 09:52:04 +0200
+ -- Michal Čihař <nijel@debian.org>  Tue, 28 Apr 2015 10:31:57 +0200
 
 phpmyadmin (4:4.2.12-2) unstable; urgency=high
 

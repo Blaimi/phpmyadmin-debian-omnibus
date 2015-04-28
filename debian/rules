@@ -31,6 +31,4 @@ override_dh_install:
 
 	# Remove sources from binary package
 	rm -r debian/phpmyadmin/usr/share/phpmyadmin/js/jquery/src
-
-override_dh_installchangelogs:
-	dh_installchangelogs ChangeLog
+	rm -r debian/phpmyadmin/usr/share/phpmyadmin/js/openlayers/src

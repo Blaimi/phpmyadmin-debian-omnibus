@@ -40,7 +40,7 @@ if (isset($ajax_reload) && $ajax_reload['reload'] === true) {
 /**
  * Defines the url to return to in case of error in a sql statement
  */
-// Security checkings
+// Security checks
 if (! empty($goto)) {
     $is_gotofile     = preg_replace('@^([^?]+).*$@s', '\\1', $goto);
     if (! @file_exists('' . $is_gotofile)) {
@@ -59,8 +59,9 @@ if (! empty($goto)) {
 
 if (! isset($err_url)) {
     $err_url = (! empty($back) ? $back : $goto)
-        . '?' . PMA_URL_getCommon($db)
-        . ((strpos(' ' . $goto, 'db_') != 1 && strlen($table))
+        . '?' . PMA_URL_getCommon(array('db' => $GLOBALS['db']))
+        . ((/*overload*/mb_strpos(' ' . $goto, 'db_') != 1
+            && /*overload*/mb_strlen($table))
             ? '&amp;table=' . urlencode($table)
             : ''
         );
@@ -110,7 +111,9 @@ if (isset($_REQUEST['set_col_prefs']) && $_REQUEST['set_col_prefs'] == true) {
 
 // Default to browse if no query set and we have table
 // (needed for browsing from DefaultTabTable)
-if (empty($sql_query) && strlen($table) && strlen($db)) {
+$tableLength = /*overload*/mb_strlen($table);
+$dbLength = /*overload*/mb_strlen($db);
+if (empty($sql_query) && $tableLength && $dbLength) {
     $sql_query = PMA_getDefaultSqlQueryForBrowse($db, $table);
 
     // set $goto to what will be displayed if query returns 0 rows
@@ -139,7 +142,7 @@ if (PMA_hasNoRightsToDropDatabase(
     PMA_Util::mysqlDie(
         __('"DROP DATABASE" statements are disabled.'),
         '',
-        '',
+        false,
         $err_url
     );
 } // end if
@@ -185,7 +188,6 @@ PMA_executeQueryAndSendQueryResponse(
     isset($extra_data) ? $extra_data : null,
     $is_affected,
     isset($message_to_show) ? $message_to_show : null,
-    isset($disp_mode) ? $disp_mode : null,
     isset($message) ? $message : null,
     isset($sql_data) ? $sql_data : null,
     $goto,

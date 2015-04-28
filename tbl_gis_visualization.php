@@ -51,7 +51,7 @@ if (! isset($visualizationSettings['labelColumn']) && isset($labelCandidates[0])
     $visualizationSettings['labelColumn'] = '';
 }
 
-// If spatial column is not set, use first geometric colum as spatial column
+// If spatial column is not set, use first geometric column as spatial column
 if (! isset($visualizationSettings['spatialColumn'])) {
     $visualizationSettings['spatialColumn'] = $spatialCandidates[0];
 }
@@ -67,11 +67,7 @@ while ($row = $GLOBALS['dbi']->fetchAssoc($modified_result)) {
 
 if (isset($_REQUEST['saveToFile'])) {
     $response->disable();
-    $file_name = $_REQUEST['fileName'];
-    if ($file_name == '') {
-        $file_name = $visualizationSettings['spatialColumn'];
-    }
-
+    $file_name = $visualizationSettings['spatialColumn'];
     $save_format = $_REQUEST['fileFormat'];
     PMA_GIS_saveToFile($data, $visualizationSettings, $save_format, $file_name);
     exit();

@@ -6,8 +6,8 @@ Forwarded: not-needed
 --- a/doc/setup.rst
 +++ b/doc/setup.rst
 @@ -165,22 +165,12 @@
- Instead of manually editing :file:`config.inc.php`, you can use the `Setup
- Script <setup/>`_. First you must manually create a folder ``config``
+ Instead of manually editing :file:`config.inc.php`, you can use phpMyAdmin's 
+ setup feature. First you must manually create a folder ``config``
  in the phpMyAdmin directory. This is a security measure. On a
 -Linux/Unix system you can use the following commands:
 +Debian system you can use the following commands:

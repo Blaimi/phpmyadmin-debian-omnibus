@@ -12,17 +12,19 @@ phpmyadmin source: source-contains-prebuilt-javascript-object doc/html/_static/u
 phpmyadmin source: source-is-missing doc/html/_static/underscore.js
 
 # Source include in js/openlayers/src/
+phpmyadmin source-contains-prebuilt-javascript-object js/openlayers/OpenLayers.js
+# Source include in js/openlayers/src/
 phpmyadmin source: source-is-missing js/openlayers/OpenLayers.js
 
 # Source included in js/jquery/src/
 phpmyadmin source: source-contains-prebuilt-javascript-object js/jquery/jquery-1.8.3.min.js
 # Source included in js/jquery/src/
-phpmyadmin source: source-is-missing js/jquery/jquery-1.8.3.min.js
+phpmyadmin source: source-is-missing js/jquery/jquery-1.11.1.min.js
 
 # Source included in js/jquery/src/
 phpmyadmin source: source-contains-prebuilt-javascript-object js/jquery/jquery-ui-1.9.2.custom.min.js
 # Source included in js/jquery/src/
-phpmyadmin source: source-is-missing js/jquery/jquery-ui-1.9.2.custom.min.js
+phpmyadmin source: source-is-missing js/jquery/jquery-ui-1.11.2.min.js
 
 # Not really a composer package
 phpmyadmin source: composer-package-without-pkg-php-tools-builddep

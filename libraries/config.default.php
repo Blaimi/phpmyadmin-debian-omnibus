@@ -54,7 +54,15 @@ $cfg['PmaNoRelation_DisableWarning'] = false;
 $cfg['SuhosinDisableWarning'] = false;
 
 /**
- * Disable the default warning that is displayed if a diffrence between
+ * Disable the default warning that is displayed if session.gc_maxlifetime
+ * is less than `LoginCookieValidity`
+ *
+ * @global boolean $cfg['LoginCookieValidityDisableWarning']
+ */
+$cfg['LoginCookieValidityDisableWarning'] = false;
+
+/**
+ * Disable the default warning that is displayed if a difference between
  * the MySQL library and server is detected.
  *
  * @global boolean $cfg['['ServerLibraryDifference_DisableWarning']']
@@ -84,9 +92,9 @@ $cfg['TranslationWarningThreshold'] = 80;
 $cfg['AllowThirdPartyFraming'] = false;
 
 /**
- * The 'cookie' auth_type uses blowfish algorithm to encrypt the password. If
+ * The 'cookie' auth_type uses AES algorithm to encrypt the password. If
  * at least one server configuration uses 'cookie' auth_type, enter here a
- * pass phrase that will be used by blowfish. The maximum length seems to be 46
+ * pass phrase that will be used by AES. The maximum length seems to be 46
  * characters.
  *
  * @global string $cfg['blowfish_secret']
@@ -318,7 +326,7 @@ $cfg['Servers'][$i]['verbose'] = '';
 
 /**
  * Database used for Relation, Bookmark and PDF Features
- * (see examples/create_tables.sql)
+ * (see sql/create_tables.sql)
  *   - leave blank for no support
  *     SUGGESTED: 'phpmyadmin'
  *
@@ -354,7 +362,7 @@ $cfg['Servers'][$i]['relation'] = '';
 $cfg['Servers'][$i]['table_info'] = '';
 
 /**
- * table to describe the tables position for the PDF schema
+ * table to describe the tables position for the designer and PDF schema
  *   - leave blank for no PDF schema support
  *     SUGGESTED: 'pma__table_coords'
  *
@@ -388,15 +396,6 @@ $cfg['Servers'][$i]['column_info'] = '';
  * @global string $cfg['Servers'][$i]['history']
  */
 $cfg['Servers'][$i]['history'] = '';
-
-/**
- * table to store the coordinates for Designer
- *   - leave blank for no Designer feature
- *     SUGGESTED: 'pma__designer_coords'
- *
- * @global string $cfg['Servers'][$i]['designer_coords']
- */
-$cfg['Servers'][$i]['designer_coords'] = '';
 
 /**
  * table to store recently used tables
@@ -474,6 +473,14 @@ $cfg['Servers'][$i]['navigationhiding'] = '';
 $cfg['Servers'][$i]['savedsearches'] = '';
 
 /**
+ * table to store central list of columns per database
+ *   - leave blank to disable central list of columns feature
+ *     SUGGESTED: 'pma__central_columns'
+ *
+ * @global string $cfg['Servers'][$i]['central_columns']
+ */
+$cfg['Servers'][$i]['central_columns'] = '';
+/**
  * Maximum number of records saved in $cfg['Servers'][$i]['table_uiprefs'] table.
  *
  * In case where tables in databases is modified (e.g. dropped or renamed),
@@ -485,6 +492,14 @@ $cfg['Servers'][$i]['savedsearches'] = '';
  * @global integer $cfg['Servers'][$i]['userconfig'] = '';
  */
 $cfg['Servers'][$i]['MaxTableUiprefs'] = 100;
+
+/**
+ * Sets the time zone used by phpMyAdmin. Possible values are explained at
+ * http://dev.mysql.com/doc/refman/5.7/en/time-zone-support.html
+ *
+ * @global string $cfg['Servers'][$i]['SessionTimeZone'] = ''
+ */
+$cfg['Servers'][$i]['SessionTimeZone'] = '';
 
 /**
  * whether to allow root login
@@ -513,6 +528,15 @@ $cfg['Servers'][$i]['AllowDeny']['order'] = '';
  * @global array $cfg['Servers'][$i]['AllowDeny']['rules']
  */
 $cfg['Servers'][$i]['AllowDeny']['rules'] = array();
+
+/**
+ * Disable use of INFORMATION_SCHEMA. Is always 'false' for Drizzle.
+ *
+ * @see https://sourceforge.net/p/phpmyadmin/bugs/2606/
+ * @see http://bugs.mysql.com/19588
+ * @global boolean $cfg['Servers'][$i]['DisableIS']
+ */
+$cfg['Servers'][$i]['DisableIS'] = false;
 
 /**
  * Whether the tracking mechanism creates
@@ -561,23 +585,6 @@ $cfg['Servers'][$i]['tracking_add_drop_table'] = true;
  */
 
 $cfg['Servers'][$i]['tracking_add_drop_database'] = true;
-
-/**
- * Enables caching of TABLE STATUS outputs for specific databases on this server
- * (in some cases TABLE STATUS can be very slow, so you may want to cache it).
- * APC is used (if the PHP extension is available, if not, this setting is ignored
- * silently). You have to provide StatusCacheLifetime.
- *
- * @global array $cfg['Servers'][$i]['StatusCacheDatabases']
- */
-$cfg['Servers'][$i]['StatusCacheDatabases'] = array();
-
-/**
- * Lifetime in seconds of the TABLE STATUS cache if StatusCacheDatabases is used
- *
- * @global integer $cfg['Servers'][$i]['StatusCacheLifetime']
- */
-$cfg['Servers'][$i]['StatusCacheLifetime'] = 0;
 
 /**
  * Default server (0 = no default server)
@@ -802,6 +809,14 @@ $cfg['IgnoreMultiSubmitErrors'] = false;
 $cfg['AllowArbitraryServer'] = false;
 
 /**
+ * restrict by IP (with regular expression) the MySQL servers the user can enter
+ * when $cfg['AllowArbitraryServer'] = true
+ *
+ * @global string $cfg['ArbitraryServerRegexp']
+ */
+$cfg['ArbitraryServerRegexp'] = '';
+
+/**
  * if reCaptcha is enabled it needs public key to connect with the service
  *
  * @global string $cfg['CaptchaLoginPublicKey']
@@ -816,35 +831,22 @@ $cfg['CaptchaLoginPublicKey'] = '';
 $cfg['CaptchaLoginPrivateKey'] = '';
 
 /*******************************************************************************
- * Error handler configuration
- *
- * this configures phpMyAdmin's own error handler, it is used to avoid information
- * disclosure, gather errors for logging, reporting and displaying
- *
- * @global array $cfg['Error_Handler']
- */
-$cfg['Error_Handler'] = array();
-
-/**
- * whether to display errors or not
- *
- * this does not affect errors of type  E_USER_*
- *
- * @global boolean $cfg['Error_Handler']['display']
- */
-$cfg['Error_Handler']['display'] = false;
-
-
-/*******************************************************************************
  * Navigation panel setup
  */
+
+/**
+ * In the navigation panel, replaces the database tree with a selector
+ *
+ * @global boolean $cfg['ShowDatabasesNavigationAsTree']
+ */
+$cfg['ShowDatabasesNavigationAsTree'] = true;
 
 /**
  * maximum number of first level databases displayed in navigation panel
  *
  * @global integer $cfg['FirstLevelNavigationItems']
  */
-$cfg['FirstLevelNavigationItems'] = 250;
+$cfg['FirstLevelNavigationItems'] = 100;
 
 /**
  * maximum number of items displayed in navigation panel
@@ -882,6 +884,13 @@ $cfg['NavigationTreeTableSeparator'] = '__';
  * @global integer $cfg['NavigationTreeTableLevel']
  */
 $cfg['NavigationTreeTableLevel'] = 1;
+
+/**
+ * link with main panel by highlighting the current db/table
+ *
+ * @global boolean $cfg['NavigationLinkWithMainPanel']
+ */
+$cfg['NavigationLinkWithMainPanel'] = true;
 
 /**
  * display logo at top of navigation panel
@@ -964,11 +973,26 @@ $cfg['NavigationTreeDisplayDbFilterMinimum'] = 30;
 $cfg['NavigationTreeDefaultTabTable'] = 'tbl_structure.php';
 
 /**
+ * target of the navigation panel quick second access icon
+ *
+ * Possible values:
+ * 'tbl_structure.php' = fields list
+ * 'tbl_sql.php' = SQL form
+ * 'tbl_select.php' = search page
+ * 'tbl_change.php' = insert row page
+ * 'sql.php' = browse page
+ * '' = no link
+ *
+ * @global string $cfg['NavigationTreeDefaultTabTable2']
+ */
+$cfg['NavigationTreeDefaultTabTable2'] = '';
+
+/**
  * Disables the possibility of database expansion
  *
- * @global boolean $cfg['DisableDatabaseExpansion']
+ * @global boolean $cfg['NavigationTreeEnableExpansion']
  */
-$cfg['NavigationTreeDisableDatabaseExpansion'] = false;
+$cfg['NavigationTreeEnableExpansion'] = true;
 
 /*******************************************************************************
  * In the main panel, at startup...
@@ -1083,13 +1107,6 @@ $cfg['MaxRows'] = 25;
 $cfg['Order'] = 'SMART';
 
 /**
- * default for 'Show binary contents as HEX'
- *
- * @global string $cfg['DisplayBinaryAsHex']
- */
-$cfg['DisplayBinaryAsHex'] = true;
-
-/**
  * grid editing: save edited cell(s) in browse-mode at once
  *
  * @global boolean $cfg['SaveCellsAtOnce']
@@ -1108,6 +1125,19 @@ $cfg['SaveCellsAtOnce'] = false;
  * @global string $cfg['GridEditing']
  */
 $cfg['GridEditing'] ='double-click';
+
+/**
+ * Options > Relational display
+ *
+ * Possible values:
+ * 'K' for key value
+ * 'D' for display column
+ *
+ * @global string $cfg['RelationalDisplay']
+ *
+ */
+
+$cfg['RelationalDisplay'] = 'K';
 
 
 /*******************************************************************************
@@ -2101,6 +2131,13 @@ $cfg['Import']['sql_no_auto_value_on_zero'] = true;
 /**
  *
  *
+ * @global string $cfg['Import']['sql_read_as_multibytes']
+ */
+$cfg['Import']['sql_read_as_multibytes'] = false;
+
+/**
+ *
+ *
  * @global boolean $cfg['Import']['csv_replace']
  */
 $cfg['Import']['csv_replace'] = false;
@@ -2260,6 +2297,144 @@ $cfg['Import']['xls_empty_rows'] = true;
 $cfg['Import']['xlsx_col_names'] = false;
 
 /*******************************************************************************
+ * Schema export defaults
+*/
+$cfg['Schema'] = array();
+
+/**
+ * pdf/eps/dia/svg
+ *
+ * @global string $cfg['Schema']['format']
+*/
+$cfg['Schema']['format'] = 'pdf';
+
+/**
+ *
+ *
+ * @global string $cfg['Schema']['pdf_show_color']
+ */
+$cfg['Schema']['pdf_show_color'] = true;
+
+/**
+ *
+ *
+ * @global string $cfg['Schema']['pdf_show_keys']
+ */
+$cfg['Schema']['pdf_show_keys'] = false;
+
+/**
+ *
+ *
+ * @global string $cfg['Schema']['pdf_all_tables_same_width']
+ */
+$cfg['Schema']['pdf_all_tables_same_width'] = false;
+
+/**
+ * L/P
+ *
+ * @global string $cfg['Schema']['pdf_orientation']
+ */
+$cfg['Schema']['pdf_orientation'] = 'L';
+
+/**
+ *
+ *
+ * @global string $cfg['Schema']['pdf_paper']
+ */
+$cfg['Schema']['pdf_paper'] = 'A4';
+
+/**
+ *
+ *
+ * @global string $cfg['Schema']['pdf_show_grid']
+ */
+$cfg['Schema']['pdf_show_grid'] = false;
+
+/**
+ *
+ *
+ * @global string $cfg['Schema']['pdf_with_doc']
+ */
+$cfg['Schema']['pdf_with_doc'] = true;
+
+/**
+ *
+ *
+ * @global string $cfg['Schema']['dia_show_color']
+ */
+$cfg['Schema']['dia_show_color'] = true;
+
+/**
+ *
+ *
+ * @global string $cfg['Schema']['dia_show_keys']
+ */
+$cfg['Schema']['dia_show_keys'] = false;
+
+/**
+ * L/P
+ *
+ * @global string $cfg['Schema']['dia_orientation']
+ */
+$cfg['Schema']['dia_orientation'] = 'L';
+
+/**
+ *
+ *
+ * @global string $cfg['Schema']['dia_paper']
+ */
+$cfg['Schema']['dia_paper'] = 'A4';
+
+/**
+ *
+ *
+ * @global string $cfg['Schema']['eps_show_color']
+ */
+$cfg['Schema']['eps_show_color'] = true;
+
+/**
+ *
+ *
+ * @global string $cfg['Schema']['eps_show_keys']
+ */
+$cfg['Schema']['eps_show_keys'] = false;
+
+/**
+ *
+ *
+ * @global string $cfg['Schema']['eps_all_tables_same_width']
+ */
+$cfg['Schema']['eps_all_tables_same_width'] = false;
+
+/**
+ * L/P
+ *
+ * @global string $cfg['Schema']['eps_orientation']
+ */
+$cfg['Schema']['eps_orientation'] = 'L';
+
+/**
+ *
+ *
+ * @global string $cfg['Schema']['svg_show_color']
+ */
+$cfg['Schema']['svg_show_color'] = true;
+
+/**
+ *
+ *
+ * @global string $cfg['Schema']['svg_show_keys']
+ */
+$cfg['Schema']['svg_show_keys'] = false;
+
+/**
+ *
+ *
+ * @global string $cfg['Schema']['svg_all_tables_same_width']
+ */
+$cfg['Schema']['svg_all_tables_same_width'] = false;
+
+/*******************************************************************************
  * PDF options
  */
 
@@ -2294,12 +2469,16 @@ $cfg['DefaultLang'] = 'en';
  *
  * @global string $cfg['DefaultConnectionCollation']
  */
-$cfg['DefaultConnectionCollation'] = 'utf8_general_ci';
+$cfg['DefaultConnectionCollation'] = 'utf8_unicode_ci';
 
 /**
- * Force: always use this language
- * $cfg['Lang'] = 'en';
+ * Force: always use this language, e.g. 'en'
  *
+ * @global string $cfg['Lang']
+ */
+$cfg['Lang'] = '';
+
+/**
  * Regular expression to limit listed languages, e.g. '^(cs|en)' for Czech and
  * English only
  *
@@ -2468,11 +2647,10 @@ $cfg['LimitChars'] = 50;
 $cfg['RowActionLinks'] = 'left';
 
 /**
- * default display direction (horizontal|vertical|horizontalflipped)
- *
- * @global string $cfg['DefaultDisplay']
+ * Default sort order by primary key.
+ * @global string $cfg['TablePrimaryKeyOrder']
  */
-$cfg['DefaultDisplay'] = 'horizontal';
+$cfg['TablePrimaryKeyOrder'] = 'NONE';
 
 /**
  * remember the last way a table sorted
@@ -2480,14 +2658,6 @@ $cfg['DefaultDisplay'] = 'horizontal';
  * @global string $cfg['RememberSorting']
  */
 $cfg['RememberSorting'] = true;
-
-/**
- * table-header rotation via faking or CSS? (css|fake|auto)
- * NOTE: CSS only works in IE browsers!
- *
- * @global string $cfg['HeaderFlipType']
- */
-$cfg['HeaderFlipType'] = 'auto';
 
 /**
  * shows stored relation-comments in 'browse' mode.
@@ -2504,38 +2674,11 @@ $cfg['ShowBrowseComments'] = true;
 $cfg['ShowPropertyComments']= true;
 
 /**
- * shows table display direction.
- */
-$cfg['ShowDisplayDirection'] = false;
-
-/**
  * repeat header names every X cells? (0 = deactivate)
  *
  * @global integer $cfg['RepeatCells']
  */
 $cfg['RepeatCells'] = 100;
-
-/**
- * Set to true if Edit link should open the query to edit in the query window
- * and to false if we should edit in the right panel
- *
- * @global boolean $cfg['EditInWindow']
- */
-$cfg['EditInWindow'] = true;
-
-/**
- * Width of Query window
- *
- * @global integer $cfg['QueryWindowWidth']
- */
-$cfg['QueryWindowWidth'] = 550;
-
-/**
- * Height of Query window
- *
- * @global integer $cfg['QueryWindowHeight']
- */
-$cfg['QueryWindowHeight'] = 310;
 
 /**
  * Set to true if you want DB-based query history.If false, this utilizes
@@ -2544,14 +2687,6 @@ $cfg['QueryWindowHeight'] = 310;
  * @global boolean $cfg['QueryHistoryDB']
  */
 $cfg['QueryHistoryDB'] = false;
-
-/**
- * which tab to display in the querywindow on startup
- * (sql|files|history|full)
- *
- * @global string $cfg['QueryWindowDefTab']
- */
-$cfg['QueryWindowDefTab'] = 'sql';
 
 /**
  * When using DB-based query history, how many entries should be kept?
@@ -2823,6 +2958,12 @@ $cfg['DisableMultiTableMaintenance'] = false;
  */
 $cfg['SendErrorReports'] = 'ask';
 
+/**
+ * Zero Configuration mode.
+ *
+ * @global boolean $cfg['ZeroConf']
+ */
+$cfg['ZeroConf'] = true;
 
 /*******************************************************************************
  * Developers ONLY!

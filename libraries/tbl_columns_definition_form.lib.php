@@ -20,8 +20,9 @@ if (!defined('PHPMYADMIN')) {
  *
  * @return array $form_params form parameters
  */
-function PMA_getFormsParameters($db, $table, $action, $num_fields, $selected)
-{
+function PMA_getFormsParameters(
+    $db, $table, $action, $num_fields, $selected
+) {
     $form_params = array(
         'db' => $db
     );
@@ -65,22 +66,41 @@ function PMA_getFormsParameters($db, $table, $action, $num_fields, $selected)
  */
 function PMA_getHtmlForTableConfigurations()
 {
-    $html = '<table>'
-        . '<tr class="vtop">'
+    $html  = '<table>';
+    $html .= '<tr class="vtop">'
         . '<th>' . __('Table comments:') . '</th>'
         . '<td width="25">&nbsp;</td>'
-        . '<th>' . __('Storage Engine:')
+        . '<th>' . __('Collation:') . '</th>'
+        . '<td width="25">&nbsp;</td>'
+        . '<th>'
+        . __('Storage Engine:')
         . PMA_Util::showMySQLDocu('Storage_engines')
         . '</th>'
         . '<td width="25">&nbsp;</td>'
-        . '<th>' . __('Collation:') . '</th>'
-        . '</tr>'
-        . '<tr><td><input type="text" name="comment" size="40" maxlength="80"'
+        . '<th>'
+        . __('Connection:')
+        . PMA_Util::showMySQLDocu('federated-create-connection')
+        . '</th>'
+        . '</tr>';
+
+    $html .= '<tr>'
+        . '<td><input type="text" name="comment" size="40" maxlength="80"'
         . ' value="'
         . (isset($_REQUEST['comment'])
         ? htmlspecialchars($_REQUEST['comment'])
         : '')
         . '" class="textfield" />'
+        . '</td>'
+        . '<td width="25">&nbsp;</td>'
+        . '<td>'
+        . PMA_generateCharsetDropdownBox(
+            PMA_CSDROPDOWN_COLLATION, 'tbl_collation', null,
+            (isset($_REQUEST['tbl_collation'])
+                ? $_REQUEST['tbl_collation']
+                : null
+            ),
+            false
+        )
         . '</td>'
         . '<td width="25">&nbsp;</td>'
         . '<td>'
@@ -93,15 +113,12 @@ function PMA_getHtmlForTableConfigurations()
         )
         . '</td>'
         . '<td width="25">&nbsp;</td>'
-        . '<td>'
-        . PMA_generateCharsetDropdownBox(
-            PMA_CSDROPDOWN_COLLATION, 'tbl_collation', null,
-            (isset($_REQUEST['tbl_collation'])
-                ? $_REQUEST['tbl_collation']
-                : null
-            ),
-            false, 3
-        )
+        . '<td><input type="text" name="connection" size="40"'
+        . ' value="' . (isset($_REQUEST['connection'])
+            ? htmlspecialchars($_REQUEST['connection'])
+            : '') . '"'
+        . ' placeholder="scheme://user_name[:password]@host_name[:port_num]/db_name/tbl_name"'
+        . ' class="textfield" required="required" />'
         . '</td>'
         . '</tr>';
 
@@ -138,6 +155,8 @@ function PMA_getHtmlForTableConfigurations()
 function PMA_getHtmlForFooter()
 {
     $html = '<fieldset class="tblFooters">'
+        . '<input type="button" class="preview_sql" value="'
+        . __('Preview SQL') . '" />'
         . '<input type="submit" name="do_save_data" value="' . __('Save') . '" />'
         . '</fieldset>'
         . '<div id="properties_message"></div>'
@@ -170,13 +189,8 @@ function PMA_getHtmlForTableNameAndNoOfColumns()
         . '()" />'
     );
 
-    $html .= '<input type="submit" name="submit_num_fields"'
-        . 'value="' . __('Go') . '"'
-        . ' onclick="return'
-        . ' checkFormElementInRange(this.form, \'added_fields\', \''
-        . str_replace(
-            '\'', '\\\'', __('You have to add at least one column.')
-        ) . '\', 1)" />';
+    $html .= '<input type="button" name="submit_num_fields"'
+        . 'value="' . __('Go') . '" />';
 
     $html .= '</td>'
         . '</tr>'
@@ -224,6 +238,30 @@ function PMA_getHtmlForTableFieldDefinitions($header_cells, $content_cells)
 }
 
 /**
+ * Function to get html for the hidden fields containing index creation info 
+ *
+ * @param string $index_type the index type
+ *
+ * @return string
+ */
+function PMA_getHtmlForHiddenIndexInfo($index_type)
+{
+    $html = '<input type="hidden" name="' . $index_type . '" value="';
+    if (! empty($_REQUEST[$index_type])) {
+        // happens when an index has been set on a column, 
+        // and a column is added to the table creation dialog
+        //
+        // this contains a JSON-encoded string
+        $html .= htmlspecialchars($_REQUEST[$index_type]);
+    } else {
+        $html .= '[]';
+    }
+    $html .= '">';
+
+    return $html;
+}    
+
+/**
  * Function to get html for the create table or field add view
  *
  * @param string $action        action
@@ -238,8 +276,13 @@ function PMA_getHtmlForTableCreateOrAddField($action, $form_params, $content_cel
 ) {
     $html = '<form method="post" action="' . $action  . '" class="'
         . ($action == 'tbl_create.php' ? 'create_table' : 'append_fields')
-        . '_form ajax">';
+        . '_form ajax lock-page">';
     $html .= PMA_URL_getHiddenInputs($form_params);
+
+    $html .= PMA_getHtmlForHiddenIndexInfo('primary_indexes');
+    $html .= PMA_getHtmlForHiddenIndexInfo('unique_indexes');
+    $html .= PMA_getHtmlForHiddenIndexInfo('indexes');
+    $html .= PMA_getHtmlForHiddenIndexInfo('fulltext_indexes');
 
     if ($action == 'tbl_create.php') {
         $html .= PMA_getHtmlForTableNameAndNoOfColumns();
@@ -261,11 +304,11 @@ function PMA_getHtmlForTableCreateOrAddField($action, $form_params, $content_cel
 /**
  * Function to get header cells
  *
- * @param bool   $is_backup  whether backup or not
- * @param array  $columnMeta column meta data
- * @param bool   $mimework   whether mimework or not
- * @param string $db         current database
- * @param string $table      current table
+ * @param bool       $is_backup  whether backup or not
+ * @param array|null $columnMeta column meta data
+ * @param bool       $mimework   whether mimework or not
+ * @param string     $db         current database
+ * @param string     $table      current table
  *
  * @return array
  */
@@ -312,24 +355,31 @@ function PMA_getHeaderCells($is_backup, $columnMeta, $mimework, $db, $table)
 
     if ($mimework && $GLOBALS['cfg']['BrowseMIME']) {
         $header_cells[] = __('MIME type');
-        $header_cells[] = '<a href="transformation_overview.php?'
-            . PMA_URL_getCommon($db, $table)
-            . '" title="' . __(
+        $header_link = '<a href="transformation_overview.php'
+            . PMA_URL_getCommon()
+            . '#%s" title="' . __(
                 'List of available transformations and their options'
             )
-            . '" target="_blank">'
-            . __('Browser transformation')
-            . '</a>';
-        $header_cells[] = __('Transformation options')
-            . PMA_Util::showHint(
-                __(
-                    'Please enter the values for transformation options using this'
-                    . ' format: \'a\', 100, b,\'c\'…<br />If you ever need to put'
-                    . ' a backslash ("\") or a single quote ("\'") amongst those'
-                    . ' values, precede it with a backslash (for example \'\\\\xyz\''
-                    . ' or \'a\\\'b\').'
-                )
-            );
+            . '" target="_blank">%s</a>';
+        $transformations_hint = PMA_Util::showHint(
+            __(
+                'Please enter the values for transformation options using this'
+                . ' format: \'a\', 100, b,\'c\'…<br />If you ever need to put'
+                . ' a backslash ("\") or a single quote ("\'") amongst those'
+                . ' values, precede it with a backslash (for example \'\\\\xyz\''
+                . ' or \'a\\\'b\').'
+            )
+        );
+        $header_cells[] = sprintf(
+            $header_link, 'transformation', __('Browser display transformation')
+        );
+        $header_cells[] = __('Browser display transformation options')
+            . $transformations_hint;
+        $header_cells[] = sprintf(
+            $header_link, 'input_transformation', __('Input transformation')
+        );
+        $header_cells[] = __('Input transformation options')
+            . $transformations_hint;
     }
 
     return $header_cells;
@@ -554,15 +604,17 @@ function PMA_getColumnMetaForDefault($columnMeta, $isDefault)
 /**
  * Function to get html for the column name
  *
- * @param int   $columnNumber column number
- * @param int   $ci           cell index
- * @param int   $ci_offset    cell index offset
- * @param array $columnMeta   column meta
+ * @param int        $columnNumber column number
+ * @param int        $ci           cell index
+ * @param int        $ci_offset    cell index offset
+ * @param array|null $columnMeta   column meta
+ * @param array      $cfgRelation  configuration relation
  *
  * @return string
  */
-function PMA_getHtmlForColumnName($columnNumber, $ci, $ci_offset, $columnMeta)
-{
+function PMA_getHtmlForColumnName(
+    $columnNumber, $ci, $ci_offset, $columnMeta, $cfgRelation
+) {
     $title = '';
     if (isset($columnMeta['column_status'])) {
         if ($columnMeta['column_status']['isReferenced']) {
@@ -591,7 +643,20 @@ function PMA_getHtmlForColumnName($columnNumber, $ci, $ci_offset, $columnMeta)
         . (isset($columnMeta['Field'])
             ? htmlspecialchars($columnMeta['Field']) : '')
         . '"' . ' />';
-
+    if (isset($cfgRelation['central_columnswork'])
+        && $cfgRelation['central_columnswork']
+        && !(isset($columnMeta['column_status'])
+        && !$columnMeta['column_status']['isEditable'])
+    ) {
+        $html .=  '<p style="font-size:80%;margin:5px 2px" '
+            . 'id="central_columns_' . $columnNumber . '_'
+            . ($ci - $ci_offset)
+            . '">';
+        $html .= '<a data-maxrows="' . $GLOBALS['cfg']['MaxRows'] . '" '
+            . 'href="#" class="central_columns_dialog"> '
+            . __('Pick from Central Columns') . '</a>'
+            . '</p>';
+    }
     return $html;
 }
 
@@ -623,28 +688,31 @@ function PMA_getHtmlForColumnType($columnNumber, $ci, $ci_offset,
 /**
  * Function to get html for transformation option
  *
- * @param int   $columnNumber column number
- * @param int   $ci           cell index
- * @param int   $ci_offset    cell index offset
- * @param array $columnMeta   column meta
- * @param array $mime_map     mime map
+ * @param int        $columnNumber column number
+ * @param int        $ci           cell index
+ * @param int        $ci_offset    cell index offset
+ * @param array|null $columnMeta   column meta
+ * @param array      $mime_map     mime map
+ * @param string     $type_prefix  prefix for type of transformation
+ *                                 '' or 'input'
  *
  * @return string
  */
 function PMA_getHtmlForTransformationOption($columnNumber, $ci, $ci_offset,
-    $columnMeta, $mime_map
+    $columnMeta, $mime_map, $type_prefix
 ) {
+    $options_key = $type_prefix . 'transformation_options';
     $val = isset($columnMeta['Field'])
-            && isset($mime_map[$columnMeta['Field']]['transformation_options'])
+            && isset($mime_map[$columnMeta['Field']][$options_key])
                 ? htmlspecialchars(
                     $mime_map[$columnMeta['Field']]
-                    ['transformation_options']
+                    [$options_key]
                 )
                 : '';
 
     $html = '<input id="field_' . $columnNumber . '_'
                 . ($ci - $ci_offset) . '"' . ' type="text" '
-                . 'name="field_transformation_options[' . $columnNumber . ']"'
+                . 'name="field_' . $options_key . '[' . $columnNumber . ']"'
                 . ' size="16" class="textfield"'
                 . ' value="' . $val . '"'
                 . ' />';
@@ -672,7 +740,9 @@ function PMA_getHtmlForMimeType($columnNumber, $ci, $ci_offset,
             . '" size="1" name="field_mimetype[' . $columnNumber . ']">';
     $html .= '    <option value="">&nbsp;</option>';
 
-    if (is_array($available_mime['mimetype'])) {
+    if (isset($available_mime['mimetype'])
+        && is_array($available_mime['mimetype'])
+    ) {
         foreach ($available_mime['mimetype'] as $mimetype) {
             $checked = (isset($columnMeta['Field'])
                 && isset($mime_map[$columnMeta['Field']]['mimetype'])
@@ -692,42 +762,45 @@ function PMA_getHtmlForMimeType($columnNumber, $ci, $ci_offset,
 }
 
 /**
- * Function to get html for browser transformation
+ * Function to get html for transformations
  *
- * @param int   $columnNumber   column number
- * @param int   $ci             cell index
- * @param int   $ci_offset      cell index offset
- * @param array $available_mime available mime
- * @param array $columnMeta     column meta
- * @param array $mime_map       mime map
+ * @param int        $columnNumber   column number
+ * @param int        $ci             cell index
+ * @param int        $ci_offset      cell index offset
+ * @param array      $available_mime available mime
+ * @param array|null $columnMeta     column meta
+ * @param array      $mime_map       mime map
+ * @param string     $type_prefix    prefix for type of transformation
+ *                                   '' or 'input'
  *
  * @return string
  */
-function PMA_getHtmlForBrowserTransformation($columnNumber, $ci, $ci_offset,
-    $available_mime, $columnMeta, $mime_map
+function PMA_getHtmlForTransformation($columnNumber, $ci, $ci_offset,
+    $available_mime, $columnMeta, $mime_map, $type_prefix
 ) {
+    $type = $type_prefix . 'transformation';
     $html = '<select id="field_' . $columnNumber . '_'
-            . ($ci - $ci_offset) . '" size="1" name="field_transformation['
-            . $columnNumber . ']">';
+            . ($ci - $ci_offset) . '" size="1" name="field_' . $type
+            . '[' . $columnNumber . ']">';
     $html .= '    <option value="" title="' . __('None')
             . '"></option>';
-    if (is_array($available_mime['transformation'])) {
-        foreach ($available_mime['transformation'] as $mimekey => $transform) {
+    if (isset($available_mime[$type]) && is_array($available_mime[$type])) {
+        foreach ($available_mime[$type] as $mimekey => $transform) {
             $checked = isset($columnMeta['Field'])
-                && isset($mime_map[$columnMeta['Field']]['transformation'])
+                && isset($mime_map[$columnMeta['Field']][$type])
                 && preg_match(
                     '@' . preg_quote(
-                        $available_mime['transformation_file'][$mimekey]
+                        $available_mime[$type . '_file'][$mimekey]
                     ) . '3?@i',
-                    $mime_map[$columnMeta['Field']]['transformation']
+                    $mime_map[$columnMeta['Field']][$type]
                 )
                 ? 'selected '
                 : '';
             $tooltip = PMA_getTransformationDescription(
-                $available_mime['transformation_file'][$mimekey], false
+                $available_mime[$type . '_file'][$mimekey], false
             );
             $html .= '<option value="'
-                . $available_mime['transformation_file'][$mimekey] . '" '
+                . $available_mime[$type . '_file'][$mimekey] . '" '
                 . $checked . ' title="' . htmlspecialchars($tooltip) . '">'
                 . htmlspecialchars($transform) . '</option>';
         }
@@ -834,7 +907,7 @@ function PMA_getHtmlForColumnAutoIncrement($columnNumber, $ci, $ci_offset,
     $html = '<input name="field_extra[' . $columnNumber . ']"'
         . ' id="field_' . $columnNumber . '_' . ($ci - $ci_offset) . '"';
     if (isset($columnMeta['Extra'])
-        && strtolower($columnMeta['Extra']) == 'auto_increment'
+        && /*overload*/mb_strtolower($columnMeta['Extra']) == 'auto_increment'
     ) {
         $html .= ' checked="checked"';
     }
@@ -857,7 +930,8 @@ function PMA_getHtmlForColumnAutoIncrement($columnNumber, $ci, $ci_offset,
 function PMA_getHtmlForColumnIndexes($columnNumber, $ci, $ci_offset, $columnMeta)
 {
     $html = '<select name="field_key[' . $columnNumber . ']"'
-        . ' id="field_' . $columnNumber . '_' . ($ci - $ci_offset) . '">';
+        . ' id="field_' . $columnNumber . '_' . ($ci - $ci_offset)
+        . '" data-index="">';
     $html .= '<option value="none_' . $columnNumber . '">---</option>';
 
     $html .= PMA_getHtmlForIndexTypeOption(
@@ -893,13 +967,14 @@ function PMA_getHtmlForColumnIndexes($columnNumber, $ci, $ci_offset, $columnMeta
 
 function PMA_getHtmlForIndexTypeOption($columnNumber, $columnMeta, $type, $key)
 {
-    $html = '<option value="' . strtolower($type) . '_' . $columnNumber
-        . '" title="'
-        . __($type) . '"';
+    $typeToLower = /*overload*/mb_strtolower($type);
+    $typeToUpper = /*overload*/mb_strtoupper($type);
+    $html = '<option value="' . $typeToLower . '_' . $columnNumber
+        . '" title="' . __($type) . '"';
     if (isset($columnMeta['Key']) && $columnMeta['Key'] == $key) {
         $html .= ' selected="selected"';
     }
-    $html .= '>' . strtoupper($type) . '</option>';
+    $html .= '>' . $typeToUpper . '</option>';
 
     return $html;
 }
@@ -934,22 +1009,20 @@ function PMA_getHtmlForColumnNull($columnNumber, $ci, $ci_offset, $columnMeta)
 /**
  * Function to get html for column attribute
  *
- * @param int   $columnNumber                     column number
- * @param int   $ci                               cell index
- * @param int   $ci_offset                        cell index offset
- * @param array $extracted_columnspec             extracted column
- * @param array $columnMeta                       column meta
- * @param bool  $submit_attribute                 submit attribute
- * @param array $analyzed_sql                     analyzed sql
- * @param bool  $submit_default_current_timestamp submit default current time stamp
+ * @param int   $columnNumber         column number
+ * @param int   $ci                   cell index
+ * @param int   $ci_offset            cell index offset
+ * @param array $extracted_columnspec extracted column
+ * @param array $columnMeta           column meta
+ * @param bool  $submit_attribute     submit attribute
+ * @param array $analyzed_sql         analyzed sql
  *
  * @return string
  */
 function PMA_getHtmlForColumnAttribute($columnNumber, $ci, $ci_offset,
-    $extracted_columnspec, $columnMeta, $submit_attribute, $analyzed_sql,
-    $submit_default_current_timestamp
+    $extracted_columnspec, $columnMeta, $submit_attribute, $analyzed_sql
 ) {
-    $html = '<select style="font-size: 70%;"'
+    $html = '<select style="width: 7em;"'
         . ' name="field_attribute[' . $columnNumber . ']"'
         . ' id="field_' . $columnNumber . '_' . ($ci - $ci_offset) . '">';
 
@@ -972,14 +1045,6 @@ function PMA_getHtmlForColumnAttribute($columnNumber, $ci, $ci_offset,
     // NULL attribute, but SHOW CREATE TABLE says the contrary. Believe
     // the latter.
     $create_table_fields = $analyzed_sql[0]['create_table_fields'];
-    if (PMA_MYSQL_INT_VERSION < 50025
-        && isset($columnMeta['Field'])
-        && isset($create_table_fields[$columnMeta['Field']]['type'])
-        && $create_table_fields[$columnMeta['Field']]['type'] == 'TIMESTAMP'
-        && $create_table_fields[$columnMeta['Field']]['timestamp_not_null'] == true
-    ) {
-        $columnMeta['Null'] = '';
-    }
 
     // MySQL 4.1.2+ TIMESTAMP options
     // (if on_update_current_timestamp is set, then it's TRUE)
@@ -992,22 +1057,13 @@ function PMA_getHtmlForColumnAttribute($columnNumber, $ci, $ci_offset,
     ) {
         $attribute = 'on update CURRENT_TIMESTAMP';
     }
-    if ((isset($columnMeta['Field'])
-        && isset($field['default_current_timestamp']))
-        || (isset($submit_default_current_timestamp)
-        && $submit_default_current_timestamp)
-    ) {
-        $default_current_timestamp = true;
-    } else {
-        $default_current_timestamp = false;
-    }
 
     $attribute_types = $GLOBALS['PMA_Types']->getAttributes();
     $cnt_attribute_types = count($attribute_types);
     for ($j = 0; $j < $cnt_attribute_types; $j++) {
-        $html
-            .= '                <option value="' . $attribute_types[$j] . '"';
-        if (strtoupper($attribute) == strtoupper($attribute_types[$j])) {
+        $html .= '                <option value="' . $attribute_types[$j] . '"';
+        $attrUpper = /*overload*/mb_strtoupper($attribute);
+        if ($attrUpper == /*overload*/mb_strtoupper($attribute_types[$j])) {
             $html .= ' selected="selected"';
         }
         $html .= '>' . $attribute_types[$j] . '</option>';
@@ -1047,7 +1103,7 @@ function PMA_getHtmlForColumnCollation($columnNumber, $ci, $ci_offset, $columnMe
  * @param int $ci                       cell index
  * @param int $ci_offset                cell index offset
  * @param int $length_values_input_size length values input size
- * @param int $length_to_display        length to disply
+ * @param int $length_to_display        length to display
  *
  * @return string
  */
@@ -1103,11 +1159,11 @@ function PMA_getHtmlForColumnDefault($columnNumber, $ci, $ci_offset, $type_upper
         && isset($columnMeta['Default'])
     ) {
         $columnMeta['Default'] = '';
-    }
-
-    if ($type_upper == 'BIT') {
+    } elseif ($type_upper == 'BIT') {
         $columnMeta['DefaultValue']
             = PMA_Util::convertBitDefaultValue($columnMeta['DefaultValue']);
+    } elseif ($type_upper == 'BINARY' || $type_upper == 'VARBINARY') {
+        $columnMeta['DefaultValue'] = bin2hex($columnMeta['DefaultValue']);
     }
 
     $html = '<select name="field_default_type[' . $columnNumber
@@ -1148,35 +1204,34 @@ function PMA_getHtmlForColumnDefault($columnNumber, $ci, $ci_offset, $type_upper
 /**
  * Function to get html for column attributes
  *
- * @param int    $columnNumber                     column number
- * @param array  $columnMeta                       column meta
- * @param string $type_upper                       type upper
- * @param int    $length_values_input_size         length values input size
- * @param int    $length                           length
- * @param string $default_current_timestamp        default current time stamp
- * @param array  $extracted_columnspec             extracted column spec
- * @param string $submit_attribute                 submit attribute
- * @param array  $analyzed_sql                     analyzed sql
- * @param string $submit_default_current_timestamp submit default current time stamp
- * @param array  $comments_map                     comments map
- * @param array  $fields_meta                      fields map
- * @param bool   $is_backup                        is backup
- * @param array  $move_columns                     move columns
- * @param array  $cfgRelation                      configuration relation
- * @param array  $available_mime                   available mime
- * @param array  $mime_map                         mime map
+ * @param int        $columnNumber                     column number
+ * @param array      $columnMeta                       column meta
+ * @param string     $type_upper                       type upper
+ * @param int        $length_values_input_size         length values input size
+ * @param int        $length                           length
+ * @param string     $default_current_timestamp        default current time stamp
+ * @param array|null $extracted_columnspec             extracted column spec
+ * @param string     $submit_attribute                 submit attribute
+ * @param array|null $analyzed_sql                     analyzed sql
+ * @param array      $comments_map                     comments map
+ * @param array|null $fields_meta                      fields map
+ * @param bool       $is_backup                        is backup
+ * @param array      $move_columns                     move columns
+ * @param array      $cfgRelation                      configuration relation
+ * @param array      $available_mime                   available mime
+ * @param array      $mime_map                         mime map
  *
  * @return array
  */
 function PMA_getHtmlForColumnAttributes($columnNumber, $columnMeta, $type_upper,
     $length_values_input_size, $length, $default_current_timestamp,
     $extracted_columnspec, $submit_attribute, $analyzed_sql,
-    $submit_default_current_timestamp, $comments_map, $fields_meta, $is_backup,
+    $comments_map, $fields_meta, $is_backup,
     $move_columns, $cfgRelation, $available_mime, $mime_map
 ) {
     // Cell index: If certain fields get left out, the counter shouldn't change.
     $ci = 0;
-    // Everytime a cell shall be left out the STRG-jumping feature, $ci_offset
+    // Every time a cell shall be left out the STRG-jumping feature, $ci_offset
     // has to be incremented ($ci_offset++)
     $ci_offset = -1;
 
@@ -1184,13 +1239,15 @@ function PMA_getHtmlForColumnAttributes($columnNumber, $columnMeta, $type_upper,
 
     // column name
     $content_cell[$ci] = PMA_getHtmlForColumnName(
-        $columnNumber, $ci, $ci_offset, isset($columnMeta) ? $columnMeta : null
+        $columnNumber, $ci, $ci_offset, isset($columnMeta) ? $columnMeta : null,
+        $cfgRelation
     );
     $ci++;
 
     // column type
     $content_cell[$ci] = PMA_getHtmlForColumnType(
-        $columnNumber, $ci, $ci_offset, $type_upper, isset($columnMeta) ? $columnMeta : null
+        $columnNumber, $ci, $ci_offset, $type_upper,
+        isset($columnMeta) ? $columnMeta : null
     );
     $ci++;
 
@@ -1221,9 +1278,7 @@ function PMA_getHtmlForColumnAttributes($columnNumber, $columnMeta, $type_upper,
         isset($extracted_columnspec) ? $extracted_columnspec : null,
         isset($columnMeta) ? $columnMeta : null,
         isset($submit_attribute) ? $submit_attribute : null,
-        isset($analyzed_sql) ? $analyzed_sql : null,
-        isset($submit_default_current_timestamp)
-        ? $submit_default_current_timestamp : null
+        isset($analyzed_sql) ? $analyzed_sql : null
     );
     $ci++;
 
@@ -1274,15 +1329,28 @@ function PMA_getHtmlForColumnAttributes($columnNumber, $columnMeta, $type_upper,
         $ci++;
 
         // Column Browser transformation
-        $content_cell[$ci] = PMA_getHtmlForBrowserTransformation(
-            $columnNumber, $ci, $ci_offset, $available_mime, $columnMeta, $mime_map
+        $content_cell[$ci] = PMA_getHtmlForTransformation(
+            $columnNumber, $ci, $ci_offset, $available_mime,
+            $columnMeta, $mime_map, ''
         );
         $ci++;
 
         // column Transformation options
         $content_cell[$ci] = PMA_getHtmlForTransformationOption(
-            $columnNumber, $ci, $ci_offset, isset($columnMeta) ? $columnMeta : null,
-            isset($mime_map) ? $mime_map : null
+            $columnNumber, $ci, $ci_offset, $columnMeta, $mime_map, ''
+        );
+        $ci++;
+
+        // Column Input transformation
+        $content_cell[$ci] = PMA_getHtmlForTransformation(
+            $columnNumber, $ci, $ci_offset, $available_mime,
+            $columnMeta, $mime_map, 'input_'
+        );
+        $ci++;
+
+        // column Input transformation options
+        $content_cell[$ci] = PMA_getHtmlForTransformationOption(
+            $columnNumber, $ci, $ci_offset, $columnMeta, $mime_map, 'input_'
         );
     }
 
@@ -1318,16 +1386,17 @@ function PMA_getFormParamsForOldColumn(
     } else {
         $form_params['field_orig[' . $columnNumber . ']'] = '';
     }
+
     // old column type
     if (isset($columnMeta['Type'])) {
         // keep in uppercase because the new type will be in uppercase
         $form_params['field_type_orig[' . $columnNumber . ']']
-            = strtoupper($type);
+            = /*overload*/mb_strtoupper($type);
         if (isset($columnMeta['column_status'])
             && !$columnMeta['column_status']['isEditable']
         ) {
             $form_params['field_type[' . $columnNumber . ']']
-                = strtoupper($type);
+                = /*overload*/mb_strtoupper($type);
         }
     } else {
         $form_params['field_type_orig[' . $columnNumber . ']'] = '';

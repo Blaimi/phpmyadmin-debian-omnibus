@@ -20,6 +20,7 @@
 require_once 'libraries/common.inc.php';
 require_once 'libraries/index.lib.php';
 require_once 'libraries/tbl_relation.lib.php';
+require_once 'libraries/structure.lib.php';
 
 $response = PMA_Response::getInstance();
 
@@ -35,25 +36,6 @@ $header   = $response->getHeader();
 $scripts  = $header->getScripts();
 $scripts->addFile('tbl_relation.js');
 $scripts->addFile('indexes.js');
-
-/**
- * Sets globals from $_POST
- */
-$post_params = array(
-    'destination_foreign_db',
-    'destination_foreign_table',
-    'destination_foreign_column',
-    'display_field',
-    'fields_name',
-    'on_delete',
-    'on_update'
-);
-
-foreach ($post_params as $one_post_param) {
-    if (isset($_POST[$one_post_param])) {
-        $GLOBALS[$one_post_param] = $_POST[$one_post_param];
-    }
-}
 
 /**
  * Gets tables informations
@@ -83,6 +65,8 @@ if (PMA_Util::isForeignKeySupported($tbl_storage_engine)) {
 }
 if ($cfgRelation['displaywork']) {
     $disp     = PMA_getDisplayField($db, $table);
+} else {
+    $disp = '';
 }
 
 // will be used in the logic for internal relations and foreign keys:
@@ -91,9 +75,11 @@ $multi_edit_columns_name = isset($_REQUEST['fields_name'])
     : null;
 
 
+$html_output = '';
+
 // u p d a t e s   f o r   I n t e r n a l    r e l a t i o n s
 if (isset($_POST['destination_db']) && $cfgRelation['relwork']) {
-    PMA_handleUpdatesForInternalRelations(
+    $html_output .= PMA_handleUpdatesForInternalRelations(
         $_POST['destination_db'], $multi_edit_columns_name,
         $_POST['destination_table'],
         $_POST['destination_column'], $cfgRelation, $db, $table,
@@ -101,25 +87,26 @@ if (isset($_POST['destination_db']) && $cfgRelation['relwork']) {
     );
 } // end if (updates for internal relations)
 
-$html_output = '';
+$multi_edit_columns_name = isset($_REQUEST['foreign_key_fields_name'])
+    ? $_REQUEST['foreign_key_fields_name']
+    : null;
 
 // u p d a t e s    f o r    f o r e i g n    k e y s
 // (for now, one index name only; we keep the definitions if the
 // foreign db is not the same)
-if (isset($destination_foreign_db)) {
+if (isset($_POST['destination_foreign_db'])) {
     $html_output .= PMA_handleUpdatesForForeignKeys(
-        $destination_foreign_db,
-        $multi_edit_columns_name, $destination_foreign_table,
-        $destination_foreign_column, $options_array, $table,
-        isset($existrel_foreign) ? $existrel_foreign : null
+        $_POST['destination_foreign_db'],
+        $multi_edit_columns_name, $_POST['destination_foreign_table'],
+        $_POST['destination_foreign_column'], $options_array, $table,
+        isset($existrel_foreign) ? $existrel_foreign['foreign_keys_data'] : null
     );
 } // end if isset($destination_foreign)
 
-
 // U p d a t e s   f o r   d i s p l a y   f i e l d
-if ($cfgRelation['displaywork'] && isset($display_field)) {
-    PMA_handleUpdateForDisplayField(
-        $disp, $display_field, $db, $table, $cfgRelation
+if ($cfgRelation['displaywork'] && isset($_POST['display_field'])) {
+    $html_output .= PMA_handleUpdateForDisplayField(
+        $disp, $_POST['display_field'], $db, $table, $cfgRelation
     );
 } // end if
 
@@ -127,7 +114,7 @@ if ($cfgRelation['displaywork'] && isset($display_field)) {
 if (isset($_POST['destination_db']) && $cfgRelation['relwork']) {
     $existrel = PMA_getForeigners($db, $table, '', 'internal');
 }
-if (isset($destination_foreign_db)
+if (isset($_POST['destination_foreign_db'])
     && PMA_Util::isForeignKeySupported($tbl_storage_engine)
 ) {
     $existrel_foreign = PMA_getForeigners($db, $table, '', 'foreign');
@@ -137,6 +124,11 @@ if ($cfgRelation['displaywork']) {
     $disp     = PMA_getDisplayField($db, $table);
 }
 
+
+// display secondary level tabs if necessary
+$engine = PMA_Table::sGetStatusInfo($db, $table, 'ENGINE');
+$response->addHTML(PMA_getStructureSecondaryTabs($engine));
+$response->addHTML('<div id="structure_content">');
 
 /**
  * Dialog
@@ -149,13 +141,16 @@ $columns = $GLOBALS['dbi']->getColumns($db, $table);
 // common form
 $html_output .= PMA_getHtmlForCommonForm(
     $db, $table, $columns, $cfgRelation, $tbl_storage_engine,
-    isset($existrel) ? $existrel : null,
-    isset($existrel_foreign) ? $existrel_foreign : null, $options_array
+    isset($existrel) ? $existrel : array(),
+    isset($existrel_foreign) ? $existrel_foreign['foreign_keys_data'] : array(),
+    $options_array
 );
 
 if (PMA_Util::isForeignKeySupported($tbl_storage_engine)) {
     $html_output .= PMA_getHtmlForDisplayIndexes();
 }
 // Render HTML output
-PMA_Response::getInstance()->addHTML($html_output);
+$response->addHTML($html_output);
+
+$response->addHTML('</div>');
 ?>

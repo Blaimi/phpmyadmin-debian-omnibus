@@ -58,7 +58,7 @@ AJAX.registerTeardown('import.js', function () {
 
 AJAX.registerOnload('import.js', function () {
     // import_file_form validation.
-    $('#import_file_form').live('submit', function (event) {
+    $(document).on('submit', '#import_file_form', function (event) {
         var radioLocalImport = $("#radio_local_import_file");
         var radioImport = $("#radio_import_file");
         var fileMsg = '<div class="error"><img src="themes/dot.gif" title="" alt="" class="icon ic_s_error" /> ' + PMA_messages.strImportDialogMessage + '</div>';
@@ -85,7 +85,7 @@ AJAX.registerOnload('import.js', function () {
                 if ($("#select_local_import_file").length === 0) {
                     PMA_ajaxShowMessage('<div class="error"><img src="themes/dot.gif" title="" alt="" class="icon ic_s_error" /> ' + PMA_messages.strNoImportFile + ' </div>', false);
                     return false;
-            }
+                }
 
                 if ($("#select_local_import_file").val() === '') {
                     $("#select_local_import_file").focus();
@@ -105,7 +105,6 @@ AJAX.registerOnload('import.js', function () {
         // show progress bar.
         $("#upload_form_status").css("display", "inline");
         $("#upload_form_status_info").css("display", "inline");
-        return;
     });
 
     // Initially display the options for the selected plugin

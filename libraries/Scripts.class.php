@@ -54,12 +54,13 @@ class PMA_Scripts
         $dynamic_scripts = "";
         $scripts = array();
         foreach ($files as $value) {
-            if (strpos($value['filename'], "?") !== false) {
+            if (/*overload*/mb_strpos($value['filename'], "?") !== false) {
                 if ($value['before_statics'] === true) {
-                    $first_dynamic_scripts .= "<script type='text/javascript' src='js/"
+                    $first_dynamic_scripts
+                        .= "<script data-cfasync='false' type='text/javascript' src='js/"
                         . $value['filename'] . "'></script>";
                 } else {
-                    $dynamic_scripts .= "<script type='text/javascript' src='js/"
+                    $dynamic_scripts .= "<script data-cfasync='false' type='text/javascript' src='js/"
                         . $value['filename'] . "'></script>";
                 }
                 continue;
@@ -77,16 +78,14 @@ class PMA_Scripts
                 }
             }
             if ($include) {
-                $scripts[] = "scripts[]=" . $value['filename'];
+                $scripts[] = "scripts%5B%5D=" . $value['filename'];
             }
         }
         $separator = PMA_URL_getArgSeparator();
-        $url = 'js/get_scripts.js.php'
-            . PMA_URL_getCommon(array(), 'none')
-            . $separator . implode($separator, $scripts);
+        $url = 'js/get_scripts.js.php?' . implode($separator, $scripts);
 
         $static_scripts = sprintf(
-            '<script type="text/javascript" src="%s"></script>',
+            '<script data-cfasync="false" type="text/javascript" src="%s"></script>',
             htmlspecialchars($url)
         );
         return $first_dynamic_scripts . $static_scripts . $dynamic_scripts;
@@ -116,8 +115,11 @@ class PMA_Scripts
      *
      * @return void
      */
-    public function addFile($filename, $conditional_ie = false, $before_statics = false)
-    {
+    public function addFile(
+        $filename,
+        $conditional_ie = false,
+        $before_statics = false
+    ) {
         $hash = md5($filename);
         if (!empty($this->_files[$hash])) {
             return;
@@ -130,6 +132,22 @@ class PMA_Scripts
             'conditional_ie' => $conditional_ie,
             'before_statics' => $before_statics
         );
+    }
+
+    /**
+     * Add new files to the list of scripts
+     *
+     * @param array $filelist       The array of file names
+     * @param bool  $conditional_ie Whether to wrap the script tag in
+     *                              conditional comments for IE
+     *
+     * @return void
+     */
+    public function addFiles($filelist, $conditional_ie = false)
+    {
+        foreach ($filelist as $filename) {
+            $this->addFile($filename, $conditional_ie);
+        }
     }
 
     /**
@@ -248,7 +266,7 @@ class PMA_Scripts
         $code .= '});';
         $this->addCode($code);
 
-        $retval .= '<script type="text/javascript">';
+        $retval .= '<script data-cfasync="false" type="text/javascript">';
         $retval .= "// <![CDATA[\n";
         $retval .= $this->_code;
         foreach ($this->_events as $js_event) {

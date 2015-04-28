@@ -316,33 +316,15 @@ class PMA_StorageEngine_Innodb extends PMA_StorageEngine
     /**
      * returns InnoDB status
      *
-     * @return string  result of SHOW INNODB STATUS inside pre tags
+     * @return string  result of SHOW ENGINE INNODB STATUS inside pre tags
      */
     public function getPageStatus()
     {
         return '<pre id="pre_innodb_status">' . "\n"
             . htmlspecialchars(
-                $GLOBALS['dbi']->fetchValue('SHOW INNODB STATUS;', 0, 'Status')
+                $GLOBALS['dbi']->fetchValue('SHOW ENGINE INNODB STATUS;', 0, 'Status')
             ) . "\n"
             . '</pre>' . "\n";
-    }
-
-    /**
-     * Returns content for page $id
-     *
-     * @param string $id page id
-     *
-     * @return string html output
-     */
-    public function getPage($id)
-    {
-        if (! array_key_exists($id, $this->getInfoPages())) {
-            return false;
-        }
-
-        $id = 'getPage' . $id;
-
-        return $this->$id();
     }
 
     /**

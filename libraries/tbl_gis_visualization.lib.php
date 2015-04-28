@@ -51,9 +51,9 @@ function PMA_GIS_modifyQuery($sql_query, $visualizationSettings)
  *
  * @param array  $data                   Data for the status chart
  * @param array  &$visualizationSettings Settings used to generate the chart
- * @param string $format                 Format of the visulaization
+ * @param string $format                 Format of the visualization
  *
- * @return string|void HTML and JS code for the GIS visualization
+ * @return string|bool HTML and JS code for the GIS visualization or false on failure
  */
 function PMA_GIS_visualizationResults($data, &$visualizationSettings, $format)
 {
@@ -63,23 +63,26 @@ function PMA_GIS_visualizationResults($data, &$visualizationSettings, $format)
     if (! isset($data[0])) {
         // empty data
         return __('No data found for GIS visualization.');
-    } else {
-        $visualization = new PMA_GIS_Visualization($data, $visualizationSettings);
-        if ($visualizationSettings != null) {
-            foreach ($visualization->getSettings() as $setting => $val) {
-                if (! isset($visualizationSettings[$setting])) {
-                    $visualizationSettings[$setting] = $val;
-                }
+    }
+
+    $visualization = new PMA_GIS_Visualization($data, $visualizationSettings);
+    if ($visualizationSettings != null) {
+        foreach ($visualization->getSettings() as $setting => $val) {
+            if (! isset($visualizationSettings[$setting])) {
+                $visualizationSettings[$setting] = $val;
             }
         }
-        if ($format == 'svg') {
-            return $visualization->asSvg();
-        } elseif ($format == 'png') {
-            return $visualization->asPng();
-        } elseif ($format == 'ol') {
-            return $visualization->asOl();
-        }
     }
+
+    if ($format == 'svg') {
+        return $visualization->asSvg();
+    } elseif ($format == 'png') {
+        return $visualization->asPng();
+    } elseif ($format == 'ol') {
+        return $visualization->asOl();
+    }
+
+    return false;
 }
 
 /**
@@ -87,7 +90,7 @@ function PMA_GIS_visualizationResults($data, &$visualizationSettings, $format)
  *
  * @param array  $data                  data for the status chart
  * @param array  $visualizationSettings settings used to generate the chart
- * @param string $format                format of the visulaization
+ * @param string $format                format of the visualization
  * @param string $fileName              file name
  *
  * @return file File containing the visualization
@@ -111,7 +114,7 @@ function PMA_GIS_saveToFile($data, $visualizationSettings, $format, $fileName)
 }
 
 /**
- * Function to get html for the lebel column and spatial column
+ * Function to get html for the label column and spatial column
  *
  * @param string $column                the column type. i.e either "labelColumn"
  *                                      or "spatialColumn"
@@ -120,14 +123,14 @@ function PMA_GIS_saveToFile($data, $visualizationSettings, $format, $fileName)
  *
  * @return string  $html
  */
-function PMA_getHtmlForColumn($column, $columnCandidates, $visualizationSettings)
+function PMA_getHtmlForSelect($column, $columnCandidates, $visualizationSettings)
 {
-    $html = '<tr><td><label for="labelColumn">';
+    $html = '<label for="' . $column . '">';
     $html .= ($column=="labelColumn") ? __("Label column") : __("Spatial column");
-    $html .= '</label></td>';
+    $html .= '</label>';
 
-    $html .= '<td><select name="visualizationSettings[' . $column . ']" id="'
-        . $column . '">';
+    $html .= '<select name="visualizationSettings[' . $column . ']" id="'
+        . $column . '" class="autosubmit">';
 
     if ($column == "labelColumn") {
         $html .= '<option value="">' . __("-- None --") . '</option>';
@@ -137,8 +140,7 @@ function PMA_getHtmlForColumn($column, $columnCandidates, $visualizationSettings
         $columnCandidates, array($visualizationSettings[$column])
     );
 
-    $html .= '</select></td>';
-    $html .= '</tr>';
+    $html .= '</select>';
 
     return $html;
 }
@@ -168,6 +170,25 @@ function PMA_getHtmlForUseOpenStreetMaps($isSelected)
 }
 
 /**
+ * Get the link for downloading GIS visualization in a particular format.
+ *
+ * @param string $url   base url
+ * @param string $name  format name
+ * @param string $label format label
+ *
+ * @return string HTML for download link
+ */
+function PMA_getHtmlForGisDownloadLink($url, $name, $label)
+{
+    $html  = '<li class="warp_link">';
+    $html .= '<a href="' . $url . '&fileFormat=' . $name . '"'
+        . ' class="disableAjax">' . $label . '</a>';
+    $html .= '</li>';
+
+    return $html;
+}
+
+/**
  * Function to generate HTML for the GIS visualization page
  *
  * @param array   $url_params            url parameters
@@ -189,66 +210,47 @@ function PMA_getHtmlForGisVisualization(
     $html .= '<fieldset>';
     $html .= '<legend>' . __('Display GIS Visualization') . '</legend>';
 
-    $html .= '<div style="width: 400px; float: left;">';
+    $html .= '<div id="gis_div" style="position:relative;">';
     $html .= '<form method="post" action="tbl_gis_visualization.php">';
     $html .= PMA_URL_getHiddenInputs($url_params);
-    $html .= '<table class="gis_table">';
 
-    $html .= PMA_getHtmlForColumn(
+    $html .= PMA_getHtmlForSelect(
         "labelColumn", $labelCandidates, $visualizationSettings
     );
-
-    $html .= PMA_getHtmlForColumn(
+    $html .= PMA_getHtmlForSelect(
         "spatialColumn", $spatialCandidates, $visualizationSettings
     );
 
-    $html .= '<tr><td></td>';
-    $html .= '<td class="button"><input type="submit"';
-    $html .= ' name="displayVisualizationBtn" value="';
-    $html .= __('Redraw');
-    $html .= '" /></td></tr>';
+    $html .= '<input type="hidden" name="displayVisualization" value="redraw">';
+    $html .= '<input type="hidden" name="sql_query" value="';
+    $html .= htmlspecialchars($sql_query) . '" />';
+    $html .= '</form>';
 
     if (! $GLOBALS['PMA_Config']->isHttps()) {
         $isSelected = isset($visualizationSettings['choice']) ? true : false;
         $html .= PMA_getHtmlForUseOpenStreetMaps($isSelected);
     }
 
-    $html .= '</table>';
-    $html .= '<input type="hidden" name="displayVisualization" value="redraw">';
-    $html .= '<input type="hidden" name="sql_query" value="';
-    $html .= htmlspecialchars($sql_query) . '" />';
-    $html .= '</form>';
-    $html .= '</div>';
+    $html .= '<div class="pma_quick_warp" style="width: 50px; position: absolute;'
+        . ' right: 0; top: 0; cursor: pointer;">';
+    $html .= '<div class="drop_list">';
+    $html .= '<span class="drop_button" style="padding: 0; border: 0;">';
+    $html .= PMA_Util::getImage('b_saveimage', __('Save'));
+    $html .= '</span>';
 
-    $html .= '<div  style="float:left;">';
-    $html .= '<form method="post" class="disableAjax"';
-    $html .= ' action="tbl_gis_visualization.php">';
-    $html .= PMA_URL_getHiddenInputs($url_params);
-    $html .= '<table class="gis_table">';
-    $html .= '<tr><td><label for="fileName">';
-    $html .= __("File name") . '</label></td>';
-    $html .= '<td><input type="text" name="fileName" id="fileName" /></td></tr>';
+    $url_params['sql_query'] = $sql_query;
+    $url_params['saveToFile'] = 'download';
+    $url = 'tbl_gis_visualization.php' . PMA_URL_getCommon($url_params);
 
-    $html .= '<tr><td><label for="fileFormat">';
-    $html .= __("Format") . '</label></td>';
-    $html .= '<td><select name="fileFormat" id="fileFormat">';
-    $html .= '<option value="png">PNG</option>';
-    $html .= '<option value="pdf">PDF</option>';
-
+    $html .= '<ul>';
+    $html .= PMA_getHtmlForGisDownloadLink($url, 'png', 'PNG');
+    $html .= PMA_getHtmlForGisDownloadLink($url, 'pdf', 'PDF');
     if ($svg_support) {
-        $html .= '<option value="svg" selected="selected">SVG</option>';
+        $html .= PMA_getHtmlForGisDownloadLink($url, 'svg', 'SVG');
     }
-    $html .= '</select></td></tr>';
+    $html .= '</ul>';
+    $html .= '</div></div>';
 
-    $html .= '<tr><td></td>';
-    $html .= '<td class="button"><input type="submit" name="saveToFileBtn" value="';
-    $html .= __('Download') . '" /></td></tr>';
-    $html .= '</table>';
-
-    $html .= '<input type="hidden" name="saveToFile" value="download">';
-    $html .= '<input type="hidden" name="sql_query" value="';
-    $html .= htmlspecialchars($sql_query) . '" />';
-    $html .= '</form>';
     $html .= '</div>';
 
     $html .= '<div style="clear:both;">&nbsp;</div>';

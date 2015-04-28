@@ -42,6 +42,14 @@ $cfg_db['NavigationTreeDefaultTabTable'] = array(
     'tbl_change.php',    // insert row page
     'sql.php'            // browse page
 );
+$cfg_db['NavigationTreeDefaultTabTable2'] = array(
+    '', //don't display
+    'tbl_structure.php', // fields list
+    'tbl_sql.php',       // SQL form
+    'tbl_select.php',    // search page
+    'tbl_change.php',    // insert row page
+    'sql.php'            // browse page
+);
 $cfg_db['NavigationTreeDbSeparator'] = 'short_string';
 $cfg_db['NavigationTreeTableSeparator'] = 'short_string';
 $cfg_db['TableNavigationLinksMode'] = array(
@@ -57,8 +65,12 @@ $cfg_db['RowActionLinks'] = array(
     'right' => __('Right'),
     'both'  => __('Both')
 );
+$cfg_db['TablePrimaryKeyOrder'] = array(
+    'NONE'  => __('None'),
+    'ASC'   => __('Ascending'),
+    'DESC'  => __('Descending')
+);
 $cfg_db['ProtectBinary'] = array(false, 'blob', 'noblob', 'all');
-$cfg_db['DefaultDisplay'] = array('horizontal', 'vertical', 'horizontalflipped');
 $cfg_db['CharEditing'] = array('input', 'textarea');
 $cfg_db['TabsMode'] = array(
     'icons' => __('Icons'),
@@ -82,6 +94,10 @@ $cfg_db['GridEditing'] = array(
     'double-click' => __('Double click'),
     'disabled' => __('Disabled'),
 );
+$cfg_db['RelationalDisplay'] = array(
+    'K' => __('key'),
+    'D' => __('display column')
+);
 $cfg_db['DefaultTabServer'] = array(
     'index.php',               // the welcome page (recommended for multiuser setups)
     'server_databases.php',    // list of databases
@@ -101,12 +117,6 @@ $cfg_db['DefaultTabTable'] = array(
     'tbl_select.php',    // search page
     'tbl_change.php',    // insert row page
     'sql.php'            // browse page
-);
-$cfg_db['QueryWindowDefTab'] = array(
-    'sql',     // SQL
-    'files',   // Import files
-    'history', // SQL history
-    'full'     // All (SQL and SQL history)
 );
 $cfg_db['InitialSlidersState'] = array(
     'open'     => __('Open'),
@@ -234,8 +244,6 @@ $cfg_db['_validators'] = array(
     'MemoryLimit' => array(array('validateByRegex', '/^(-1|(\d+(?:[kmg])?))$/i')),
     'NavigationTreeTableLevel' => 'validatePositiveNumber',
     'QueryHistoryMax' => 'validatePositiveNumber',
-    'QueryWindowWidth' => 'validatePositiveNumber',
-    'QueryWindowHeight' => 'validatePositiveNumber',
     'RepeatCells' => 'validateNonNegativeNumber',
     'Server' => 'validateServer',
     'Server_pmadb' => 'validatePMAStorage',

@@ -120,7 +120,7 @@ AJAX.registerTeardown('tbl_zoom_plot_jqplot.js', function () {
     $('#tableid_3').unbind('change');
     $('#inputFormSubmitId').unbind('click');
     $('#togglesearchformlink').unbind('click');
-    $("#dataDisplay").find(':input').die('keydown');
+    $(document).on('keydown', "#dataDisplay :input");
     $('button.button-reset').unbind('click');
     $('div#resizer').unbind('resizestop');
     $('div#querychart').unbind('jqplotDataClick');
@@ -142,7 +142,12 @@ AJAX.registerOnload('tbl_zoom_plot_jqplot.js', function () {
 
 
     // Get query result
-    var searchedData = jQuery.parseJSON($('#querydata').html());
+    var searchedData;
+    try {
+        searchedData = jQuery.parseJSON($('#querydata').html());
+    } catch (err) {
+        searchedData = null;
+    }
 
     /**
      ** Input form submit on field change
@@ -154,6 +159,7 @@ AJAX.registerOnload('tbl_zoom_plot_jqplot.js', function () {
         $.post('tbl_zoom_select.php', {
             'ajax_request' : true,
             'change_tbl_info' : true,
+            'server' : PMA_commonParams.get('server'),
             'db' : PMA_commonParams.get('db'),
             'table' : PMA_commonParams.get('table'),
             'field' : $('#tableid_0').val(),
@@ -178,6 +184,7 @@ AJAX.registerOnload('tbl_zoom_plot_jqplot.js', function () {
         $.post('tbl_zoom_select.php', {
             'ajax_request' : true,
             'change_tbl_info' : true,
+            'server' : PMA_commonParams.get('server'),
             'db' : PMA_commonParams.get('db'),
             'table' : PMA_commonParams.get('table'),
             'field' : $('#tableid_1').val(),
@@ -201,6 +208,7 @@ AJAX.registerOnload('tbl_zoom_plot_jqplot.js', function () {
         $.post('tbl_zoom_select.php', {
             'ajax_request' : true,
             'change_tbl_info' : true,
+            'server' : PMA_commonParams.get('server'),
             'db' : PMA_commonParams.get('db'),
             'table' : PMA_commonParams.get('table'),
             'field' : $('#tableid_2').val(),
@@ -222,6 +230,7 @@ AJAX.registerOnload('tbl_zoom_plot_jqplot.js', function () {
         $.post('tbl_zoom_select.php', {
             'ajax_request' : true,
             'change_tbl_info' : true,
+            'server' : PMA_commonParams.get('server'),
             'db' : PMA_commonParams.get('db'),
             'table' : PMA_commonParams.get('table'),
             'field' : $('#tableid_3').val(),
@@ -287,13 +296,14 @@ AJAX.registerOnload('tbl_zoom_plot_jqplot.js', function () {
         var xChange = false;
         var yChange = false;
         var key;
+        var tempGetVal = function () {
+            return $(this).val();
+        };
         for (key in selectedRow) {
             var oldVal = selectedRow[key];
             var newVal = ($('#edit_fields_null_id_' + it).prop('checked')) ? null : $('#edit_fieldID_' + it).val();
             if (newVal instanceof Array) { // when the column is of type SET
-                newVal =  $('#edit_fieldID_' + it).map(function () {
-                    return $(this).val();
-                }).get().join(",");
+                newVal =  $('#edit_fieldID_' + it).map(tempGetVal).get().join(",");
             }
             if (oldVal != newVal) {
                 selectedRow[key] = newVal;
@@ -328,6 +338,7 @@ AJAX.registerOnload('tbl_zoom_plot_jqplot.js', function () {
                     series[0][searchedDataKey][0] =
                         getTimeStamp(selectedRow[xLabel], $('#types_0').val());
                 } else {
+                    series[0][searchedDataKey][0] = '';
                     // TODO: text values
                 }
                 currentChart.series[0].data = series[0];
@@ -344,6 +355,7 @@ AJAX.registerOnload('tbl_zoom_plot_jqplot.js', function () {
                     series[0][searchedDataKey][1] =
                         getTimeStamp(selectedRow[yLabel], $('#types_1').val());
                 } else {
+                    series[0][searchedDataKey][1] = '';
                     // TODO: text values
                 }
                 currentChart.series[0].data = series[0];
@@ -391,14 +403,15 @@ AJAX.registerOnload('tbl_zoom_plot_jqplot.js', function () {
             //Post SQL query to sql.php
             $.post('sql.php', {
                     'token' : PMA_commonParams.get('token'),
+                    'server' : PMA_commonParams.get('server'),
                     'db' : PMA_commonParams.get('db'),
                     'ajax_request' : true,
                     'sql_query' : sql_query,
                     'inline_edit' : false
                 }, function (data) {
                     if (typeof data !== 'undefined' && data.success === true) {
-                        $('#sqlqueryresults').html(data.sql_query);
-                        $("#sqlqueryresults").trigger('appendAnchor');
+                        $('#sqlqueryresultsouter').html(data.sql_query);
+                        PMA_highlightSQL($('#sqlqueryresultsouter'));
                     } else {
                         PMA_ajaxShowMessage(data.error, false);
                     }
@@ -424,7 +437,7 @@ AJAX.registerOnload('tbl_zoom_plot_jqplot.js', function () {
      * in the dialog. Used to submit the Ajax
      * request when the ENTER key is pressed.
      */
-    $("#dataDisplay").find(':input').live('keydown', function (e) {
+    $(document).on('keydown', "#dataDisplay :input", function (e) {
         if (e.which === 13) { // 13 is the ENTER key
             e.preventDefault();
             if (typeof buttonOptions[PMA_messages.strSave] === 'function') {
@@ -587,6 +600,7 @@ AJAX.registerOnload('tbl_zoom_plot_jqplot.js', function () {
                 var post_params = {
                     'ajax_request' : true,
                     'get_data_row' : true,
+                    'server' : PMA_commonParams.get('server'),
                     'db' : PMA_commonParams.get('db'),
                     'table' : PMA_commonParams.get('table'),
                     'where_clause' : data[3],

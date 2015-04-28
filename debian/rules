@@ -4,62 +4,33 @@
 
 REVISION := $(shell head -1 debian/changelog | sed 's/.*(//;s/).*//;s/.*-//')
 
-build-arch:
+%:
+	dh $@ --fail-missing --with sphinxdoc
 
-build: build-indep
-build-indep: build-stamp
-build-stamp:
-	dh_testdir
+override_dh_auto_build:
 	make -C doc/ html
 	touch build-stamp
 
-clean: 
-	dh_testdir
-	dh_testroot
-	rm -f build-stamp
-	dh_clean 
-	debconf-updatepo
-
-install: build
-	dh_testdir
-	dh_testroot
-	dh_prep
-	dh_installdirs
+override_dh_install:
 	dh_install
 	# spurious licence files, this is in debian/copyright
 	rm \
 		debian/phpmyadmin/usr/share/phpmyadmin/js/canvg/MIT-LICENSE.txt \
 		debian/phpmyadmin/usr/share/phpmyadmin/js/openlayers/src/openlayers/lib/Firebug/license.txt \
-		debian/phpmyadmin/usr/share/phpmyadmin/js/codemirror/LICENSE
+		debian/phpmyadmin/usr/share/phpmyadmin/js/codemirror/LICENSE \
+		debian/phpmyadmin/usr/share/phpmyadmin/libraries/plugins/auth/recaptcha/LICENSE \
+		debian/phpmyadmin/usr/share/phpmyadmin/libraries/sql-formatter/LICENSE.txt
+
 	# Use system tcpdf/gettext
 	rm -rf debian/phpmyadmin/usr/share/phpmyadmin/libraries/tcpdf
 	rm -rf debian/phpmyadmin/usr/share/phpmyadmin/libraries/php-gettext
+
 	# include Debian marker in version string
 	sed -ri "/set..PMA_VERSION/ s/'([-0-9a-z.]+)'/'\\1deb$(REVISION)'/" \
 	    debian/phpmyadmin/usr/share/phpmyadmin/libraries/Config.class.php
 
-# Build architecture-independent files here.
-binary-indep: build install
-	dh_testdir
-	dh_testroot
-	dh_installchangelogs ChangeLog
-	dh_installdocs
-	dh_sphinxdoc
-	dh_installexamples
-	dh_installdebconf	
-	dh_installman
-	dh_lintian
+	# Remove sources from binary package
 	rm -r debian/phpmyadmin/usr/share/phpmyadmin/js/jquery/src
-	dh_link
-	dh_compress
-	dh_fixperms
-	dh_installdeb
-	dh_gencontrol
-	dh_md5sums
-	dh_builddeb
 
-# Build architecture-dependent files here.
-binary-arch:
-
-binary: binary-indep binary-arch
-.PHONY: build clean binary-indep binary-arch binary install
+override_dh_installchangelogs:
+	dh_installchangelogs ChangeLog

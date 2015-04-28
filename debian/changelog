@@ -1,6 +1,7 @@
 phpmyadmin (4:4.2.12-3) UNRELEASED; urgency=medium
 
   * Add Estonian debconf translation.
+  * Add Turkish debconf translation.
 
  -- Michal Čihař <nijel@debian.org>  Tue, 10 Feb 2015 15:09:44 +0100
 

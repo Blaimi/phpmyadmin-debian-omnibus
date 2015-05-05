@@ -6,7 +6,7 @@ From: Michal Čihař <nijel@debian.org>
 Forwarded: not-needed
 --- a/libraries/vendor_config.php
 +++ b/libraries/vendor_config.php
-@@ -17,30 +17,30 @@
+@@ -17,24 +17,24 @@
   * Path to changelog file, can be gzip compressed. Useful when you want to
   * have documentation somewhere else, eg. /usr/share/doc.
   */
@@ -34,15 +34,8 @@ Forwarded: not-needed
 +define('SETUP_DIR_WRITABLE', false);
  
  /**
-  * Directory where examples reside. Useful when you want to include
-  * the examples directory with documentation, eg. /usr/share/doc.
-  */
--define('EXAMPLES_DIR', './examples/');
-+define('EXAMPLES_DIR', '/usr/share/doc/phpmyadmin/examples/');
- 
- /**
   * Directory where SQL scripts to create/upgrade configuration storage reside.
-@@ -52,7 +52,7 @@
+@@ -46,7 +46,7 @@
   * It is not used directly in code, just a convenient
   * define used further in this file.
   */
@@ -51,7 +44,7 @@ Forwarded: not-needed
  
  /**
   * Filename of a configuration file.
-@@ -72,18 +72,18 @@
+@@ -66,18 +66,18 @@
  /**
   * Default value for check for version upgrades.
   */

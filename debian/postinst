@@ -126,7 +126,7 @@ if [ "$1" = "configure" ]; then
 		# Redirection of 3 is needed because Debconf uses it and it might 
 		# be inherited by webserver. See bug #446324.
         if [ -f /etc/init.d/$webserver ] ; then
-            if [ -x /usr/sbin/invoke-rc.d ]; then
+            if which invoke-rc.d > /dev/null ; then
                 invoke-rc.d $webserver reload 3>/dev/null || true
             else
                 /etc/init.d/$webserver reload 3>/dev/null || true

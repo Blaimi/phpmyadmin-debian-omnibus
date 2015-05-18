@@ -1,6 +1,6 @@
 phpmyadmin (4:3.2.2.1-1) unstable; urgency=low
 
-  phpMyAdmin setup script now does not allow to write configuration by
+  phpMyAdmin setup script now does not allow one to write configuration by
   default. See README.Debian for information how to enable writing
   configuration.
 

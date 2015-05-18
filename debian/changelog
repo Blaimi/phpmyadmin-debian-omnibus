@@ -2,13 +2,15 @@ phpmyadmin (4:4.4.7-1) UNRELEASED; urgency=medium
 
   * New upstream release.
   * Fix typo in debian/NEWS.
+  * Wrap long line in last changelog entry.
 
  -- Michal Čihař <nijel@debian.org>  Mon, 18 May 2015 09:47:11 +0200
 
 phpmyadmin (4:4.4.6.1-1) unstable; urgency=high
 
   * New upstream security release.
-    - CVE-2015-3902 / PMASA-2015-2 - XSRF/CSRF vulnerability in phpMyAdmin setup.
+    - CVE-2015-3902 / PMASA-2015-2 - XSRF/CSRF vulnerability in phpMyAdmin
+      setup.
     - CVE-2015-3903 / PMASA-2015-3 - Vulnerability allowing man-in-the-middle
       attack on API call to GitHub.
 

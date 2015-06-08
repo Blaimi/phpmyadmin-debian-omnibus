@@ -1,8 +1,9 @@
-phpmyadmin (4:4.4.8-2) UNRELEASED; urgency=medium
+phpmyadmin (4:4.4.9-1) unstable; urgency=medium
 
+  * New upstream release.
   * Update Hungarian debconf translation.
 
- -- Michal Čihař <nijel@debian.org>  Thu, 04 Jun 2015 13:07:41 +0200
+ -- Michal Čihař <nijel@debian.org>  Mon, 08 Jun 2015 10:00:51 +0200
 
 phpmyadmin (4:4.4.8-1) unstable; urgency=medium
 

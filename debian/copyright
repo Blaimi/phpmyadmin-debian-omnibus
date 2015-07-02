@@ -1,9 +1,9 @@
 This is a prepackaged version of phpMyAdmin: a tool to Administrate MySQL
 over the WWW. It was Debianised from scratch by Thijs Kinkhorst
-<thijs@debian.org>, using files obtained from http://www.phpmyadmin.net/
+<thijs@debian.org>, using files obtained from https://www.phpmyadmin.net/
 
 More information about phpMyAdmin is available from
-http://www.phpmyadmin.net/
+https://www.phpmyadmin.net/
 
 Copyright and licence notice:
 

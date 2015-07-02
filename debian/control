@@ -7,7 +7,7 @@ Standards-Version: 3.9.6
 Build-Depends: debhelper (>= 9), 
     python-sphinx,
     po-debconf
-Homepage: http://www.phpmyadmin.net/
+Homepage: https://www.phpmyadmin.net/
 Vcs-Browser: http://anonscm.debian.org/gitweb/?p=collab-maint/phpmyadmin.git
 Vcs-Git: git://anonscm.debian.org/collab-maint/phpmyadmin.git
 

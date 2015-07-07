@@ -1,8 +1,9 @@
-phpmyadmin (4:4.4.10-2) UNRELEASED; urgency=medium
+phpmyadmin (4:4.4.11-1) unstable; urgency=medium
 
+  * New upstream release.
   * Use https for upstream homepage links.
 
- -- Michal Čihař <nijel@debian.org>  Thu, 02 Jul 2015 13:23:52 +0200
+ -- Michal Čihař <nijel@debian.org>  Tue, 07 Jul 2015 10:25:56 +0200
 
 phpmyadmin (4:4.4.10-1) unstable; urgency=medium
 

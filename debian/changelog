@@ -1,8 +1,13 @@
-phpmyadmin (4:4.4.14-2) UNRELEASED; urgency=medium
+phpmyadmin (4:4.4.14.1-1) unstable; urgency=high
 
+  [ Thijs Kinkhorst ]
+  * New upstream security release.
+    - Fixes a bypass of the optional reCaptcha (CVE-2015-6830)
+
+  [ Michal Čihař ]
   * Add Albanian debconf translation.
 
- -- Michal Čihař <nijel@debian.org>  Tue, 08 Sep 2015 15:15:03 +0200
+ -- Thijs Kinkhorst <thijs@debian.org>  Wed, 09 Sep 2015 08:34:00 +0000
 
 phpmyadmin (4:4.4.14-1) unstable; urgency=medium
 

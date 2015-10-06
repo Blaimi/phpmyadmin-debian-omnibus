@@ -22,6 +22,7 @@ Depends: libapache2-mod-php5 | libapache2-mod-php5filter | php5-cgi | php5-fpm |
     ${sphinxdoc:Depends},
     dbconfig-common,
     php-gettext,
+    php-seclib,
     ucf (>= 0.28)
 Recommends: apache2 | lighttpd | httpd, 
     php5-gd, 

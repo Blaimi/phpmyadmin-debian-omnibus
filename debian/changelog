@@ -1,6 +1,7 @@
 phpmyadmin (4:4.5.0.2-1) UNRELEASED; urgency=medium
 
   * New upstream release.
+  * Update database schema using dbconfig-common.
 
  -- Michal Čihař <nijel@debian.org>  Tue, 06 Oct 2015 14:33:31 +0200
 

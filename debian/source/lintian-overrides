@@ -1,32 +1,38 @@
 # Sphinx index, source included
+phpmyadmin source: source-contains-prebuilt-sphinx-documentation doc/html/
 phpmyadmin source: source-contains-prebuilt-javascript-object doc/html/searchindex.js mean line length is about 16184 characters
-# Sphinx index, source included
 phpmyadmin source: source-is-missing doc/html/searchindex.js
-# Sphinx docs
 phpmyadmin source: source-contains-prebuilt-javascript-object doc/html/_static/jquery.js mean line length is about 510 characters
-# Sphinx docs
 phpmyadmin source: source-is-missing doc/html/_static/jquery.js
-# Sphinx docs
 phpmyadmin source: source-contains-prebuilt-javascript-object doc/html/_static/underscore.js mean line length is about 512 characters
-# Sphinx docs
 phpmyadmin source: source-is-missing doc/html/_static/underscore.js
 
 # Source include in js/openlayers/src/
-phpmyadmin source-contains-prebuilt-javascript-object js/openlayers/OpenLayers.js
-# Source include in js/openlayers/src/
 phpmyadmin source: source-is-missing js/openlayers/OpenLayers.js
+phpmyadmin source: source-contains-prebuilt-javascript-object js/openlayers/OpenLayers.js line length is 7940 characters (>1024)
+
+# Just long line, not prebuilt
+phpmyadmin source: source-contains-prebuilt-javascript-object js/codemirror/mode/sql/sql.js line length is 3062 characters (>1024)
+phpmyadmin source: source-is-missing js/codemirror/mode/sql/sql.js
 
 # Source included in js/jquery/src/
-phpmyadmin source: source-contains-prebuilt-javascript-object js/jquery/jquery-1.8.3.min.js
-# Source included in js/jquery/src/
+phpmyadmin source: source-contains-prebuilt-javascript-object js/jquery/jquery-1.11.1.min.js
 phpmyadmin source: source-is-missing js/jquery/jquery-1.11.1.min.js
 
 # Source included in js/jquery/src/
-phpmyadmin source: source-contains-prebuilt-javascript-object js/jquery/jquery-ui-1.9.2.custom.min.js
-# Source included in js/jquery/src/
+phpmyadmin source: source-contains-prebuilt-javascript-object js/jquery/jquery-ui-1.11.2.min.js
 phpmyadmin source: source-is-missing js/jquery/jquery-ui-1.11.2.min.js
 
 # Not really a composer package
 phpmyadmin source: composer-package-without-pkg-php-tools-builddep
-# No upstream signatures
-phpmyadmin source: debian-watch-may-check-gpg-signature
+
+# Source is js/jquery/src/jquery/sizzle/dist/sizzle.min
+phpmyadmin source: source-contains-prebuilt-javascript-object js/jquery/src/jquery/sizzle/dist/sizzle.min.js
+
+# This is source
+phpmyadmin source: source-is-missing js/jqplot/plugins/jqplot.dateAxisRenderer.js
+phpmyadmin source: source-contains-prebuilt-javascript-object js/jqplot/plugins/jqplot.dateAxisRenderer.js line length is 308 characters (>256)
+
+# These are source translation files
+phpmyadmin source: source-contains-prebuilt-javascript-object js/openlayers/src/openlayers/lib/OpenLayers/Lang/*
+phpmyadmin source: source-is-missing js/openlayers/src/openlayers/lib/OpenLayers/Lang/*

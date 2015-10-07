@@ -8,6 +8,7 @@ libraries	usr/share/phpmyadmin
 themes		usr/share/phpmyadmin
 setup		usr/share/phpmyadmin
 sql		usr/share/phpmyadmin
+templates   usr/share/phpmyadmin
 
 debian/conf/*	etc/phpmyadmin
 

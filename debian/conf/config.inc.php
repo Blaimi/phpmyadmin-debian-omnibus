@@ -87,7 +87,6 @@ if (!empty($dbname)) {
     $cfg['Servers'][$i]['history'] = 'pma__history';
     $cfg['Servers'][$i]['table_uiprefs'] = 'pma__table_uiprefs';
     $cfg['Servers'][$i]['tracking'] = 'pma__tracking';
-    $cfg['Servers'][$i]['designer_coords'] = 'pma__designer_coords';
     $cfg['Servers'][$i]['userconfig'] = 'pma__userconfig';
     $cfg['Servers'][$i]['recent'] = 'pma__recent';
     $cfg['Servers'][$i]['favorite'] = 'pma__favorite';
@@ -95,6 +94,9 @@ if (!empty($dbname)) {
     $cfg['Servers'][$i]['usergroups'] = 'pma__usergroups';
     $cfg['Servers'][$i]['navigationhiding'] = 'pma__navigationhiding';
     $cfg['Servers'][$i]['savedsearches'] = 'pma__savedsearches';
+    $cfg['Servers'][$i]['central_columns'] = 'pma__central_columns';
+    $cfg['Servers'][$i]['designer_settings'] = 'pma__designer_settings';
+    $cfg['Servers'][$i]['export_templates'] = 'pma__export_templates';
 
     /* Uncomment the following to enable logging in to passwordless accounts,
      * after taking note of the associated security risks. */
@@ -110,9 +112,17 @@ if (!empty($dbname)) {
 //$cfg['Servers'][$i]['host'] = 'localhost';
 //$cfg['Servers'][$i]['connect_type'] = 'tcp';
 //$cfg['Servers'][$i]['compress'] = false;
-/* Select mysqli if your server has it */
-//$cfg['Servers'][$i]['extension'] = 'mysql';
-/* Optional: User for advanced features */
+/* Uncomment the following to enable logging in to passwordless accounts,
+ * after taking note of the associated security risks. */
+// $cfg['Servers'][$i]['AllowNoPassword'] = TRUE;
+
+/**
+ * phpMyAdmin configuration storage settings.
+ */
+
+/* User used to manipulate with storage */
+// $cfg['Servers'][$i]['controlhost'] = '';
+// $cfg['Servers'][$i]['controlport'] = '';
 // $cfg['Servers'][$i]['controluser'] = 'pma';
 // $cfg['Servers'][$i]['controlpass'] = 'pmapass';
 
@@ -127,7 +137,6 @@ if (!empty($dbname)) {
 // $cfg['Servers'][$i]['history'] = 'pma__history';
 // $cfg['Servers'][$i]['table_uiprefs'] = 'pma__table_uiprefs';
 // $cfg['Servers'][$i]['tracking'] = 'pma__tracking';
-// $cfg['Servers'][$i]['designer_coords'] = 'pma__designer_coords';
 // $cfg['Servers'][$i]['userconfig'] = 'pma__userconfig';
 // $cfg['Servers'][$i]['recent'] = 'pma__recent';
 // $cfg['Servers'][$i]['favorite'] = 'pma__favorite';
@@ -135,9 +144,11 @@ if (!empty($dbname)) {
 // $cfg['Servers'][$i]['usergroups'] = 'pma__usergroups';
 // $cfg['Servers'][$i]['navigationhiding'] = 'pma__navigationhiding';
 // $cfg['Servers'][$i]['savedsearches'] = 'pma__savedsearches';
-/* Uncomment the following to enable logging in to passwordless accounts,
- * after taking note of the associated security risks. */
-// $cfg['Servers'][$i]['AllowNoPassword'] = TRUE;
+// $cfg['Servers'][$i]['central_columns'] = 'pma__central_columns';
+// $cfg['Servers'][$i]['designer_settings'] = 'pma__designer_settings';
+// $cfg['Servers'][$i]['export_templates'] = 'pma__export_templates';
+/* Contrib / Swekey authentication */
+// $cfg['Servers'][$i]['auth_swekey_config'] = '/etc/swekey-pma.conf';
 
 /*
  * End of servers configuration

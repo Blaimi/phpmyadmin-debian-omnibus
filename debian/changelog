@@ -1,11 +1,11 @@
-phpmyadmin (4:4.5.1-2) UNRELEASED; urgency=medium
+phpmyadmin (4:4.5.1-2) unstable; urgency=medium
 
   * Adjust database configuration to match current upstream and configure
     all phpMyAdmin storage tables (Closes: #804101).
   * Reload webserver only if it is running to avoid spurious error messages
     (Closes: #785233, #802037).
 
- -- Michal Čihař <nijel@debian.org>  Thu, 05 Nov 2015 08:24:31 +0100
+ -- Michal Čihař <nijel@debian.org>  Thu, 05 Nov 2015 09:54:44 +0100
 
 phpmyadmin (4:4.5.1-1) unstable; urgency=medium
 

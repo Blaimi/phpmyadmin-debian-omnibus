@@ -120,7 +120,8 @@ if [ "$1" = "configure" ]; then
 		if [ "$webserver" = "lighttpd" ] ; then
 			lighttpd_install
 		else
-			apache_install
+			# Need to pass params for apache2-maintscript-helper
+			apache_install $@
 		fi
 		# Reload webserver in any case, configuration might have changed
 		# Redirection of 3 is needed because Debconf uses it and it might 

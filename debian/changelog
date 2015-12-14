@@ -2,6 +2,8 @@ phpmyadmin (4:4.5.2-2) UNRELEASED; urgency=medium
 
   * Require PHP >= 5.5 (to avoid installing on older systems which do not have
     it).
+  * Symlink create_tables.sql to examples to have the file in the previous
+    location as well.
 
  -- Michal Čihař <nijel@debian.org>  Mon, 14 Dec 2015 08:19:31 +0100
 

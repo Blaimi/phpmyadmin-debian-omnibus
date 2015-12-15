@@ -1,4 +1,4 @@
-phpmyadmin (4:4.5.2-2) UNRELEASED; urgency=medium
+phpmyadmin (4:4.5.2-2) unstable; urgency=medium
 
   * Require PHP >= 5.5 (to avoid installing on older systems which do not have
     it).
@@ -7,7 +7,7 @@ phpmyadmin (4:4.5.2-2) UNRELEASED; urgency=medium
   * Remove mcrypt dependency, it's not directly needed.
   * Add alternative dependencies on PHP 7.
 
- -- Michal Čihař <nijel@debian.org>  Mon, 14 Dec 2015 08:19:31 +0100
+ -- Michal Čihař <nijel@debian.org>  Tue, 15 Dec 2015 12:58:59 +0100
 
 phpmyadmin (4:4.5.2-1) unstable; urgency=medium
 

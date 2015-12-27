@@ -32,6 +32,7 @@ phpmyadmin source: source-contains-prebuilt-javascript-object js/jquery/src/jque
 # This is source
 phpmyadmin source: source-is-missing js/jqplot/plugins/jqplot.dateAxisRenderer.js
 phpmyadmin source: source-contains-prebuilt-javascript-object js/jqplot/plugins/jqplot.dateAxisRenderer.js line length is 308 characters (>256)
+phpmyadmin source: source-is-missing js/jquery/additional-methods.js
 
 # These are source translation files
 phpmyadmin source: source-contains-prebuilt-javascript-object js/openlayers/src/openlayers/lib/OpenLayers/Lang/*

@@ -1,3 +1,10 @@
+phpmyadmin (4:4.5.3.1-1) unstable; urgency=medium
+
+  * New upstream release.
+    - Fixes path disclosure (PMASA-2015-6, CVE-2015-8669).
+
+ -- Michal Čihař <nijel@debian.org>  Sun, 27 Dec 2015 09:32:29 +0100
+
 phpmyadmin (4:4.5.2-2) unstable; urgency=medium
 
   * Require PHP >= 5.5 (to avoid installing on older systems which do not have

@@ -1,9 +1,28 @@
-phpmyadmin (4:4.5.3.1-2) UNRELEASED; urgency=medium
+phpmyadmin (4:4.5.4-1) unstable; urgency=high
 
+  * New upstream release, fixes security issues:
+    - Multiple full path disclosure vulnerabilities
+    (PMASA-2016-1/CVE-2016-2038).
+    - Unsafe generation of XSRF/CSRF token.
+    (PMASA-2016-2/CVE-2016-2039).
+    - Multiple XSS vulnerabilities.
+    (PMASA-2016-3/CVE-2016-2040).
+    - Insecure password generation in JavaScript.
+    (PMASA-2016-4/CVE-2016-1927).
+    - Unsafe comparison of XSRF/CSRF token.
+    (PMASA-2016-5/CVE-2016-2041).
+    - Multiple full path disclosure vulnerabilities.
+    (PMASA-2016-6/CVE-2016-2042).
+    - XSS vulnerability in normalization page.
+    (PMASA-2016-7/CVE-2016-2043).
+    - Full path disclosure vulnerability in SQL parser.
+    (PMASA-2016-8/CVE-2016-2044).
+    - XSS vulnerability in SQL editor.
+    (PMASA-2016-9/CVE-2016-2045).
   * Add dependency on dbconfig-mysql (Closes: #811452).
   * Update upstream keyring as there is new release manager.
 
- -- Michal Čihař <nijel@debian.org>  Tue, 19 Jan 2016 08:19:58 +0100
+ -- Michal Čihař <nijel@debian.org>  Thu, 28 Jan 2016 09:41:38 +0100
 
 phpmyadmin (4:4.5.3.1-1) unstable; urgency=medium
 

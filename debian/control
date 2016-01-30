@@ -21,7 +21,6 @@ Depends: libapache2-mod-php5 | libapache2-mod-php5filter | php5-cgi | php5-fpm |
     ${misc:Depends}, 
     ${sphinxdoc:Depends},
     dbconfig-mysql | dbconfig-no-thanks | dbconfig-common (< 2.0.0),
-    dbconfig-common,
     php-gettext,
     php-seclib >= 2.0,
     ucf (>= 0.28)

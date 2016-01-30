@@ -2,6 +2,7 @@ phpmyadmin (4:4.5.4.1-1) UNRELEASED; urgency=medium
 
   * New upstream release.
   * Use versioned dependency on phpseclib, we need at least 2.0.
+  * Add phpseclib path to open_basedir settings (Closes: #813095).
 
  -- Michal Čihař <nijel@debian.org>  Sat, 30 Jan 2016 14:46:44 +0100
 

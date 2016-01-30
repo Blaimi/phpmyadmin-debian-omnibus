@@ -68,7 +68,7 @@ Forwarded: not-needed
   * Path to the phpseclib. Useful when you want to use system phpseclib.
   */
 -define('PHPSECLIB_INC_DIR', './libraries/phpseclib/');
-+define('PHPSECLIB_INC_DIR', '/usr/share/php/');
++define('PHPSECLIB_INC_DIR', '/usr/share/php/phpseclib/');
  
  /**
   * Path to the udan11/sql-parser. Useful when you want to use system version.

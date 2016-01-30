@@ -8,12 +8,13 @@ phpmyadmin source: source-contains-prebuilt-javascript-object doc/html/_static/u
 phpmyadmin source: source-is-missing doc/html/_static/underscore.js
 
 # Source include in js/openlayers/src/
-phpmyadmin source: source-is-missing js/openlayers/OpenLayers.js
+phpmyadmin source: source-is-missing js/openlayers/OpenLayers.js line length is 7940 characters (>512)
 phpmyadmin source: source-contains-prebuilt-javascript-object js/openlayers/OpenLayers.js line length is 7940 characters (>1024)
 
 # Just long line, not prebuilt
 phpmyadmin source: source-contains-prebuilt-javascript-object js/codemirror/mode/sql/sql.js line length is 3062 characters (>1024)
-phpmyadmin source: source-is-missing js/codemirror/mode/sql/sql.js
+phpmyadmin source: source-is-missing js/codemirror/mode/sql/sql.js line length is 3062 characters (>512)
+phpmyadmin source: source-is-missing js/jquery/additional-methods.js line length is 918 characters (>512)
 
 # Source included in js/jquery/src/
 phpmyadmin source: source-contains-prebuilt-javascript-object js/jquery/jquery-1.11.1.min.js

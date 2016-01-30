@@ -20,9 +20,9 @@ Depends: libapache2-mod-php5 | libapache2-mod-php5filter | php5-cgi | php5-fpm |
     perl, 
     ${misc:Depends}, 
     ${sphinxdoc:Depends},
-    dbconfig-mysql | dbconfig-no-thanks | dbconfig-common (< 2.0.0),
+    dbconfig-mysql | dbconfig-no-thanks | dbconfig-common (<< 2.0.0),
     php-gettext,
-    php-seclib >= 2.0,
+    php-seclib (>= 2.0),
     ucf (>= 0.28)
 Recommends: apache2 | lighttpd | httpd, 
     php5-gd | php7.0-gd,

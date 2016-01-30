@@ -1,3 +1,9 @@
+phpmyadmin (4:4.5.4.1-1) UNRELEASED; urgency=medium
+
+  * New upstream release.
+
+ -- Michal Čihař <nijel@debian.org>  Sat, 30 Jan 2016 14:46:44 +0100
+
 phpmyadmin (4:4.5.4-1) unstable; urgency=high
 
   * New upstream release, fixes security issues:

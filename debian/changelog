@@ -1,6 +1,7 @@
 phpmyadmin (4:4.5.4.1-2) UNRELEASED; urgency=medium
 
   * Added Gujarati debconf translation.
+  * Adjust phpseclib dependency to 2.0 package named php-phpseclib.
 
  -- Michal Čihař <nijel@debian.org>  Sat, 30 Jan 2016 15:43:59 +0100
 

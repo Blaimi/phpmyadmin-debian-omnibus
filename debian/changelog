@@ -1,3 +1,9 @@
+phpmyadmin (4:4.5.5-1) unstable; urgency=medium
+
+  * New upstream release.
+
+ -- Michal Čihař <nijel@debian.org>  Wed, 24 Feb 2016 16:17:32 +0100
+
 phpmyadmin (4:4.5.4.1-2) unstable; urgency=medium
 
   * Upload to unstable as all deps are there.

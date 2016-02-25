@@ -19,7 +19,6 @@ Depends: libapache2-mod-php5 | libapache2-mod-php5filter | php5-cgi | php5-fpm |
     php5-common (>= 5.5.0) | php7.0-common,
     php5-common | php7.0-common (<<7.0.3-6) | php7.0-mbstring,
     php5-common | php7.0-common (<<7.0.3-6) | php7.0-xml,
-    php5-common | php7.0-common (<<7.0.3-6) | php7.0-zip,
     perl, 
     ${misc:Depends}, 
     ${sphinxdoc:Depends},
@@ -30,6 +29,7 @@ Depends: libapache2-mod-php5 | libapache2-mod-php5filter | php5-cgi | php5-fpm |
 Recommends: apache2 | lighttpd | httpd, 
     php5-gd | php7.0-gd,
     php5-common | php7.0-common (<<7.0.3-7) | php7.0-bz2,
+    php5-common | php7.0-common (<<7.0.3-6) | php7.0-zip,
     mysql-client | mariadb-client | virtual-mysql-client,
     php-tcpdf
 Suggests: mysql-server | mariadb-server | virtual-mysql-server,

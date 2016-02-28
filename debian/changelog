@@ -1,8 +1,13 @@
-phpmyadmin (4:4.5.5-2) UNRELEASED; urgency=medium
+phpmyadmin (4:4.5.5-2) unstable; urgency=medium
 
+  [ Michal Čihař ]
   * Adjust dependecies to split of extensions in PHP 7.0 packages.
 
- -- Michal Čihař <nijel@debian.org>  Thu, 25 Feb 2016 09:29:11 +0100
+  [ Thijs Kinkhorst ]
+  * Fix include of gettext in sql-parser library (closes: #815917).
+  * Checked for policy 3.9.7, no changes.
+
+ -- Thijs Kinkhorst <thijs@debian.org>  Sun, 28 Feb 2016 17:43:45 +0000
 
 phpmyadmin (4:4.5.5-1) unstable; urgency=medium
 

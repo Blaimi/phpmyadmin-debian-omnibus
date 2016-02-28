@@ -1,7 +1,7 @@
 phpmyadmin (4:4.5.5-2) unstable; urgency=medium
 
   [ Michal Čihař ]
-  * Adjust dependecies to split of extensions in PHP 7.0 packages.
+  * Adjust dependencies to split of extensions in PHP 7.0 packages.
 
   [ Thijs Kinkhorst ]
   * Fix include of gettext in sql-parser library (closes: #815917).

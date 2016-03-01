@@ -13,8 +13,8 @@ phpmyadmin source: source-contains-prebuilt-javascript-object js/openlayers/Open
 
 # Just long line, not prebuilt
 phpmyadmin source: source-contains-prebuilt-javascript-object js/codemirror/mode/sql/sql.js line length is 3062 characters (>1024)
-phpmyadmin source: source-is-missing js/codemirror/mode/sql/sql.js line length is 3062 characters (>512)
-phpmyadmin source: source-is-missing js/jquery/additional-methods.js line length is 918 characters (>512)
+phpmyadmin source: source-is-missing js/codemirror/mode/sql/sql.js line length is 3058 characters (>512)
+phpmyadmin source: source-is-missing js/jquery/additional-methods.js line length is 914 characters (>512)
 
 # Source included in js/jquery/src/
 phpmyadmin source: source-contains-prebuilt-javascript-object js/jquery/jquery-1.11.1.min.js

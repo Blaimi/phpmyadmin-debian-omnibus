@@ -7,6 +7,8 @@ REVISION := $(shell head -1 debian/changelog | sed 's/.*(//;s/).*//;s/.*-//')
 %:
 	dh $@ --fail-missing --with sphinxdoc
 
+override_dh_auto_clean:
+
 override_dh_auto_build:
 	make -C doc/ html
 	touch build-stamp

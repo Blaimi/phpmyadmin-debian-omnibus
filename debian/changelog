@@ -1,3 +1,17 @@
+phpmyadmin (4:4.5.5.1-1) unstable; urgency=high
+
+  * New upstream release, fixes security issues:
+    - XSS vulnerability in SQL parser
+      (CVE-2016-2559, PMASA-2016-10).
+    - Multiple XSS vulnerabilities
+      (CVE-2016-2560, PMASA-2016-11).
+    - Multiple XSS vulnerabilities
+      (CVE-2016-2561, PMASA-2016-12).
+    - Vulnerability allowing man-in-the-middle attack on API call to GitHub
+      (CVE-2016-2562, PMASA-2016-13).
+
+ -- Michal Čihař <nijel@debian.org>  Tue, 01 Mar 2016 10:03:38 +0100
+
 phpmyadmin (4:4.5.5-2) unstable; urgency=medium
 
   [ Michal Čihař ]

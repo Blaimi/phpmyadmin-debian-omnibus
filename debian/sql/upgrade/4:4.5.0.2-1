@@ -25,9 +25,6 @@ UPDATE `pma__column_info`
     'text_plain_imagelink.class.php',
     'text_plain_sql.class.php'
   );
-ALTER TABLE `pma__column_info`
-  ADD `input_transformation` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL DEFAULT '',
-  ADD `input_transformation_options` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL DEFAULT '';
 
 -- --------------------------------------------------------
 

@@ -15,6 +15,7 @@ Package: phpmyadmin
 Architecture: all
 Depends: libapache2-mod-php7.0 | php7.0-cgi | php7.0-fpm | php7.0 | libapache2-mod-php5 | libapache2-mod-php5filter | php5-cgi | php5-fpm | php5,
     php7.0-mysql | php5-mysql | php5-mysqli | php5-mysqlnd,
+    php7.0-cli | php5-cli,
     php7.0-json | php5-json,
     php7.0-common | php5-common (>= 5.5.0),
     php7.0-mbstring | php7.0-common (<<7.0.3-6) | php5-common,

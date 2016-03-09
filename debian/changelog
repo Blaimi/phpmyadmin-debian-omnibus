@@ -1,9 +1,11 @@
-phpmyadmin (4:4.5.5.1-2) UNRELEASED; urgency=medium
+phpmyadmin (4:4.5.5.1-2) unstable; urgency=medium
 
   * Prefer PHP 7 over PHP 5 in dependencies to make it more straightforward
     for new installs (Closes: #816462, #816466).
+  * Fix upgrade for automatically upgraded configuration storage
+    (Closes: #802855, #813190).
 
- -- Michal Čihař <nijel@debian.org>  Wed, 02 Mar 2016 08:10:11 +0100
+ -- Michal Čihař <nijel@debian.org>  Wed, 09 Mar 2016 16:41:03 +0100
 
 phpmyadmin (4:4.5.5.1-1) unstable; urgency=high
 

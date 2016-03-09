@@ -17,6 +17,7 @@ debian/pma-secure usr/sbin
 
 debian/sql/upgrade/*    usr/share/dbconfig-common/data/phpmyadmin/upgrade/mysql
 debian/sql/install/*    usr/share/dbconfig-common/data/phpmyadmin/install
+debian/sql/upgrade-scripts/*    usr/share/dbconfig-common/scripts/phpmyadmin/upgrade/mysql
 
 debian/icons/48/phpmyadmin.png usr/share/icons/hicolor/48x48/apps
 debian/icons/32/phpmyadmin.png usr/share/icons/hicolor/32x32/apps

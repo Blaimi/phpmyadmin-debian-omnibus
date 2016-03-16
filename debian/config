@@ -6,9 +6,7 @@ set -e
 
 if [ -f /usr/share/dbconfig-common/dpkg/config.mysql ]; then
         . /usr/share/dbconfig-common/dpkg/config.mysql
-        if ! dbc_go phpmyadmin $@ ; then
-            echo 'Automatic configuration using dbconfig-common failed!'
-        fi
+        dbc_go phpmyadmin $@
 fi
 
 db_version 2.0

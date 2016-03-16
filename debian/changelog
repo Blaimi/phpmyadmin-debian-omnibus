@@ -1,3 +1,9 @@
+phpmyadmin (4:4.5.5.1-3) UNRELEASED; urgency=medium
+
+  * Let dbconfig-common handle error states (Closes: #818314).
+
+ -- Michal Čihař <nijel@debian.org>  Wed, 16 Mar 2016 19:23:14 +0100
+
 phpmyadmin (4:4.5.5.1-2) unstable; urgency=medium
 
   * Prefer PHP 7 over PHP 5 in dependencies to make it more straightforward

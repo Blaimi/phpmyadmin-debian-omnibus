@@ -28,7 +28,7 @@ override_dh_install:
 
 	# include Debian marker in version string
 	sed -ri "/set..PMA_VERSION/ s/'([-0-9a-z.]+)'/'\\1deb$(REVISION)'/" \
-	    debian/phpmyadmin/usr/share/phpmyadmin/libraries/Config.class.php
+	    debian/phpmyadmin/usr/share/phpmyadmin/libraries/Config.php
 
 	# Remove sources from binary package
 	rm -r debian/phpmyadmin/usr/share/phpmyadmin/js/jquery/src

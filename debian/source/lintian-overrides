@@ -8,7 +8,7 @@ phpmyadmin source: source-contains-prebuilt-javascript-object doc/html/_static/u
 phpmyadmin source: source-is-missing doc/html/_static/underscore.js
 
 # Source include in js/openlayers/src/
-phpmyadmin source: source-is-missing js/openlayers/OpenLayers.js line length is 7940 characters (>512)
+phpmyadmin source: source-is-missing js/openlayers/OpenLayers.js line length is 639 characters (>512)
 phpmyadmin source: source-contains-prebuilt-javascript-object js/openlayers/OpenLayers.js line length is 7940 characters (>1024)
 
 # Just long line, not prebuilt
@@ -18,11 +18,11 @@ phpmyadmin source: source-is-missing js/jquery/additional-methods.js line length
 
 # Source included in js/jquery/src/
 phpmyadmin source: source-contains-prebuilt-javascript-object js/jquery/jquery-1.11.1.min.js
-phpmyadmin source: source-is-missing js/jquery/jquery-1.11.1.min.js
+phpmyadmin source: source-is-missing js/jquery/jquery-2.1.4.min.js
 
 # Source included in js/jquery/src/
 phpmyadmin source: source-contains-prebuilt-javascript-object js/jquery/jquery-ui-1.11.2.min.js
-phpmyadmin source: source-is-missing js/jquery/jquery-ui-1.11.2.min.js
+phpmyadmin source: source-is-missing js/jquery/jquery-ui-1.11.4.min.js
 
 # Not really a composer package
 phpmyadmin source: composer-package-without-pkg-php-tools-builddep

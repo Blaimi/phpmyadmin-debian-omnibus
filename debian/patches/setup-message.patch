@@ -11,7 +11,7 @@ Forwarded: not-needed
 -                'Configuration saved to file config/config.inc.php in phpMyAdmin '
 -                . 'top level directory, copy it to top level one and delete '
 -                . 'directory config to use it.'
-+                'Configuration saved to file /etc/phpmyadmin/config.inc.php.'
++                'Configuration saved to file /var/lib/phpmyadmin/config.inc.php.'
              )
          )
      );

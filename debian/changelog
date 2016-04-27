@@ -1,11 +1,11 @@
-phpmyadmin (4:4.6.0-2) UNRELEASED; urgency=medium
+phpmyadmin (4:4.6.0-2) unstable; urgency=medium
 
   * Do not assume PHP 5 for the upgrade script (Closes: #820881).
   * Simplify PHP dependencies, mixed PHP 5/7 setup never really worked, so
     let's depend on one PHP version only (Closes: #821592, #820881, #819521).
   * Bump standards to 3.9.8.
 
- -- Michal Čihař <nijel@debian.org>  Wed, 13 Apr 2016 12:58:28 +0200
+ -- Michal Čihař <nijel@debian.org>  Wed, 27 Apr 2016 08:55:48 +0200
 
 phpmyadmin (4:4.6.0-1) unstable; urgency=medium
 

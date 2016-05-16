@@ -9,6 +9,20 @@ USAGE
   at time of writing this). Please note that you need to have enabled PHP
   support in your webserver (for Apache you can do this by a2enmod php5, for
   Lighttpd by lighty-enable-mod fastcgi).
+
+  Should you get a 404 "not found" error when you installed phpMyAdmin using
+  apt-get and point your browser at <http://localhost/phpmyadmin/>.
+
+  Most likely you did not enable configuration for your webserver during
+  installation. You can reconfigure phpmyadmin package to get the selection
+  again and choose webserver you are using (eg. "Apache 2"):
+
+    sudo dpkg-reconfigure -plow phpmyadmin
+
+  You can also manually install the shipped configuration file to Apache conf.d
+  directory (but the above way is preferred):
+
+    sudo a2enconf phpmyadmin
   
 
 PROBLEM WITH COOKIES

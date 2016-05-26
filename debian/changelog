@@ -1,9 +1,13 @@
-phpmyadmin (4:4.6.1-2) UNRELEASED; urgency=medium
+phpmyadmin (4:4.6.2-1) unstable; urgency=medium
 
+  * New upstream release, fixing several security issues:
+    - PMASA-2016-16 - Self XSS.
+    - PMASA-2016-15 - File Traversal Protection Bypass on Error Reporting.
+    - PMASA-2016-14 - Sensitive Data in URL GET Query Parameters.
   * Document troubleshooting when web server is not configured.
   * Remove recommends of virtual-mysql-client, it's not needed.
 
- -- Michal Čihař <nijel@debian.org>  Mon, 16 May 2016 11:16:32 +0200
+ -- Michal Čihař <nijel@debian.org>  Thu, 26 May 2016 12:29:41 +0200
 
 phpmyadmin (4:4.6.1-1) unstable; urgency=medium
 

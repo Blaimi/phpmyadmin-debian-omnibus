@@ -1,9 +1,11 @@
 phpmyadmin (4:4.6.2-1) unstable; urgency=medium
 
   * New upstream release, fixing several security issues:
-    - PMASA-2016-16 - Self XSS.
-    - PMASA-2016-15 - File Traversal Protection Bypass on Error Reporting.
-    - PMASA-2016-14 - Sensitive Data in URL GET Query Parameters.
+    - PMASA-2016-16 - Self XSS (CVE-2016-5099).
+    - PMASA-2016-15 - File Traversal Protection Bypass on Error Reporting
+      (CVE-2016-5098).
+    - PMASA-2016-14 - Sensitive Data in URL GET Query Parameters
+      (CVE-2016-5097).
   * Document troubleshooting when web server is not configured.
   * Remove recommends of virtual-mysql-client, it's not needed.
 

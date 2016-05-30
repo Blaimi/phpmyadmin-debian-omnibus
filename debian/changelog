@@ -1,8 +1,9 @@
-phpmyadmin (4:4.6.2-2) UNRELEASED; urgency=medium
+phpmyadmin (4:4.6.2-2) unstable; urgency=medium
 
   * Updated Bulgarian and Esperanto debconf translations.
+  * Fix typo in upgrade script (Closes: #820881).
 
- -- Michal Čihař <nijel@debian.org>  Thu, 26 May 2016 19:34:35 +0200
+ -- Michal Čihař <nijel@debian.org>  Mon, 30 May 2016 09:56:18 +0200
 
 phpmyadmin (4:4.6.2-1) unstable; urgency=medium
 

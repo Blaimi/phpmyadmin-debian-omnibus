@@ -9,7 +9,7 @@ require '/etc/phpmyadmin/config-db.php';
 /** 
  * Connect to the database
  */
-$link = mysqli_connect($dbserver, $dbuser, $dbpass, $dbname, $dbport)
+$link = mysqli_connect($dbserver, $dbuser, $dbpass, $dbname, $dbport);
 
 /**
  * Update table ignoring result as this migration might have been already 

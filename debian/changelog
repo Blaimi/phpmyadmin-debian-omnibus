@@ -1,3 +1,33 @@
+phpmyadmin (4:4.6.3-1) unstable; urgency=high
+
+  * New upstream release, fixing several security issues:
+    - BBCode injection vulnerability
+      (PMASA-2016-17 / CVE-2016-5701)
+    - Cookie attribute injection attack
+      (PMASA-2016-18 / CVE-2016-5702)
+    - SQL injection attack
+      (PMASA-2016-19 / CVE-2016-5703)
+    - XSS on table structure page
+      (PMASA-2016-20 / CVE-2016-5704)
+    - Multiple XSS vulnerabilities
+      (PMASA-2016-21 / CVE-2016-5705)
+    - DOS attack
+      (PMASA-2016-22 / CVE-2016-5706)
+    - Multiple full path disclosure vulnerabilities
+      (PMASA-2016-23 / CVE-2016-5730)
+    - XSS through FPD
+      (PMASA-2016-24 / CVE-2016-5731)
+    - XSS in partition range functionality
+      (PMASA-2016-25 / CVE-2016-5732)
+    - Multiple XSS vulnerabilities
+      (PMASA-2016-26 / CVE-2016-5733)
+    - Unsafe handling of preg_replace parameters
+      (PMASA-2016-27 / CVE-2016-5734)
+    - Referrer leak in transformations
+      (PMASA-2016-28 / CVE-2016-5739)
+
+ -- Michal Čihař <nijel@debian.org>  Thu, 23 Jun 2016 08:58:19 +0200
+
 phpmyadmin (4:4.6.2-2) unstable; urgency=medium
 
   * Updated Bulgarian and Esperanto debconf translations.

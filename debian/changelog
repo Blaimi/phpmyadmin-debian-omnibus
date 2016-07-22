@@ -1,6 +1,7 @@
 phpmyadmin (4:4.6.3-2) UNRELEASED; urgency=medium
 
   * Replace FollowSymLinks with SymLinksIfOwnerMatch to apache configuration.
+  * Updated Chinese debconf translations.
 
  -- Michal Čihař <nijel@debian.org>  Fri, 22 Jul 2016 10:46:02 +0200
 

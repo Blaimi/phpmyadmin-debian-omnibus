@@ -62,9 +62,10 @@ if [ "$1" = "configure" ]; then
 		touch /var/lib/phpmyadmin/blowfish_secret.inc.php
 		chgrp www-data /var/lib/phpmyadmin/blowfish_secret.inc.php
 		chmod 640 /var/lib/phpmyadmin/blowfish_secret.inc.php
-		printf "<?php\n\$cfg['blowfish_secret'] = '%s';\n" \
-		`cat /dev/urandom | tr -dc 'a-zA-Z0-9~!@#$%^&*_()+}{?></";.,[]=-' | fold -w 32 | head -n 1` \
-			>> /var/lib/phpmyadmin/blowfish_secret.inc.php
+        cat >> /var/lib/phpmyadmin/blowfish_secret.inc.php <<EOT
+<?php
+\$cfg['blowfish_secret'] = '`cat /dev/urandom | tr -dc 'a-zA-Z0-9~!@#$%^&*_()+}{?></";.,[]=-' | fold -w 32 | head -n 1`';
+EOT
 	fi
 
 	db_version 2.0

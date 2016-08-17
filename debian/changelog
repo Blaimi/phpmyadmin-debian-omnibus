@@ -1,4 +1,4 @@
-phpmyadmin (4:4.6.4+dfsg1-1) UNRELEASED; urgency=high
+phpmyadmin (4:4.6.4+dfsg1-1) unstable; urgency=high
 
   * Repacked sources to exclude non free sRGB profile.
   * Replace FollowSymLinks with SymLinksIfOwnerMatch to apache configuration.
@@ -64,7 +64,7 @@ phpmyadmin (4:4.6.4+dfsg1-1) UNRELEASED; urgency=high
     - Remove tode execution vulnerability when PHP uses dbase extension
       (PMASA-2016-56, CVE-2016-6633)
 
- -- Michal Čihař <nijel@debian.org>  Wed, 17 Aug 2016 08:45:23 +0200
+ -- Michal Čihař <nijel@debian.org>  Wed, 17 Aug 2016 10:05:21 +0200
 
 phpmyadmin (4:4.6.3-1) unstable; urgency=high
 

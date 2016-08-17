@@ -1,50 +1,50 @@
-This is a prepackaged version of phpMyAdmin: a tool to Administrate MySQL
-over the WWW. It was Debianised from scratch by Thijs Kinkhorst
-<thijs@debian.org>, using files obtained from https://www.phpmyadmin.net/
+Format: http://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
+Upstream-Contact: developers@phpmyamdin.net
+Source: https://www.phpmyadmin.net/
+Files-Excluded:
+  libraries/tcpdf/include/sRGB.icc
 
-More information about phpMyAdmin is available from
-https://www.phpmyadmin.net/
+Files: *
+Copyright: 
+    Copyright (C) 1998-2000 Tobias Ratschiller <tobias_at_ratschiller.com>
+    Copyright (C) 2001-2014 Marc Delisle <marc_at_infomarc.info>
+        Olivier Müller <om_at_omnis.ch>
+        Robin Johnson <robbat2_at_users.sourceforge.net>
+        Alexander M. Turek <me_at_derrabus.de>
+        Michal Čihař <michal_at_cihar.com>
+        Garvin Hicking <me_at_supergarv.de>
+        Michael Keck <mkkeck_at_users.sourceforge.net>
+        Sebastian Mendel <cybot_tm_at_users.sourceforge.net>
+        [check credits for more details]
+License: GPL-2
 
-Copyright and licence notice:
+Files: libraries/tcpdf/*
+Copyright: (C) 2002-2014  Nicola Asuni - Tecnick.com LTD
+License: LGPL-3+
 
-      Copyright (C) 1998-2000 Tobias Ratschiller <tobias_at_ratschiller.com>
-      Copyright (C) 2001-2012 Marc Delisle <DelislMa_at_cegepsherbrooke.qc.ca>
-                              Olivier Mller <om_at_omnis.ch>
-                              Robin Johnson <robbat2_at_users.sourceforge.net>
-                              Alexander M. Turek <me_at_derrabus.de>
-                              Michal Cihar <michal_at_cihar.com>
-                              Garvin Hicking <me_at_supergarv.de>
-                              Michael Keck <mkkeck_at_users.sourceforge.net>
-                              Sebastian Mendel <cybot_tm_at_users.sf.net>
-                              [see Documentation.txt/.html file for more]
+Files: libraries/phpseclib/*
+Copyright: 2007-2013 TerraFrost and other contributors
+License: MIT
 
-    This program is free software; you can redistribute it and/or modify
-    it under the terms of the GNU General Public License version 2,
-    as published by the Free Software Foundation.
+Files: libraries/tcpdf/font/*
+Copyright: (c) 2003 by Bitstream, Inc.
+License: public-domain
 
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
+Files: debian/*
+Copyright: 2007-2016, Michal Čihař <nijel@debian.org>, Thijs Kinkhorst <thijs@debian.org>
+License: GPL-2+
 
-    You should have received a copy of the GNU General Public License
-    along with this program; if not, write to the Free Software
-    Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+License: GPL-2
+ On Debian systems the full text of the GNU General Public
+ License can be found in the `/usr/share/common-licenses/GPL-2'
+ file.
 
-On any Debian system, you can find the complete text of the GNU GPL
-(GNU General Public License) in the file  /usr/share/common-licenses/GPL-2
+License: LGPL-3+
+ On Debian systems the full text of the GNU Lesser General Public
+ License can be found in the `/usr/share/common-licenses/LGPL-3'
+ file.
 
-The files under libraries/tcpdf are copyright (c) 2001-2012 Tecnick.com S.r.l.
-Licence: GNU Lesser General Public License as published by the Free Software
-Foundation, either version 3 of the License, or (at your option) any later
-version.
-
-On any Debian system, you can find the complete text of the GNU LGPL
-(GNU Lesser General Public License) in the file
-/usr/share/common-licenses/LGPL-3
-
-libraries/phpseclib is copyright 2008 Jim Wigginton <terrafrost@php.net>
-and licenced under the MIT License:
+License: MIT
     Permission is hereby granted, free of charge, to any person obtaining a copy
     of this software and associated documentation files (the "Software"), to deal
     in the Software without restriction, including without limitation the rights
@@ -63,9 +63,8 @@ and licenced under the MIT License:
     OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
     THE SOFTWARE.
 
-The fonts under libraries/tcpdf/font are Copyright (c) 2003 by Bitstream, Inc..
-DejaVu changes are in public domain. Licence:
 
+License: public-domain
     Permission is hereby granted, free of charge, to any person obtaining a copy
     of the fonts accompanying this license ("Fonts") and associated
     documentation files (the "Font Software"), to reproduce and distribute the
@@ -106,115 +105,3 @@ DejaVu changes are in public domain. Licence:
     without prior written authorization from the Gnome Foundation or Bitstream
     Inc., respectively. For further information, contact: fonts at gnome dot
     org. 
-
-Glyphs imported from Arev fonts are Copyright (c) 2006 by Tavmjong Bah.
-Licence:
-
-    Permission is hereby granted, free of charge, to any person obtaining
-    a copy of the fonts accompanying this license ("Fonts") and
-    associated documentation files (the "Font Software"), to reproduce
-    and distribute the modifications to the Bitstream Vera Font Software,
-    including without limitation the rights to use, copy, merge, publish,
-    distribute, and/or sell copies of the Font Software, and to permit
-    persons to whom the Font Software is furnished to do so, subject to
-    the following conditions:
-
-    The above copyright and trademark notices and this permission notice
-    shall be included in all copies of one or more of the Font Software
-    typefaces.
-
-    The Font Software may be modified, altered, or added to, and in
-    particular the designs of glyphs or characters in the Fonts may be
-    modified and additional glyphs or characters may be added to the
-    Fonts, only if the fonts are renamed to names not containing either
-    the words "Tavmjong Bah" or the word "Arev".
-
-    This License becomes null and void to the extent applicable to Fonts
-    or Font Software that has been modified and is distributed under the 
-    "Tavmjong Bah Arev" names.
-
-    The Font Software may be sold as part of a larger software package but
-    no copy of one or more of the Font Software typefaces may be sold by
-    itself.
-
-    THE FONT SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
-    EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO ANY WARRANTIES OF
-    MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT
-    OF COPYRIGHT, PATENT, TRADEMARK, OR OTHER RIGHT. IN NO EVENT SHALL
-    TAVMJONG BAH BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,
-    INCLUDING ANY GENERAL, SPECIAL, INDIRECT, INCIDENTAL, OR CONSEQUENTIAL
-    DAMAGES, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
-    FROM, OUT OF THE USE OR INABILITY TO USE THE FONT SOFTWARE OR FROM
-    OTHER DEALINGS IN THE FONT SOFTWARE.
-
-    Except as contained in this notice, the name of Tavmjong Bah shall not
-    be used in advertising or otherwise to promote the sale, use or other
-    dealings in this Font Software without prior written authorization
-    from Tavmjong Bah. For further information, contact: tavmjong @ free
-    . fr.
-
-The OpenLayers library under js/openlayers:
-
-    Copyright 2005-2013 OpenLayers Contributors. All rights reserved. See
-    authors.txt for full list.
-
-    Redistribution and use in source and binary forms, with or without modification,
-    are permitted provided that the following conditions are met:
-
-     1. Redistributions of source code must retain the above copyright notice, this
-    list of conditions and the following disclaimer.
-
-     2. Redistributions in binary form must reproduce the above copyright notice,
-    this list of conditions and the following disclaimer in the documentation and/or
-    other materials provided with the distribution.
-
-    THIS SOFTWARE IS PROVIDED BY OPENLAYERS CONTRIBUTORS ``AS IS'' AND ANY EXPRESS
-    OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
-    MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT
-    SHALL COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
-    INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
-    LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR
-    PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
-    LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE
-    OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
-    ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-
-    The views and conclusions contained in the software and documentation are those
-    of the authors and should not be interpreted as representing official policies,
-    either expressed or implied, of OpenLayers Contributors.
-
-The Firebug library pars under js/openlayers/:
-
-    Software License Agreement (BSD License)
-
-    Copyright (c) 2007, Parakey Inc.
-    All rights reserved.
-
-    Redistribution and use of this software in source and binary forms, with or without modification,
-    are permitted provided that the following conditions are met:
-
-    * Redistributions of source code must retain the above
-      copyright notice, this list of conditions and the
-      following disclaimer.
-
-    * Redistributions in binary form must reproduce the above
-      copyright notice, this list of conditions and the
-      following disclaimer in the documentation and/or other
-      materials provided with the distribution.
-
-    * Neither the name of Parakey Inc. nor the names of its
-      contributors may be used to endorse or promote products
-      derived from this software without specific prior
-      written permission of Parakey Inc.
-
-    THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR
-    IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND
-    FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR
-    CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
-    DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
-    DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER
-    IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT
-    OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-
-The Debian packaging of phpMyAdmin is (c) 2007-2014 Thijs Kinkhorst and
-Michal Čihař licenced under the same licence as phpMyAdmin itself.

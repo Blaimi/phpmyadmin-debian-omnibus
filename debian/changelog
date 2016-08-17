@@ -1,5 +1,6 @@
-phpmyadmin (4:4.6.4-1) unstable; urgency=high
+phpmyadmin (4:4.6.4+dfsg1-1) UNRELEASED; urgency=high
 
+  * Repacked sources to exclude non free sRGB profile.
   * Replace FollowSymLinks with SymLinksIfOwnerMatch to apache configuration.
   * Updated Chinese debconf translations.
   * Better generate blowfish_secret.

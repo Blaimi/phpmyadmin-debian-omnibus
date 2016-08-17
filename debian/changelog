@@ -1,10 +1,69 @@
-phpmyadmin (4:4.6.3-2) UNRELEASED; urgency=medium
+phpmyadmin (4:4.6.4-1) unstable; urgency=high
 
   * Replace FollowSymLinks with SymLinksIfOwnerMatch to apache configuration.
   * Updated Chinese debconf translations.
   * Better generate blowfish_secret.
+  * New upstream release, fixing several security issues:
+    - Weaknesses with cookie encryption
+      (PMASA-2016-29, CVE-2016-6606)
+    - Multiple XSS vulnerabilities
+      (PMASA-2016-30, CVE-2016-6607)
+    - Multiple XSS vulnerabilities
+      (PMASA-2016-31, CVE-2016-6608)
+    - PHP code injection
+      (PMASA-2016-32, CVE-2016-6609)
+    - Full path disclosure
+      (PMASA-2016-33, CVE-2016-6610)
+    - SQL injection attack
+      (PMASA-2016-34, CVE-2016-6611)
+    - Local file exposure through LOAD DATA LOCAL INFILE
+      (PMASA-2016-35, CVE-2016-6612)
+    - Local file exposure through symlinks with UploadDir
+      (PMASA-2016-36, CVE-2016-6613)
+    - Path traversal with SaveDir and UploadDir
+      (PMASA-2016-37, CVE-2016-6614)
+    - Multiple XSS vulnerabilities
+      (PMASA-2016-38, CVE-2016-6615)
+    - SQL injection vulnerability as control user
+      (PMASA-2016-39, CVE-2016-6616)
+    - SQL injection vulnerability
+      (PMASA-2016-40, CVE-2016-6617)
+    - Denial-of-service attack through transformation feature
+      (PMASA-2016-41, CVE-2016-6618)
+    - SQL injection vulnerability as control user
+      (PMASA-2016-42, CVE-2016-6619)
+    - Verify data before unserializing
+      (PMASA-2016-43, CVE-2016-6620)
+    - SSRF in setup script
+      (PMASA-2016-44, CVE-2016-6621)
+    - Denial-of-service attack with $cfg['AllowArbitraryServer'] = true and
+    persistent connections
+      (PMASA-2016-45, CVE-2016-6622)
+    - Denial-of-service attack by using for loops
+      (PMASA-2016-46, CVE-2016-6623)
+    - Possible circumvention of IP-based allow/deny rules with IPv6 and proxy
+    server
+      (PMASA-2016-47, CVE-2016-6624)
+    - Detect if user is logged in
+      (PMASA-2016-48, CVE-2016-6625)
+    - Bypass URL redirection protection
+      (PMASA-2016-49, CVE-2016-6626)
+    - Referrer leak
+      (PMASA-2016-50, CVE-2016-6627)
+    - Reflected File Download
+      (PMASA-2016-51, CVE-2016-6628)
+    - ArbitraryServerRegexp bypass
+      (PMASA-2016-52, CVE-2016-6629)
+    - Denial-of-service attack by entering long password
+      (PMASA-2016-53, CVE-2016-6630)
+    - Remote code execution vulnerability when running as CGI
+      (PMASA-2016-54, CVE-2016-6631)
+    - Denial-of-service attack when PHP uses dbase extension
+      (PMASA-2016-55, CVE-2016-6632)
+    - Remove tode execution vulnerability when PHP uses dbase extension
+      (PMASA-2016-56, CVE-2016-6633)
 
- -- Michal Čihař <nijel@debian.org>  Fri, 22 Jul 2016 10:46:02 +0200
+ -- Michal Čihař <nijel@debian.org>  Wed, 17 Aug 2016 08:45:23 +0200
 
 phpmyadmin (4:4.6.3-1) unstable; urgency=high
 

@@ -31,7 +31,7 @@ Recommends: apache2 | lighttpd | httpd,
     php-bz2,
     php-zip,
     php-tcpdf
-Suggests: virtual-mysql-server,
+Suggests: default-mysql-server | virtual-mysql-server,
     www-browser
 Description: MySQL web administration tool
  This package allows administering of MySQL or MariaDB with a web interface.

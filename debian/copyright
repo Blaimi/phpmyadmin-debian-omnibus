@@ -1,5 +1,5 @@
 Format: http://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
-Upstream-Contact: developers@phpmyamdin.net
+Upstream-Contact: developers@phpmyadmin.net
 Source: https://www.phpmyadmin.net/
 Files-Excluded:
   libraries/tcpdf/include/sRGB.icc

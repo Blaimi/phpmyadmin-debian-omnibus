@@ -4,6 +4,8 @@ phpmyadmin (4:4.6.4+dfsg1-2) UNRELEASED; urgency=medium
   * Depend on php-php-gettext as the package has been renamed
     (Closes: #837507).
   * Deny direct access to template files.
+  * Use HTTPS in the Vcs-* fields, and use the cgit frontend instead of
+    gitweb
 
  -- Michal Čihař <nijel@debian.org>  Sun, 04 Sep 2016 09:34:43 +0200
 

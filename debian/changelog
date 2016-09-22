@@ -7,6 +7,7 @@ phpmyadmin (4:4.6.4+dfsg1-2) UNRELEASED; urgency=medium
   * Use HTTPS in the Vcs-* fields, and use the cgit frontend instead of
     gitweb
   * Use current email address in debian/doc-base and debian/copyright.
+  * Remove obsolete PHP settings from Apache configuration.
 
  -- Michal Čihař <nijel@debian.org>  Sun, 04 Sep 2016 09:34:43 +0200
 

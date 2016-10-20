@@ -56,7 +56,7 @@ Forwarded: not-needed
   * eg. /usr/share/php/gettext/gettext.inc.
   */
 -define('GETTEXT_INC', './libraries/php-gettext/gettext.inc');
-+define('GETTEXT_INC', '/usr/share/php/php-gettext/gettext.inc');
++define('GETTEXT_INC', '/usr/share/php/php-php-gettext/gettext.inc');
  /**
   * Path to tcpdf.php file. Useful when you want to use system tcpdf,
   * eg. /usr/share/php/tcpdf/tcpdf.php.

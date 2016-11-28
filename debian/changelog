@@ -1,3 +1,37 @@
+phpmyadmin (4:4.6.5.1-1) unstable; urgency=high
+
+  * New upstream release, fixing several security issues:
+    - Unsafe generation of $cfg['blowfish_secret']
+      (PMASA-2016-58)
+    - phpMyAdmin's phpinfo functionality is removed
+      (PMASA-2016-59)
+    - AllowRoot and allow/deny rule bypass with specially-crafted username
+      (PMASA-2016-60)
+    - Username matching weaknesses with allow/deny rules
+      (PMASA-2016-61)
+    - Possible to bypass logout timeout
+      (PMASA-2016-62)
+    - Full path disclosure (FPD) weaknesses
+      (PMASA-2016-63)
+    - Multiple XSS weaknesses
+      (PMASA-2016-64)
+    - Multiple denial-of-service (DOS) vulnerabilities
+      (PMASA-2016-65)
+    - Possible to bypass white-list protection for URL redirection
+      (PMASA-2016-66)
+    - BBCode injection to login page
+      (PMASA-2016-67)
+    - Denial-of-service (DOS) vulnerability in table partitioning
+      (PMASA-2016-68)
+    - Multiple SQL injection vulnerabilities
+      (PMASA-2016-69)
+    - Incorrect serialized string parsing
+      (PMASA-2016-70)
+    - CSRF token not stripped from the URL
+      (PMASA-2016-71)
+
+ -- Michal Čihař <nijel@debian.org>  Mon, 28 Nov 2016 10:22:19 +0100
+
 phpmyadmin (4:4.6.4+dfsg1-2) unstable; urgency=medium
 
   * Change suggests to prefer default-mysql-server.

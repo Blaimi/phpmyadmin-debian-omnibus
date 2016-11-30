@@ -27,6 +27,7 @@ Depends: php,
     php-phpseclib (>= 2.0),
     ucf (>= 0.28)
 Recommends: apache2 | lighttpd | httpd,
+    php-curl,
     php-gd,
     php-bz2,
     php-zip,

@@ -23,7 +23,7 @@ Depends: php,
     ${misc:Depends},
     ${sphinxdoc:Depends},
     dbconfig-mysql | dbconfig-no-thanks | dbconfig-common (<< 2.0.0),
-    php-php-gettext | php-gettext (<= 1.0.11-2),
+    php-php-gettext | php-gettext (<= 1:7.0),
     php-phpseclib (>= 2.0),
     ucf (>= 0.28)
 Recommends: apache2 | lighttpd | httpd,

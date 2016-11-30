@@ -5,7 +5,7 @@ Forwarded: not-needed
 
 --- a/doc/setup.rst
 +++ b/doc/setup.rst
-@@ -166,22 +166,12 @@
+@@ -305,22 +305,12 @@
  Instead of manually editing :file:`config.inc.php`, you can use phpMyAdmin's 
  setup feature. First you must manually create a folder ``config``
  in the phpMyAdmin directory. This is a security measure. On a
@@ -30,7 +30,7 @@ Forwarded: not-needed
  
  .. note::
  
-@@ -203,16 +193,14 @@
+@@ -342,16 +332,14 @@
  config file locally and upload it (via FTP or some similar means) to the
  proper location.
  

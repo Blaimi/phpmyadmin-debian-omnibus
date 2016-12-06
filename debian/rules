@@ -8,7 +8,10 @@ REVISION := $(shell head -1 debian/changelog | sed 's/.*(//;s/).*//;s/.*-//')
 	dh $@ --fail-missing --with sphinxdoc
 
 override_dh_auto_test:
-	phpunit --config phpunit.xml.nocoverage --exclude-group selenium --exclude testCheckHTTP
+	# We exclude:
+	# - selenium tests as the setup would be too complex
+	# - some network based tests
+	phpunit --config phpunit.xml.nocoverage --exclude-group selenium --exclude testCheckHTTP --exclude testGetLatestVersion
 
 override_dh_auto_clean:
 

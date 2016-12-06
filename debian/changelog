@@ -1,4 +1,4 @@
-phpmyadmin (4:4.6.5.2-1) unstable; urgency=medium
+phpmyadmin (4:4.6.5.2-1) UNRELEASED; urgency=medium
 
   * New upstream release.
   * Remove allow_url_fopen setting, recommend php-curl as that's better way to
@@ -6,6 +6,7 @@ phpmyadmin (4:4.6.5.2-1) unstable; urgency=medium
   * Simplify dependency on php-gettext.
   * Properly work with both php-gettext and php-php-gettext packages as each
     of them installs library to different path.
+  * Run testsuite during build.
 
  -- Michal Čihař <nijel@debian.org>  Tue, 06 Dec 2016 09:24:02 +0100
 

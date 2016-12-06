@@ -6,6 +6,16 @@ Priority: extra
 Standards-Version: 3.9.8
 Build-Depends: debhelper (>= 9),
     python-sphinx,
+    phpunit,
+    php-mysql,
+    php-json,
+    php-mbstring,
+    php-xml,
+    php-bz2,
+    php-zip,
+    php-tcpdf,
+    php-php-gettext | php-gettext (<= 1:7.0),
+    php-phpseclib (>= 2.0),
     po-debconf
 Homepage: https://www.phpmyadmin.net/
 Vcs-Browser: https://anonscm.debian.org/git/collab-maint/phpmyadmin.git

@@ -1,3 +1,4 @@
+flag-tests-needing-network-access.patch
 remove-not-needed-include.patch
 add-validation-prior-to-using-object.patch
 remove-not-needed-includes.patch

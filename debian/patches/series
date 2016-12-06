@@ -1,3 +1,4 @@
+do-not-try-to-run-gd-based-tests-if-gd-extension-is-.patch
 fix-path-to-tcpdf-include.patch
 avoid-using-hardcoded-tcpdf-path.patch
 revert-to-auto-for-further-tests.patch

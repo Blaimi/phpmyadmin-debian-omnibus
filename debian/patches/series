@@ -1,3 +1,4 @@
+add-validation-prior-to-using-object.patch
 remove-not-needed-includes.patch
 debian.patch
 doc.patch

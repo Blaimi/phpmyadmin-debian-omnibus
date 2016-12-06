@@ -1,17 +1,13 @@
-phpmyadmin (4:4.6.5.1-3) UNRELEASED; urgency=medium
+phpmyadmin (4:4.6.5.2-1) unstable; urgency=medium
 
+  * New upstream release.
   * Remove allow_url_fopen setting, recommend php-curl as that's better way to
     support ReCaptcha or similar plugins.
-  * Properly work with both php-gettext and php-php-gettext packages as each
-    of them installs library to differnt path.
-
- -- Michal Čihař <nijel@debian.org>  Wed, 30 Nov 2016 13:40:05 +0100
-
-phpmyadmin (4:4.6.5.1-2) unstable; urgency=medium
-
   * Simplify dependency on php-gettext.
+  * Properly work with both php-gettext and php-php-gettext packages as each
+    of them installs library to different path.
 
- -- Michal Čihař <nijel@debian.org>  Wed, 30 Nov 2016 12:07:21 +0100
+ -- Michal Čihař <nijel@debian.org>  Tue, 06 Dec 2016 09:24:02 +0100
 
 phpmyadmin (4:4.6.5.1-1) unstable; urgency=high
 

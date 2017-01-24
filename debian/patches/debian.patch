@@ -6,7 +6,7 @@ From: Michal Čihař <nijel@debian.org>
 Forwarded: not-needed
 --- a/libraries/vendor_config.php
 +++ b/libraries/vendor_config.php
-@@ -17,24 +17,24 @@
+@@ -17,13 +17,13 @@
   * Path to changelog file, can be gzip compressed. Useful when you want to
   * have documentation somewhere else, eg. /usr/share/doc.
   */
@@ -21,21 +21,8 @@ Forwarded: not-needed
 +define('LICENSE_FILE', '/usr/share/doc/phpmyadmin/copyright');
  
  /**
-  * Path to config file generated using setup script.
-  */
--define('SETUP_CONFIG_FILE', './config/config.inc.php');
-+define('SETUP_CONFIG_FILE', '/var/lib/phpmyadmin/config.inc.php');
- 
- /**
-  * Whether setup requires writable directory where config
-  * file will be generated.
-  */
--define('SETUP_DIR_WRITABLE', true);
-+define('SETUP_DIR_WRITABLE', false);
- 
- /**
   * Directory where SQL scripts to create/upgrade configuration storage reside.
-@@ -46,7 +46,7 @@
+@@ -35,7 +35,7 @@
   * It is not used directly in code, just a convenient
   * define used further in this file.
   */
@@ -44,7 +31,7 @@ Forwarded: not-needed
  
  /**
   * Filename of a configuration file.
-@@ -66,23 +66,27 @@
+@@ -55,23 +55,27 @@
  /**
   * Default value for check for version upgrades.
   */
@@ -75,15 +62,4 @@ Forwarded: not-needed
 +define('PHPSECLIB_INC_DIR', '/usr/share/php/phpseclib/');
  
  /**
-  * Path to the udan11/sql-parser. Useful when you want to use system version.
---- a/test/bootstrap-dist.php
-+++ b/test/bootstrap-dist.php
-@@ -65,7 +65,7 @@
- require_once 'libraries/sql-parser/autoload.php';
- 
- /* Ensure default langauge is active */
--require_once 'libraries/php-gettext/gettext.inc';
-+require_once GETTEXT_INC;
- PMA\libraries\LanguageManager::getInstance()->getLanguage('en')->activate();
- 
- // Set proxy information from env, if available
+  * Path to the phpmyadmin/sql-parser. Useful when you want to use system version.

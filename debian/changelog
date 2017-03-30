@@ -1,3 +1,10 @@
+phpmyadmin (4:4.6.6-2) unstable; urgency=high
+
+  * Apply upstream patch to fix not working
+    $cfg['Servers'][$i]['AllowNoPassword'] (PMASA-2017-8).
+
+ -- Michal Čihař <nijel@debian.org>  Thu, 30 Mar 2017 14:40:46 +0200
+
 phpmyadmin (4:4.6.6-1) unstable; urgency=medium
 
   * New upstream release.

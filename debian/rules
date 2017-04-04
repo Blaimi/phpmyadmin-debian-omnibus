@@ -11,7 +11,7 @@ override_dh_auto_test:
 	# We exclude:
 	# - selenium tests as the setup would be too complex
 	# - some network based tests
-	phpunit --config phpunit.xml.nocoverage --exclude-group selenium --exclude-group network
+	LC_ALL=en_US.UTF-8 phpunit --config phpunit.xml.nocoverage --exclude-group selenium --exclude-group network
 
 override_dh_auto_clean:
 

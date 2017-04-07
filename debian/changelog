@@ -1,9 +1,9 @@
-phpmyadmin (4:4.6.6-4) UNRELEASED; urgency=medium
+phpmyadmin (4:4.6.6-4) unstable; urgency=medium
 
   * Build depend on locales-all to ensure en_US.UTF-8 is available (see
     #859219).
 
- -- Michal Čihař <nijel@debian.org>  Thu, 06 Apr 2017 15:15:27 +0200
+ -- Michal Čihař <nijel@debian.org>  Fri, 07 Apr 2017 16:54:26 +0200
 
 phpmyadmin (4:4.6.6-3) unstable; urgency=medium
 

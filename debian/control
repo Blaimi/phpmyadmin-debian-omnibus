@@ -26,7 +26,7 @@ Package: phpmyadmin
 Architecture: all
 Depends: php,
     php-cli,
-    php-mysql,
+    php-mysql | php-mysqli,
     php-json,
     php-mbstring,
     php-xml,

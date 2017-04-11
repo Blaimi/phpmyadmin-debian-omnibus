@@ -2,6 +2,8 @@ phpmyadmin (4:4.6.6-5) UNRELEASED; urgency=medium
 
   * Add alternate dependency to php-mysqli. This seems to help in case people
     are using the package with other than default PHP.
+  * Add Ukrainian debconf translation.
+  * Update Portuguese debconf translation.
 
  -- Michal Čihař <nijel@debian.org>  Mon, 10 Apr 2017 12:48:01 +0200
 

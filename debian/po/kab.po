@@ -8,19 +8,22 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: phpmyadmin@packages.debian.org\n"
 "POT-Creation-Date: 2009-11-16 14:57+0100\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: Automatically generated\n"
-"Language-Team: none\n"
+"PO-Revision-Date: 2017-05-04 08:45+0000\n"
+"Last-Translator: Muḥend Belqasem <belkacem77@gmail.com>\n"
+"Language-Team: Kabyle "
+"<https://hosted.weblate.org/projects/phpmyadmin/debian/kab/>\n"
 "Language: kab\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 2.14-dev\n"
 
 #. Type: multiselect
 #. Description
 #: ../templates:2001
 msgid "Web server to reconfigure automatically:"
-msgstr ""
+msgstr "Aqeddac web ara yettwasewlen s wudem awurman :"
 
 #. Type: multiselect
 #. Description
@@ -28,13 +31,13 @@ msgstr ""
 msgid ""
 "Please choose the web server that should be automatically configured to run "
 "phpMyAdmin."
-msgstr ""
+msgstr "Fren aqeddac web ara tsewleḍ s wudem awurman i uselkem n phpMyAdmin."
 
 #. Type: string
 #. Description
 #: ../templates:3001
 msgid "Username for web-based setup system:"
-msgstr ""
+msgstr "Asulay n twila s Web:"
 
 #. Type: string
 #. Description
@@ -45,6 +48,8 @@ msgid ""
 "The setup system for phpMyAdmin may be used, after installation, from http://"
 "localhost/phpmyadmin/setup/index.php."
 msgstr ""
+"Anagraw n twila n phpMyadmin yezmer ad ituuseqdec, seld asebded, seg tensa "
+"l'adresse http://localhost/phpmyadmin/setup/index.php."
 
 #. Type: string
 #. Description
@@ -53,20 +58,20 @@ msgstr ""
 #: ../templates:3001 ../templates:4001
 msgid ""
 "Access to this system requires identification with a username and a password."
-msgstr ""
+msgstr "Anekcum ar twila yesra asulay akked wawal uffir."
 
 #. Type: string
 #. Description
 #: ../templates:3001
 msgid ""
 "If you leave this field empty, the default username ('admin') will be used."
-msgstr ""
+msgstr "Ma teǧǧiḍ urti-agi d ilem, asulay amezwer ('admin') ad yettwaseqdec."
 
 #. Type: password
 #. Description
 #: ../templates:4001
 msgid "Password for web-based setup system:"
-msgstr ""
+msgstr "Awal uffir n twila s Web:"
 
 #. Type: password
 #. Description
@@ -75,6 +80,8 @@ msgid ""
 "Usernames and passwords may be managed with the `htpasswd' command and are "
 "stored in /etc/phpmyadmin/htpasswd.setup."
 msgstr ""
+"Isulayen d wawalen uffiren zemren ad ttwasferken s tladna 'htpasswd' udiɣ "
+"yettwasekles di /etc/phpmyadmin/htpasswd.setup."
 
 #. Type: password
 #. Description
@@ -82,4 +89,4 @@ msgstr ""
 msgid ""
 "If you leave this field empty, access to the web-based setup will be "
 "disabled."
-msgstr ""
+msgstr "MA teǧǧiḍ urti-agi d ilem, tawila s web ad tens."

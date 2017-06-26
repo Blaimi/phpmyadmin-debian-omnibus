@@ -8,20 +8,22 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: phpmyadmin@packages.debian.org\n"
 "POT-Creation-Date: 2009-11-16 14:57+0100\n"
-"PO-Revision-Date: 2007-12-03 12:02+0100\n"
-"Last-Translator: Christian Perrier <bubulle@debian.org>\n"
-"Language-Team: French <debian-l10n-french@lists.debian.org>\n"
+"PO-Revision-Date: 2017-06-26 19:14+0000\n"
+"Last-Translator: tmtisfree <tmtisfree@free.fr>\n"
+"Language-Team: French "
+"<https://hosted.weblate.org/projects/phpmyadmin/debian/fr/>\n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: KBabel 1.11.4\n"
+"Plural-Forms: nplurals=2; plural=n > 1;\n"
+"X-Generator: Weblate 2.15-dev\n"
 
 #. Type: multiselect
 #. Description
 #: ../templates:2001
 msgid "Web server to reconfigure automatically:"
-msgstr "Serveur web à reconfigurer automatiquement :"
+msgstr "Serveur Web à reconfigurer automatiquement :"
 
 #. Type: multiselect
 #. Description
@@ -30,14 +32,14 @@ msgid ""
 "Please choose the web server that should be automatically configured to run "
 "phpMyAdmin."
 msgstr ""
-"Veuillez choisir le serveur web à reconfigurer automatiquement pour exécuter "
+"Merci de choisir le serveur Web à reconfigurer automatiquement pour exécuter "
 "phpMyAdmin."
 
 #. Type: string
 #. Description
 #: ../templates:3001
 msgid "Username for web-based setup system:"
-msgstr "Identifiant pour la configuration par le web :"
+msgstr "Identifiant pour la configuration par le Web :"
 
 #. Type: string
 #. Description
@@ -67,14 +69,14 @@ msgstr ""
 msgid ""
 "If you leave this field empty, the default username ('admin') will be used."
 msgstr ""
-"Si vous laissez ce champ vide, l'identifiant par défaut (« admin ») sera "
+"Si ce champ est laissé vide, l'identifiant par défaut (« admin ») sera "
 "utilisé."
 
 #. Type: password
 #. Description
 #: ../templates:4001
 msgid "Password for web-based setup system:"
-msgstr "Mot de passe pour la configuration par le web :"
+msgstr "Mot de passe pour la configuration par le Web :"
 
 #. Type: password
 #. Description
@@ -83,9 +85,8 @@ msgid ""
 "Usernames and passwords may be managed with the `htpasswd' command and are "
 "stored in /etc/phpmyadmin/htpasswd.setup."
 msgstr ""
-"Les identifiants et mots de passe peuvent être gérés avec la commande "
-"« htpasswd » et sont conservés dans le fichier /etc/phpmyadmin/htpasswd."
-"setup."
+"Les identifiants et mots de passe peuvent être gérés avec la commande « "
+"htpasswd » et sont stockés dans le fichier /etc/phpmyadmin/htpasswd.setup."
 
 #. Type: password
 #. Description
@@ -94,4 +95,4 @@ msgid ""
 "If you leave this field empty, access to the web-based setup will be "
 "disabled."
 msgstr ""
-"Si vous laissez ce champ vide, la configuration par le web sera désactivée."
+"Si ce champ est laissé vide, la configuration par le Web sera désactivée."

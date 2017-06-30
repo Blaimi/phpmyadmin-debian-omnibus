@@ -15,15 +15,16 @@ msgstr ""
 "Project-Id-Version: phpmyadmin_4:2.11.7.1-1_sv\n"
 "Report-Msgid-Bugs-To: phpmyadmin@packages.debian.org\n"
 "POT-Creation-Date: 2009-11-16 14:57+0100\n"
-"PO-Revision-Date: 2008-07-23 17:23+0200\n"
-"Last-Translator: Martin Ågren <martin.agren@gmail.com>\n"
-"Language-Team: Swedish <debian-l10n-swedish@lists.debian.org>\n"
+"PO-Revision-Date: 2017-06-30 17:25+0000\n"
+"Last-Translator: Aron Bergman <bathingrad@gmail.com>\n"
+"Language-Team: Swedish "
+"<https://hosted.weblate.org/projects/phpmyadmin/debian/sv/>\n"
 "Language: sv\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=ISO-8859-1\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: KBabel 1.11.4\n"
-"Plural-Forms:  nplurals=2; plural=(n != 1);\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 2.15\n"
 
 #. Type: multiselect
 #. Description
@@ -75,8 +76,8 @@ msgstr ""
 msgid ""
 "If you leave this field empty, the default username ('admin') will be used."
 msgstr ""
-"Om du lämnar detta fält blankt, kommer standardanvändarnamnet (\"admin\") "
-"att användas."
+"Om du lämnar detta fält blankt, kommer standardanvändarnamnet ('admin') att "
+"användas."
 
 #. Type: password
 #. Description

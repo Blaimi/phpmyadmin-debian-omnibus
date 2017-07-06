@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: phpmyadmin@packages.debian.org\n"
 "POT-Creation-Date: 2009-11-16 14:57+0100\n"
-"PO-Revision-Date: 2017-07-03 03:32+0000\n"
+"PO-Revision-Date: 2017-07-06 16:15+0000\n"
 "Last-Translator: zhangmiao <myzhm@163.com>\n"
 "Language-Team: Chinese (Simplified) "
 "<https://hosted.weblate.org/projects/phpmyadmin/debian/zh_Hans/>\n"
@@ -37,7 +37,7 @@ msgstr "请选择要自动配置以运行 phpMyAdmin 的网络服务器。"
 #. Description
 #: ../templates:3001
 msgid "Username for web-based setup system:"
-msgstr ""
+msgstr "用于基于网络设置系统的用户名："
 
 #. Type: string
 #. Description
@@ -48,6 +48,8 @@ msgid ""
 "The setup system for phpMyAdmin may be used, after installation, from http://"
 "localhost/phpmyadmin/setup/index.php."
 msgstr ""
+"完成安装后，可能会用到 phpMyAdmin 的设置系统，设置系统位于 "
+"http://localhost/phpmyadmin/setup/index.php。"
 
 #. Type: string
 #. Description
@@ -56,20 +58,20 @@ msgstr ""
 #: ../templates:3001 ../templates:4001
 msgid ""
 "Access to this system requires identification with a username and a password."
-msgstr ""
+msgstr "进入本系统需要用户名和密码验证。"
 
 #. Type: string
 #. Description
 #: ../templates:3001
 msgid ""
 "If you leave this field empty, the default username ('admin') will be used."
-msgstr ""
+msgstr "如果该字段留空，将会使用默认用户名（'admin'）。"
 
 #. Type: password
 #. Description
 #: ../templates:4001
 msgid "Password for web-based setup system:"
-msgstr ""
+msgstr "用于基于网络设置系统的密码："
 
 #. Type: password
 #. Description
@@ -77,7 +79,7 @@ msgstr ""
 msgid ""
 "Usernames and passwords may be managed with the `htpasswd' command and are "
 "stored in /etc/phpmyadmin/htpasswd.setup."
-msgstr ""
+msgstr "可以通过 “htpasswd” 管理用户名和密码，并将其存储于/etc/phpmyadmin/htpasswd.setup。"
 
 #. Type: password
 #. Description
@@ -85,4 +87,4 @@ msgstr ""
 msgid ""
 "If you leave this field empty, access to the web-based setup will be "
 "disabled."
-msgstr ""
+msgstr "如果您将此字段留空，将无法进入基于网络的系统设置。"

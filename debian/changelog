@@ -1,10 +1,11 @@
-phpmyadmin (4:4.6.6-5) UNRELEASED; urgency=medium
+phpmyadmin (4:4.6.6-5) unstable; urgency=medium
 
   * Add alternate dependency to php-mysqli. This seems to help in case people
     are using the package with other than default PHP.
   * Debconf translations update (Ukrainian, Portuguese, Kabyle and French).
+  * Fix open_basedir setting for PHP 7 (Closes: #867882).
 
- -- Michal Čihař <nijel@debian.org>  Mon, 10 Apr 2017 12:48:01 +0200
+ -- Michal Čihař <nijel@debian.org>  Mon, 10 Jul 2017 12:43:06 +0200
 
 phpmyadmin (4:4.6.6-4) unstable; urgency=medium
 

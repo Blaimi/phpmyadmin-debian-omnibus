@@ -402,7 +402,8 @@ RTE.COMMON = {
              *          the AJAX message shown to the user
              */
             var $msg = PMA_ajaxShowMessage(PMA_messages.strProcessingRequest);
-            $.post(url, {'is_js_confirmed': 1, 'ajax_request': true}, function (data) {
+            var params = getJSConfirmCommonParam(this, $this.getPostData());
+            $.post(url, params, function (data) {
                 if (data.success === true) {
                     /**
                      * @var $table Object containing reference
@@ -476,7 +477,8 @@ RTE.COMMON = {
                  * @var $curr_row Object containing reference to the current row
                  */
                 var $curr_row = $anchor.parents('tr');
-                $.post($anchor.attr('href'), {'is_js_confirmed': 1, 'ajax_request': true}, function (data) {
+                var params = getJSConfirmCommonParam(this, $anchor.getPostData());
+                $.post($anchor.attr('href'), params, function (data) {
                     returnCount++;
                     if (data.success === true) {
                         /**
@@ -822,7 +824,11 @@ RTE.ROUTINE = {
          *          the AJAX message shown to the user
          */
         var $msg = PMA_ajaxShowMessage();
-        $.post($this.attr('href'), {'ajax_request': true}, function (data) {
+        var params = {
+            'ajax_request': true,
+            'token': PMA_commonParams.get('token')
+        };
+        $.post($this.attr('href'), params, function (data) {
             if (data.success === true) {
                 PMA_ajaxRemoveMessage($msg);
                 // If 'data.dialog' is true we show a dialog with a form

@@ -5,7 +5,7 @@
 REVISION := $(shell head -1 debian/changelog | sed 's/.*(//;s/).*//;s/.*-//')
 
 %:
-	dh $@ --fail-missing --with sphinxdoc
+	dh $@ --fail-missing --with sphinxdoc,phpcomposer
 
 override_dh_auto_test:
 	# We exclude:
@@ -15,10 +15,16 @@ override_dh_auto_test:
 	#LC_ALL=en_US.UTF-8 phpunit --config phpunit.xml.nocoverage --exclude-group selenium --exclude-group network
 
 override_dh_auto_clean:
+	rm -rf vendor
 
 override_dh_auto_build:
 	make -C doc/ html
 	rm -rf test/selenium
+	mkdir -p vendor
+	phpab --template debian/autoload.php.tpl \
+		--output vendor/autoload.php \
+		libraries/classes \
+		setup/lib
 
 override_dh_install:
 	dh_install
@@ -27,12 +33,6 @@ override_dh_install:
 		debian/phpmyadmin/usr/share/phpmyadmin/js/openlayers/src/openlayers/lib/Firebug/license.txt \
 		debian/phpmyadmin/usr/share/phpmyadmin/js/codemirror/LICENSE \
 		debian/phpmyadmin/usr/share/phpmyadmin/libraries/plugins/auth/recaptcha/LICENSE
-
-	# Use system tcpdf, gettext, phpseclib
-	rm -rf debian/phpmyadmin/usr/share/phpmyadmin/libraries/tcpdf
-	rm -rf debian/phpmyadmin/usr/share/phpmyadmin/libraries/php-gettext
-	rm -rf debian/phpmyadmin/usr/share/phpmyadmin/libraries/phpseclib
-
 	# include Debian marker in version string
 	sed -ri "/set..PMA_VERSION/ s/'([-0-9a-z.]+)'/'\\1deb$(REVISION)'/" \
 	    debian/phpmyadmin/usr/share/phpmyadmin/libraries/Config.php

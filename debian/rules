@@ -30,13 +30,10 @@ override_dh_install:
 	dh_install
 	# spurious licence files, this is in debian/copyright
 	rm \
-		debian/phpmyadmin/usr/share/phpmyadmin/js/openlayers/src/openlayers/lib/Firebug/license.txt \
-		debian/phpmyadmin/usr/share/phpmyadmin/js/codemirror/LICENSE \
-		debian/phpmyadmin/usr/share/phpmyadmin/libraries/plugins/auth/recaptcha/LICENSE
+		debian/phpmyadmin/usr/share/phpmyadmin/js/vendor/codemirror/LICENSE
 	# include Debian marker in version string
 	sed -ri "/set..PMA_VERSION/ s/'([-0-9a-z.]+)'/'\\1deb$(REVISION)'/" \
 	    debian/phpmyadmin/usr/share/phpmyadmin/libraries/classes/Config.php
 
 	# Remove sources from binary package
-	rm -r debian/phpmyadmin/usr/share/phpmyadmin/js/jquery/src
-	rm -r debian/phpmyadmin/usr/share/phpmyadmin/js/openlayers/src
+	rm -r debian/phpmyadmin/usr/share/phpmyadmin/js/vendor/openlayers/src

@@ -2,7 +2,7 @@ Format: http://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
 Upstream-Contact: developers@phpmyadmin.net
 Source: https://www.phpmyadmin.net/
 Files-Excluded:
-  libraries/tcpdf/include/sRGB.icc
+  vendor
 
 Files: *
 Copyright: 
@@ -17,18 +17,6 @@ Copyright:
         Sebastian Mendel <cybot_tm_at_users.sourceforge.net>
         [check credits for more details]
 License: GPL-2
-
-Files: libraries/tcpdf/*
-Copyright: (C) 2002-2014  Nicola Asuni - Tecnick.com LTD
-License: LGPL-3+
-
-Files: libraries/phpseclib/*
-Copyright: 2007-2013 TerraFrost and other contributors
-License: MIT
-
-Files: libraries/tcpdf/font/*
-Copyright: (c) 2003 by Bitstream, Inc.
-License: public-domain
 
 Files: debian/*
 Copyright: 2007-2016, Michal Čihař <nijel@debian.org>, Thijs Kinkhorst <thijs@debian.org>

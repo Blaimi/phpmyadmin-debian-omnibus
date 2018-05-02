@@ -35,7 +35,7 @@ override_dh_install:
 		debian/phpmyadmin/usr/share/phpmyadmin/libraries/plugins/auth/recaptcha/LICENSE
 	# include Debian marker in version string
 	sed -ri "/set..PMA_VERSION/ s/'([-0-9a-z.]+)'/'\\1deb$(REVISION)'/" \
-	    debian/phpmyadmin/usr/share/phpmyadmin/libraries/Config.php
+	    debian/phpmyadmin/usr/share/phpmyadmin/libraries/classes/Config.php
 
 	# Remove sources from binary package
 	rm -r debian/phpmyadmin/usr/share/phpmyadmin/js/jquery/src

@@ -14,9 +14,14 @@ Build-Depends: debhelper (>= 9),
     php-xml,
     php-bz2,
     php-zip,
-    php-tcpdf,
-    php-php-gettext | php-gettext (<= 1:7.0),
+    php-phpmyadmin-motranslator (>= 4.0),
+    php-phpmyadmin-sql-parser (>= 4.2.3),
+    php-phpmyadmin-shapefile (>= 2.0),
     php-phpseclib (>= 2.0),
+    php-psr-container (>= 1.0),
+    php-symfony-expression-language (>=3.2),
+    php-tcpdf,
+    php-twig,
     po-debconf
 Homepage: https://www.phpmyadmin.net/
 Vcs-Browser: https://anonscm.debian.org/git/collab-maint/phpmyadmin.git

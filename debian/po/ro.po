@@ -8,19 +8,23 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: phpmyadmin@packages.debian.org\n"
 "POT-Creation-Date: 2009-11-16 14:57+0100\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: Automatically generated\n"
-"Language-Team: none\n"
+"PO-Revision-Date: 2018-09-22 21:32+0000\n"
+"Last-Translator: xSuicide <massi.radu@gmail.com>\n"
+"Language-Team: Romanian <https://hosted.weblate.org/projects/phpmyadmin/"
+"debian/ro/>\n"
 "Language: ro\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=n==1 ? 0 : (n==0 || (n%100 > 0 && n%100 < "
+"20)) ? 1 : 2;\n"
+"X-Generator: Weblate 3.2-dev\n"
 
 #. Type: multiselect
 #. Description
 #: ../templates:2001
 msgid "Web server to reconfigure automatically:"
-msgstr ""
+msgstr "Webserver la configurare automată:"
 
 #. Type: multiselect
 #. Description
@@ -29,12 +33,14 @@ msgid ""
 "Please choose the web server that should be automatically configured to run "
 "phpMyAdmin."
 msgstr ""
+"Va rugam sa alegeți serverul web care ar trebui să fie configurat automat să "
+"ruleze phpMyAdmin."
 
 #. Type: string
 #. Description
 #: ../templates:3001
 msgid "Username for web-based setup system:"
-msgstr ""
+msgstr "Numele de utilizator pentru setup-ul bazat pe web:"
 
 #. Type: string
 #. Description
@@ -45,6 +51,8 @@ msgid ""
 "The setup system for phpMyAdmin may be used, after installation, from http://"
 "localhost/phpmyadmin/setup/index.php."
 msgstr ""
+"Acest sistem setup pentru phpMyAdmin poate fi utilizat, după instalare, de "
+"pe http://localhost/phpmyadmin/setup/index.php."
 
 #. Type: string
 #. Description
@@ -53,7 +61,7 @@ msgstr ""
 #: ../templates:3001 ../templates:4001
 msgid ""
 "Access to this system requires identification with a username and a password."
-msgstr ""
+msgstr "Accesul la acest sistem se face cu un nume de utilizator și o parolă."
 
 #. Type: string
 #. Description
@@ -61,12 +69,14 @@ msgstr ""
 msgid ""
 "If you leave this field empty, the default username ('admin') will be used."
 msgstr ""
+"Dacă lași acest câmp gol, numele standard de utilizator (\"admin\") va fii "
+"utilizat."
 
 #. Type: password
 #. Description
 #: ../templates:4001
 msgid "Password for web-based setup system:"
-msgstr ""
+msgstr "Parola pentru setup-ul bazat pe web:"
 
 #. Type: password
 #. Description
@@ -75,6 +85,8 @@ msgid ""
 "Usernames and passwords may be managed with the `htpasswd' command and are "
 "stored in /etc/phpmyadmin/htpasswd.setup."
 msgstr ""
+"Numele de utilizator și parolele pot fi gestionate prin comanda `htpasswd "
+"'și sunt stocate în /etc/phpmyadmin/htpasswd.setup."
 
 #. Type: password
 #. Description
@@ -82,4 +94,4 @@ msgstr ""
 msgid ""
 "If you leave this field empty, access to the web-based setup will be "
 "disabled."
-msgstr ""
+msgstr "Dacă lăsați acest câmp gol, accesul la setup-ul web va fi dezactivat."

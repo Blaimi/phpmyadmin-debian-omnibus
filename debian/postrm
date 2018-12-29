@@ -21,7 +21,7 @@ lighttpd_remove() {
 }
 
 apache_remove() {
-        COMMON_STATE=$(dpkg-query -f '${Status}' -W 'apache2.2-common' 2>/dev/null | awk '{print $3}' || true)
+        COMMON_STATE=$(dpkg-query -f '${Status}' -W 'apache2-data' 2>/dev/null | awk '{print $3}' || true)
 
         if [ -e /usr/share/apache2/apache2-maintscript-helper ] ; then
                 . /usr/share/apache2/apache2-maintscript-helper
@@ -63,7 +63,7 @@ if [ "$1" = "remove" ] || [ "$1" = "purge" ]; then
 			else
 				apache_remove $1
 			fi
-			# Redirection of 3 is needed because Debconf uses it and it might 
+			# Redirection of 3 is needed because Debconf uses it and it might
 			# be inherited by webserver. See bug #446324.
 			if [ -f /etc/init.d/$webserver ] ; then
 				if which invoke-rc.d > /dev/null ; then

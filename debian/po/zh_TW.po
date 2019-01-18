@@ -8,22 +8,22 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: phpmyadmin@packages.debian.org\n"
 "POT-Creation-Date: 2009-11-16 14:57+0100\n"
-"PO-Revision-Date: 2016-06-24 01:04+0000\n"
-"Last-Translator: Peter Chen <petercpg@gmail.com>\n"
-"Language-Team: Chinese (Taiwan) "
-"<https://hosted.weblate.org/projects/phpmyadmin/debian/zh_TW/>\n"
+"PO-Revision-Date: 2019-01-19 09:21+0000\n"
+"Last-Translator: Walter Cheuk <wwycheuk@gmail.com>\n"
+"Language-Team: Chinese (Traditional) <https://hosted.weblate.org/projects/"
+"phpmyadmin/debian/zh_Hant/>\n"
 "Language: zh_TW\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 2.7-dev\n"
+"X-Generator: Weblate 3.4-dev\n"
 
 #. Type: multiselect
 #. Description
 #: ../templates:2001
 msgid "Web server to reconfigure automatically:"
-msgstr "要自動重新設定的網頁伺服器:"
+msgstr "要自動重新設定的網頁伺服器："
 
 #. Type: multiselect
 #. Description
@@ -37,7 +37,7 @@ msgstr "請選擇要用來自動設定執行 phpMyAdmin 的網頁伺服器。"
 #. Description
 #: ../templates:3001
 msgid "Username for web-based setup system:"
-msgstr "網頁安裝程式的帳號:"
+msgstr "網頁安裝程式的帳號："
 
 #. Type: string
 #. Description
@@ -64,13 +64,13 @@ msgstr "若需存取此系統，需輸入帳號與密碼。"
 #: ../templates:3001
 msgid ""
 "If you leave this field empty, the default username ('admin') will be used."
-msgstr "若您將此欄位留白，將使用預設帳號「admin」。"
+msgstr "若將此欄位留白，將使用預設帳號「admin」。"
 
 #. Type: password
 #. Description
 #: ../templates:4001
 msgid "Password for web-based setup system:"
-msgstr "網頁安裝程式的密碼:"
+msgstr "網頁安裝程式的密碼："
 
 #. Type: password
 #. Description
@@ -78,7 +78,7 @@ msgstr "網頁安裝程式的密碼:"
 msgid ""
 "Usernames and passwords may be managed with the `htpasswd' command and are "
 "stored in /etc/phpmyadmin/htpasswd.setup."
-msgstr "可使用命令列的「htpasswd」指令來帳號與密碼，儲存於 /etc/phpmyadmin/htpasswd.setup。"
+msgstr "可使用「htpasswd」指令來管理帳號與密碼；帳號與密碼儲存於 /etc/phpmyadmin/htpasswd.setup。"
 
 #. Type: password
 #. Description
@@ -86,4 +86,4 @@ msgstr "可使用命令列的「htpasswd」指令來帳號與密碼，儲存於 
 msgid ""
 "If you leave this field empty, access to the web-based setup will be "
 "disabled."
-msgstr "若您將此欄位留白，將無法存取網頁安裝程式。"
+msgstr "若將此欄位留白，將無法存取網頁安裝程式。"

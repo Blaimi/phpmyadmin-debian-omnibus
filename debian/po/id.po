@@ -8,22 +8,23 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: phpmyadmin@packages.debian.org\n"
 "POT-Creation-Date: 2009-11-16 14:57+0100\n"
-"PO-Revision-Date: 2017-09-19 05:17+0000\n"
-"Last-Translator: Andika Triwidada <andika@gmail.com>\n"
-"Language-Team: Indonesian "
-"<https://hosted.weblate.org/projects/phpmyadmin/debian/id/>\n"
+"PO-Revision-Date: 2019-03-11 16:03+0000\n"
+"Last-Translator: Muhammad Rifqi Priyo Susanto "
+"<muhammadrifqipriyosusanto@gmail.com>\n"
+"Language-Team: Indonesian <https://hosted.weblate.org/projects/phpmyadmin/"
+"debian/id/>\n"
 "Language: id\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 2.17-dev\n"
+"X-Generator: Weblate 3.5.1\n"
 
 #. Type: multiselect
 #. Description
 #: ../templates:2001
 msgid "Web server to reconfigure automatically:"
-msgstr "Server web yang akan dikonfigurasi secara otomatis:"
+msgstr "Peladen web yang akan dikonfigurasi secara otomatis:"
 
 #. Type: multiselect
 #. Description
@@ -32,7 +33,7 @@ msgid ""
 "Please choose the web server that should be automatically configured to run "
 "phpMyAdmin."
 msgstr ""
-"Harap pilih server web yang mesti dikonfigurasi secara otomatis untuk "
+"Harap pilih peladen web yang harus dikonfigurasi secara otomatis untuk "
 "menjalankan phpMyAdmin."
 
 #. Type: string
@@ -61,7 +62,7 @@ msgstr ""
 msgid ""
 "Access to this system requires identification with a username and a password."
 msgstr ""
-"Akses ke sistem ini memerlukan identifikasi dengan suatu nama pengguna dan "
+"Akses ke sistem ini memerlukan identifikasi dengan sebuah nama pengguna dan "
 "sebuah kata sandi."
 
 #. Type: string
@@ -70,7 +71,7 @@ msgstr ""
 msgid ""
 "If you leave this field empty, the default username ('admin') will be used."
 msgstr ""
-"Bila Anda membiarkan ruas ini kosong, nama pengguna baku ('admin') akan "
+"Bila Anda membiarkan ruas ini kosong, nama pengguna bawaan (\"admin\") akan "
 "dipakai."
 
 #. Type: password
@@ -86,8 +87,8 @@ msgid ""
 "Usernames and passwords may be managed with the `htpasswd' command and are "
 "stored in /etc/phpmyadmin/htpasswd.setup."
 msgstr ""
-"Nama-nama pengguna dan kata-kata sandi dapat dikelola dengan perintah "
-"'htpasswd' dan disimpai di /etc/phpmyadmin/htpasswd.setup."
+"Nama-nama pengguna dan kata-kata sandi dapat dikelola dengan perintah \""
+"htpasswd\" dan disimpan dalam /etc/phpmyadmin/htpasswd.setup."
 
 #. Type: password
 #. Description
@@ -97,4 +98,4 @@ msgid ""
 "disabled."
 msgstr ""
 "Bila Anda membiarkan ruas ini kosong, akses ke penyiapan berbasis web akan "
-"dinonaktifkan."
+"dimatikan."

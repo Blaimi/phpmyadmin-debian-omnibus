@@ -1,12 +1,20 @@
 Subject: Adjust phpMyAdmin vendor configuration to match Debian needs
- - setup generates configuration in /var
+ - configuration is in /etc/phpmyadmin
  - documentation is in /usr/share/doc
  - config file consists of several included files, so we skip mtime check
+ - tempdir is in /var/lib/phpmyadmin/tmp
 From: Michal Čihař <nijel@debian.org>
 Forwarded: not-needed
 --- a/libraries/vendor_config.php
 +++ b/libraries/vendor_config.php
-@@ -17,13 +17,13 @@
+@@ -22,19 +22,19 @@
+ /**
+  * Directory where cache files are stored.
+  */
+-define('TEMP_DIR', './tmp/');
++define('TEMP_DIR', '/var/lib/phpmyadmin/tmp/');
+ 
+ /**
   * Path to changelog file, can be gzip compressed. Useful when you want to
   * have documentation somewhere else, eg. /usr/share/doc.
   */
@@ -22,7 +30,7 @@ Forwarded: not-needed
  
  /**
   * Directory where SQL scripts to create/upgrade configuration storage reside.
-@@ -35,7 +35,7 @@
+@@ -46,7 +46,7 @@
   * It is not used directly in code, just a convenient
   * define used further in this file.
   */
@@ -31,7 +39,7 @@ Forwarded: not-needed
  
  /**
   * Filename of a configuration file.
-@@ -55,7 +55,7 @@
+@@ -66,7 +66,7 @@
  /**
   * Default value for check for version upgrades.
   */

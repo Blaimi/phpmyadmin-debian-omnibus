@@ -5,8 +5,10 @@ require_once 'PhpMyAdmin/SqlParser/autoload.php';
 require_once 'Symfony/Component/ExpressionLanguage/autoload.php';
 require_once 'phpseclib/autoload.php';
 require_once 'Twig/autoload.php';
+require_once 'Twig-Extensions/autoload.php';
 require_once 'ReCaptcha/autoload.php';
 require_once 'Psr/Container/autoload.php';
+@include_once 'tcpdf/tcpdf.php';
 
 // @codingStandardsIgnoreFile
 // @codeCoverageIgnoreStart

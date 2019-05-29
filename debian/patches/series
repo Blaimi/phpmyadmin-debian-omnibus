@@ -1,2 +1,4 @@
+phpunit-7.patch
 allow-twig-2.patch
 debian.patch
+test-autoload.patch

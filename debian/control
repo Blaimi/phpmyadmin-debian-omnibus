@@ -17,14 +17,18 @@ Build-Depends: debhelper (>= 9),
     php-xml,
     php-bz2,
     php-zip,
+    php-gd,
+    php-recode,
     php-phpmyadmin-motranslator (>= 4.0),
-    php-phpmyadmin-sql-parser (>= 4.2.3),
+    php-phpmyadmin-sql-parser (>= 4.3.2),
     php-phpmyadmin-shapefile (>= 2.0),
     php-phpseclib (>= 2.0),
     php-psr-container (>= 1.0),
     php-symfony-expression-language (>=3.2),
     php-tcpdf,
     php-twig,
+    php-twig-extensions,
+    php-google-recaptcha,
     po-debconf
 Homepage: https://www.phpmyadmin.net/
 Vcs-Browser: https://salsa.debian.org/phpmyadmin-team/phpmyadmin.git
@@ -53,6 +57,7 @@ Recommends: apache2 | lighttpd | httpd,
     php-tcpdf
 Suggests: default-mysql-server | virtual-mysql-server,
     www-browser,
+    php-recode,
     ${phpcomposer:Debian-suggest}
 Description: MySQL web administration tool
  This package allows administering of MySQL or MariaDB with a web interface.

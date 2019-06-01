@@ -106,7 +106,7 @@ EOT
         chmod 0640 /var/lib/phpmyadmin/config.inc.php
     fi
 	if ! dpkg-statoverride --list /var/lib/phpmyadmin/tmp >/dev/null; then
-		chown -R www-data:www-data    /var/lib/phpmyadmin/tmp
+		chown www-data:www-data    /var/lib/phpmyadmin/tmp
 	fi
 
 	# Configure Apache

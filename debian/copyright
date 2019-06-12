@@ -4,6 +4,7 @@ Source: https://www.phpmyadmin.net/
 Files-Excluded:
   vendor
   js/vendor/openlayers
+  node_modules/jquery-ui/external/jshint
 
 Files: *
 Copyright: 

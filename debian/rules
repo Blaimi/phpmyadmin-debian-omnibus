@@ -21,7 +21,7 @@ override_dh_auto_build:
 	rm -rf test/selenium
 	mkdir -p vendor
 	phpab --template debian/autoload.php.tpl \
-		--output vendor/autoload.php \
+		--output autoload.php \
 		libraries/classes \
 		setup/lib
 	phpab --template debian/autoload-test.php.tpl \

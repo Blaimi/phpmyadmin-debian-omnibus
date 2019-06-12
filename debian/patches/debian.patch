@@ -7,7 +7,13 @@ From: Michal Čihař <nijel@debian.org>
 Forwarded: not-needed
 --- a/libraries/vendor_config.php
 +++ b/libraries/vendor_config.php
-@@ -22,19 +22,19 @@
+@@ -17,24 +17,24 @@
+  * Path to vendor autoload file. Useful when you want to
+  * have have vendor dependencies somewhere else.
+  */
+-define('AUTOLOAD_FILE', './vendor/autoload.php');
++define('AUTOLOAD_FILE', './autoload.php');
+
  /**
   * Directory where cache files are stored.
   */

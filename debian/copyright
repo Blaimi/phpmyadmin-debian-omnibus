@@ -27,6 +27,54 @@ Copyright:
         Matthias Blümel <matthias.bluemel@krumedia.com>
 License: GPL-2+
 
+Files: node_modules/codemirror
+Copyright: Copyright (C) 2017 by Marijn Haverbeke <marijnh@gmail.com> and others
+License: MIT
+
+Files: node_modules/jquery
+Copyright: Copyright JS Foundation and other contributors, https://js.foundation/
+License: MIT
+
+Files: node_modules/jquery.event.drag
+Copyright: Copyright (c) 2010 Three Dub Media - http://threedubmedia.com
+License: MIT
+
+Files: node_modules/jquery-migrate
+Copyright: Copyright jQuery Foundation and other contributors, https://jquery.org/
+License: MIT
+
+Files: node_modules/jquery-mousewheel
+Copyright: Copyright jQuery Foundation and other contributors, https://jquery.org/
+License: MIT
+
+Files: node_modules/jquery-ui
+Copyright: Copyright jQuery Foundation and other contributors, https://jquery.org/
+License: MIT
+
+Files: node_modules/jquery-ui-timepicker-addon
+Copyright: Copyright (c) 2013 Trent Richardson
+License: MIT
+
+Files: node_modules/jquery-validation
+Copyright: Copyright Jörn Zaefferer
+License: MIT
+
+Files: node_modules/js-cookie
+Copyright: Copyright 2014 Klaus Hartl
+License: MIT
+
+Files: node_modules/tracekit
+Copyright: Copyright (c) 2013 Onur Can Cakmak <onur.cakmak@gmail.com> and all TraceKit contributors
+License: MIT
+
+Files: node_modules/updated-jqplot
+Copyright: Copyright (c) 2009-2013 Chris Leonello
+License: MIT
+
+Files: node_modules/zxcvbn
+Copyright: Copyright (c) 2012-2016 Dan Wheeler and Dropbox, Inc.
+License: MIT
+
 License: GPL-2
  On Debian systems the full text of the GNU General Public
  License can be found in the `/usr/share/common-licenses/GPL-2'
@@ -36,3 +84,22 @@ License: GPL-2+
  On Debian systems the full text of the GNU General Public
  License can be found in the `/usr/share/common-licenses/GPL-2'
  file.
+
+License: MIT
+    Permission is hereby granted, free of charge, to any person obtaining a copy
+    of this software and associated documentation files (the "Software"), to deal
+    in the Software without restriction, including without limitation the rights
+    to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+    copies of the Software, and to permit persons to whom the Software is
+    furnished to do so, subject to the following conditions:
+    .
+    The above copyright notice and this permission notice shall be included in
+    all copies or substantial portions of the Software.
+    .
+    THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+    IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+    FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+    AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+    LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+    OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+    THE SOFTWARE.

@@ -3,6 +3,7 @@ Upstream-Contact: developers@phpmyadmin.net
 Source: https://www.phpmyadmin.net/
 Files-Excluded:
   vendor
+  js/vendor/openlayers
 
 Files: *
 Copyright: 

@@ -49,6 +49,7 @@ Depends: php,
     dbconfig-mysql | dbconfig-no-thanks | dbconfig-common (<< 2.0.0),
     php-phpseclib (>= 2.0),
     ${phpcomposer:Debian-require},
+    libjs-openlayers,
     ucf (>= 0.28)
 Recommends: apache2 | lighttpd | httpd,
     php-curl,

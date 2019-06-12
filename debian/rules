@@ -37,5 +37,5 @@ override_dh_install:
 	sed -ri "/set..PMA_VERSION/ s/'([-0-9a-z.]+)'/'\\1deb$(REVISION)'/" \
 	    debian/phpmyadmin/usr/share/phpmyadmin/libraries/classes/Config.php
 
-	# Remove sources from binary package
-	rm -r debian/phpmyadmin/usr/share/phpmyadmin/js/vendor/openlayers/src
+	# Remove openlayers. we use libjs-openlayers. TODO: is this necessary after dfsg-repack?
+	rm -rf debian/phpmyadmin/usr/share/phpmyadmin/js/vendor/openlayers

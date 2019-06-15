@@ -1,4 +1,4 @@
-phpmyadmin (4:4.9.0.1-1~1.gbp530c6f65) UNRELEASED; urgency=medium
+phpmyadmin (4:4.9.0.1+dfsg1-1) unstable; urgency=medium
 
   * New upstream version 4.9.0.1.
   * Update Package for new composer-oriented structure in upstream

@@ -1,8 +1,4 @@
-# Version difference with shipped libraries causes too much troubles
-phpmyadmin: embedded-javascript-library usr/share/phpmyadmin/js/jquery/jquery.cookie.js please use libjs-jquery-cookie
-# Version difference with shipped libraries causes too much troubles
-phpmyadmin: embedded-javascript-library usr/share/phpmyadmin/js/jquery/jquery.mousewheel.js please use libjs-jquery-mousewheel
-# Version difference with shipped libraries causes too much troubles
-phpmyadmin: embedded-javascript-library usr/share/phpmyadmin/js/jquery/jquery.tablesorter.js please use libjs-jquery-tablesorter
-# Version difference with shipped libraries causes too much troubles
-phpmyadmin: embedded-javascript-library usr/share/phpmyadmin/js/jqplot/excanvas.js please use libjs-excanvas
+# Version difference of jquery with shipped libraries causes too much troubles
+phpmyadmin: embedded-javascript-library usr/share/phpmyadmin/js/vendor/jquery/*
+phpmyadmin: embedded-javascript-library usr/share/phpmyadmin/themes/original/jquery/*
+phpmyadmin: embedded-javascript-library usr/share/phpmyadmin/themes/pmahomme/jquery/*

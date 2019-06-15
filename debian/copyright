@@ -1,8 +1,10 @@
-Format: http://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
+Format: https://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
 Upstream-Contact: developers@phpmyadmin.net
 Source: https://www.phpmyadmin.net/
 Files-Excluded:
-  libraries/tcpdf/include/sRGB.icc
+  vendor
+  js/vendor/openlayers
+  node_modules/jquery-ui/external/jshint
 
 Files: *
 Copyright: 
@@ -18,21 +20,61 @@ Copyright:
         [check credits for more details]
 License: GPL-2
 
-Files: libraries/tcpdf/*
-Copyright: (C) 2002-2014  Nicola Asuni - Tecnick.com LTD
-License: LGPL-3+
+Files: debian/*
+Copyright:
+    Copyright (C) 2007-2018, Michal Čihař <nijel@debian.org>, Thijs Kinkhorst <thijs@debian.org>
+    Copyright (C) 2018-2019, Felipe Sateler <fsateler@debian.org>
+        Juri Grabowski <debian@jugra.de>
+        Matthias Blümel <matthias.bluemel@krumedia.com>
+License: GPL-2+
 
-Files: libraries/phpseclib/*
-Copyright: 2007-2013 TerraFrost and other contributors
+Files: node_modules/codemirror
+Copyright: Copyright (C) 2017 by Marijn Haverbeke <marijnh@gmail.com> and others
 License: MIT
 
-Files: libraries/tcpdf/font/*
-Copyright: (c) 2003 by Bitstream, Inc.
-License: public-domain
+Files: node_modules/jquery
+Copyright: Copyright JS Foundation and other contributors, https://js.foundation/
+License: MIT
 
-Files: debian/*
-Copyright: 2007-2016, Michal Čihař <nijel@debian.org>, Thijs Kinkhorst <thijs@debian.org>
-License: GPL-2+
+Files: node_modules/jquery.event.drag
+Copyright: Copyright (c) 2010 Three Dub Media - http://threedubmedia.com
+License: MIT
+
+Files: node_modules/jquery-migrate
+Copyright: Copyright jQuery Foundation and other contributors, https://jquery.org/
+License: MIT
+
+Files: node_modules/jquery-mousewheel
+Copyright: Copyright jQuery Foundation and other contributors, https://jquery.org/
+License: MIT
+
+Files: node_modules/jquery-ui
+Copyright: Copyright jQuery Foundation and other contributors, https://jquery.org/
+License: MIT
+
+Files: node_modules/jquery-ui-timepicker-addon
+Copyright: Copyright (c) 2013 Trent Richardson
+License: MIT
+
+Files: node_modules/jquery-validation
+Copyright: Copyright Jörn Zaefferer
+License: MIT
+
+Files: node_modules/js-cookie
+Copyright: Copyright 2014 Klaus Hartl
+License: MIT
+
+Files: node_modules/tracekit
+Copyright: Copyright (c) 2013 Onur Can Cakmak <onur.cakmak@gmail.com> and all TraceKit contributors
+License: MIT
+
+Files: node_modules/updated-jqplot
+Copyright: Copyright (c) 2009-2013 Chris Leonello
+License: MIT
+
+Files: node_modules/zxcvbn
+Copyright: Copyright (c) 2012-2016 Dan Wheeler and Dropbox, Inc.
+License: MIT
 
 License: GPL-2
  On Debian systems the full text of the GNU General Public
@@ -42,11 +84,6 @@ License: GPL-2
 License: GPL-2+
  On Debian systems the full text of the GNU General Public
  License can be found in the `/usr/share/common-licenses/GPL-2'
- file.
-
-License: LGPL-3+
- On Debian systems the full text of the GNU Lesser General Public
- License can be found in the `/usr/share/common-licenses/LGPL-3'
  file.
 
 License: MIT
@@ -67,46 +104,3 @@ License: MIT
     LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
     OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
     THE SOFTWARE.
-
-
-License: public-domain
-    Permission is hereby granted, free of charge, to any person obtaining a copy
-    of the fonts accompanying this license ("Fonts") and associated
-    documentation files (the "Font Software"), to reproduce and distribute the
-    Font Software, including without limitation the rights to use, copy, merge,
-    publish, distribute, and/or sell copies of the Font Software, and to permit
-    persons to whom the Font Software is furnished to do so, subject to the
-    following conditions:
-    .
-    The above copyright and trademark notices and this permission notice shall
-    be included in all copies of one or more of the Font Software typefaces.
-    .
-    The Font Software may be modified, altered, or added to, and in particular
-    the designs of glyphs or characters in the Fonts may be modified and
-    additional glyphs or characters may be added to the Fonts, only if the fonts
-    are renamed to names not containing either the words "Bitstream" or the word
-    "Vera".
-    .
-    This License becomes null and void to the extent applicable to Fonts or Font
-    Software that has been modified and is distributed under the "Bitstream
-    Vera" names.
-    .
-    The Font Software may be sold as part of a larger software package but no
-    copy of one or more of the Font Software typefaces may be sold by itself.
-    .
-    THE FONT SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS
-    OR IMPLIED, INCLUDING BUT NOT LIMITED TO ANY WARRANTIES OF MERCHANTABILITY,
-    FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT OF COPYRIGHT, PATENT,
-    TRADEMARK, OR OTHER RIGHT. IN NO EVENT SHALL BITSTREAM OR THE GNOME
-    FOUNDATION BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, INCLUDING
-    ANY GENERAL, SPECIAL, INDIRECT, INCIDENTAL, OR CONSEQUENTIAL DAMAGES,
-    WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF
-    THE USE OR INABILITY TO USE THE FONT SOFTWARE OR FROM OTHER DEALINGS IN THE
-    FONT SOFTWARE.
-    .
-    Except as contained in this notice, the names of Gnome, the Gnome
-    Foundation, and Bitstream Inc., shall not be used in advertising or
-    otherwise to promote the sale, use or other dealings in this Font Software
-    without prior written authorization from the Gnome Foundation or Bitstream
-    Inc., respectively. For further information, contact: fonts at gnome dot
-    org. 

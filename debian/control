@@ -2,25 +2,37 @@ Source: phpmyadmin
 Maintainer: Thijs Kinkhorst <thijs@debian.org>
 Uploaders: Michal Čihař <nijel@debian.org>
 Section: web
-Priority: extra
-Standards-Version: 3.9.8
+Priority: optional
+Standards-Version: 4.3.0
 Build-Depends: debhelper (>= 9),
+    pkg-php-tools (>= 1.7~),
+    phpab,
     locales-all,
-    python-sphinx,
+    python3-sphinx,
     phpunit,
+    composer,
     php-mysql,
     php-json,
     php-mbstring,
     php-xml,
     php-bz2,
     php-zip,
-    php-tcpdf,
-    php-php-gettext | php-gettext (<= 1:7.0),
+    php-gd,
+    php-recode,
+    php-phpmyadmin-motranslator (>= 4.0),
+    php-phpmyadmin-sql-parser (>= 4.3.2),
+    php-phpmyadmin-shapefile (>= 2.0),
     php-phpseclib (>= 2.0),
+    php-psr-container (>= 1.0),
+    php-symfony-expression-language (>=3.2),
+    php-tcpdf,
+    php-twig,
+    php-twig-extensions,
+    php-google-recaptcha,
     po-debconf
 Homepage: https://www.phpmyadmin.net/
-Vcs-Browser: https://anonscm.debian.org/git/collab-maint/phpmyadmin.git
-Vcs-Git: https://anonscm.debian.org/git/collab-maint/phpmyadmin.git
+Vcs-Browser: https://salsa.debian.org/phpmyadmin-team/phpmyadmin.git
+Vcs-Git: https://salsa.debian.org/phpmyadmin-team/phpmyadmin.git
 
 Package: phpmyadmin
 Architecture: all
@@ -33,9 +45,11 @@ Depends: php,
     perl,
     ${misc:Depends},
     ${sphinxdoc:Depends},
+    sensible-utils,
     dbconfig-mysql | dbconfig-no-thanks | dbconfig-common (<< 2.0.0),
-    php-php-gettext | php-gettext (<= 1:7.0),
     php-phpseclib (>= 2.0),
+    ${phpcomposer:Debian-require},
+    libjs-openlayers,
     ucf (>= 0.28)
 Recommends: apache2 | lighttpd | httpd,
     php-curl,
@@ -44,7 +58,9 @@ Recommends: apache2 | lighttpd | httpd,
     php-zip,
     php-tcpdf
 Suggests: default-mysql-server | virtual-mysql-server,
-    www-browser
+    www-browser,
+    php-recode,
+    ${phpcomposer:Debian-suggest}
 Description: MySQL web administration tool
  This package allows administering of MySQL or MariaDB with a web interface.
  .

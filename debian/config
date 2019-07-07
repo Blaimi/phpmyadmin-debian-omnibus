@@ -2,20 +2,24 @@
 
 set -e
 
+# set the user and database to 'pma-omnibus' because the whole packagename is too long
+dbc_dbuser=pma-omnibus
+dbc_dbname=pma-omnibus
+
 . /usr/share/debconf/confmodule
 
 if [ -f /usr/share/dbconfig-common/dpkg/config.mysql ]; then
         . /usr/share/dbconfig-common/dpkg/config.mysql
-        dbc_go phpmyadmin $@
+        dbc_go phpmyadmin-omnibus $@
 fi
 
 db_version 2.0
 
-db_input high phpmyadmin/reconfigure-webserver || true
+db_input high phpmyadmin-omnibus/reconfigure-webserver || true
 
-if [ ! -f /etc/phpmyadmin/htpasswd.setup ]; then
-	db_input low phpmyadmin/setup-username || true
-	db_input low phpmyadmin/setup-password || true
+if [ ! -f /etc/phpmyadmin-omnibus/htpasswd.setup ]; then
+	db_input low phpmyadmin-omnibus/setup-username || true
+	db_input low phpmyadmin-omnibus/setup-password || true
 fi
 
 db_go || true

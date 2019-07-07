@@ -1,2 +1,2 @@
-etc/phpmyadmin/conf.d
-var/lib/phpmyadmin/tmp
+etc/phpmyadmin-omnibus/conf.d
+var/lib/phpmyadmin-omnibus/tmp

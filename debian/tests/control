@@ -1,3 +1,0 @@
-Test-Command: LC_ALL=en_US.UTF-8 phpunit --config phpunit.xml.nocoverage --exclude-group selenium --exclude-group network
-Depends: phpunit
-

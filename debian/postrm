@@ -1,21 +1,21 @@
 #!/bin/sh
-# postrm script for phpmyadmin
+# postrm script for phpmyadmin-omnibus
 
 set -e
 
 lighttpd_remove() {
-	if [ -f /etc/lighttpd/conf-available/50-phpmyadmin.conf ] ; then
-		rm -f /etc/lighttpd/conf-available/50-phpmyadmin.conf
+	if [ -f /etc/lighttpd/conf-available/50-phpmyadmin-omnibus.conf ] ; then
+		rm -f /etc/lighttpd/conf-available/50-phpmyadmin-omnibus.conf
 		if which lighty-enable-mod >/dev/null 2>&1 ; then
-			lighty-disable-mod phpmyadmin
+			lighty-disable-mod phpmyadmin-omnibus
 			# We also enabled auth in postinst, but I think it's safer to keep it there
 		else
 			echo "Lighttpd not installed, skipping"
 		fi
 		# See bug #448682
-		if [ -h /etc/lighttpd/conf-enabled/50-phpmyadmin.conf ] ; then
+		if [ -h /etc/lighttpd/conf-enabled/50-phpmyadmin-omnibus.conf ] ; then
 		    echo 'Manually deleting lighttpd/phpMyAdmin configuration link'
-		    rm /etc/lighttpd/conf-enabled/50-phpmyadmin.conf
+		    rm /etc/lighttpd/conf-enabled/50-phpmyadmin-omnibus.conf
 		fi
 	fi
 }
@@ -25,25 +25,25 @@ apache_remove() {
 
         if [ -e /usr/share/apache2/apache2-maintscript-helper ] ; then
                 . /usr/share/apache2/apache2-maintscript-helper
-                apache2_invoke disconf phpmyadmin
+                apache2_invoke disconf phpmyadmin-omnibus
         elif [ "$COMMON_STATE" = "installed" ] || [ "$COMMON_STATE" = "unpacked" ] ; then
-                rm -f /etc/apache2/conf.d/phpmyadmin.conf
+                rm -f /etc/apache2/conf.d/phpmyadmin-omnibus.conf
         fi
 
-	rm -f /etc/apache2/conf-available/phpmyadmin.conf
+	rm -f /etc/apache2/conf-available/phpmyadmin-omnibus.conf
 }
 if [ -f /usr/share/debconf/confmodule ]; then
     . /usr/share/debconf/confmodule
 fi
 if [ -f /usr/share/dbconfig-common/dpkg/postrm.mysql ]; then
     . /usr/share/dbconfig-common/dpkg/postrm.mysql
-    dbc_go phpmyadmin $@
+    dbc_go phpmyadmin-omnibus $@
 fi
 
 if [ "$1" = "purge" ]; then
-    rm -f /etc/phpmyadmin/config-db.php
+    rm -f /etc/phpmyadmin-omnibus/config-db.php
     if which ucf >/dev/null 2>&1; then
-	ucf --debconf-ok --purge /etc/phpmyadmin/config-db.php
+	ucf --debconf-ok --purge /etc/phpmyadmin-omnibus/config-db.php
     fi
 fi
 
@@ -52,7 +52,7 @@ if [ "$1" = "remove" ] || [ "$1" = "purge" ]; then
 	if [ -f /usr/share/debconf/confmodule ]; then
 		db_version 2.0
 
-		db_get phpmyadmin/reconfigure-webserver
+		db_get phpmyadmin-omnibus/reconfigure-webserver
 
 		webservers="$RET"
 
@@ -82,13 +82,13 @@ if [ "$1" = "remove" ] || [ "$1" = "purge" ]; then
 
 	if [ "$1" = "purge" ]; then
         # Possibly installed desktop file
-        if [ -h /usr/share/applications/phpmyadmin.desktop ] ; then
-            rm -f /usr/share/applications/phpmyadmin.desktop
+        if [ -h /usr/share/applications/phpmyadmin-omnibus.desktop ] ; then
+            rm -f /usr/share/applications/phpmyadmin-omnibus.desktop
         fi
-        if [ -h /etc/avahi/services/phpmyadmin.service ] ; then
-            rm -f /etc/avahi/services/phpmyadmin.service
+        if [ -h /etc/avahi/services/phpmyadmin-omnibus.service ] ; then
+            rm -f /etc/avahi/services/phpmyadmin-omnibus.service
         fi
-		rm -rf /etc/phpmyadmin /var/lib/phpmyadmin
+		rm -rf /etc/phpmyadmin-omnibus /var/lib/phpmyadmin-omnibus
 	fi
 fi
 

@@ -6,9 +6,9 @@
  * utility.
  *
  * For example configuration see
- *   /usr/share/doc/phpmyadmin/examples/config.sample.inc.php
+ *   /usr/share/doc/phpmyadmin-omnibus/examples/config.sample.inc.php
  * or
- *   /usr/share/doc/phpmyadmin/examples/config.manyhosts.inc.php
+ *   /usr/share/doc/phpmyadmin-omnibus/examples/config.manyhosts.inc.php
  *
  * NOTE: do not add security sensitive data to this file (like passwords)
  * unless you really know what you're doing. If you do, any user that can
@@ -33,13 +33,13 @@ if (!function_exists('check_file_access')) {
 }
 
 // Load secret generated on postinst
-if (check_file_access('/var/lib/phpmyadmin/blowfish_secret.inc.php')) {
-    require('/var/lib/phpmyadmin/blowfish_secret.inc.php');
+if (check_file_access('/var/lib/phpmyadmin-omnibus/blowfish_secret.inc.php')) {
+    require('/var/lib/phpmyadmin-omnibus/blowfish_secret.inc.php');
 }
 
 // Load autoconf local config
-if (check_file_access('/var/lib/phpmyadmin/config.inc.php')) {
-    require('/var/lib/phpmyadmin/config.inc.php');
+if (check_file_access('/var/lib/phpmyadmin-omnibus/config.inc.php')) {
+    require('/var/lib/phpmyadmin-omnibus/config.inc.php');
 }
 
 /**
@@ -52,10 +52,10 @@ $i++;
 
 /**
  * Read configuration from dbconfig-common
- * You can regenerate it using: dpkg-reconfigure -plow phpmyadmin
+ * You can regenerate it using: dpkg-reconfigure -plow phpmyadmin-omnibus
  */
-if (check_file_access('/etc/phpmyadmin/config-db.php')) {
-    require('/etc/phpmyadmin/config-db.php');
+if (check_file_access('/etc/phpmyadmin-omnibus/config-db.php')) {
+    require('/etc/phpmyadmin-omnibus/config-db.php');
 }
 
 /* Configure according to dbconfig-common if enabled */
@@ -161,7 +161,7 @@ $cfg['UploadDir'] = '';
 $cfg['SaveDir'] = '';
 
 /* Support additional configurations */
-foreach (glob('/etc/phpmyadmin/conf.d/*.php') as $filename)
+foreach (glob('/etc/phpmyadmin-omnibus/conf.d/*.php') as $filename)
 {
     include($filename);
 }

@@ -15,11 +15,11 @@
 -- --------------------------------------------------------
 
 --
--- Database : `phpmyadmin`
+-- Database : `phpmyadmin-omnibus`
 --
-CREATE DATABASE IF NOT EXISTS `phpmyadmin`
-  DEFAULT CHARACTER SET utf8 COLLATE utf8_bin;
-USE phpmyadmin;
+-- CREATE DATABASE IF NOT EXISTS `phpmyadmin`
+--   DEFAULT CHARACTER SET utf8 COLLATE utf8_bin;
+-- USE phpmyadmin-omnibus;
 
 -- --------------------------------------------------------
 

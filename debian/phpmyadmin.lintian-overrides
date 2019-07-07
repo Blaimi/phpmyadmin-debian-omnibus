@@ -1,4 +1,0 @@
-# Version difference of jquery with shipped libraries causes too much troubles
-phpmyadmin: embedded-javascript-library usr/share/phpmyadmin/js/vendor/jquery/*
-phpmyadmin: embedded-javascript-library usr/share/phpmyadmin/themes/original/jquery/*
-phpmyadmin: embedded-javascript-library usr/share/phpmyadmin/themes/pmahomme/jquery/*

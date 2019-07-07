@@ -1,5 +1,0 @@
-# Source include in node_modules
-phpmyadmin source: source-is-missing js/vendor/*
-
-# This is source
-phpmyadmin source: source-is-missing node_modules/*

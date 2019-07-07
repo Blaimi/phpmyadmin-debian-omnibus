@@ -1,3 +1,2 @@
-usr/share/doc/phpmyadmin/html usr/share/phpmyadmin/doc/html
-usr/share/phpmyadmin/sql/create_tables.sql usr/share/doc/phpmyadmin/examples/create_tables.sql
-usr/share/javascript/openlayers usr/share/phpmyadmin/js/vendor/openlayers
+usr/share/doc/phpmyadmin-omnibus/html usr/share/phpmyadmin-omnibus/doc/html
+usr/share/phpmyadmin-omnibus/sql/create_tables.sql usr/share/doc/phpmyadmin-omnibus/examples/create_tables.sql

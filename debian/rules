@@ -5,38 +5,10 @@
 REVISION := $(shell head -1 debian/changelog | sed 's/.*(//;s/).*//;s/.*-//')
 
 %:
-	dh $@ --fail-missing --with sphinxdoc,phpcomposer
-
-override_dh_auto_test:
-	# We exclude:
-	# - selenium tests as the setup would be too complex
-	# - some network based tests
-	LC_ALL=en_US.UTF-8 phpunit --config phpunit.xml.nocoverage --exclude-group selenium --exclude-group network
-
-override_dh_auto_clean:
-	rm -rf vendor
-
-override_dh_auto_build:
-	make -C doc/ html
-	rm -rf test/selenium
-	mkdir -p vendor
-	phpab --template debian/autoload.php.tpl \
-		--output autoload.php \
-		libraries/classes \
-		setup/lib
-	phpab --template debian/autoload-test.php.tpl \
-		--output test/autoload.php \
-		test
+	dh $@
 
 override_dh_install:
 	dh_install
-	# spurious licence files, this is in debian/copyright
-	rm \
-		debian/phpmyadmin/usr/share/phpmyadmin/js/vendor/codemirror/LICENSE \
-		debian/phpmyadmin/usr/share/phpmyadmin/js/vendor/jquery/MIT-LICENSE.txt
 	# include Debian marker in version string
-	sed -ri "/set..PMA_VERSION/ s/'([-0-9a-z.]+)'/'\\1deb$(REVISION)'/" \
-	    debian/phpmyadmin/usr/share/phpmyadmin/libraries/classes/Config.php
-
-	# Remove openlayers. we use libjs-openlayers. TODO: is this necessary after dfsg-repack?
-	rm -rf debian/phpmyadmin/usr/share/phpmyadmin/js/vendor/openlayers
+	sed -ri "/set..PMA_VERSION/ s/'([-0-9a-z.]+)'/'\\1deb-omnibus$(REVISION)'/" \
+	    debian/phpmyadmin-omnibus/usr/share/phpmyadmin-omnibus/libraries/classes/Config.php

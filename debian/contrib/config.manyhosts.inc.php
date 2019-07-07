@@ -23,14 +23,14 @@ foreach ($hosts as $host) {
     $cfg['Servers'][$i]['connect_type']     = 'tcp';
     $cfg['Servers'][$i]['extension']        = 'mysql';
     $cfg['Servers'][$i]['compress'] = FALSE;
-    $cfg['Servers'][$i]['controluser']      = 'pma';
+    $cfg['Servers'][$i]['controluser']      = 'pma-omnibus';
     $cfg['Servers'][$i]['controlpass']      = 'pmapass';
     $cfg['Servers'][$i]['auth_type']        = 'cookie';
     $cfg['Servers'][$i]['user']     = '';
     $cfg['Servers'][$i]['password'] = '';
     $cfg['Servers'][$i]['only_db']  = '';
     $cfg['Servers'][$i]['verbose']  = '';
-    $cfg['Servers'][$i]['pmadb']    = 'phpmyadmin';
+    $cfg['Servers'][$i]['pmadb']    = 'pma-omnibus';
     $cfg['Servers'][$i]['bookmarktable']    = 'pma_bookmark';
     $cfg['Servers'][$i]['relation'] = 'pma_relation';
     $cfg['Servers'][$i]['table_info']       = 'pma_table_info';

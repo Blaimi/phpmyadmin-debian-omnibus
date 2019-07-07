@@ -1,38 +1,32 @@
 Subject: Adjust phpMyAdmin vendor configuration to match Debian needs
- - configuration is in /etc/phpmyadmin
+ - configuration is in /etc/phpmyadmin-omnibus
  - documentation is in /usr/share/doc
  - config file consists of several included files, so we skip mtime check
- - tempdir is in /var/lib/phpmyadmin/tmp
+ - tempdir is in /var/lib/phpmyadmin-omnibus/tmp
 From: Michal Čihař <nijel@debian.org>
 Forwarded: not-needed
 --- a/libraries/vendor_config.php
 +++ b/libraries/vendor_config.php
-@@ -17,24 +17,24 @@
-  * Path to vendor autoload file. Useful when you want to
-  * have have vendor dependencies somewhere else.
-  */
--define('AUTOLOAD_FILE', './vendor/autoload.php');
-+define('AUTOLOAD_FILE', './autoload.php');
-
+@@ -22,19 +22,19 @@
  /**
   * Directory where cache files are stored.
   */
 -define('TEMP_DIR', './tmp/');
-+define('TEMP_DIR', '/var/lib/phpmyadmin/tmp/');
++define('TEMP_DIR', '/var/lib/phpmyadmin-omnibus/tmp/');
  
  /**
   * Path to changelog file, can be gzip compressed. Useful when you want to
   * have documentation somewhere else, eg. /usr/share/doc.
   */
 -define('CHANGELOG_FILE', './ChangeLog');
-+define('CHANGELOG_FILE', '/usr/share/doc/phpmyadmin/changelog.gz');
++define('CHANGELOG_FILE', '/usr/share/doc/phpmyadmin-omnibus/changelog.gz');
  
  /**
   * Path to license file. Useful when you want to have documentation somewhere
   * else, eg. /usr/share/doc.
   */
 -define('LICENSE_FILE', './LICENSE');
-+define('LICENSE_FILE', '/usr/share/doc/phpmyadmin/copyright');
++define('LICENSE_FILE', '/usr/share/doc/phpmyadmin-omnibus/copyright');
  
  /**
   * Directory where SQL scripts to create/upgrade configuration storage reside.
@@ -41,7 +35,7 @@ Forwarded: not-needed
   * define used further in this file.
   */
 -define('CONFIG_DIR', '');
-+define('CONFIG_DIR', '/etc/phpmyadmin/');
++define('CONFIG_DIR', '/etc/phpmyadmin-omnibus/');
  
  /**
   * Filename of a configuration file.

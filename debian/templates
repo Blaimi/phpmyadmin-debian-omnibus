@@ -7,14 +7,14 @@
 # Even minor modifications require translation updates and such
 # changes should be coordinated with translators and reviewers.
 
-Template: phpmyadmin/reconfigure-webserver
+Template: phpmyadmin-omnibus/reconfigure-webserver
 Type: multiselect
 Choices: apache2, lighttpd
 _Description: Web server to reconfigure automatically:
  Please choose the web server that should be automatically configured
  to run phpMyAdmin.
 
-Template: phpmyadmin/setup-username
+Template: phpmyadmin-omnibus/setup-username
 Type: string
 Default: admin
 _Description: Username for web-based setup system:
@@ -26,7 +26,7 @@ _Description: Username for web-based setup system:
  .
  If you leave this field empty, the default username ('admin') will be used.
 
-Template: phpmyadmin/setup-password
+Template: phpmyadmin-omnibus/setup-password
 Type: password
 Default:
 _Description: Password for web-based setup system:
@@ -37,7 +37,7 @@ _Description: Password for web-based setup system:
  password.
  .
  Usernames and passwords may be managed with the `htpasswd' command and
- are stored in /etc/phpmyadmin/htpasswd.setup.
+ are stored in /etc/phpmyadmin-omnibus/htpasswd.setup.
  .
  If you leave this field empty, access to the web-based setup will be
  disabled.
